@@ -1,0 +1,160 @@
+{
+  "company": {
+    "name": "ENFOCO, S.R.L.",
+    "rnc": "1-31-44504-0",
+    "description": "Somos una empresa de tecnología especializada en Desarrollo de Software a la medida, automatización y mejoramiento de procesos operativos. Contamos con amplia experiencia empresarial y comercial.",
+    "mission": "Brindar servicios de asesoría, desarrollo de nuevos modelos operativos y aplicaciones a la medida, con asistencia empresarial personalizada.",
+    "vision": "Ser el mejor aliado de nuestros clientes, para apoyar la innovación de los procesos y soluciones tecnológicas.",
+    "values": ["Innovación Constante", "Liderazgo Técnico", "Honestidad e Integridad", "Compromiso & Dedicación"],
+    "certifications": ["Metodología Agile / Scrum", "Diplomado en Arquitectura de Software", "Calidad de Software (QA)"]
+  },
+  "client": {
+    "name": "Claro Dominicana",
+    "shortName": "Claro",
+    "contactName": "Gerencia de Operaciones & Experiencia del Cliente",
+    "contactRole": "Comité de Tecnología Corporativa"
+  },
+  "project": {
+    "code": "ENF-CLA-2026-03",
+    "title": "Portal Web de Gestión de Reclamaciones Corporativas & Trazabilidad B2B",
+    "heroTitlePrefix": "Gestión de Reclamaciones &",
+    "heroTitleAccent": "Trazabilidad B2B",
+    "heroTitleSuffix": "para Claro",
+    "heroHeadline": "Gestión de Reclamaciones & *Trazabilidad B2B* para Claro",
+    "heroSubtitle": "Garantizando la excelencia operativa y el cumplimiento estricto de SLAs normativos INDOTEL con visibilidad en tiempo real.",
+    "version": "1.0",
+    "date": "6 de Agosto, 2026",
+    "author": "Rosa Elba Martínez",
+    "authorRole": "Analista de Proyectos & Operaciones",
+    "authorPhone": "809-481-4035",
+    "authorEmail": "rmartinez@enfoco.com.do",
+    "estimatedDuration": "12 a 16 Semanas",
+    "guaranteePeriod": "60 Días Calendario"
+  },
+  "contacts": [
+    {
+      "name": "Jorge Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Gerente General & Lead Strategist",
+      "email": "jmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    },
+    {
+      "name": "Rosa Elba Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Analista de Proyectos & Operaciones",
+      "email": "rmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    }
+  ],
+  "team": [
+    {
+      "role": "Gerente de Tecnología & Negocio",
+      "category": "Dirección",
+      "dedicationPercent": 50,
+      "responsibilities": ["Coordinación con gerencia de cuentas corporativas Claro", "Seguimiento de cumplimiento SLA"],
+      "iconName": "Briefcase"
+    },
+    {
+      "role": "Arquitecto de Procesos & Software",
+      "category": "Arquitectura",
+      "dedicationPercent": 100,
+      "responsibilities": ["Diseño de solución multitenant para grandes clientes B2B", "Seguridad de datos de telecomunicaciones"],
+      "iconName": "Cpu"
+    },
+    {
+      "role": "Analista de Proyectos & QA",
+      "category": "Calidad",
+      "dedicationPercent": 100,
+      "responsibilities": ["Certificación INDOTEL de tiempos de respuesta", "Pruebas integrales de flujo"],
+      "iconName": "ShieldCheck"
+    },
+    {
+      "role": "Ingeniero de Software Lead",
+      "category": "Construcción",
+      "dedicationPercent": 100,
+      "responsibilities": ["Desarrollo de plataforma web B2B", "Sistema de ticketing automatizado"],
+      "iconName": "Code"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "category": "Core",
+      "title": "Módulo de Registro & Seguimiento de Tickets B2B en Tiempo Real",
+      "description": "Portal ejecutivo para empresas clientes de Claro donde pueden abrir y consultar el estatus de averías y servicios.",
+      "deliverables": ["Línea de tiempo interactiva", "Alertas por correo y WhatsApp", "Asignación automática de técnicos"]
+    },
+    {
+      "id": "REQ-02",
+      "category": "Automatización",
+      "title": "Motor de Control de SLAs & Escalación Normativa INDOTEL",
+      "description": "Monitoreo continuo de tiempos de atención con escalamiento jerárquico automatizado para cumplir requerimientos normativos.",
+      "deliverables": ["Temporizadores en vivo", "Escalamiento multinivel", "Reporte de cumplimiento de SLA"]
+    },
+    {
+      "id": "REQ-03",
+      "category": "Reportes",
+      "title": "Dashboard Ejecutivo de Disponibilidad de Enlaces Corporativos",
+      "description": "Visualización gráfica de uptime de enlaces dedicados de fibra óptica e internet empresarial.",
+      "deliverables": ["Gráficos de disponibilidad %", "Exportación de informes ejecutivos", "Filtros por cuenta de cliente"]
+    }
+  ],
+  "roadmap": [
+    {
+      "phase": "Fase I",
+      "title": "Levantamiento de Flujos Operativos Claro & Diseño UI",
+      "duration": "Semanas 1 - 3",
+      "description": "Entrevistas con gerencia B2B y diseño de prototipos de alta fidelidad.",
+      "status": "Completado",
+      "milestones": ["Definición de SLAs", "Prototipos Aprobados"]
+    },
+    {
+      "phase": "Fase II",
+      "title": "Desarrollo del Motor de Tickets & SLAs",
+      "duration": "Semanas 4 - 11",
+      "description": "Desarrollo frontend/backend e integración con CRM corporativo.",
+      "status": "En Proceso",
+      "milestones": ["Modulo Tickets", "Motor SLAs"]
+    },
+    {
+      "phase": "Fase III",
+      "title": "Pruebas UAT & Despliegue en Producción",
+      "duration": "Semanas 12 - 16",
+      "description": "Pruebas con cuentas piloto, capacitación de agentes y garantía de 60 días.",
+      "status": "Pendiente",
+      "milestones": ["Certificación QA", "Pase a Producción"]
+    }
+  ],
+  "clientResponsibilities": [
+    "Proporcionar credenciales de pruebas para APIs del CRM Claro.",
+    "Designar supervisores de operaciones para validaciones UAT."
+  ],
+  "enfocoResponsibilities": [
+    "Desarrollar la solución bajo estándares ISO 27001.",
+    "Garantizar soporte especializado durante el periodo de garantía."
+  ],
+  "budget": {
+    "amountWithoutTax": 22000,
+    "taxAmount": 3960,
+    "totalAmount": 25960,
+    "currency": "USD",
+    "paymentTerms": [
+      {
+        "milestone": "Firma de Contrato & Kick-off del Proyecto",
+        "percentage": 50,
+        "description": "Inicio de desarrollo."
+      },
+      {
+        "milestone": "Entrega de Versión Beta & Pruebas UAT",
+        "percentage": 40,
+        "description": "Demostración de tickets y SLAs."
+      },
+      {
+        "milestone": "Pase a Producción & Garantía de 60 Días",
+        "percentage": 10,
+        "description": "Cierre e inicio de soporte."
+      }
+    ]
+  }
+}

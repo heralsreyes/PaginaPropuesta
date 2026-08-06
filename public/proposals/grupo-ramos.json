@@ -1,0 +1,160 @@
+{
+  "company": {
+    "name": "ENFOCO, S.R.L.",
+    "rnc": "1-31-44504-0",
+    "description": "Somos una empresa de tecnología especializada en Desarrollo de Software a la medida, automatización y mejoramiento de procesos operativos. Contamos con amplia experiencia empresarial y comercial.",
+    "mission": "Brindar servicios de asesoría, desarrollo de nuevos modelos operativos y aplicaciones a la medida, con asistencia empresarial personalizada.",
+    "vision": "Ser el mejor aliado de nuestros clientes, para apoyar la innovación de los procesos y soluciones tecnológicas.",
+    "values": ["Innovación Constante", "Liderazgo Técnico", "Honestidad e Integridad", "Compromiso & Dedicación"],
+    "certifications": ["Metodología Agile / Scrum", "Diplomado en Arquitectura de Software", "Calidad de Software (QA)"]
+  },
+  "client": {
+    "name": "Grupo Ramos, S.A.",
+    "shortName": "Grupo Ramos",
+    "contactName": "Gerencia Operativa & Logística",
+    "contactRole": "Dirección de Cadena de Suministro"
+  },
+  "project": {
+    "code": "ENF-RAM-2026-02",
+    "title": "Sistema Web de Gestión Operativa de Inventario & Control de Proveedores B2B",
+    "heroTitlePrefix": "Gestión de Inventario &",
+    "heroTitleAccent": "Control de Proveedores B2B",
+    "heroTitleSuffix": "para Grupo Ramos",
+    "heroHeadline": "Gestión de Inventario & *Control de Proveedores B2B* para Grupo Ramos",
+    "heroSubtitle": "Optimizando la recepción de mercancía y conciliación fiscal en centros de distribución (CEDIS) a través de un portal B2B de alta velocidad.",
+    "version": "1.0",
+    "date": "6 de Agosto, 2026",
+    "author": "Rosa Elba Martínez",
+    "authorRole": "Analista de Proyectos & Operaciones",
+    "authorPhone": "809-481-4035",
+    "authorEmail": "rmartinez@enfoco.com.do",
+    "estimatedDuration": "10 a 14 Semanas",
+    "guaranteePeriod": "60 Días Calendario"
+  },
+  "contacts": [
+    {
+      "name": "Jorge Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Gerente General & Lead Strategist",
+      "email": "jmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    },
+    {
+      "name": "Rosa Elba Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Analista de Proyectos & Operaciones",
+      "email": "rmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    }
+  ],
+  "team": [
+    {
+      "role": "Gerente de Tecnología & Negocio",
+      "category": "Dirección",
+      "dedicationPercent": 50,
+      "responsibilities": ["Alineación de objetivos con Grupo Ramos", "Supervisión de entregables logísticos"],
+      "iconName": "Briefcase"
+    },
+    {
+      "role": "Arquitecto de Procesos & Software",
+      "category": "Arquitectura",
+      "dedicationPercent": 100,
+      "responsibilities": ["Diseño de arquitectura de alta disponibilidad para CEDIS", "Optimización de consultas relacionales"],
+      "iconName": "Cpu"
+    },
+    {
+      "role": "Analista de Proyectos & QA",
+      "category": "Calidad",
+      "dedicationPercent": 100,
+      "responsibilities": ["Pruebas de conciliación de inventario", "Validación UAT en almacenes centrales"],
+      "iconName": "ShieldCheck"
+    },
+    {
+      "role": "Ingeniero de Software Lead",
+      "category": "Construcción",
+      "dedicationPercent": 100,
+      "responsibilities": ["Portal de proveedores Sirena/Aprecio", "Lógica de órdenes de compra automatizadas"],
+      "iconName": "Code"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "category": "Core",
+      "title": "Portal B2B de Proveedores & Citas de Recepción CEDIS",
+      "description": "Programación de citas de descarga en centro de distribución con agendamiento automático de rampas.",
+      "deliverables": ["Calendario de citas por almacén", "Confirmación QR para transportistas", "Notificaciones de retraso"]
+    },
+    {
+      "id": "REQ-02",
+      "category": "Automatización",
+      "title": "Conciliación Automática de Órdenes de Compra & Facturas DGII",
+      "description": "Cruce trilateral entre orden de compra, conduce de recepción e e-CF fiscal de la DGII.",
+      "deliverables": ["Motor de matching 3-way", "Alertas de discrepancia de precios", "Validación RNC instantánea"]
+    },
+    {
+      "id": "REQ-03",
+      "category": "Reportes",
+      "title": "Dashboard de Rotación de Inventario & Tiempos de Rampa",
+      "description": "Métricas en tiempo real sobre eficiencias de recepción por proveedor y categoría de producto.",
+      "deliverables": ["Métricas KPI de rampa", "Exportación masiva a Excel/CSV", "Alertas de stock crítico"]
+    }
+  ],
+  "roadmap": [
+    {
+      "phase": "Fase I",
+      "title": "Levantamiento Operativo en CEDIS & Diseño",
+      "duration": "Semanas 1 - 3",
+      "description": "Revisión de flujo de recepción de mercancía y diseño de portal de proveedores.",
+      "status": "Completado",
+      "milestones": ["Mapeo de Flujo CEDIS", "Diseño UI Portal"]
+    },
+    {
+      "phase": "Fase II",
+      "title": "Desarrollo del Portal & Motor de Citas",
+      "duration": "Semanas 4 - 9",
+      "description": "Construcción de módulos de agendamiento, conciliación fiscal y alertas.",
+      "status": "En Proceso",
+      "milestones": ["Motor de Agendamiento", "Integración DGII"]
+    },
+    {
+      "phase": "Fase III",
+      "title": "Pruebas UAT & Pase a Producción",
+      "duration": "Semanas 10 - 14",
+      "description": "Piloto en centro de distribución, capacitación a supervisores y soporte de 60 días.",
+      "status": "Pendiente",
+      "milestones": ["Piloto CEDIS", "Pase a Producción"]
+    }
+  ],
+  "clientResponsibilities": [
+    "Facilitar acceso a especificaciones del ERP SAP de Grupo Ramos.",
+    "Asignar supervisores de almacén para pruebas de recepción."
+  ],
+  "enfocoResponsibilities": [
+    "Garantizar disponibilidad 99.9% del portal de proveedores.",
+    "Brindar capacitación técnica y soporte continuo."
+  ],
+  "budget": {
+    "amountWithoutTax": 15800,
+    "taxAmount": 2844,
+    "totalAmount": 18644,
+    "currency": "USD",
+    "paymentTerms": [
+      {
+        "milestone": "Firma de Contrato & Inicio de Desarrollo",
+        "percentage": 50,
+        "description": "Anticipo de inicio."
+      },
+      {
+        "milestone": "Entrega de Módulo de Citas & UAT",
+        "percentage": 40,
+        "description": "Demostración funcional en CEDIS."
+      },
+      {
+        "milestone": "Aceptación Final & Salida a Producción",
+        "percentage": 10,
+        "description": "Entrega final e inicio de garantía."
+      }
+    ]
+  }
+}

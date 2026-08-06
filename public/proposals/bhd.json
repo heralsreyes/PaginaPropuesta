@@ -1,0 +1,184 @@
+{
+  "company": {
+    "name": "ENFOCO, S.R.L.",
+    "rnc": "1-31-44504-0",
+    "description": "Somos una empresa de tecnología especializada en Desarrollo de Software a la medida, automatización y mejoramiento de procesos operativos. Contamos con amplia experiencia empresarial y comercial, respaldada por un equipo de profesionales de alto nivel.",
+    "mission": "Brindar servicios de asesoría, desarrollo de nuevos modelos operativos y aplicaciones a la medida, con asistencia empresarial personalizada, garantizando soluciones confiables a cargo de nuestro equipo de profesionales calificados.",
+    "vision": "Ser el mejor aliado de nuestros clientes, para apoyar la innovación de los procesos y soluciones tecnológicas, sostenidos en nuevas ideas, actitud de servicios y rentabilidad del negocio.",
+    "values": ["Innovación Constante", "Liderazgo Técnico", "Honestidad e Integridad", "Compromiso & Dedicación"],
+    "certifications": ["Metodología Agile / Scrum", "Diplomado en Arquitectura de Software", "Calidad de Software (QA)", "ISO 27002 & ITIL Framework"]
+  },
+  "client": {
+    "name": "Banco BHD, S.A.",
+    "shortName": "Banco BHD",
+    "contactName": "Vicepresidencia de Tecnología & Operaciones",
+    "contactRole": "Comité de Transformación Digital"
+  },
+  "project": {
+    "code": "ENF-BHD-2026-01",
+    "title": "Plataforma Web de Solicitudes de Crédito Empresarial & Motor de Evaluación B2B",
+    "heroTitlePrefix": "Originación Digital &",
+    "heroTitleAccent": "Scoring de Crédito",
+    "heroTitleSuffix": "para Banco BHD",
+    "heroHeadline": "Originación Digital & *Scoring de Crédito* para Banco BHD",
+    "heroSubtitle": "Transformando el flujo de solicitudes de crédito empresarial a través de un motor de evaluación automatizado, seguro e integrado al Core Bancario.",
+    "version": "1.0",
+    "date": "6 de Agosto, 2026",
+    "author": "Rosa Elba Martínez",
+    "authorRole": "Analista de Proyectos & Operaciones",
+    "authorPhone": "809-481-4035",
+    "authorEmail": "rmartinez@enfoco.com.do",
+    "estimatedDuration": "14 a 18 Semanas",
+    "guaranteePeriod": "60 Días Calendario"
+  },
+  "contacts": [
+    {
+      "name": "Jorge Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Gerente General & Lead Strategist",
+      "email": "jmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    },
+    {
+      "name": "Rosa Elba Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Analista de Proyectos & Operaciones",
+      "email": "rmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    }
+  ],
+  "team": [
+    {
+      "role": "Gerente de Tecnología & Negocio",
+      "category": "Dirección",
+      "dedicationPercent": 50,
+      "responsibilities": ["Alineación estratégica con VP BHD", "Dirección de sprint reviews", "Seguimiento de cumplimiento normativo bancario"],
+      "iconName": "Briefcase"
+    },
+    {
+      "role": "Arquitecto de Procesos & Software",
+      "category": "Arquitectura",
+      "dedicationPercent": 100,
+      "responsibilities": ["Diseño de arquitectura bancaria segura", "Integración con Core Bancario", "Modelado de datos encriptados"],
+      "iconName": "Cpu"
+    },
+    {
+      "role": "Analista de Proyectos & QA",
+      "category": "Calidad",
+      "dedicationPercent": 100,
+      "responsibilities": ["Pruebas de estrés y seguridad", "Validación UAT con analistas de crédito", "Certificación de normativas SB"],
+      "iconName": "ShieldCheck"
+    },
+    {
+      "role": "Ingeniero de Software Web Lead",
+      "category": "Construcción",
+      "dedicationPercent": 100,
+      "responsibilities": ["Desarrollo frontend dinámico B2B", "Motor de reglas de scoring", "Formularios de expediente digital"],
+      "iconName": "Code"
+    },
+    {
+      "role": "Ingeniero de Base de Datos & APIs",
+      "category": "Construcción",
+      "dedicationPercent": 100,
+      "responsibilities": ["Servicios web REST/SOAP bancarios", "Consolidación de Buró de Crédito", "Auditoría de transacciones"],
+      "iconName": "Database"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "category": "Core",
+      "title": "Portal de Originación Digital de Créditos Pyme & Corporativos",
+      "description": "Plataforma self-service para empresas clientes de BHD para cargar estados financieros, RNC y documentación de scoring.",
+      "deliverables": ["Expediente digital encriptado", "Validación de firma RNC", "Carga masiva de estados de cuenta"]
+    },
+    {
+      "id": "REQ-02",
+      "category": "Automatización",
+      "title": "Motor de Scoring & Flujo de Pre-Aprobación Automática",
+      "description": "Cálculo en tiempo real de capacidad de endeudamiento basado en reglas paramétricas del Banco BHD.",
+      "deliverables": ["Algoritmo de scoring paramétrico", "Notificaciones SMS/Email", "Matriz de atribuciones por nivel de oficial"]
+    },
+    {
+      "id": "REQ-03",
+      "category": "Integración",
+      "title": "Conector API con Buró de Crédito & Core Bancario",
+      "description": "Integración mediante servicios cifrados para consulta instantánea de historial crediticio y apertura de expediente.",
+      "deliverables": ["Conector API REST cifrado", "Log de consultas bancarias", "Sincronización con Core BHD"]
+    },
+    {
+      "id": "REQ-04",
+      "category": "Seguridad",
+      "title": "Módulo de Seguridad Bancaria & Auditoría SB",
+      "description": "Cumplimiento con las normativas de Ciberseguridad de la Superintendencia de Bancos de la República Dominicana.",
+      "deliverables": ["Autenticación 2FA / Token", "Trazabilidad completa de auditoría", "Cifrado AES-256"]
+    }
+  ],
+  "roadmap": [
+    {
+      "phase": "Fase I",
+      "title": "Levantamiento de Reglas BHD & Arquitectura",
+      "duration": "Semanas 1 - 4",
+      "description": "Análisis de matriz de riesgo bancario, diseño de prototipos UI/UX y aprobación de seguridad.",
+      "status": "Completado",
+      "milestones": ["Matriz de Riesgo", "Prototipos Figma BHD", "Arquitectura SB Aprobada"]
+    },
+    {
+      "phase": "Fase II",
+      "title": "Construcción Core & Motor de Scoring",
+      "duration": "Semanas 5 - 11",
+      "description": "Desarrollo del portal de originación, algoritmo de scoring e integración con Buró.",
+      "status": "En Proceso",
+      "milestones": ["Portal B2B", "Motor Scoring", "APIs de Buró"]
+    },
+    {
+      "phase": "Fase III",
+      "title": "Pruebas UAT con Oficiales BHD & Hacking Ético",
+      "duration": "Semanas 12 - 15",
+      "description": "Pruebas de estrés, auditoría de penetración y UAT con oficiales de crédito.",
+      "status": "Pendiente",
+      "milestones": ["Reporte PenTest", "Aprobación UAT", "Certificación SB"]
+    },
+    {
+      "phase": "Fase IV",
+      "title": "Pase a Producción & Capacitación",
+      "duration": "Semanas 16 - 18",
+      "description": "Puesta en marcha en servidores BHD, manuales operativos y garantía de 60 días.",
+      "status": "Pendiente",
+      "milestones": ["Salida a Producción", "Manuales BHD", "Soporte Garantizado"]
+    }
+  ],
+  "clientResponsibilities": [
+    "Proporcionar especificaciones técnicas de APIs del Core Bancario BHD.",
+    "Designar equipo de Riesgo y Oficiales de Crédito para pruebas UAT.",
+    "Coordinar ventana de mantenimiento para despliegue en ambiente BHD."
+  ],
+  "enfocoResponsibilities": [
+    "Desarrollar la plataforma bajo estrictos estándares de seguridad bancaria.",
+    "Brindar acompañamiento continuo durante pruebas PenTest y UAT.",
+    "Garantizar el cumplimiento del cronograma y periodo de cobertura."
+  ],
+  "budget": {
+    "amountWithoutTax": 18500,
+    "taxAmount": 3330,
+    "totalAmount": 21830,
+    "currency": "USD",
+    "paymentTerms": [
+      {
+        "milestone": "Firma de Contrato & Inicio de Proyecto",
+        "percentage": 40,
+        "description": "Aprobación de arquitectura e inicio de sprints."
+      },
+      {
+        "milestone": "Entrega de Beta Funcional & Integración APIs",
+        "percentage": 40,
+        "description": "Demonstración de originación y scoring BHD."
+      },
+      {
+        "milestone": "Certificación UAT & Salida a Producción",
+        "percentage": 20,
+        "description": "Puesta en marcha e inicio de garantía de 60 días."
+      }
+    ]
+  }
+}

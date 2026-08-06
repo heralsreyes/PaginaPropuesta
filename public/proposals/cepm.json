@@ -1,0 +1,160 @@
+{
+  "company": {
+    "name": "ENFOCO, S.R.L.",
+    "rnc": "1-31-44504-0",
+    "description": "Somos una empresa de tecnología especializada en Desarrollo de Software a la medida, automatización y mejoramiento de procesos operativos.",
+    "mission": "Brindar servicios de asesoría, desarrollo de nuevos modelos operativos y aplicaciones a la medida con asistencia empresarial personalizada.",
+    "vision": "Ser el mejor aliado de nuestros clientes, para apoyar la innovación de los procesos y soluciones tecnológicas.",
+    "values": ["Innovación Constante", "Liderazgo Técnico", "Honestidad e Integridad", "Compromiso & Dedicación"],
+    "certifications": ["Metodología Agile / Scrum", "Diplomado en Arquitectura de Software", "Calidad de Software (QA)"]
+  },
+  "client": {
+    "name": "CEPM (Consorcio Energético Punta Cana-Macao)",
+    "shortName": "CEPM",
+    "contactName": "Gerencia Tecnológica & Operaciones Comerciales",
+    "contactRole": "Comité de Transformación Digital"
+  },
+  "project": {
+    "code": "ENF-CEP-2026-05",
+    "title": "Plataforma Web de Monitoreo de Procesos Operativos & Gestión de Órdenes de Servicio",
+    "heroTitlePrefix": "Monitoreo Operativo &",
+    "heroTitleAccent": "Medición Inteligente",
+    "heroTitleSuffix": "para CEPM",
+    "heroHeadline": "Monitoreo Operativo & *Medición Inteligente* para CEPM",
+    "heroSubtitle": "Automatizando el despacho de brigadas de campo y la telemedición AMI en vivo para garantizar la máxima continuidad del servicio eléctrico.",
+    "version": "1.0",
+    "date": "6 de Agosto, 2026",
+    "author": "Rosa Elba Martínez",
+    "authorRole": "Analista de Proyectos & Operaciones",
+    "authorPhone": "809-481-4035",
+    "authorEmail": "rmartinez@enfoco.com.do",
+    "estimatedDuration": "12 a 16 Semanas",
+    "guaranteePeriod": "60 Días Calendario"
+  },
+  "contacts": [
+    {
+      "name": "Jorge Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Gerente General & Lead Strategist",
+      "email": "jmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    },
+    {
+      "name": "Rosa Elba Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Analista de Proyectos & Operaciones",
+      "email": "rmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    }
+  ],
+  "team": [
+    {
+      "role": "Gerente de Tecnología & Negocio",
+      "category": "Dirección",
+      "dedicationPercent": 50,
+      "responsibilities": ["Coordinación con Dirección CEPM", "Supervisión de entregables de campo"],
+      "iconName": "Briefcase"
+    },
+    {
+      "role": "Arquitecto de Procesos & Software",
+      "category": "Arquitectura",
+      "dedicationPercent": 100,
+      "responsibilities": ["Diseño de arquitectura resiliente para alta demanda", "Integración con medidores inteligentes"],
+      "iconName": "Cpu"
+    },
+    {
+      "role": "Analista de Proyectos & QA",
+      "category": "Calidad",
+      "dedicationPercent": 100,
+      "responsibilities": ["Validación de pruebas de rendimiento", "Certificación UAT de cuadrillas de campo"],
+      "iconName": "ShieldCheck"
+    },
+    {
+      "role": "Ingeniero Web Lead",
+      "category": "Construcción",
+      "dedicationPercent": 100,
+      "responsibilities": ["Desarrollo del portal de monitoreo en tiempo real", "Mantenimiento de mapas interactivos"],
+      "iconName": "Code"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "category": "Core",
+      "title": "Portal de Despacho de Órdenes de Servicio Técnico de Campo",
+      "description": "Asignación automatizada de brigadas para reconexión, inspección de medidores y mantenimiento de red.",
+      "deliverables": ["Ruta óptima por mapa", "Notificaciones push a brigadas", "Confirmación fotográfica de trabajo concluido"]
+    },
+    {
+      "id": "REQ-02",
+      "category": "Automatización",
+      "title": "Integración con Sistema de Medición Inteligente (AMI)",
+      "description": "Conexión en tiempo real para verificar lecturas de consumo e incidencias de voltaje.",
+      "deliverables": ["Webhooks de eventos lecturas", "Lectura remota de medidores", "Logs auditables de corte/reconexión"]
+    },
+    {
+      "id": "REQ-03",
+      "category": "Reportes",
+      "title": "Dashboard de Control de Tiempos de Respuesta a Averías (SAIDI / SAIFI)",
+      "description": "Métricas regulatorias de calidad del servicio eléctrico y frecuencia de interrupciones.",
+      "deliverables": ["Indicadores SAIDI / SAIFI", "Exportación de informes ejecutivos", "Filtros por zona geográfica"]
+    }
+  ],
+  "roadmap": [
+    {
+      "phase": "Fase I",
+      "title": "Levantamiento Energético & Arquitectura",
+      "duration": "Semanas 1 - 3",
+      "description": "Análisis de flujos de despacho de brigadas y diseño de prototipos.",
+      "status": "Completado",
+      "milestones": ["Flujo de Despacho", "Prototipos CEPM"]
+    },
+    {
+      "phase": "Fase II",
+      "title": "Desarrollo del Portal & Conector AMI",
+      "duration": "Semanas 4 - 10",
+      "description": "Construcción de módulos de órdenes de servicio e integración con medidores.",
+      "status": "En Proceso",
+      "milestones": ["Despacho en Vivo", "Conector AMI"]
+    },
+    {
+      "phase": "Fase III",
+      "title": "Pruebas de Campo, UAT & Producción",
+      "duration": "Semanas 11 - 16",
+      "description": "Piloto con brigadas de zona Este, capacitación y soporte garantizado.",
+      "status": "Pendiente",
+      "milestones": ["Piloto Zona Este", "Pase a Producción"]
+    }
+  ],
+  "clientResponsibilities": [
+    "Facilitar documentación técnica de APIs del sistema de medición AMI.",
+    "Designar supervisores de despacho para pruebas UAT."
+  ],
+  "enfocoResponsibilities": [
+    "Desarrollar una plataforma de alta tolerancia a fallos.",
+    "Acompañar al personal operativo durante la salida a producción."
+  ],
+  "budget": {
+    "amountWithoutTax": 16900,
+    "taxAmount": 3042,
+    "totalAmount": 19942,
+    "currency": "USD",
+    "paymentTerms": [
+      {
+        "milestone": "Firma de Contrato & Inicio de Proyecto",
+        "percentage": 50,
+        "description": "Anticipo inicial."
+      },
+      {
+        "milestone": "Entrega de Módulo de Despacho & Pruebas AMI",
+        "percentage": 40,
+        "description": "Demostración de integraciones."
+      },
+      {
+        "milestone": "Aceptación Final & Salida a Producción",
+        "percentage": 10,
+        "description": "Despliegue final y soporte de 60 días."
+      }
+    ]
+  }
+}

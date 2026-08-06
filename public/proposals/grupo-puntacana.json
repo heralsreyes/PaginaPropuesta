@@ -1,0 +1,160 @@
+{
+  "company": {
+    "name": "ENFOCO, S.R.L.",
+    "rnc": "1-31-44504-0",
+    "description": "Somos una empresa de tecnología especializada en Desarrollo de Software a la medida, automatización y mejoramiento de procesos operativos.",
+    "mission": "Brindar servicios de asesoría, desarrollo de nuevos modelos operativos y aplicaciones a la medida con asistencia empresarial personalizada.",
+    "vision": "Ser el mejor aliado de nuestros clientes, para apoyar la innovación de los procesos y soluciones tecnológicas.",
+    "values": ["Innovación Constante", "Liderazgo Técnico", "Honestidad e Integridad", "Compromiso & Dedicación"],
+    "certifications": ["Metodología Agile / Scrum", "Diplomado en Arquitectura de Software", "Calidad de Software (QA)"]
+  },
+  "client": {
+    "name": "Grupo Puntacana",
+    "shortName": "Grupo Puntacana",
+    "contactName": "Dirección de Operaciones & Servicios Turísticos",
+    "contactRole": "Comité Ejecutivo de Innovación"
+  },
+  "project": {
+    "code": "ENF-PUN-2026-04",
+    "title": "Sistema Integrado de Control Operativo de Servicios & Gestión de Proveedores",
+    "heroTitlePrefix": "Control Operativo &",
+    "heroTitleAccent": "Despacho de Servicios",
+    "heroTitleSuffix": "para Grupo Puntacana",
+    "heroHeadline": "Control Operativo & *Despacho de Servicios* para Grupo Puntacana",
+    "heroSubtitle": "Digitalizando la asignación de cuadrillas técnicas y órdenes de trabajo en residencias, complejos hoteleros y terminales aeroportuarias.",
+    "version": "1.0",
+    "date": "6 de Agosto, 2026",
+    "author": "Rosa Elba Martínez",
+    "authorRole": "Analista de Proyectos & Operaciones",
+    "authorPhone": "809-481-4035",
+    "authorEmail": "rmartinez@enfoco.com.do",
+    "estimatedDuration": "10 a 12 Semanas",
+    "guaranteePeriod": "60 Días Calendario"
+  },
+  "contacts": [
+    {
+      "name": "Jorge Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Gerente General & Lead Strategist",
+      "email": "jmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    },
+    {
+      "name": "Rosa Elba Martínez",
+      "company": "ENFOCO, S.R.L.",
+      "role": "Analista de Proyectos & Operaciones",
+      "email": "rmartinez@enfoco.com.do",
+      "phone": "809-481-4035"
+    }
+  ],
+  "team": [
+    {
+      "role": "Gerente de Tecnología & Negocio",
+      "category": "Dirección",
+      "dedicationPercent": 50,
+      "responsibilities": ["Gestión estratégica del proyecto", "Presentación de avances ejecutivos"],
+      "iconName": "Briefcase"
+    },
+    {
+      "role": "Arquitecto de Software",
+      "category": "Arquitectura",
+      "dedicationPercent": 100,
+      "responsibilities": ["Diseño de arquitectura de alta disponibilidad", "Optimización de rendimiento"],
+      "iconName": "Cpu"
+    },
+    {
+      "role": "Analista de Proyectos & QA",
+      "category": "Calidad",
+      "dedicationPercent": 100,
+      "responsibilities": ["Control de calidad de entregables", "Pruebas UAT en ambiente hotelero/aeroportuario"],
+      "iconName": "ShieldCheck"
+    },
+    {
+      "role": "Ingeniero Web Lead",
+      "category": "Construcción",
+      "dedicationPercent": 100,
+      "responsibilities": ["Desarrollo frontend y backend", "Páneles interactivos de operaciones"],
+      "iconName": "Code"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "category": "Core",
+      "title": "Portal de Solicitudes de Mantenimiento & Servicios Hoteleros",
+      "description": "Registro digital de ordenes de trabajo para residencias, aeropuerto y complejos hoteleros del grupo.",
+      "deliverables": ["Asignación de cuadrillas en tiempo real", "Geolocalización de servicios", "Firma digital de conformidad del cliente"]
+    },
+    {
+      "id": "REQ-02",
+      "category": "Automatización",
+      "title": "Flujo de Aprobación de Compras & Servicios de Contratistas",
+      "description": "Validación automática de presupuestos de subcontratistas según límites de autorización.",
+      "deliverables": ["Matriz de firmas digitales", "Alertas por WhatsApp", "Historial de modificaciones auditables"]
+    },
+    {
+      "id": "REQ-03",
+      "category": "Reportes",
+      "title": "Dashboard de Tiempos de Respuesta & Satisfacción de Clientes",
+      "description": "Métricas en vivo del cumplimiento de acuerdos de nivel de servicio en cada propiedad.",
+      "deliverables": ["Indicadores de satisfacción CSAT", "Exportación masiva", "Alertas de retraso"]
+    }
+  ],
+  "roadmap": [
+    {
+      "phase": "Fase I",
+      "title": "Levantamiento Operativo en Puntacana & Prototipos",
+      "duration": "Semanas 1 - 3",
+      "description": "Definición de requerimientos por área operativa y diseño UI.",
+      "status": "Completado",
+      "milestones": ["Definición de Requerimientos", "Prototipos UI"]
+    },
+    {
+      "phase": "Fase II",
+      "title": "Construcción de Portal & Lógica de Asignación",
+      "duration": "Semanas 4 - 8",
+      "description": "Desarrollo de módulos de órdenes de trabajo y flujos de aprobación.",
+      "status": "En Proceso",
+      "milestones": ["Plataforma Core", "Asignación en Vivo"]
+    },
+    {
+      "phase": "Fase III",
+      "title": "Pruebas UAT & Pase a Producción",
+      "duration": "Semanas 9 - 12",
+      "description": "Capacitación a supervisores de área y despliegue final.",
+      "status": "Pendiente",
+      "milestones": ["Capacitación", "Despliegue Final"]
+    }
+  ],
+  "clientResponsibilities": [
+    "Coordinar accesos para levantamientos en instalaciones del Grupo Puntacana.",
+    "Designar supervisores de operaciones para validaciones UAT."
+  ],
+  "enfocoResponsibilities": [
+    "Desarrollar una herramienta robusta y escalable.",
+    "Brindar soporte durante la fase de puesta en marcha."
+  ],
+  "budget": {
+    "amountWithoutTax": 14200,
+    "taxAmount": 2556,
+    "totalAmount": 16756,
+    "currency": "USD",
+    "paymentTerms": [
+      {
+        "milestone": "Firma de Contrato & Kick-off",
+        "percentage": 50,
+        "description": "Inicio de actividades."
+      },
+      {
+        "milestone": "Entrega del Módulo de Órdenes de Trabajo & UAT",
+        "percentage": 40,
+        "description": "Demostración operativa."
+      },
+      {
+        "milestone": "Pase a Producción & Garantía de 60 Días",
+        "percentage": 10,
+        "description": "Cierre de entrega."
+      }
+    ]
+  }
+}
