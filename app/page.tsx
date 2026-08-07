@@ -14,13 +14,15 @@ import { AcceptModal } from "@/components/AcceptModal";
 import { CustomizerDrawer } from "@/components/CustomizerDrawer";
 import { Footer } from "@/components/Footer";
 
+import { StudioLayout } from "@/components/studio/StudioLayout";
+
 function ProposalContent() {
   const { proposal } = useProposal();
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
   return (
-    <main className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth bg-[var(--bg-main)] text-[var(--text-primary)] relative transition-colors duration-300">
+    <div className="w-full bg-[var(--bg-main)] text-[var(--text-primary)] relative transition-colors duration-300">
       {/* Floating Vertical Sidebar & Top Branding Nav */}
       <SidebarNav
         proposal={proposal}
@@ -28,7 +30,7 @@ function ProposalContent() {
         onOpenCustomizer={() => setIsCustomizerOpen(true)}
       />
 
-      {/* Slide 1: Hero Cover (#inicio) */}
+      {/* Slide 1: Hero Cover (#hero) */}
       <HeroSection
         proposal={proposal}
         onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
@@ -46,20 +48,20 @@ function ProposalContent() {
       {/* Slide 4: Recursos Necesarios & Roles del Proyecto (#equipo) */}
       <TeamSection team={proposal.team} />
 
-      {/* Slide 5: Matriz de Responsabilidades & Garantía (#garantia / #responsabilidades) */}
+      {/* Slide 5: Matriz de Responsabilidades & Garantía (#responsabilidades) */}
       <ResponsibilitiesSection
         clientResponsibilities={proposal.clientResponsibilities}
         enfocoResponsibilities={proposal.enfocoResponsibilities}
         guaranteePeriod={proposal.project.guaranteePeriod}
       />
 
-      {/* Slide 6: Presupuesto & Esquema de Inversión (#presupuesto / #inversion) */}
+      {/* Slide 6: Presupuesto & Esquema de Inversión (#inversion) */}
       <BudgetSection
         budget={proposal.budget}
         onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
       />
 
-      {/* Slide 7: Sobre ENFOCO (Misión & Visión) (#nosotros / #empresa) */}
+      {/* Slide 7: Sobre ENFOCO (Misión & Visión) (#empresa) */}
       <CompanySection company={proposal.company} />
 
       {/* Slide 8: Contacto & Siguientes Pasos (#contacto) */}
@@ -77,14 +79,16 @@ function ProposalContent() {
         isOpen={isCustomizerOpen}
         onClose={() => setIsCustomizerOpen(false)}
       />
-    </main>
+    </div>
   );
 }
 
 export default function Home() {
   return (
     <ProposalProvider>
-      <ProposalContent />
+      <StudioLayout>
+        <ProposalContent />
+      </StudioLayout>
     </ProposalProvider>
   );
 }

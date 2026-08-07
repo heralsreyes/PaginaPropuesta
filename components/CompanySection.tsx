@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { ProposalData } from "@/data/proposalData";
+import { useProposal } from "@/context/ProposalContext";
+import { EditableText } from "@/components/studio/EditableText";
 import { Target, Compass, Award, ShieldCheck, CheckCircle2, Monitor, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +14,7 @@ interface CompanySectionProps {
 type OptionType = "mision" | "vision" | "valores" | "estandares";
 
 export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
+  const { updateCompany } = useProposal();
   const [activeOption, setActiveOption] = useState<OptionType>("mision");
 
   const options = [
@@ -65,9 +68,9 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
         </div>
 
         {/* Two-Column Asymmetric Grid Container */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-stretch max-w-6xl mx-auto w-full">
           {/* LEFT COLUMN: Interactive Controls & Details (6 Cols) */}
-          <div className="lg:col-span-6 flex flex-col justify-between">
+          <div className="xl:col-span-6 flex flex-col justify-between">
             <div>
               <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center space-x-2">
                 <span className="w-2 h-2 rounded-full bg-[var(--accent-color)]"></span>
@@ -124,24 +127,26 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Visual Mockup Showcase (6 Cols) */}
-          <div className="lg:col-span-6 flex flex-col justify-center">
-            <div className="bg-[var(--card-bg)] rounded-3xl border-4 border-[var(--text-primary)] shadow-2xl overflow-hidden min-h-[400px] max-h-[420px] flex flex-col justify-between relative transition-colors duration-300">
+          {/* RIGHT COLUMN: Visual Computer Screen Mockup Showcase (6 Cols) */}
+          <div className="xl:col-span-6 flex flex-col justify-center">
+            <div className="bg-[var(--card-bg)] rounded-3xl border-4 border-[var(--text-primary)] shadow-2xl overflow-hidden min-h-[380px] w-full flex flex-col justify-between relative transition-colors duration-300">
+              {/* macOS Window Controls Top Bar */}
               <div className="bg-[var(--text-primary)] text-[var(--card-bg)] px-4 py-2.5 flex items-center justify-between shrink-0">
                 <div className="flex items-center space-x-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <div className="flex items-center space-x-2 text-xs font-mono opacity-80">
+                <div className="flex items-center space-x-2 text-xs font-mono opacity-90">
                   <Monitor className="w-3.5 h-3.5 text-[var(--accent-color)]" />
                   <span>ENFOCO OS • [{activeOption.toUpperCase()}]</span>
                 </div>
-                <span className="text-[10px] bg-[#2563EB]/20 text-[var(--accent-color)] px-2 py-0.5 rounded font-mono">
+                <span className="text-[10px] bg-[#2563EB]/20 text-[var(--accent-color)] px-2 py-0.5 rounded font-mono font-bold">
                   v2.5
                 </span>
               </div>
 
+              {/* Inner Screen Content */}
               <div className="p-6 sm:p-7 flex-1 flex flex-col justify-center bg-[var(--bg-main)] relative overflow-hidden transition-colors duration-300">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -168,7 +173,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
 
                         <div className="p-4 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm">
                           <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed italic font-normal">
-                            "{company.mission}"
+                            "
+                            <EditableText
+                              value={company.mission}
+                              onChange={(val) => updateCompany({ mission: val })}
+                              multiline
+                              tag="span"
+                            />
+                            "
                           </p>
                         </div>
 
@@ -201,7 +213,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
 
                         <div className="p-4 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm">
                           <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed italic font-normal">
-                            "{company.vision}"
+                            "
+                            <EditableText
+                              value={company.vision}
+                              onChange={(val) => updateCompany({ vision: val })}
+                              multiline
+                              tag="span"
+                            />
+                            "
                           </p>
                         </div>
 
@@ -233,7 +252,17 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                               className="p-3 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] flex items-center space-x-2 text-xs text-[var(--text-primary)] font-bold shadow-xs"
                             >
                               <CheckCircle2 className="w-4 h-4 text-[var(--accent-color)] shrink-0" />
-                              <span>{val}</span>
+                              <span>
+                                <EditableText
+                                  value={val}
+                                  onChange={(newVal) => {
+                                    const updatedValues = [...company.values];
+                                    updatedValues[idx] = newVal;
+                                    updateCompany({ values: updatedValues });
+                                  }}
+                                  tag="span"
+                                />
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -260,7 +289,17 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                               key={idx}
                               className="p-3 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] flex items-center justify-between text-xs"
                             >
-                              <span className="font-bold text-[var(--text-primary)]">{cert}</span>
+                              <span className="font-bold text-[var(--text-primary)]">
+                                <EditableText
+                                  value={cert}
+                                  onChange={(newCert) => {
+                                    const updatedCerts = [...company.certifications];
+                                    updatedCerts[idx] = newCert;
+                                    updateCompany({ certifications: updatedCerts });
+                                  }}
+                                  tag="span"
+                                />
+                              </span>
                               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] border border-[var(--accent-color)]/30 font-bold">
                                 Certificado
                               </span>
@@ -274,7 +313,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
               </div>
 
               <div className="bg-[var(--text-primary)] text-[var(--card-bg)] opacity-90 px-4 py-2 text-[11px] flex items-center justify-between shrink-0 font-mono">
-                <span>ENFOCO S.R.L. • RNC {company.rnc}</span>
+                <span>
+                  ENFOCO S.R.L. • RNC{" "}
+                  <EditableText
+                    value={company.rnc}
+                    onChange={(val) => updateCompany({ rnc: val })}
+                    tag="span"
+                  />
+                </span>
                 <span className="text-[var(--accent-color)] font-bold">100% Calidad Garantizada</span>
               </div>
             </div>
@@ -297,7 +343,6 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {/* Misión */}
           <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
             <div className="flex items-center space-x-2 mb-2">
               <Target className="w-4 h-4 text-[var(--accent-color)]" />
@@ -306,45 +351,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
             <p className="text-xs text-[var(--text-primary)]/70 leading-relaxed italic">"{company.mission}"</p>
           </div>
 
-          {/* Visión */}
           <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
             <div className="flex items-center space-x-2 mb-2">
               <Compass className="w-4 h-4 text-[var(--accent-color)]" />
               <h3 className="text-sm font-bold text-[var(--text-primary)]">Nuestra Visión</h3>
             </div>
             <p className="text-xs text-[var(--text-primary)]/70 leading-relaxed italic">"{company.vision}"</p>
-          </div>
-
-          {/* Valores */}
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
-            <div className="flex items-center space-x-2 mb-2">
-              <Award className="w-4 h-4 text-[var(--accent-color)]" />
-              <h3 className="text-sm font-bold text-[var(--text-primary)]">Valores Fundamentales</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs font-bold text-[var(--text-primary)]">
-              {company.values.map((v, idx) => (
-                <div key={idx} className="flex items-center space-x-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)]" />
-                  <span>{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Estándares */}
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
-            <div className="flex items-center space-x-2 mb-2">
-              <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
-              <h3 className="text-sm font-bold text-[var(--text-primary)]">Estándares & Normativas</h3>
-            </div>
-            <div className="space-y-1.5 text-xs text-[var(--text-primary)]">
-              {company.certifications.map((cert, idx) => (
-                <div key={idx} className="flex items-center justify-between p-1.5 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)]">
-                  <span className="font-bold">{cert}</span>
-                  <span className="text-[10px] text-[var(--accent-color)] font-bold">Certificado</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>

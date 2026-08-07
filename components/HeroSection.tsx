@@ -2,6 +2,8 @@
 
 import React from "react";
 import { ProposalData } from "@/data/proposalData";
+import { useProposal } from "@/context/ProposalContext";
+import { EditableText } from "@/components/studio/EditableText";
 import { ShieldCheck, Calendar, FileText, UserCheck, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -10,36 +12,8 @@ interface HeroSectionProps {
   onOpenAcceptModal: () => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ proposal, onOpenAcceptModal }) => {
-  // Fallback helper to parse *asterisks* if explicit heroTitleAccent is not passed
-  const renderFormattedHeadline = (text?: string) => {
-    if (!text) {
-      return (
-        <>
-          Una nueva era en la{" "}
-          <span className="text-[var(--accent-color)]">
-            automatización & gestión
-          </span>{" "}
-          operativa para {proposal.client.shortName}
-        </>
-      );
-    }
-
-    if (text.includes("*")) {
-      const parts = text.split(/\*(.*?)\*/g);
-      return parts.map((part, index) =>
-        index % 2 === 1 ? (
-          <span key={index} className="text-[var(--accent-color)]">
-            {part}
-          </span>
-        ) : (
-          part
-        )
-      );
-    }
-
-    return text;
-  };
+export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
+  const { updateProject, updateClient } = useProposal();
 
   return (
     <section id="hero" className="h-screen w-full snap-start snap-always flex flex-col justify-between items-center relative overflow-hidden bg-[var(--bg-main)] px-4 sm:px-6 lg:px-8 pt-20 pb-8 transition-colors duration-300">
@@ -51,7 +25,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal, onOpenAccept
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="max-w-6xl mx-auto text-center relative z-10 my-auto w-full flex flex-col items-center"
+        className="max-w-5xl mx-auto text-center relative z-10 my-auto w-full flex flex-col items-center px-2"
       >
         {/* Tracking Label */}
         <span className="text-xs font-bold tracking-widest text-[#71717A] uppercase mb-3">
@@ -59,7 +33,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal, onOpenAccept
         </span>
 
         {/* Co-Branding Header */}
-        <div className="inline-flex items-center gap-3 py-2 px-5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm text-xs font-semibold uppercase tracking-wider mb-6 transition-colors duration-300">
+        <div className="inline-flex items-center gap-3 py-2 px-5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm text-xs font-semibold uppercase tracking-wider mb-5 transition-colors duration-300">
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-black font-display text-[var(--text-primary)]">
               ENFOCO<span className="text-[var(--accent-color)]">.</span>
@@ -72,78 +46,131 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal, onOpenAccept
           <span className="text-[#D4D4D8] font-light text-xs">|</span>
 
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)]">
-            {proposal.client.name}
+            <EditableText
+              value={proposal.client.name}
+              onChange={(val) => updateClient({ name: val })}
+              tag="span"
+            />
           </span>
         </div>
 
         {/* Dynamic 2-Tone Headline with Accent */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-display text-[var(--text-primary)] text-center leading-[1.14] max-w-4xl mx-auto tracking-tight mb-4 transition-colors duration-300">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-display text-[var(--text-primary)] text-center leading-[1.14] max-w-3xl mx-auto tracking-tight mb-4 transition-colors duration-300">
           {proposal.project.heroTitleAccent ? (
             <>
-              {proposal.project.heroTitlePrefix}{" "}
+              <EditableText
+                value={proposal.project.heroTitlePrefix || ""}
+                onChange={(val) => updateProject({ heroTitlePrefix: val })}
+                tag="span"
+              />{" "}
               <span className="text-[var(--accent-color)]">
-                {proposal.project.heroTitleAccent}
+                <EditableText
+                  value={proposal.project.heroTitleAccent}
+                  onChange={(val) => updateProject({ heroTitleAccent: val })}
+                  tag="span"
+                />
               </span>{" "}
-              {proposal.project.heroTitleSuffix}
+              <EditableText
+                value={proposal.project.heroTitleSuffix || ""}
+                onChange={(val) => updateProject({ heroTitleSuffix: val })}
+                tag="span"
+              />
             </>
           ) : (
-            renderFormattedHeadline(proposal.project.heroHeadline)
+            <EditableText
+              value={proposal.project.heroHeadline || "Una nueva era en la *automatización & gestión* operativa"}
+              onChange={(val) => updateProject({ heroHeadline: val })}
+              tag="span"
+            />
           )}
         </h1>
 
         {/* Dynamic Subtitle */}
-        <p className="text-sm sm:text-base md:text-lg text-[var(--text-primary)]/80 text-center max-w-2xl mx-auto mt-2 mb-6 font-normal leading-relaxed transition-colors duration-300">
-          {proposal.project.heroSubtitle ||
-            `Transformando la operativa de ${proposal.client.shortName} a través de una arquitectura web moderna, escalable y desarrollada a la medida.`}
-        </p>
+        <div className="text-xs sm:text-sm md:text-base text-[var(--text-primary)]/80 text-center max-w-xl mx-auto mt-1 mb-5 font-normal leading-relaxed transition-colors duration-300">
+          <EditableText
+            value={
+              proposal.project.heroSubtitle ||
+              `Transformando la operativa de ${proposal.client.shortName} a través de una arquitectura web moderna, escalable y desarrollada a la medida.`
+            }
+            onChange={(val) => updateProject({ heroSubtitle: val })}
+            multiline
+            tag="p"
+          />
+        </div>
 
         {/* Call to Action (CTA) Button */}
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex items-center justify-center mb-5">
           <a
             href="#alcance"
-            className="inline-flex items-center space-x-2.5 bg-[var(--accent-color)] hover:opacity-90 text-white font-bold px-8 py-3.5 rounded-full shadow-lg shadow-[var(--accent-color)]/25 transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+            className="inline-flex items-center space-x-2.5 bg-[var(--accent-color)] hover:opacity-90 text-white font-bold px-7 py-3 rounded-full shadow-lg shadow-[var(--accent-color)]/25 transition-all transform hover:scale-105 active:scale-95 cursor-pointer text-sm"
           >
             <span>Comenzar Experiencia</span>
             <ArrowRight className="w-4 h-4" />
           </a>
         </div>
 
-        {/* Expanded High-Scale Bottom Metadata Card */}
-        <div className="max-w-5xl md:max-w-6xl w-full mx-auto p-5 md:p-6 rounded-3xl bg-[var(--card-bg)]/90 backdrop-blur-md border border-[var(--border-color)] shadow-lg shadow-zinc-900/5 mt-4 text-left grid grid-cols-2 md:grid-cols-4 gap-6 items-center divide-y md:divide-y-0 md:divide-x divide-[var(--border-color)] transition-colors duration-300">
+        {/* Expanded High-Scale Bottom Metadata Card (Grid-cols-2 on tablet/studio, grid-cols-4 on xl screens) */}
+        <div className="max-w-4xl w-full mx-auto p-4 sm:p-5 rounded-3xl bg-[var(--card-bg)]/90 backdrop-blur-md border border-[var(--border-color)] shadow-lg shadow-zinc-900/5 mt-2 text-left grid grid-cols-2 xl:grid-cols-4 gap-4 items-center divide-y xl:divide-y-0 xl:divide-x divide-[var(--border-color)] transition-colors duration-300">
           {/* Column 1: Fecha de Emisión */}
-          <div className="px-4 py-2 flex flex-col justify-center">
-            <div className="text-xs font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-2 flex items-center mb-1.5">
-              <Calendar className="w-5 h-5 text-[var(--accent-color)]" />
+          <div className="px-3 py-1 flex flex-col justify-center">
+            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+              <Calendar className="w-4 h-4 text-[var(--accent-color)]" />
               <span>Fecha de Emisión</span>
             </div>
-            <p className="text-base md:text-lg font-extrabold text-[var(--text-primary)] whitespace-nowrap">{proposal.project.date}</p>
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
+              <EditableText
+                value={proposal.project.date}
+                onChange={(val) => updateProject({ date: val })}
+                tag="span"
+              />
+            </p>
           </div>
 
           {/* Column 2: Versión & Código */}
-          <div className="px-4 py-2 flex flex-col justify-center pt-4 md:pt-2">
-            <div className="text-xs font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-2 flex items-center mb-1.5">
-              <FileText className="w-5 h-5 text-[var(--accent-color)]" />
+          <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
+            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+              <FileText className="w-4 h-4 text-[var(--accent-color)]" />
               <span>Versión & Código</span>
             </div>
-            <p className="text-base md:text-lg font-extrabold text-[var(--text-primary)] whitespace-nowrap">v{proposal.project.version} ({proposal.project.code})</p>
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
+              v{proposal.project.version} (
+              <EditableText
+                value={proposal.project.code}
+                onChange={(val) => updateProject({ code: val })}
+                tag="span"
+              />
+              )
+            </p>
           </div>
 
           {/* Column 3: Preparado Por */}
-          <div className="px-4 py-2 flex flex-col justify-center pt-4 md:pt-2">
-            <div className="text-xs font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-2 flex items-center mb-1.5">
-              <UserCheck className="w-5 h-5 text-[var(--accent-color)]" />
+          <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
+            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+              <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
               <span>Preparado Por</span>
             </div>
-            <p className="text-base md:text-lg font-extrabold text-[var(--text-primary)] whitespace-nowrap">{proposal.project.author}</p>
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
+              <EditableText
+                value={proposal.project.author}
+                onChange={(val) => updateProject({ author: val })}
+                tag="span"
+              />
+            </p>
           </div>
 
           {/* Column 4: Garantía Incluida */}
-          <div className="px-4 py-2 flex flex-col justify-center pt-4 md:pt-2">
-            <div className="text-xs font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-2 flex items-center mb-1.5">
-              <ShieldCheck className="w-5 h-5 text-[var(--accent-color)]" />
+          <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
+            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+              <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
               <span>Garantía Incluida</span>
             </div>
-            <p className="text-base md:text-lg font-extrabold text-[var(--accent-color)] whitespace-nowrap">60 Días Cobertura</p>
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--accent-color)] leading-tight">
+              <EditableText
+                value={proposal.project.guaranteePeriod || "60 Días Cobertura"}
+                onChange={(val) => updateProject({ guaranteePeriod: val })}
+                tag="span"
+              />
+            </p>
           </div>
         </div>
       </motion.div>

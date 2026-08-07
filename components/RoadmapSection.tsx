@@ -2,7 +2,11 @@
 
 import React from "react";
 import { RoadmapPhase } from "@/data/proposalData";
-import { CheckCircle2, Circle } from "lucide-react";
+import { useProposal } from "@/context/ProposalContext";
+import { useStudioStore } from "@/store/useStudioStore";
+import { EditableText } from "@/components/studio/EditableText";
+import { DeletableItem } from "@/components/studio/DeletableItem";
+import { CheckCircle2, Circle, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface RoadmapSectionProps {
@@ -11,7 +15,9 @@ interface RoadmapSectionProps {
 }
 
 export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimatedDuration }) => {
-  // Helper to dynamically calculate total project duration from phase durations if available
+  const { updateRoadmapPhase, removeRoadmapPhase, addRoadmapPhase } = useProposal();
+  const { isDesignMode } = useStudioStore();
+
   const getComputedDuration = () => {
     if (estimatedDuration && estimatedDuration.trim()) {
       return estimatedDuration;
@@ -38,31 +44,49 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
     return "12 a 16 Semanas";
   };
 
-  const getStatusBadge = (status: RoadmapPhase["status"]) => {
+  const getStatusBadge = (status: RoadmapPhase["status"], phaseIdx: number) => {
+    const cycleStatus = () => {
+      const nextStatus: RoadmapPhase["status"] =
+        status === "Completado" ? "En Proceso" : status === "En Proceso" ? "Pendiente" : "Completado";
+      updateRoadmapPhase(phaseIdx, { status: nextStatus });
+    };
+
     switch (status) {
       case "Completado":
         return (
-          <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+          <button
+            onClick={cycleStatus}
+            className="inline-flex items-center space-x-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 cursor-pointer"
+            title="Clic para cambiar estado de fase"
+          >
             <CheckCircle2 className="w-3 h-3 text-emerald-600" />
             <span>Completado</span>
-          </span>
+          </button>
         );
       case "En Proceso":
         return (
-          <span className="inline-flex items-center space-x-1.5 text-[10px] font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30 shadow-xs">
+          <button
+            onClick={cycleStatus}
+            className="inline-flex items-center space-x-1.5 text-[10px] font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30 shadow-xs cursor-pointer"
+            title="Clic para cambiar estado de fase"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-color)] opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent-color)]" />
             </span>
             <span>En Proceso</span>
-          </span>
+          </button>
         );
       case "Pendiente":
         return (
-          <span className="inline-flex items-center space-x-1 text-[10px] font-semibold text-[var(--text-primary)]/60 bg-[var(--bg-main)] px-2.5 py-1 rounded-full border border-[var(--border-color)]">
+          <button
+            onClick={cycleStatus}
+            className="inline-flex items-center space-x-1 text-[10px] font-semibold text-[var(--text-primary)]/60 bg-[var(--bg-main)] px-2.5 py-1 rounded-full border border-[var(--border-color)] cursor-pointer"
+            title="Clic para cambiar estado de fase"
+          >
             <Circle className="w-3 h-3 text-[var(--text-primary)]/40" />
             <span>Planificado</span>
-          </span>
+          </button>
         );
     }
   };
@@ -74,14 +98,14 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="max-w-7xl mx-auto w-full my-auto flex flex-col justify-center"
+        className="max-w-5xl xl:max-w-6xl mx-auto w-full my-auto flex flex-col justify-center"
       >
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">
+        <div className="text-center max-w-3xl mx-auto mb-5 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30">
             CRONOGRAMA DE EJECUCIÓN • ESTIMACIÓN: {getComputedDuration()}
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-display text-[var(--text-primary)] mt-3 mb-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-3 mb-2">
             Plan de Trabajo & Fases EDT
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
@@ -90,52 +114,129 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
         </div>
 
         {/* Unified Stepper Container */}
-        <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-7 sm:p-9 shadow-sm max-w-7xl mx-auto w-full relative transition-colors duration-300">
-          {/* Thick Gradient Connecting Line */}
-          <div className="hidden md:block absolute top-[5.25rem] left-[6%] right-[6%] h-1 bg-gradient-to-r from-[var(--accent-color)] via-blue-500 to-[var(--border-color)] z-0 rounded-full" />
-
-          {/* Stepper Grid (4 Expanded Content Cards) */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10">
-            {roadmap.map((item, idx) => (
-              <div
-                key={idx}
-                className="min-h-[220px] p-6 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:-translate-y-1 hover:border-[var(--accent-color)]/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+        <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-5 sm:p-7 shadow-sm max-w-6xl mx-auto w-full relative transition-colors duration-300">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-mono font-bold text-[var(--text-primary)]/60">
+              FASES DEL PROYECTO ({roadmap.length})
+            </span>
+            {isDesignMode && (
+              <button
+                onClick={() =>
+                  addRoadmapPhase({
+                    phase: `Fase ${roadmap.length + 1}`,
+                    title: "Nueva Fase",
+                    duration: "2 Semanas",
+                    status: "Pendiente",
+                    description: "Descripción editable de la fase.",
+                    milestones: ["Hito 1"],
+                  })
+                }
+                className="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
               >
-                <div>
-                  {/* Large Node Badge & Status Badge */}
-                  <div className="flex items-center justify-between w-full mb-3">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-base bg-[var(--accent-color)]/10 text-[var(--accent-color)] border border-[var(--accent-color)]/30 shadow-md shadow-[var(--accent-color)]/15">
-                      {idx + 1}
+                <Plus className="w-3.5 h-3.5" />
+                <span>Añadir Fase EDT</span>
+              </button>
+            )}
+          </div>
+
+          {/* Stepper Grid (Responsive 2x2 on studio/tablet, 4x1 on xl wide) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 relative z-10">
+            {roadmap.map((item, idx) => (
+              <DeletableItem
+                key={idx}
+                onDelete={() => removeRoadmapPhase(idx)}
+                itemTitle="fase EDT"
+              >
+                <div className="min-h-[210px] p-5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:-translate-y-1 hover:border-[var(--accent-color)]/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full">
+                  <div>
+                    {/* Large Node Badge & Status Badge */}
+                    <div className="flex items-center justify-between w-full mb-2.5">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm bg-[var(--accent-color)]/10 text-[var(--accent-color)] border border-[var(--accent-color)]/30 shadow-xs">
+                        {idx + 1}
+                      </div>
+                      {getStatusBadge(item.status, idx)}
                     </div>
-                    {getStatusBadge(item.status)}
+
+                    {/* Phase Info */}
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]/60 font-mono block mb-0.5">
+                      <EditableText
+                        value={item.phase}
+                        onChange={(val) => updateRoadmapPhase(idx, { phase: val })}
+                        tag="span"
+                      />{" "}
+                      •{" "}
+                      <EditableText
+                        value={item.duration}
+                        onChange={(val) => updateRoadmapPhase(idx, { duration: val })}
+                        tag="span"
+                      />
+                    </span>
+                    <h3 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] mb-1.5 leading-snug">
+                      <EditableText
+                        value={item.title}
+                        onChange={(val) => updateRoadmapPhase(idx, { title: val })}
+                        tag="span"
+                      />
+                    </h3>
+                    <div className="text-[11px] text-[var(--text-primary)]/70 leading-relaxed mb-3 font-normal">
+                      <EditableText
+                        value={item.description}
+                        onChange={(val) => updateRoadmapPhase(idx, { description: val })}
+                        multiline
+                        tag="p"
+                      />
+                    </div>
                   </div>
 
-                  {/* Phase Info */}
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]/60 font-mono block mb-0.5">
-                    {item.phase} • {item.duration}
-                  </span>
-                  <h3 className="text-sm font-extrabold text-[var(--text-primary)] mb-2 leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[var(--text-primary)]/70 leading-relaxed mb-4 font-normal">
-                    {item.description}
-                  </p>
-                </div>
+                  {/* Milestones Bullet List */}
+                  <div className="w-full pt-2.5 border-t border-[var(--border-color)] space-y-1 text-left">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block font-mono">
+                        Hitos Clave:
+                      </span>
+                      {isDesignMode && (
+                        <button
+                          onClick={() => {
+                            const updatedM = [...(item.milestones || []), "Nuevo Hito"];
+                            updateRoadmapPhase(idx, { milestones: updatedM });
+                          }}
+                          className="text-[10px] font-bold text-[#2563EB] hover:underline flex items-center gap-0.5 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Hito</span>
+                        </button>
+                      )}
+                    </div>
 
-                {/* Milestones Bullet List */}
-                <div className="w-full pt-3 border-t border-[var(--border-color)] space-y-1.5 text-left">
-                  <span className="text-[10px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block font-mono">
-                    Hitos Clave:
-                  </span>
-                  {item.milestones &&
-                    item.milestones.map((m, mIdx) => (
-                      <div key={mIdx} className="flex items-center space-x-1.5 text-[11px] text-[var(--text-primary)]/80">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0" />
-                        <span className="font-medium text-[var(--text-primary)] leading-tight">{m}</span>
-                      </div>
-                    ))}
+                    {item.milestones &&
+                      item.milestones.map((m, mIdx) => (
+                        <DeletableItem
+                          key={mIdx}
+                          onDelete={() => {
+                            const updatedM = item.milestones.filter((_, i) => i !== mIdx);
+                            updateRoadmapPhase(idx, { milestones: updatedM });
+                          }}
+                          itemTitle="hito"
+                        >
+                          <div className="flex items-center space-x-1.5 text-[10px] sm:text-[11px] text-[var(--text-primary)]/80">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0" />
+                            <span className="font-medium text-[var(--text-primary)] leading-tight">
+                              <EditableText
+                                value={m}
+                                onChange={(newM) => {
+                                  const updatedM = [...item.milestones];
+                                  updatedM[mIdx] = newM;
+                                  updateRoadmapPhase(idx, { milestones: updatedM });
+                                }}
+                                tag="span"
+                              />
+                            </span>
+                          </div>
+                        </DeletableItem>
+                      ))}
+                  </div>
                 </div>
-              </div>
+              </DeletableItem>
             ))}
           </div>
         </div>

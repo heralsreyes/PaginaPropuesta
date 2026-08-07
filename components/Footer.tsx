@@ -2,6 +2,8 @@
 
 import React from "react";
 import { ProposalData } from "@/data/proposalData";
+import { useProposal } from "@/context/ProposalContext";
+import { EditableText } from "@/components/studio/EditableText";
 import { MessageSquare, ArrowUp, UserCheck, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -10,6 +12,8 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ proposal }) => {
+  const { updateCompany } = useProposal();
+
   const scrollToTop = () => {
     const heroEl = document.getElementById("hero");
     if (heroEl) {
@@ -44,10 +48,10 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
           </p>
         </div>
 
-        {/* Expanded 3-Column Hero Layout (max-w-7xl) */}
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch mt-4 mb-6">
-          {/* Card 1: Company Profile (lg:col-span-4) */}
-          <div className="lg:col-span-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 md:p-10 shadow-lg flex flex-col justify-between min-h-[380px] transition-colors duration-300">
+        {/* Expanded 3-Column Hero Layout (max-w-6xl) */}
+        <div className="max-w-6xl mx-auto w-full grid grid-cols-1 xl:grid-cols-12 gap-6 items-stretch mt-4 mb-6">
+          {/* Card 1: Company Profile (xl:col-span-4) */}
+          <div className="xl:col-span-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 md:p-8 shadow-lg flex flex-col justify-between min-h-[360px] transition-colors duration-300">
             <div>
               <div className="flex items-center space-x-3 mb-2">
                 <span className="text-3xl font-black font-display text-[var(--text-primary)] tracking-tight">
@@ -64,7 +68,14 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
 
             <div className="pt-5 border-t border-[var(--border-color)] space-y-2">
               <div className="text-sm font-semibold bg-[var(--bg-main)] text-[var(--text-primary)]/80 px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
-                RNC: <strong className="text-[var(--text-primary)] font-bold">{proposal.company.rnc}</strong>
+                RNC:{" "}
+                <strong className="text-[var(--text-primary)] font-bold">
+                  <EditableText
+                    value={proposal.company.rnc}
+                    onChange={(val) => updateCompany({ rnc: val })}
+                    tag="span"
+                  />
+                </strong>
               </div>
               <div className="text-xs font-semibold text-[var(--text-primary)]/70 bg-[var(--bg-main)] px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
                 Santo Domingo, República Dominicana
@@ -72,8 +83,8 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
             </div>
           </div>
 
-          {/* Card 2: Executive Contacts (lg:col-span-4) */}
-          <div className="lg:col-span-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 md:p-10 shadow-lg flex flex-col justify-between min-h-[380px] transition-colors duration-300">
+          {/* Card 2: Executive Contacts (xl:col-span-4) */}
+          <div className="xl:col-span-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 md:p-8 shadow-lg flex flex-col justify-between min-h-[360px] transition-colors duration-300">
             <div>
               <h4 className="text-xs font-bold text-[var(--text-primary)] mb-4 uppercase tracking-wider flex items-center space-x-2 font-mono">
                 <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
@@ -94,8 +105,8 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
             </div>
           </div>
 
-          {/* Card 3: Direct Action & WhatsApp CTA (lg:col-span-4) */}
-          <div className="lg:col-span-4 bg-[var(--card-bg)] text-[var(--text-primary)] rounded-3xl p-8 md:p-10 shadow-2xl border border-[var(--border-color)] flex flex-col justify-between min-h-[380px] relative overflow-hidden transition-colors duration-300">
+          {/* Card 3: Direct Action & WhatsApp CTA (xl:col-span-4) */}
+          <div className="xl:col-span-4 bg-[var(--card-bg)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl border border-[var(--border-color)] flex flex-col justify-between min-h-[360px] relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent-color)]/20 blur-3xl rounded-full pointer-events-none" />
 
             <div>

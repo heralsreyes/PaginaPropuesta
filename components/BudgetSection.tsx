@@ -2,8 +2,12 @@
 
 import React, { useState } from "react";
 import { ProposalData } from "@/data/proposalData";
+import { useProposal } from "@/context/ProposalContext";
 import { useFinancialStore } from "@/store/useFinancialStore";
-import { CheckCircle2, CreditCard, ShieldCheck, Tag } from "lucide-react";
+import { useStudioStore } from "@/store/useStudioStore";
+import { EditableText } from "@/components/studio/EditableText";
+import { DeletableItem } from "@/components/studio/DeletableItem";
+import { CheckCircle2, CreditCard, ShieldCheck, Tag, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface BudgetSectionProps {
@@ -12,7 +16,8 @@ interface BudgetSectionProps {
 }
 
 export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcceptModal }) => {
-  // Suscripción reactiva explícita a todos los valores del store
+  const { updateBudget, addPaymentTerm, removePaymentTerm } = useProposal();
+  const { isDesignMode } = useStudioStore();
   const {
     baseSubtotal: storeBaseSubtotal,
     hasTax: storeHasTax,
@@ -37,7 +42,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
     }).format(finalAmount);
   };
 
-  // Prioridad: Prop propuesta (React Context) > Store > Default
+  // Priority: Proposal Prop > Store > Default
   const isTaxActive = budget.hasTax !== undefined ? budget.hasTax : storeHasTax;
   const taxPercentVal = budget.taxPercent !== undefined ? budget.taxPercent : storeTaxPercent;
   const isDiscountActive = budget.hasDiscount !== undefined ? budget.hasDiscount : storeHasDiscount;
@@ -45,7 +50,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
   const discountTypeVal = budget.discountType || storeDiscountType;
   const baseSubtotal = budget.amountWithoutTax || storeBaseSubtotal || 12500;
 
-  // Recálculo automático en cada re-render reactivo
+  // Real-time calculation
   const discountAmount = isDiscountActive
     ? discountTypeVal === "percent"
       ? baseSubtotal * (discountValueVal / 100)
@@ -57,7 +62,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
   const totalFinal = subtotalNeto + taxAmount;
 
   return (
-    <section id="inversion" className="h-screen w-full snap-start snap-always flex flex-col justify-center items-center relative overflow-hidden bg-[#FAF9F6] border-t border-[#E4E4E7] px-4 sm:px-6 lg:px-8">
+    <section id="inversion" className="h-screen w-full snap-start snap-always flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -67,34 +72,34 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
       >
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] bg-[#EFF6FF] px-3.5 py-1 rounded-full border border-[#BFDBFE]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
             PROPUESTA ECONÓMICA • INVERSIÓN TRANSPARENTE
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-display text-[#111111] mt-3 mb-2">
+          <h2 className="text-3xl sm:text-4xl font-bold font-display text-[var(--text-primary)] mt-3 mb-2">
             Presupuesto & Esquema de Inversión
           </h2>
-          <p className="text-[#52525B] text-xs sm:text-sm font-normal max-w-2xl mx-auto">
+          <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
             Monto total estimado para la ejecución del proyecto con desglose de impuestos y modalidades de pago por entregables.
           </p>
         </div>
 
         {/* High-Impact Pricing Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-7xl mx-auto w-full items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 max-w-6xl mx-auto w-full items-stretch">
           {/* Left Card: Dark Hero Pricing Card */}
-          <div className="lg:col-span-5 bg-[#18181B] text-white border border-zinc-800 rounded-3xl p-7 md:p-9 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[440px]">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-[#2563EB]/20 blur-3xl rounded-full pointer-events-none" />
+          <div className="xl:col-span-5 bg-[var(--card-bg)] text-[var(--text-primary)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[420px] transition-colors duration-300">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent-color)]/15 blur-3xl rounded-full pointer-events-none" />
 
             <div>
               {/* Currency Selector Toggle Header */}
               <div className="flex items-center justify-between mb-5">
-                <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-bold">
+                <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-primary)]/60 font-bold">
                   Resumen Financiero
                 </span>
-                <div className="inline-flex p-1 rounded-xl bg-zinc-800 border border-zinc-700">
+                <div className="inline-flex p-1 rounded-xl bg-[var(--bg-main)] border border-[var(--border-color)]">
                   <button
                     onClick={() => setSelectedCurrency("USD")}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                      currentCurrency === "USD" ? "bg-[#2563EB] text-white" : "text-zinc-400 hover:text-white"
+                      currentCurrency === "USD" ? "bg-[var(--accent-color)] text-white" : "text-[var(--text-primary)]/70"
                     }`}
                   >
                     USD
@@ -102,7 +107,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                   <button
                     onClick={() => setSelectedCurrency("DOP")}
                     className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                      currentCurrency === "DOP" ? "bg-[#2563EB] text-white" : "text-zinc-400 hover:text-white"
+                      currentCurrency === "DOP" ? "bg-[var(--accent-color)] text-white" : "text-[var(--text-primary)]/70"
                     }`}
                   >
                     DOP
@@ -113,16 +118,16 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
               {/* Financial Breakdown Rows */}
               <div className="space-y-2.5 mb-2 text-xs">
                 {/* Subtotal Base */}
-                <div className="flex items-center justify-between text-zinc-400">
+                <div className="flex items-center justify-between text-[var(--text-primary)]/70">
                   <span>Monto Subtotal Base:</span>
-                  <span className="font-mono font-medium text-zinc-200">
+                  <span className="font-mono font-bold text-[var(--text-primary)]">
                     {formatMoney(baseSubtotal, currentCurrency)}
                   </span>
                 </div>
 
                 {/* Descuento Especial (si aplica) */}
                 {isDiscountActive && discountAmount > 0 && (
-                  <div className="flex items-center justify-between text-emerald-400">
+                  <div className="flex items-center justify-between text-emerald-600 font-semibold">
                     <span className="flex items-center gap-1.5 font-medium">
                       <Tag className="w-3.5 h-3.5" />
                       Descuento Comercial ({discountTypeVal === "percent" ? `${discountValueVal}%` : "Monto Fijo"}):
@@ -135,14 +140,14 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
 
                 {/* ITBIS / Impuestos */}
                 {isTaxActive ? (
-                  <div className="flex items-center justify-between text-zinc-400">
+                  <div className="flex items-center justify-between text-[var(--text-primary)]/70">
                     <span>ITBIS ({taxPercentVal}%):</span>
-                    <span className="text-[#3B82F6] font-mono font-semibold bg-[#2563EB]/15 px-2.5 py-0.5 rounded-lg border border-[#2563EB]/30">
+                    <span className="text-[var(--accent-color)] font-mono font-semibold bg-[var(--accent-color)]/10 px-2.5 py-0.5 rounded-lg border border-[var(--accent-color)]/30">
                       +{formatMoney(taxAmount, currentCurrency)}
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between text-amber-400 text-[11px]">
+                  <div className="flex items-center justify-between text-amber-600 text-[11px]">
                     <span>ITBIS Exento:</span>
                     <span className="font-mono">$0.00 (Sin Impuestos)</span>
                   </div>
@@ -150,14 +155,14 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
               </div>
 
               {/* Divider */}
-              <div className="border-t border-zinc-800 my-3" />
+              <div className="border-t border-[var(--border-color)] my-3" />
 
               {/* Main Total Display (BIG & PROMINENT) */}
               <div>
-                <span className="text-xs font-bold text-zinc-400 tracking-wider uppercase block font-mono">
+                <span className="text-xs font-bold text-[var(--text-primary)]/60 tracking-wider uppercase block font-mono">
                   TOTAL GENERAL AGREGADO {isTaxActive ? "(CON ITBIS)" : "(SIN IMPUESTOS)"}
                 </span>
-                <div className="text-4xl sm:text-5xl md:text-6xl font-black font-display text-white tracking-tight my-2 pr-2">
+                <div className="text-4xl sm:text-5xl md:text-6xl font-black font-display text-[var(--text-primary)] tracking-tight my-2 pr-2">
                   {formatMoney(totalFinal, currentCurrency)}
                 </div>
               </div>
@@ -167,58 +172,99 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
             <div>
               <button
                 onClick={onOpenAcceptModal}
-                className="w-full inline-flex items-center justify-center space-x-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-[#2563EB]/30 transition-all text-sm mt-3 transform hover:scale-[1.02] active:scale-95 cursor-pointer"
+                className="w-full inline-flex items-center justify-center space-x-2.5 bg-[var(--accent-color)] hover:opacity-90 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-[var(--accent-color)]/30 transition-all text-sm mt-3 transform hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Aceptar Propuesta Formal</span>
               </button>
 
-              <div className="text-zinc-400 text-[11px] text-center mt-2.5 font-mono flex items-center justify-center space-x-1.5">
-                <ShieldCheck className="w-4 h-4 text-[#2563EB]" />
+              <div className="text-[var(--text-primary)]/60 text-[11px] text-center mt-2.5 font-mono flex items-center justify-center space-x-1.5">
+                <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
                 <span>Incluye 60 Días de Garantía SLA Post-Pase</span>
               </div>
             </div>
           </div>
 
           {/* Right Card: Payment Milestones */}
-          <div className="lg:col-span-7 bg-white border border-[#E4E4E7] rounded-3xl p-7 sm:p-8 md:p-9 shadow-sm flex flex-col justify-between">
+          <div className="xl:col-span-7 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between transition-colors duration-300">
             <div>
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-base sm:text-lg font-extrabold text-[#111111] flex items-center space-x-2.5">
-                  <CreditCard className="w-5 h-5 text-[#2563EB]" />
+                <h3 className="text-base sm:text-lg font-extrabold text-[var(--text-primary)] flex items-center space-x-2.5">
+                  <CreditCard className="w-5 h-5 text-[var(--accent-color)]" />
                   <span>Esquema de Pagos por Entregables</span>
                 </h3>
-                <span className="text-xs font-bold text-[#2563EB] bg-[#EFF6FF] px-3.5 py-1 rounded-full border border-[#BFDBFE]">
-                  {budget.paymentTerms.length} Hitos de Pago
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
+                    {budget.paymentTerms.length} Hitos de Pago
+                  </span>
+                  {isDesignMode && (
+                    <button
+                      onClick={() =>
+                        addPaymentTerm({
+                          milestone: "Nuevo Hito de Pago",
+                          percentage: 20,
+                          description: "Descripción editable del hito.",
+                        })
+                      }
+                      className="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Añadir</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-3.5">
                 {budget.paymentTerms.map((term, idx) => (
-                  <div
+                  <DeletableItem
                     key={idx}
-                    className="p-4 rounded-2xl bg-[#FAF9F6] border border-[#E4E4E7] flex items-start space-x-4 hover:border-[#2563EB]/40 transition-all"
+                    onDelete={() => removePaymentTerm(idx)}
+                    itemTitle="hito de pago"
                   >
-                    <div className="w-11 h-11 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
-                      {term.percentage}%
-                    </div>
-                    <div className="flex-1 min-w-0 pr-2">
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <h4 className="text-xs sm:text-sm font-extrabold text-[#111111] truncate">{term.milestone}</h4>
-                        <span className="text-xs sm:text-sm font-mono font-bold text-[#2563EB] shrink-0 pl-2">
-                          {formatMoney((totalFinal * term.percentage) / 100, currentCurrency)}
-                        </span>
+                    <div className="p-4 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] flex items-start space-x-4 hover:border-[var(--accent-color)]/40 transition-all">
+                      <div className="w-11 h-11 rounded-2xl bg-[var(--accent-color)] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
+                        {term.percentage}%
                       </div>
-                      <p className="text-xs text-[#52525B] leading-relaxed font-normal">{term.description}</p>
+                      <div className="flex-1 min-w-0 pr-2">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <h4 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] truncate">
+                            <EditableText
+                              value={term.milestone}
+                              onChange={(val) => {
+                                const nextTerms = [...budget.paymentTerms];
+                                nextTerms[idx] = { ...nextTerms[idx], milestone: val };
+                                updateBudget({ paymentTerms: nextTerms });
+                              }}
+                              tag="span"
+                            />
+                          </h4>
+                          <span className="text-xs sm:text-sm font-mono font-bold text-[var(--accent-color)] shrink-0 pl-2">
+                            {formatMoney((totalFinal * term.percentage) / 100, currentCurrency)}
+                          </span>
+                        </div>
+                        <div className="text-xs text-[var(--text-primary)]/70 leading-relaxed font-normal">
+                          <EditableText
+                            value={term.description}
+                            onChange={(val) => {
+                              const nextTerms = [...budget.paymentTerms];
+                              nextTerms[idx] = { ...nextTerms[idx], description: val };
+                              updateBudget({ paymentTerms: nextTerms });
+                            }}
+                            multiline
+                            tag="p"
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </DeletableItem>
                 ))}
               </div>
             </div>
 
-            <div className="pt-4 mt-5 border-t border-[#E4E4E7] flex flex-wrap items-center justify-between gap-2 text-xs text-[#71717A] font-mono">
+            <div className="pt-4 mt-5 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2 text-xs text-[var(--text-primary)]/60 font-mono">
               <span>Modalidad: Transferencia Bancaria</span>
-              <span className="font-bold text-[#111111]">Facturación con NCF Fiscal</span>
+              <span className="font-bold text-[var(--text-primary)]">Facturación con NCF Fiscal</span>
             </div>
           </div>
         </div>
