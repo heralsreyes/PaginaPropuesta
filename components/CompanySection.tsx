@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { ProposalData } from "@/data/proposalData";
-import { Target, Compass, Award, ShieldCheck, CheckCircle2, Sparkles, Monitor, Cpu } from "lucide-react";
+import { Target, Compass, Award, ShieldCheck, CheckCircle2, Monitor, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CompanySectionProps {
@@ -42,7 +42,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
   ];
 
   return (
-    <section id="empresa" className="h-screen w-full snap-start snap-always flex flex-col justify-center items-center relative overflow-hidden bg-[#FAF9F6] border-t border-[#E4E4E7] px-4 sm:px-6 lg:px-8">
+    <section id="empresa" className="h-screen w-full snap-start snap-always flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       {/* 💻 Screen Interactive View */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -53,13 +53,13 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
       >
         {/* Standard Executive Header Block */}
         <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">
-          <span className="px-3.5 py-1 rounded-full bg-[#EFF6FF] text-[#2563EB] text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[#BFDBFE] mb-2 inline-block">
+          <span className="px-3.5 py-1 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[var(--accent-color)]/30 mb-2 inline-block">
             RESPALDO CORPORATIVO • EXPERIENCIA & CALIDAD
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[#111111] tracking-tight text-center mt-1 mb-2">
+          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--text-primary)] tracking-tight text-center mt-1 mb-2">
             Sobre ENFOCO, S.R.L.
           </h2>
-          <p className="text-[#52525B] text-xs sm:text-sm max-w-2xl mx-auto text-center mb-2">
+          <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm max-w-2xl mx-auto text-center mb-2">
             Conozca nuestro propósito, estándares metodológicos y el compromiso técnico que respalda cada una de nuestras soluciones.
           </p>
         </div>
@@ -69,8 +69,8 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
           {/* LEFT COLUMN: Interactive Controls & Details (6 Cols) */}
           <div className="lg:col-span-6 flex flex-col justify-between">
             <div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#111111] mb-3 flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-[#2563EB]"></span>
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--accent-color)]"></span>
                 <span>Seleccione una opción para explorar:</span>
               </h3>
 
@@ -86,23 +86,23 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       onClick={() => setActiveOption(opt.id)}
                       className={`p-4 rounded-2xl border text-center transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
                         isActive
-                          ? "bg-[#2563EB] text-white border-[#2563EB] shadow-lg shadow-[#2563EB]/25 scale-[1.02]"
-                          : "bg-white text-[#52525B] border-[#E4E4E7] hover:border-[#2563EB]/40 hover:bg-[#F4F4F5] hover:text-[#111111]"
+                          ? "bg-[var(--accent-color)] text-white border-[var(--accent-color)] shadow-lg shadow-[var(--accent-color)]/25 scale-[1.02]"
+                          : "bg-[var(--card-bg)] text-[var(--text-primary)]/80 border-[var(--border-color)] hover:border-[var(--accent-color)]/40 hover:text-[var(--text-primary)]"
                       }`}
                     >
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 transition-colors ${
                           isActive
                             ? "bg-white/20 text-white"
-                            : "bg-[#EFF6FF] text-[#2563EB]"
+                            : "bg-[var(--accent-color)]/10 text-[var(--accent-color)]"
                         }`}
                       >
                         <IconComponent className="w-5 h-5" />
                       </div>
-                      <span className={`text-xs sm:text-sm font-bold block ${isActive ? "text-white" : "text-[#111111]"}`}>
+                      <span className={`text-xs sm:text-sm font-bold block ${isActive ? "text-white" : "text-[var(--text-primary)]"}`}>
                         {opt.title}
                       </span>
-                      <span className={`text-[11px] font-normal block ${isActive ? "text-white/80" : "text-[#71717A]"}`}>
+                      <span className={`text-[11px] font-normal block ${isActive ? "text-white/80" : "text-[var(--text-primary)]/60"}`}>
                         {opt.subtitle}
                       </span>
                     </button>
@@ -111,14 +111,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
               </div>
 
               <div className="space-y-2.5">
-                <div className="p-3.5 rounded-2xl bg-[#F4F4F5] border border-[#E4E4E7] text-xs text-[#52525B] leading-relaxed">
-                  <span className="text-[#2563EB] font-bold mr-1.5">•</span>
-                  <strong className="text-[#111111] font-semibold">ENFOCO, S.R.L.:</strong> Soluciones tecnológicas integrales especializadas en Desarrollo de Software a la medida, automatización y optimización operativa.
+                <div className="p-3.5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)]/80 leading-relaxed">
+                  <span className="text-[var(--accent-color)] font-bold mr-1.5">•</span>
+                  <strong className="text-[var(--text-primary)] font-semibold">ENFOCO, S.R.L.:</strong> Soluciones tecnológicas integrales especializadas en Desarrollo de Software a la medida, automatización y optimización operativa.
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#F4F4F5] border border-[#E4E4E7] text-xs text-[#52525B] leading-relaxed">
-                  <span className="text-[#2563EB] font-bold mr-1.5">•</span>
-                  <strong className="text-[#111111] font-semibold">Respaldo Internacional:</strong> Equipo multidisciplinario con certificaciones CMMI, ISO 27002 y metodologías ágiles Scrum/PMP.
+                <div className="p-3.5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)]/80 leading-relaxed">
+                  <span className="text-[var(--accent-color)] font-bold mr-1.5">•</span>
+                  <strong className="text-[var(--text-primary)] font-semibold">Respaldo Internacional:</strong> Equipo multidisciplinario con certificaciones CMMI, ISO 27002 y metodologías ágiles Scrum/PMP.
                 </div>
               </div>
             </div>
@@ -126,23 +126,23 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
 
           {/* RIGHT COLUMN: Visual Mockup Showcase (6 Cols) */}
           <div className="lg:col-span-6 flex flex-col justify-center">
-            <div className="bg-white rounded-3xl border-4 border-[#111111] shadow-2xl overflow-hidden min-h-[400px] max-h-[420px] flex flex-col justify-between relative">
-              <div className="bg-[#111111] text-white px-4 py-2.5 flex items-center justify-between shrink-0">
+            <div className="bg-[var(--card-bg)] rounded-3xl border-4 border-[var(--text-primary)] shadow-2xl overflow-hidden min-h-[400px] max-h-[420px] flex flex-col justify-between relative transition-colors duration-300">
+              <div className="bg-[var(--text-primary)] text-[var(--card-bg)] px-4 py-2.5 flex items-center justify-between shrink-0">
                 <div className="flex items-center space-x-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <div className="flex items-center space-x-2 text-xs font-mono text-zinc-300">
-                  <Monitor className="w-3.5 h-3.5 text-[#2563EB]" />
+                <div className="flex items-center space-x-2 text-xs font-mono opacity-80">
+                  <Monitor className="w-3.5 h-3.5 text-[var(--accent-color)]" />
                   <span>ENFOCO OS • [{activeOption.toUpperCase()}]</span>
                 </div>
-                <span className="text-[10px] bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded font-mono">
+                <span className="text-[10px] bg-[#2563EB]/20 text-[var(--accent-color)] px-2 py-0.5 rounded font-mono">
                   v2.5
                 </span>
               </div>
 
-              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-center bg-[#FAF9F6] relative overflow-hidden">
+              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-center bg-[var(--bg-main)] relative overflow-hidden transition-colors duration-300">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeOption}
@@ -156,30 +156,30 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <Target className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[#111111]">Nuestra Misión Corporativa</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">Nuestra Misión Corporativa</h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-full border border-[#BFDBFE]">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
                             Objetivo Principal
                           </span>
                         </div>
 
-                        <div className="p-4 rounded-2xl bg-white border border-[#E4E4E7] shadow-sm">
-                          <p className="text-xs sm:text-sm text-[#111111] leading-relaxed italic font-normal">
+                        <div className="p-4 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm">
+                          <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed italic font-normal">
                             "{company.mission}"
                           </p>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="p-3.5 rounded-xl bg-white border border-[#E4E4E7] text-left">
-                            <span className="text-[10px] text-[#71717A] block font-semibold">Garantía</span>
-                            <span className="text-xs font-bold text-[#111111]">100% a la Medida</span>
+                          <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-left">
+                            <span className="text-[10px] text-[var(--text-primary)]/60 block font-semibold">Garantía</span>
+                            <span className="text-xs font-bold text-[var(--text-primary)]">100% a la Medida</span>
                           </div>
-                          <div className="p-3.5 rounded-xl bg-white border border-[#E4E4E7] text-left">
-                            <span className="text-[10px] text-[#71717A] block font-semibold">Soporte SLA</span>
-                            <span className="text-xs font-bold text-[#2563EB]">60 Días Cobertura</span>
+                          <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-left">
+                            <span className="text-[10px] text-[var(--text-primary)]/60 block font-semibold">Soporte SLA</span>
+                            <span className="text-xs font-bold text-[var(--accent-color)]">60 Días Cobertura</span>
                           </div>
                         </div>
                       </div>
@@ -189,23 +189,23 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <Compass className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[#111111]">Nuestra Visión de Futuro</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">Nuestra Visión de Futuro</h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-full border border-[#BFDBFE]">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
                             Liderazgo
                           </span>
                         </div>
 
-                        <div className="p-4 rounded-2xl bg-white border border-[#E4E4E7] shadow-sm">
-                          <p className="text-xs sm:text-sm text-[#111111] leading-relaxed italic font-normal">
+                        <div className="p-4 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm">
+                          <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed italic font-normal">
                             "{company.vision}"
                           </p>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE] flex items-center space-x-3 text-xs text-[#2563EB] font-semibold">
+                        <div className="p-3.5 rounded-xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center space-x-3 text-xs text-[var(--accent-color)] font-semibold">
                           <Cpu className="w-4 h-4 shrink-0" />
                           <span>Arquitectura limpia y moderna basada en Next.js, React y Cloud Services.</span>
                         </div>
@@ -216,12 +216,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <Award className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[#111111]">Valores Fundamentales</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">Valores Fundamentales</h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-full border border-[#BFDBFE]">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
                             Principios
                           </span>
                         </div>
@@ -230,9 +230,9 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           {company.values.map((val, idx) => (
                             <div
                               key={idx}
-                              className="p-3 rounded-xl bg-white border border-[#E4E4E7] flex items-center space-x-2 text-xs text-[#111111] font-bold shadow-xs"
+                              className="p-3 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] flex items-center space-x-2 text-xs text-[var(--text-primary)] font-bold shadow-xs"
                             >
-                              <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                              <CheckCircle2 className="w-4 h-4 text-[var(--accent-color)] shrink-0" />
                               <span>{val}</span>
                             </div>
                           ))}
@@ -244,12 +244,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <ShieldCheck className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[#111111]">Estándares & Normativas</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">Estándares & Normativas</h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-full border border-[#BFDBFE]">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
                             Certificado
                           </span>
                         </div>
@@ -258,10 +258,10 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           {company.certifications.map((cert, idx) => (
                             <div
                               key={idx}
-                              className="p-3 rounded-xl bg-white border border-[#E4E4E7] flex items-center justify-between text-xs"
+                              className="p-3 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] flex items-center justify-between text-xs"
                             >
-                              <span className="font-bold text-[#111111]">{cert}</span>
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE] font-bold">
+                              <span className="font-bold text-[var(--text-primary)]">{cert}</span>
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] border border-[var(--accent-color)]/30 font-bold">
                                 Certificado
                               </span>
                             </div>
@@ -273,58 +273,58 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                 </AnimatePresence>
               </div>
 
-              <div className="bg-[#111111] text-zinc-400 px-4 py-2 text-[11px] flex items-center justify-between shrink-0 font-mono">
+              <div className="bg-[var(--text-primary)] text-[var(--card-bg)] opacity-90 px-4 py-2 text-[11px] flex items-center justify-between shrink-0 font-mono">
                 <span>ENFOCO S.R.L. • RNC {company.rnc}</span>
-                <span className="text-[#2563EB] font-bold">100% Calidad Garantizada</span>
+                <span className="text-[var(--accent-color)] font-bold">100% Calidad Garantizada</span>
               </div>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* 🖨️ Print-Only Full Unwrapped View (All 4 Tabs Visible in PDF) */}
+      {/* 🖨️ Print-Only Full Unwrapped View */}
       <div className="print-only max-w-6xl mx-auto w-full my-auto">
         <div className="text-center mb-4">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] bg-[#EFF6FF] px-4 py-1.5 rounded-full border border-[#BFDBFE]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30">
             RESPALDO CORPORATIVO • EXPERIENCIA & CALIDAD
           </span>
-          <h2 className="text-2xl font-extrabold text-[#111111] mt-2 mb-1">
+          <h2 className="text-2xl font-extrabold text-[var(--text-primary)] mt-2 mb-1">
             Sobre ENFOCO, S.R.L.
           </h2>
-          <p className="text-[#52525B] text-xs max-w-2xl mx-auto text-center mb-4">
+          <p className="text-[var(--text-primary)]/70 text-xs max-w-2xl mx-auto text-center mb-4">
             Conozca nuestro propósito, estándares metodológicos y el compromiso técnico que respalda cada una de nuestras soluciones.
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           {/* Misión */}
-          <div className="bg-white border border-[#E4E4E7] rounded-2xl p-5 shadow-xs">
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
             <div className="flex items-center space-x-2 mb-2">
-              <Target className="w-4 h-4 text-[#2563EB]" />
-              <h3 className="text-sm font-bold text-[#111111]">Nuestra Misión</h3>
+              <Target className="w-4 h-4 text-[var(--accent-color)]" />
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Nuestra Misión</h3>
             </div>
-            <p className="text-xs text-[#52525B] leading-relaxed italic">"{company.mission}"</p>
+            <p className="text-xs text-[var(--text-primary)]/70 leading-relaxed italic">"{company.mission}"</p>
           </div>
 
           {/* Visión */}
-          <div className="bg-white border border-[#E4E4E7] rounded-2xl p-5 shadow-xs">
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
             <div className="flex items-center space-x-2 mb-2">
-              <Compass className="w-4 h-4 text-[#2563EB]" />
-              <h3 className="text-sm font-bold text-[#111111]">Nuestra Visión</h3>
+              <Compass className="w-4 h-4 text-[var(--accent-color)]" />
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Nuestra Visión</h3>
             </div>
-            <p className="text-xs text-[#52525B] leading-relaxed italic">"{company.vision}"</p>
+            <p className="text-xs text-[var(--text-primary)]/70 leading-relaxed italic">"{company.vision}"</p>
           </div>
 
           {/* Valores */}
-          <div className="bg-white border border-[#E4E4E7] rounded-2xl p-5 shadow-xs">
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
             <div className="flex items-center space-x-2 mb-2">
-              <Award className="w-4 h-4 text-[#2563EB]" />
-              <h3 className="text-sm font-bold text-[#111111]">Valores Fundamentales</h3>
+              <Award className="w-4 h-4 text-[var(--accent-color)]" />
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Valores Fundamentales</h3>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs font-bold text-[#111111]">
+            <div className="grid grid-cols-2 gap-2 text-xs font-bold text-[var(--text-primary)]">
               {company.values.map((v, idx) => (
                 <div key={idx} className="flex items-center space-x-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB]" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)]" />
                   <span>{v}</span>
                 </div>
               ))}
@@ -332,16 +332,16 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
           </div>
 
           {/* Estándares */}
-          <div className="bg-white border border-[#E4E4E7] rounded-2xl p-5 shadow-xs">
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
             <div className="flex items-center space-x-2 mb-2">
-              <ShieldCheck className="w-4 h-4 text-[#2563EB]" />
-              <h3 className="text-sm font-bold text-[#111111]">Estándares & Normativas</h3>
+              <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Estándares & Normativas</h3>
             </div>
-            <div className="space-y-1.5 text-xs text-[#111111]">
+            <div className="space-y-1.5 text-xs text-[var(--text-primary)]">
               {company.certifications.map((cert, idx) => (
-                <div key={idx} className="flex items-center justify-between p-1.5 bg-[#FAF9F6] rounded-lg border border-[#E4E4E7]">
+                <div key={idx} className="flex items-center justify-between p-1.5 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)]">
                   <span className="font-bold">{cert}</span>
-                  <span className="text-[10px] text-[#2563EB] font-bold">Certificado</span>
+                  <span className="text-[10px] text-[var(--accent-color)] font-bold">Certificado</span>
                 </div>
               ))}
             </div>

@@ -20,7 +20,7 @@ function ProposalContent() {
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
   return (
-    <main className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth bg-[#FAF9F6] text-[#111111] relative">
+    <main className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth bg-[var(--bg-main)] text-[var(--text-primary)] relative transition-colors duration-300">
       {/* Floating Vertical Sidebar & Top Branding Nav */}
       <SidebarNav
         proposal={proposal}

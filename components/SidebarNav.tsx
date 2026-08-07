@@ -74,28 +74,28 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptMo
   return (
     <>
       {/* Top Left Floating Brand Co-Badge */}
-      <div className="no-print fixed top-6 left-6 z-50 flex items-center space-x-3 p-3 px-4 sm:px-5 bg-white/80 backdrop-blur-md rounded-2xl border border-[#E4E4E7] shadow-sm">
+      <div className="no-print fixed top-6 left-6 z-50 flex items-center space-x-3 p-3 px-4 sm:px-5 bg-[var(--card-bg)]/80 backdrop-blur-md rounded-2xl border border-[var(--border-color)] shadow-sm transition-colors duration-300">
         <div className="flex items-center space-x-2">
-          <span className="text-lg sm:text-xl font-bold font-display tracking-tight text-[#111111]">
-            ENFOCO<span className="text-[#2563EB]">.</span>
+          <span className="text-lg sm:text-xl font-bold font-display tracking-tight text-[var(--text-primary)]">
+            ENFOCO<span className="text-[var(--accent-color)]">.</span>
           </span>
-          <span className="text-xs px-2 py-0.5 rounded bg-[#F4F4F5] text-[#52525B] border border-[#E4E4E7] font-semibold">
+          <span className="text-xs px-2 py-0.5 rounded bg-[var(--bg-main)] text-[var(--text-primary)] border border-[var(--border-color)] font-semibold">
             S.R.L.
           </span>
         </div>
         <span className="text-[#D4D4D8] font-light text-sm">/</span>
-        <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#52525B]">
+        <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]/80">
           {proposal.client.shortName}
         </span>
       </div>
 
       {/* Top Right Floating Action Buttons */}
       <div className="no-print fixed top-6 right-6 sm:right-8 z-50 flex items-center space-x-2 sm:space-x-3">
-        {/* Customizer Trigger Button (ONLY VISIBLE IN ADMIN MODE AFTER CLIENT MOUNT) */}
+        {/* Customizer Trigger Button */}
         {mounted && isAdmin && (
           <button
             onClick={onOpenCustomizer}
-            className="inline-flex items-center space-x-1.5 px-3 py-2.5 text-xs sm:text-sm font-bold text-[#111111] bg-amber-100/90 hover:bg-amber-200 backdrop-blur-md border border-amber-300 rounded-xl shadow-xs transition-all cursor-pointer transform hover:scale-105 animate-pulse"
+            className="inline-flex items-center space-x-1.5 px-3 py-2.5 text-xs sm:text-sm font-bold text-amber-900 bg-amber-100/90 hover:bg-amber-200 backdrop-blur-md border border-amber-300 rounded-xl shadow-xs transition-all cursor-pointer transform hover:scale-105 animate-pulse"
             title="Modo Editor Activo (ENFOCO) • Clic para editar"
           >
             <Settings className="w-4 h-4 text-amber-800" />
@@ -106,7 +106,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptMo
         {/* PDF Download Button */}
         <button
           onClick={handlePrint}
-          className="inline-flex items-center space-x-2 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-[#52525B] hover:text-[#111111] bg-white/80 hover:bg-white backdrop-blur-md border border-[#E4E4E7] rounded-xl shadow-sm transition-all cursor-pointer"
+          className="inline-flex items-center space-x-2 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-[var(--text-primary)]/80 hover:text-[var(--text-primary)] bg-[var(--card-bg)]/80 hover:bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-color)] rounded-xl shadow-sm transition-all cursor-pointer"
           title="Descargar PDF Completo"
         >
           <Download className="w-4 h-4" />
@@ -116,7 +116,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptMo
         {/* Primary Accept Proposal Button */}
         <button
           onClick={onOpenAcceptModal}
-          className="inline-flex items-center space-x-2 px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] rounded-xl shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          className="inline-flex items-center space-x-2 px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold text-white bg-[var(--accent-color)] hover:opacity-90 rounded-xl shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
         >
           <CheckCircle2 className="w-4 h-4" />
           <span>Aceptar Propuesta</span>
@@ -137,8 +137,8 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptMo
               <span
                 className={`text-xs sm:text-sm font-medium px-2.5 py-1 rounded-lg transition-all duration-200 ${
                   isActive
-                    ? "opacity-100 text-[#111111] font-semibold bg-white/80 backdrop-blur-sm border border-[#E4E4E7] shadow-xs translate-x-0"
-                    : "opacity-0 group-hover:opacity-100 text-[#71717A] bg-white/60 backdrop-blur-sm border border-[#E4E4E7]/60 translate-x-1 group-hover:translate-x-0"
+                    ? "opacity-100 text-[var(--text-primary)] font-semibold bg-[var(--card-bg)]/80 backdrop-blur-sm border border-[var(--border-color)] shadow-xs translate-x-0"
+                    : "opacity-0 group-hover:opacity-100 text-[var(--text-primary)]/60 bg-[var(--card-bg)]/60 backdrop-blur-sm border border-[var(--border-color)]/60 translate-x-1 group-hover:translate-x-0"
                 }`}
               >
                 {slide.label}
@@ -148,8 +148,8 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptMo
               <div
                 className={`transition-all duration-300 rounded-full ${
                   isActive
-                    ? "w-3.5 h-3.5 bg-[#2563EB] ring-4 ring-[#2563EB]/25 shadow-sm"
-                    : "w-2.5 h-2.5 bg-[#A1A1AA] group-hover:bg-[#2563EB] group-hover:scale-125"
+                    ? "w-3.5 h-3.5 bg-[var(--accent-color)] ring-4 ring-[var(--accent-color)]/25 shadow-sm"
+                    : "w-2.5 h-2.5 bg-[var(--border-color)] group-hover:bg-[var(--accent-color)] group-hover:scale-125"
                 }`}
               />
             </button>

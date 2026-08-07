@@ -2,7 +2,9 @@
 
 import React, { useState, useRef } from "react";
 import { useProposal } from "@/context/ProposalContext";
-import { X, Settings, Plus, Trash2, Download, Upload, RefreshCw, Layers, DollarSign, Building2, Calendar, FileText, CheckCircle2 } from "lucide-react";
+import { useFinancialStore } from "@/store/useFinancialStore";
+import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
+import { X, Settings, Plus, Trash2, Download, Upload, RefreshCw, Layers, DollarSign, Building2, Calendar, FileText, CheckCircle2, Palette } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface CustomizerDrawerProps {
@@ -10,7 +12,7 @@ interface CustomizerDrawerProps {
   onClose: () => void;
 }
 
-type TabType = "general" | "presupuesto" | "alcance" | "cronograma" | "json";
+type TabType = "general" | "colores" | "presupuesto" | "alcance" | "cronograma" | "json";
 
 export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onClose }) => {
   const {
@@ -36,6 +38,25 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
     resetToDefault,
   } = useProposal();
 
+  const {
+    hasTax,
+    taxPercent,
+    hasDiscount,
+    discountValue,
+    discountType,
+    setHasTax,
+    setTaxPercent,
+    setHasDiscount,
+    setDiscountValue,
+    setDiscountType,
+    setBaseSubtotal,
+    setCurrency,
+  } = useFinancialStore();
+
+  const { theme, setTheme, applyPreset, resetTheme } = useThemeStore();
+
+
+
   const [activeTab, setActiveTab] = useState<TabType>("general");
   const [newDeliverableInput, setNewDeliverableInput] = useState<{ [key: number]: string }>({});
   const [newMilestoneInput, setNewMilestoneInput] = useState<{ [key: number]: string }>({});
@@ -56,6 +77,7 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
     };
     reader.readAsText(file);
   };
+
 
   const handleAddDeliverableSubmit = (reqIdx: number) => {
     const text = newDeliverableInput[reqIdx] || "";
@@ -117,6 +139,17 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
             <Building2 className="w-3.5 h-3.5" />
             <span>Cliente & Proyecto</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab("colores")}
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer shrink-0 flex items-center space-x-1.5 ${
+              activeTab === "colores" ? "bg-white text-[#2563EB] shadow-xs border border-[#E4E4E7]" : "text-[#71717A] hover:text-[#111111]"
+            }`}
+          >
+            <Palette className="w-3.5 h-3.5" />
+            <span>Paleta & Estilo</span>
+          </button>
+
 
           <button
             onClick={() => setActiveTab("presupuesto")}
@@ -298,22 +331,215 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
             </div>
           )}
 
-          {/* TAB 2: PRESUPUESTO & ITBIS */}
+          {/* TAB: PALETA DE COLORES DINÁMICA */}
+          {activeTab === "colores" && (
+            <div className="space-y-6 text-xs">
+              {/* Presets Rápidos de Estilo */}
+              <div className="pb-4 border-b border-[#E4E4E7]">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono flex items-center gap-1.5">
+                    <Palette className="w-3.5 h-3.5 text-[#2563EB]" />
+                    <span>Presets Rápidos de Estilo</span>
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={resetTheme}
+                    className="text-[11px] font-bold text-[#71717A] hover:text-[#2563EB] transition-colors cursor-pointer"
+                  >
+                    ↺ Restablecer Defecto
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {PRESET_THEMES.map((preset) => {
+                    const isSelected = theme.bgMain === preset.theme.bgMain && theme.accentColor === preset.theme.accentColor;
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => applyPreset(preset.theme)}
+                        className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                          isSelected
+                            ? "bg-white border-[#2563EB] shadow-md ring-2 ring-[#2563EB]/20"
+                            : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-zinc-400"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-extrabold text-[#111111] text-xs">{preset.name}</span>
+                          {isSelected && <span className="w-2 h-2 rounded-full bg-[#2563EB]" />}
+                        </div>
+
+                        <div className="flex items-center gap-1.5 pt-1">
+                          <span
+                            className="w-5 h-5 rounded-full border border-zinc-300 shadow-xs"
+                            style={{ backgroundColor: preset.theme.bgMain }}
+                            title="Fondo Principal"
+                          />
+                          <span
+                            className="w-5 h-5 rounded-full border border-zinc-300 shadow-xs"
+                            style={{ backgroundColor: preset.theme.accentColor }}
+                            title="Color de Acento"
+                          />
+                          <span
+                            className="w-5 h-5 rounded-full border border-zinc-300 shadow-xs"
+                            style={{ backgroundColor: preset.theme.cardBg }}
+                            title="Fondo Tarjetas"
+                          />
+                          <span
+                            className="w-5 h-5 rounded-full border border-zinc-300 shadow-xs"
+                            style={{ backgroundColor: preset.theme.textPrimary }}
+                            title="Texto Principal"
+                          />
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Selectores Personalizados */}
+              <div>
+                <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono mb-3">
+                  Ajuste Fino de Variables CSS (:root)
+                </h4>
+
+                <div className="space-y-3">
+                  {/* bgMain */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF9F6] border border-[#E4E4E7]">
+                    <div>
+                      <span className="font-bold text-[#111111] block">Fondo Principal (--bg-main)</span>
+                      <span className="text-[10px] text-[#71717A]">Color base del lienzo y secciones</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={theme.bgMain}
+                        onChange={(e) => setTheme({ bgMain: e.target.value })}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer p-0"
+                      />
+                      <input
+                        type="text"
+                        value={theme.bgMain}
+                        onChange={(e) => setTheme({ bgMain: e.target.value })}
+                        className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-xs font-mono font-bold text-center text-[#111111]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* accentColor */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF9F6] border border-[#E4E4E7]">
+                    <div>
+                      <span className="font-bold text-[#111111] block">Color de Acento (--accent-color)</span>
+                      <span className="text-[10px] text-[#71717A]">Botones, badges, iconos y destacados</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={theme.accentColor}
+                        onChange={(e) => setTheme({ accentColor: e.target.value })}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer p-0"
+                      />
+                      <input
+                        type="text"
+                        value={theme.accentColor}
+                        onChange={(e) => setTheme({ accentColor: e.target.value })}
+                        className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-xs font-mono font-bold text-center text-[#2563EB]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* cardBg */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF9F6] border border-[#E4E4E7]">
+                    <div>
+                      <span className="font-bold text-[#111111] block">Fondo de Tarjetas (--card-bg)</span>
+                      <span className="text-[10px] text-[#71717A]">Contenedores y tarjetas ejecutivas</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={theme.cardBg}
+                        onChange={(e) => setTheme({ cardBg: e.target.value })}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer p-0"
+                      />
+                      <input
+                        type="text"
+                        value={theme.cardBg}
+                        onChange={(e) => setTheme({ cardBg: e.target.value })}
+                        className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-xs font-mono font-bold text-center text-[#111111]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* textPrimary */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF9F6] border border-[#E4E4E7]">
+                    <div>
+                      <span className="font-bold text-[#111111] block">Texto Principal (--text-primary)</span>
+                      <span className="text-[10px] text-[#71717A]">Titulares y cuerpo de texto</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={theme.textPrimary}
+                        onChange={(e) => setTheme({ textPrimary: e.target.value })}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer p-0"
+                      />
+                      <input
+                        type="text"
+                        value={theme.textPrimary}
+                        onChange={(e) => setTheme({ textPrimary: e.target.value })}
+                        className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-xs font-mono font-bold text-center text-[#111111]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* borderColor */}
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF9F6] border border-[#E4E4E7]">
+                    <div>
+                      <span className="font-bold text-[#111111] block">Bordes & Lín. Divisorias (--border-color)</span>
+                      <span className="text-[10px] text-[#71717A]">Líneas de separación y marcos</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={theme.borderColor}
+                        onChange={(e) => setTheme({ borderColor: e.target.value })}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer p-0"
+                      />
+                      <input
+                        type="text"
+                        value={theme.borderColor}
+                        onChange={(e) => setTheme({ borderColor: e.target.value })}
+                        className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-xs font-mono font-bold text-center text-[#111111]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: PRESUPUESTO & ITBIS & DESCUENTOS */}
           {activeTab === "presupuesto" && (
             <div className="space-y-5 text-xs">
-              <div className="p-4 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE]">
-                <h4 className="font-bold text-[#2563EB] mb-3 flex items-center space-x-1.5">
+              <div className="p-4 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] space-y-4">
+                <h4 className="font-bold text-[#2563EB] mb-1 flex items-center space-x-1.5 text-sm">
                   <DollarSign className="w-4 h-4" />
-                  <span>Configuración Financiera</span>
+                  <span>Ajustes Financieros, ITBIS & Descuentos</span>
                 </h4>
+
+                {/* Subtotal Base & Currency Selector */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[#111111] font-bold mb-1">Monto Sin Impuestos (Subtotal)</label>
+                    <label className="block text-[#111111] font-bold mb-1">Monto Subtotal Base</label>
                     <input
                       type="number"
                       step="100"
                       value={proposal.budget.amountWithoutTax}
-                      onChange={(e) => updateBudget({ amountWithoutTax: parseFloat(e.target.value) || 0 })}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value) || 0;
+                        setBaseSubtotal(val);
+                        updateBudget({ amountWithoutTax: val });
+                      }}
                       className="w-full px-3.5 py-2.5 bg-white border border-[#BFDBFE] rounded-xl text-[#111111] font-mono font-bold"
                     />
                   </div>
@@ -321,7 +547,11 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
                     <label className="block text-[#111111] font-bold mb-1">Moneda</label>
                     <select
                       value={proposal.budget.currency}
-                      onChange={(e) => updateBudget({ currency: e.target.value as "USD" | "DOP" })}
+                      onChange={(e) => {
+                        const curr = e.target.value as "USD" | "DOP";
+                        setCurrency(curr);
+                        updateBudget({ currency: curr });
+                      }}
                       className="w-full px-3.5 py-2.5 bg-white border border-[#BFDBFE] rounded-xl text-[#111111] font-bold"
                     >
                       <option value="USD">USD ($)</option>
@@ -330,11 +560,184 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
                   </div>
                 </div>
 
-                <div className="mt-3 pt-3 border-t border-[#BFDBFE] flex items-center justify-between text-xs font-mono font-bold text-[#2563EB]">
-                  <span>ITBIS Calculado (18%): US$ {proposal.budget.taxAmount.toLocaleString()}</span>
-                  <span>Total Con Impuestos: US$ {proposal.budget.totalAmount.toLocaleString()}</span>
+                {/* Módulo de ITBIS / Impuestos */}
+                <div className="p-3.5 rounded-xl bg-white border border-[#BFDBFE] space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-extrabold text-[#111111] block">Módulo ITBIS / Impuestos</span>
+                      <span className="text-[11px] text-[#71717A]">Impuesto sobre Transferencias de Bienes</span>
+                    </div>
+
+                    {/* TOGGLE ITBIS CORREGIDO CON ROLE=SWITCH */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={proposal.budget.hasTax !== undefined ? proposal.budget.hasTax : hasTax}
+                      onClick={() => {
+                        const currentTaxVal = proposal.budget.hasTax !== undefined ? proposal.budget.hasTax : hasTax;
+                        const nextTax = !currentTaxVal;
+                        setHasTax(nextTax);
+                        updateBudget({ hasTax: nextTax });
+                      }}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        (proposal.budget.hasTax !== undefined ? proposal.budget.hasTax : hasTax) ? "bg-[#2563EB]" : "bg-zinc-300"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${
+                          (proposal.budget.hasTax !== undefined ? proposal.budget.hasTax : hasTax) ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {(proposal.budget.hasTax !== undefined ? proposal.budget.hasTax : hasTax) && (
+                    <div className="flex items-center space-x-2 pt-2 border-t border-zinc-100">
+                      <label className="text-zinc-600 font-medium shrink-0">Porcentaje ITBIS (%):</label>
+                      <input
+                        type="number"
+                        value={proposal.budget.taxPercent !== undefined ? proposal.budget.taxPercent : taxPercent}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value) || 0;
+                          setTaxPercent(val);
+                          updateBudget({ taxPercent: val });
+                        }}
+                        className="w-24 px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-lg text-[#2563EB] font-mono font-bold text-center"
+                      />
+                    </div>
+                  )}
                 </div>
+
+                {/* Módulo de Descuento Especial */}
+                <div className="p-3.5 rounded-xl bg-white border border-[#BFDBFE] space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-extrabold text-[#111111] block">Descuento Comercial Especial</span>
+                      <span className="text-[11px] text-[#71717A]">Rebaja por pronto pago o acuerdo B2B</span>
+                    </div>
+
+                    {/* TOGGLE DESCUENTO CORREGIDO CON ROLE=SWITCH */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={proposal.budget.hasDiscount !== undefined ? proposal.budget.hasDiscount : hasDiscount}
+                      onClick={() => {
+                        const currentDiscVal = proposal.budget.hasDiscount !== undefined ? proposal.budget.hasDiscount : hasDiscount;
+                        const nextDisc = !currentDiscVal;
+                        setHasDiscount(nextDisc);
+                        updateBudget({ hasDiscount: nextDisc });
+                      }}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        (proposal.budget.hasDiscount !== undefined ? proposal.budget.hasDiscount : hasDiscount) ? "bg-[#2563EB]" : "bg-zinc-300"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${
+                          (proposal.budget.hasDiscount !== undefined ? proposal.budget.hasDiscount : hasDiscount) ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {(proposal.budget.hasDiscount !== undefined ? proposal.budget.hasDiscount : hasDiscount) && (
+                    <div className="space-y-2 pt-2 border-t border-zinc-100">
+                      <div className="flex items-center gap-2">
+                        <span className="text-zinc-600 font-medium text-xs">Tipo de Descuento:</span>
+                        <div className="inline-flex p-0.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-lg">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDiscountType("fixed");
+                              updateBudget({ discountType: "fixed" });
+                            }}
+                            className={`px-2.5 py-1 rounded-md font-bold transition-all text-xs cursor-pointer ${
+                              (proposal.budget.discountType || discountType) === "fixed"
+                                ? "bg-[#2563EB] text-white shadow-xs"
+                                : "text-[#71717A] hover:text-[#111111]"
+                            }`}
+                          >
+                            Monto Fijo ($)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDiscountType("percent");
+                              updateBudget({ discountType: "percent" });
+                            }}
+                            className={`px-2.5 py-1 rounded-md font-bold transition-all text-xs cursor-pointer ${
+                              (proposal.budget.discountType || discountType) === "percent"
+                                ? "bg-[#2563EB] text-white shadow-xs"
+                                : "text-[#71717A] hover:text-[#111111]"
+                            }`}
+                          >
+                            Porcentaje (%)
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <label className="text-zinc-600 font-medium shrink-0">Valor Descuento:</label>
+                        <input
+                          type="number"
+                          value={proposal.budget.discountValue !== undefined ? proposal.budget.discountValue : discountValue}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value) || 0;
+                            setDiscountValue(val);
+                            updateBudget({ discountValue: val });
+                          }}
+                          className="flex-1 px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-lg text-emerald-600 font-mono font-bold"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Resumen Calculado en Vivo */}
+                {(() => {
+                  const base = proposal.budget.amountWithoutTax || 12500;
+                  const isTaxActive = proposal.budget.hasTax !== undefined ? proposal.budget.hasTax : hasTax;
+                  const taxPercentVal = proposal.budget.taxPercent !== undefined ? proposal.budget.taxPercent : taxPercent;
+                  const isDiscActive = proposal.budget.hasDiscount !== undefined ? proposal.budget.hasDiscount : hasDiscount;
+                  const discountVal = proposal.budget.discountValue !== undefined ? proposal.budget.discountValue : discountValue;
+                  const discountTypeVal = proposal.budget.discountType || discountType;
+
+                  const disc = isDiscActive
+                    ? discountTypeVal === "percent"
+                      ? (base * discountVal) / 100
+                      : discountVal
+                    : 0;
+                  const net = Math.max(0, base - disc);
+                  const tax = isTaxActive ? (net * taxPercentVal) / 100 : 0;
+                  const total = net + tax;
+                  const curr = proposal.budget.currency || "USD";
+
+                  return (
+                    <div className="mt-3 pt-3 border-t border-[#BFDBFE] space-y-1 text-xs font-mono font-bold text-[#2563EB]">
+                      <div className="flex justify-between text-[#71717A]">
+                        <span>Subtotal Base:</span>
+                        <span>{base.toLocaleString("en-US", { style: "currency", currency: curr })}</span>
+                      </div>
+                      {isDiscActive && disc > 0 && (
+                        <div className="flex justify-between text-emerald-600">
+                          <span>Descuento Aplicado:</span>
+                          <span>-{disc.toLocaleString("en-US", { style: "currency", currency: curr })}</span>
+                        </div>
+                      )}
+                      {isTaxActive && (
+                        <div className="flex justify-between text-blue-600">
+                          <span>ITBIS ({taxPercentVal}%):</span>
+                          <span>+{tax.toLocaleString("en-US", { style: "currency", currency: curr })}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between text-[#111111] text-sm pt-1 border-t border-[#BFDBFE]">
+                        <span>Total Agregado:</span>
+                        <span>{total.toLocaleString("en-US", { style: "currency", currency: curr })}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
+
 
               {/* Hitos de Pago */}
               <div>

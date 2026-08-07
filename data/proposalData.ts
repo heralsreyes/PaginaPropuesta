@@ -82,6 +82,11 @@ export interface ProposalData {
     totalAmount: number;
     currency: "USD" | "DOP";
     paymentTerms: PaymentTerm[];
+    hasTax?: boolean;
+    taxPercent?: number;
+    hasDiscount?: boolean;
+    discountValue?: number;
+    discountType?: "fixed" | "percent";
   };
 }
 
@@ -295,7 +300,13 @@ export const sampleProposal: ProposalData = {
     taxAmount: 2250.0,
     totalAmount: 14750.0,
     currency: "USD",
+    hasTax: true,
+    taxPercent: 18,
+    hasDiscount: false,
+    discountValue: 0,
+    discountType: "fixed",
     paymentTerms: [
+
       {
         milestone: "Aprobación de la Propuesta & Firma de Contrato",
         percentage: 50,

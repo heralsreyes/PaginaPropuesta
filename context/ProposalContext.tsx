@@ -168,13 +168,26 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }));
   };
 
-  // Update Budget (Recalculate total if subtotal or tax changes)
+  // Update Budget (Recalculate total if subtotal, discount, or tax changes)
   const updateBudget = (data: Partial<ProposalData["budget"]>) => {
     setProposal((prev) => {
       const newAmountWithoutTax = data.amountWithoutTax !== undefined ? data.amountWithoutTax : prev.budget.amountWithoutTax;
-      const taxRate = 0.18; // 18% ITBIS
-      const newTaxAmount = newAmountWithoutTax * taxRate;
-      const newTotalAmount = newAmountWithoutTax + newTaxAmount;
+      const hasTax = data.hasTax !== undefined ? data.hasTax : (prev.budget.hasTax !== undefined ? prev.budget.hasTax : true);
+      const taxPercent = data.taxPercent !== undefined ? data.taxPercent : (prev.budget.taxPercent !== undefined ? prev.budget.taxPercent : 18);
+      const hasDiscount = data.hasDiscount !== undefined ? data.hasDiscount : (prev.budget.hasDiscount !== undefined ? prev.budget.hasDiscount : false);
+      const discountValue = data.discountValue !== undefined ? data.discountValue : (prev.budget.discountValue !== undefined ? prev.budget.discountValue : 0);
+      const discountType = data.discountType !== undefined ? data.discountType : (prev.budget.discountType !== undefined ? prev.budget.discountType : "fixed");
+
+      // Descuento
+      const discountAmount = hasDiscount
+        ? discountType === "percent"
+          ? newAmountWithoutTax * (discountValue / 100)
+          : discountValue
+        : 0;
+
+      const netBase = Math.max(0, newAmountWithoutTax - discountAmount);
+      const newTaxAmount = hasTax ? netBase * (taxPercent / 100) : 0;
+      const newTotalAmount = netBase + newTaxAmount;
 
       return {
         ...prev,
@@ -182,6 +195,11 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ...prev.budget,
           ...data,
           amountWithoutTax: newAmountWithoutTax,
+          hasTax,
+          taxPercent,
+          hasDiscount,
+          discountValue,
+          discountType,
           taxAmount: newTaxAmount,
           totalAmount: newTotalAmount,
         },
