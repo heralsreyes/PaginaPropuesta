@@ -51,8 +51,9 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
   const baseSubtotal = budget.amountWithoutTax || storeBaseSubtotal || 12500;
 
   // Real-time calculation
+  const isPercent = discountTypeVal === "percent" || discountTypeVal === "percentage";
   const discountAmount = isDiscountActive
-    ? discountTypeVal === "percent"
+    ? isPercent
       ? baseSubtotal * (discountValueVal / 100)
       : discountValueVal
     : 0;
@@ -130,7 +131,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                   <div className="flex items-center justify-between text-emerald-600 font-semibold">
                     <span className="flex items-center gap-1.5 font-medium">
                       <Tag className="w-3.5 h-3.5" />
-                      Descuento Comercial ({discountTypeVal === "percent" ? `${discountValueVal}%` : "Monto Fijo"}):
+                      Descuento Comercial ({isPercent ? `${discountValueVal}%` : "Monto Fijo"}):
                     </span>
                     <span className="font-mono font-semibold">
                       -{formatMoney(discountAmount, currentCurrency)}

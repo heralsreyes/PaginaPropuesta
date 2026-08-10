@@ -68,8 +68,16 @@ import {
   Upload,
   RefreshCw,
   Code2,
+  LayoutList,
+  ArrowUp,
+  ArrowDown,
+  Eye,
+  EyeOff,
+  ListOrdered,
+  Quote,
+  Tag,
 } from "lucide-react";
-import { PRESET_THEMES } from "@/store/useThemeStore";
+import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
 import { toast } from "sonner";
 
 export const CanvaSidebar: React.FC = () => {
@@ -83,12 +91,21 @@ export const CanvaSidebar: React.FC = () => {
     addCanvasElement,
     canvasElements,
     clearAllCanvasElements,
+    sections,
+    toggleSectionVisibility,
+    removeSection,
+    addSection,
+    moveSectionUp,
+    moveSectionDown,
+    resetSections,
+    activeDrawingTool,
+    setActiveDrawingTool,
   } = useStudioStore();
+
+  const { theme, applyPreset, resetTheme } = useThemeStore();
 
   const {
     proposal,
-    applyPreset,
-    resetTheme,
     updateBudget,
     exportJson,
     importJson,
@@ -112,6 +129,7 @@ export const CanvaSidebar: React.FC = () => {
 
   const navItems = [
     { id: "plantillas" as StudioTab, label: "Plantillas", icon: Palette },
+    { id: "secciones" as StudioTab, label: "Secciones", icon: LayoutList },
     { id: "texto" as StudioTab, label: "Texto", icon: Type },
     { id: "elementos" as StudioTab, label: "Elementos", icon: Layers },
     { id: "mockups" as StudioTab, label: "Mockups", icon: Monitor },
@@ -421,7 +439,8 @@ export const CanvaSidebar: React.FC = () => {
             <Sparkles className="w-4 h-4 text-[#2563EB]" />
             <span>
               {activeToolTab === "plantillas" && "Paletas & Estilo Visual"}
-              {activeToolTab === "texto" && "Tipografía & Títulos"}
+              {activeToolTab === "secciones" && "Estructura & Orden de Secciones"}
+              {activeToolTab === "texto" && "Tipografía & Elementos de Texto"}
               {activeToolTab === "elementos" && "Biblioteca de Elementos"}
               {activeToolTab === "mockups" && "Interfaces & Ordenador"}
               {activeToolTab === "presupuesto" && "Controles Financieros"}
@@ -481,68 +500,350 @@ export const CanvaSidebar: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 2: TEXTO & TIPOGRAFÍA */}
+          {/* TAB SECCIONES: GESTOR INTERACTIVO DE SECCIONES */}
+          {activeToolTab === "secciones" && (
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <h4 className="font-extrabold text-[#111111] text-xs font-mono">
+                  Secciones de la Página ({sections.length})
+                </h4>
+                <button
+                  onClick={resetSections}
+                  className="text-[10px] font-bold text-zinc-500 hover:text-[#2563EB]"
+                >
+                  ↺ Restablecer
+                </button>
+              </div>
+
+              {/* Lista de Secciones Actuales */}
+              <div className="space-y-2">
+                {sections.map((sec, idx) => (
+                  <div
+                    key={sec.id}
+                    className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
+                      sec.enabled
+                        ? "bg-[#FAF9F6] border-[#E4E4E7]"
+                        : "bg-zinc-100 border-zinc-200 opacity-60"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2 truncate pr-2">
+                      <span className="text-[10px] font-mono font-extrabold text-zinc-400">
+                        0{idx + 1}
+                      </span>
+                      <span className="font-bold text-xs text-[#111111] truncate">
+                        {sec.label}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center space-x-1 shrink-0">
+                      {/* Subir */}
+                      <button
+                        onClick={() => moveSectionUp(sec.id)}
+                        disabled={idx === 0}
+                        className="p-1 text-zinc-500 hover:text-[#2563EB] disabled:opacity-30 cursor-pointer"
+                        title="Mover Arriba"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Bajar */}
+                      <button
+                        onClick={() => moveSectionDown(sec.id)}
+                        disabled={idx === sections.length - 1}
+                        className="p-1 text-zinc-500 hover:text-[#2563EB] disabled:opacity-30 cursor-pointer"
+                        title="Mover Abajo"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Visibilidad Toggle */}
+                      <button
+                        onClick={() => toggleSectionVisibility(sec.id)}
+                        className={`p-1 cursor-pointer ${
+                          sec.enabled ? "text-emerald-600" : "text-zinc-400"
+                        }`}
+                        title={sec.enabled ? "Ocultar Sección" : "Mostrar Sección"}
+                      >
+                        {sec.enabled ? (
+                          <Eye className="w-3.5 h-3.5" />
+                        ) : (
+                          <EyeOff className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+
+                      {/* Eliminar */}
+                      <button
+                        onClick={() => removeSection(sec.id)}
+                        className="p-1 text-zinc-400 hover:text-red-600 cursor-pointer"
+                        title="Eliminar Sección"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Botón Añadir Sección Personalizada */}
+              <div className="pt-2 border-t border-zinc-200 space-y-2">
+                <h5 className="font-bold text-[10px] uppercase font-mono text-zinc-500">
+                  + Añadir Nueva Sección
+                </h5>
+
+                <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                  <button
+                    onClick={() => {
+                      addSection("custom", "Sección Personalizada Canva");
+                      toast.success("Sección Personalizada agregada.");
+                    }}
+                    className="p-2 bg-blue-50 border border-blue-200 text-[#2563EB] font-bold rounded-xl text-left flex items-center gap-1.5 cursor-pointer hover:bg-blue-100"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Personalizada</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      addSection("alcance", "Alcance & Módulos Adicional");
+                      toast.success("Sección de Alcance agregada.");
+                    }}
+                    className="p-2 bg-[#FAF9F6] border border-[#E4E4E7] font-bold text-zinc-700 rounded-xl text-left flex items-center gap-1.5 cursor-pointer hover:border-[#2563EB]"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Alcance</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: TEXTO & TIPOGRAFÍA (DIBUJAR RECUADRO ESTILO PPTX ONLINE) */}
           {activeToolTab === "texto" && (
             <div className="space-y-4">
-              <h4 className="font-extrabold text-[#111111] text-xs font-mono">Tipografía & Títulos</h4>
+              <div className="flex items-center justify-between">
+                <h4 className="font-extrabold text-[#111111] text-xs font-mono">
+                  Tipografía & Recuadros (PPTX Mode)
+                </h4>
+                {activeDrawingTool && (
+                  <button
+                    onClick={() => setActiveDrawingTool(null)}
+                    className="text-[10px] font-bold text-red-600 hover:text-red-700 bg-red-50 px-2 py-0.5 rounded-full"
+                  >
+                    ✕ Cancelar
+                  </button>
+                )}
+              </div>
 
-              <div className="space-y-2">
-                <button
-                  onClick={() => {
-                    addCanvasElement({
-                      type: "card",
+              {activeDrawingTool ? (
+                <div className="p-3 bg-blue-50 border-2 border-dashed border-[#2563EB] rounded-2xl text-center space-y-2">
+                  <div className="text-xs font-extrabold text-[#2563EB]">
+                    ✏️ Herramienta de Dibujo Activa
+                  </div>
+                  <p className="text-[10px] text-zinc-600 leading-tight">
+                    Haz clic y arrastra el ratón en cualquier área del lienzo para seleccionar y dibujar el recuadro con el tamaño deseado.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-2.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[10px] text-zinc-500 font-medium">
+                  💡 Haz clic en una opción y luego **arrastra en el lienzo** para seleccionar la zona del recuadro.
+                </div>
+              )}
+
+              <div className="space-y-2.5">
+                {/* 1. Título Grande H1 */}
+                <div
+                  draggable={true}
+                  onDragStart={(e) =>
+                    handleDragStart(e, {
+                      type: "text",
+                      textType: "h1",
                       sectionId: "hero",
                       title: "Título Principal H1",
-                      subtitle: "Subtítulo descriptivo de sección.",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#18181B",
+                    })
+                  }
+                  onClick={() => {
+                    setActiveDrawingTool({
+                      type: "text",
+                      textType: "h1",
+                      sectionId: "hero",
+                      title: "Título Principal H1",
                       customBg: "transparent",
                       customBorder: "transparent",
                       customText: "#18181B",
                     });
-                    toast.success("Bloque de Título Principal agregado.");
+                    toast.info("✏️ Haz clic y arrastra en el lienzo para seleccionar y dibujar el recuadro de Título.");
                   }}
-                  className="w-full p-3 bg-[#FAF9F6] border border-[#E4E4E7] hover:border-[#2563EB] rounded-2xl text-left font-black text-base text-[#111111] flex items-center gap-2 cursor-pointer transition-all"
+                  className={`p-3 border rounded-2xl cursor-crosshair transition-all hover:scale-[1.02] ${
+                    activeDrawingTool?.title === "Título Principal H1"
+                      ? "bg-blue-50 border-[#2563EB] ring-2 ring-[#2563EB]/30 shadow-md"
+                      : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-[#2563EB]"
+                  }`}
                 >
-                  <Heading1 className="w-5 h-5 text-[#2563EB]" />
-                  <span>Añadir Título Grande</span>
-                </button>
+                  <div className="flex items-center gap-2 font-black text-base text-[#111111]">
+                    <Heading1 className="w-5 h-5 text-[#2563EB]" />
+                    <span>Título Grande (H1)</span>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 mt-1">Selecciona y dibuja el recuadro de texto puro en el lienzo.</p>
+                </div>
 
-                <button
-                  onClick={() => {
-                    addCanvasElement({
-                      type: "card",
+                {/* 2. Subtítulo H2 */}
+                <div
+                  draggable={true}
+                  onDragStart={(e) =>
+                    handleDragStart(e, {
+                      type: "text",
+                      textType: "h2",
                       sectionId: "hero",
                       title: "Subtítulo H2 Destacado",
-                      subtitle: "Texto explicativo breve.",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#18181B",
+                    })
+                  }
+                  onClick={() => {
+                    setActiveDrawingTool({
+                      type: "text",
+                      textType: "h2",
+                      sectionId: "hero",
+                      title: "Subtítulo H2 Destacado",
                       customBg: "transparent",
                       customBorder: "transparent",
                       customText: "#18181B",
                     });
-                    toast.success("Bloque de Subtítulo agregado.");
+                    toast.info("✏️ Haz clic y arrastra en el lienzo para seleccionar y dibujar el recuadro de Subtítulo.");
                   }}
-                  className="w-full p-3 bg-[#FAF9F6] border border-[#E4E4E7] hover:border-[#2563EB] rounded-2xl text-left font-extrabold text-sm text-[#111111] flex items-center gap-2 cursor-pointer transition-all"
+                  className={`p-3 border rounded-2xl cursor-crosshair transition-all hover:scale-[1.02] ${
+                    activeDrawingTool?.title === "Subtítulo H2 Destacado"
+                      ? "bg-blue-50 border-[#2563EB] ring-2 ring-[#2563EB]/30 shadow-md"
+                      : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-[#2563EB]"
+                  }`}
                 >
-                  <Heading2 className="w-4 h-4 text-indigo-600" />
-                  <span>Añadir Subtítulo</span>
-                </button>
+                  <div className="flex items-center gap-2 font-extrabold text-sm text-[#111111]">
+                    <Heading2 className="w-4 h-4 text-indigo-600" />
+                    <span>Subtítulo (H2)</span>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 mt-1">Selecciona y dibuja el recuadro de texto puro en el lienzo.</p>
+                </div>
 
-                <button
-                  onClick={() => {
-                    addCanvasElement({
-                      type: "card",
+                {/* 3. Párrafo de Cuerpo */}
+                <div
+                  draggable={true}
+                  onDragStart={(e) =>
+                    handleDragStart(e, {
+                      type: "text",
+                      textType: "p",
                       sectionId: "hero",
-                      title: "Párrafo de Cuerpo",
-                      subtitle: "Este es un párrafo de texto explicativo para detallar información técnica.",
+                      title: "Este es un párrafo de texto explicativo para detallar información técnica del proyecto.",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#52525B",
+                    })
+                  }
+                  onClick={() => {
+                    setActiveDrawingTool({
+                      type: "text",
+                      textType: "p",
+                      sectionId: "hero",
+                      title: "Este es un párrafo de texto explicativo para detallar información técnica del proyecto.",
                       customBg: "transparent",
                       customBorder: "transparent",
                       customText: "#52525B",
                     });
-                    toast.success("Bloque de Párrafo agregado.");
+                    toast.info("✏️ Haz clic y arrastra en el lienzo para seleccionar y dibujar el recuadro de Párrafo.");
                   }}
-                  className="w-full p-3 bg-[#FAF9F6] border border-[#E4E4E7] hover:border-[#2563EB] rounded-2xl text-left text-xs text-zinc-600 flex items-center gap-2 cursor-pointer transition-all"
+                  className={`p-3 border rounded-2xl cursor-crosshair transition-all hover:scale-[1.02] ${
+                    activeDrawingTool?.textType === "p"
+                      ? "bg-blue-50 border-[#2563EB] ring-2 ring-[#2563EB]/30 shadow-md"
+                      : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-[#2563EB]"
+                  }`}
                 >
-                  <AlignLeft className="w-4 h-4 text-zinc-400" />
-                  <span>Añadir Párrafo</span>
-                </button>
+                  <div className="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+                    <AlignLeft className="w-4 h-4 text-zinc-500" />
+                    <span>Párrafo de Cuerpo</span>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 mt-1">Selecciona y dibuja el recuadro de texto puro en el lienzo.</p>
+                </div>
+
+                {/* 4. Lista de Puntos / Bullets */}
+                <div
+                  draggable={true}
+                  onDragStart={(e) =>
+                    handleDragStart(e, {
+                      type: "text",
+                      textType: "bullet",
+                      sectionId: "hero",
+                      title: "• Entregable 1: Arquitectura de software\n• Entregable 2: Manual de integración API",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#18181B",
+                    })
+                  }
+                  onClick={() => {
+                    setActiveDrawingTool({
+                      type: "text",
+                      textType: "bullet",
+                      sectionId: "hero",
+                      title: "• Entregable 1: Arquitectura de software\n• Entregable 2: Manual de integración API",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#18181B",
+                    });
+                    toast.info("✏️ Haz clic y arrastra en el lienzo para seleccionar y dibujar el recuadro de Viñetas.");
+                  }}
+                  className={`p-3 border rounded-2xl cursor-crosshair transition-all hover:scale-[1.02] ${
+                    activeDrawingTool?.textType === "bullet"
+                      ? "bg-blue-50 border-[#2563EB] ring-2 ring-[#2563EB]/30 shadow-md"
+                      : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-[#2563EB]"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#111111]">
+                    <ListOrdered className="w-4 h-4 text-emerald-600" />
+                    <span>Lista de Puntos (Bullets)</span>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 mt-1">Selecciona y dibuja el recuadro de viñetas en el lienzo.</p>
+                </div>
+
+                {/* 5. Banner de Cita / Quote */}
+                <div
+                  draggable={true}
+                  onDragStart={(e) =>
+                    handleDragStart(e, {
+                      type: "text",
+                      textType: "quote",
+                      sectionId: "hero",
+                      title: "“Transformación digital garantizada con ISO 27002.”",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#1E3A8A",
+                    })
+                  }
+                  onClick={() => {
+                    setActiveDrawingTool({
+                      type: "text",
+                      textType: "quote",
+                      sectionId: "hero",
+                      title: "“Transformación digital garantizada con ISO 27002.”",
+                      customBg: "transparent",
+                      customBorder: "transparent",
+                      customText: "#1E3A8A",
+                    });
+                    toast.info("✏️ Haz clic y arrastra en el lienzo para seleccionar y dibujar la Cita.");
+                  }}
+                  className={`p-3 border rounded-2xl cursor-crosshair transition-all hover:scale-[1.02] ${
+                    activeDrawingTool?.textType === "quote"
+                      ? "bg-blue-50 border-[#2563EB] ring-2 ring-[#2563EB]/30 shadow-md"
+                      : "bg-blue-50 border-blue-200 hover:border-[#2563EB]"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#2563EB]">
+                    <Quote className="w-4 h-4" />
+                    <span>Cita Destacada (Quote Banner)</span>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 mt-1">Selecciona y dibuja la cita en el lienzo.</p>
+                </div>
               </div>
             </div>
           )}
@@ -917,15 +1218,22 @@ export const CanvaSidebar: React.FC = () => {
                       <input
                         type="number"
                         value={discountValue}
-                        onChange={(e) => setDiscountValue(Number(e.target.value))}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          setDiscountValue(val);
+                          updateBudget({ discountValue: val });
+                        }}
                         className="w-20 bg-white border border-[#E4E4E7] rounded px-2 py-1 font-mono text-xs font-bold text-[#111111]"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <button
-                        onClick={() => setDiscountType("percentage")}
+                        onClick={() => {
+                          setDiscountType("percentage");
+                          updateBudget({ discountType: "percentage" });
+                        }}
                         className={`py-1 rounded text-[10px] font-bold cursor-pointer ${
-                          discountType === "percentage"
+                          discountType === "percentage" || discountType === "percent"
                             ? "bg-[#2563EB] text-white"
                             : "bg-white text-zinc-700 border border-[#E4E4E7]"
                         }`}
@@ -933,7 +1241,10 @@ export const CanvaSidebar: React.FC = () => {
                         Porcentaje (%)
                       </button>
                       <button
-                        onClick={() => setDiscountType("fixed")}
+                        onClick={() => {
+                          setDiscountType("fixed");
+                          updateBudget({ discountType: "fixed" });
+                        }}
                         className={`py-1 rounded text-[10px] font-bold cursor-pointer ${
                           discountType === "fixed"
                             ? "bg-[#2563EB] text-white"

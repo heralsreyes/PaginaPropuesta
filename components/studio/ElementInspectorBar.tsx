@@ -17,6 +17,13 @@ import {
   EyeOff,
   Plus,
   SlidersHorizontal,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Type,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -137,8 +144,20 @@ export const ElementInspectorBar: React.FC = () => {
       onPointerDown={stopAll}
       className="no-print fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#18181B] text-white p-2.5 px-4 rounded-2xl shadow-2xl border border-zinc-700 flex items-center space-x-3 text-xs font-sans select-none max-w-[95vw] overflow-visible"
     >
-      {/* 1. ID Indicator & Renamer */}
-      <div className="flex items-center space-x-1.5 border-r border-zinc-700 pr-3 shrink-0">
+      {/* 1. Front Red Trash Button & ID Indicator */}
+      <div className="flex items-center space-x-2 border-r border-zinc-700 pr-3 shrink-0">
+        <button
+          onClick={() => {
+            removeCanvasElement(selectedElement.id);
+            toast.info(`Elemento '${selectedElement.id}' eliminado.`);
+          }}
+          className="px-2.5 py-1 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center gap-1 cursor-pointer shadow-md transition-all active:scale-95 shrink-0"
+          title="Borrar Elemento (1-Clic)"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+          <span>Borrar</span>
+        </button>
+
         <span className="text-[10px] font-mono text-zinc-400 font-bold">ID:</span>
         <input
           type="text"
@@ -146,8 +165,53 @@ export const ElementInspectorBar: React.FC = () => {
           onChange={(e) =>
             updateCanvasElement(selectedElement.id, { id: e.target.value })
           }
-          className="bg-zinc-800 border border-zinc-600 rounded px-1.5 py-0.5 text-xs font-mono font-bold text-white w-28 focus:outline-none focus:border-[#2563EB]"
+          className="bg-zinc-800 border border-zinc-600 rounded px-1.5 py-0.5 text-xs font-mono font-bold text-white w-24 focus:outline-none focus:border-[#2563EB]"
         />
+      </div>
+
+      {/* 2. Font Family & Font Size Controls */}
+      <div className="flex items-center space-x-2 border-r border-zinc-700 pr-3 shrink-0">
+        <span className="text-[10px] text-zinc-400 font-bold flex items-center gap-1">
+          <Type className="w-3.5 h-3.5 text-[#2563EB]" />
+          <span>Fuente:</span>
+        </span>
+
+        {/* Font Family Select */}
+        <select
+          value={selectedElement.fontFamily || "Inter"}
+          onChange={(e) =>
+            updateCanvasElement(selectedElement.id, {
+              fontFamily: e.target.value,
+            })
+          }
+          className="bg-zinc-800 border border-zinc-600 rounded px-1.5 py-0.5 text-[10px] font-bold text-white focus:outline-none"
+        >
+          <option value="Inter">Inter (Sans)</option>
+          <option value="Outfit">Outfit (Display)</option>
+          <option value="Roboto">Roboto (Clean)</option>
+          <option value="Fira Code">Fira Code (Mono)</option>
+          <option value="Playfair Display">Playfair (Serif)</option>
+        </select>
+
+        {/* Font Size Select */}
+        <select
+          value={selectedElement.fontSize || 14}
+          onChange={(e) =>
+            updateCanvasElement(selectedElement.id, {
+              fontSize: Number(e.target.value),
+            })
+          }
+          className="bg-zinc-800 border border-zinc-600 rounded px-1.5 py-0.5 text-[10px] font-mono font-bold text-amber-400 focus:outline-none w-16"
+        >
+          <option value={12}>12px</option>
+          <option value={14}>14px</option>
+          <option value={16}>16px</option>
+          <option value={18}>18px</option>
+          <option value={20}>20px</option>
+          <option value={24}>24px</option>
+          <option value={32}>32px</option>
+          <option value={48}>48px</option>
+        </select>
       </div>
 
       {/* 2. Position X/Y and Dimensions W/H */}

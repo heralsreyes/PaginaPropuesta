@@ -56,6 +56,11 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           localStorage.setItem(ADMIN_MODE_KEY, "true");
         }
 
+        // If NO proposal URL param is present (http://localhost:3000), ALWAYS apply Default Executive Light Theme!
+        if (!proposalParam) {
+          useThemeStore.getState().applyPreset(PRESET_THEMES[0].theme);
+        }
+
         // 2. Load proposal JSON dynamically if ?proposal=name parameter exists (Takes priority over LocalStorage)
         if (proposalParam) {
           const cleanParam = proposalParam.trim().toLowerCase();
@@ -86,7 +91,15 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
-          setProposal(parsed);
+          if (!proposalParam && parsed.client?.shortName?.toUpperCase() === "EXCEL") {
+            setProposal(sampleProposal);
+            useThemeStore.getState().applyPreset(PRESET_THEMES[2].theme);
+          } else {
+            setProposal(parsed);
+          }
+        } else {
+          setProposal(sampleProposal);
+          useThemeStore.getState().applyPreset(PRESET_THEMES[2].theme);
         }
       } catch (e) {
         console.error("Error loading proposal data:", e);
@@ -179,8 +192,9 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const discountType = data.discountType !== undefined ? data.discountType : (prev.budget.discountType !== undefined ? prev.budget.discountType : "fixed");
 
       // Descuento
+      const isPercent = discountType === "percent" || discountType === "percentage";
       const discountAmount = hasDiscount
-        ? discountType === "percent"
+        ? isPercent
           ? newAmountWithoutTax * (discountValue / 100)
           : discountValue
         : 0;

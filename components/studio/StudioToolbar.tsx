@@ -11,10 +11,10 @@ import {
   ZoomIn,
   ZoomOut,
   Download,
-  CheckCircle2,
   FileCode,
   Palette,
-  RotateCcw,
+  MousePointer,
+  SquareDashed,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -26,6 +26,8 @@ export const StudioToolbar: React.FC = () => {
     zoomLevel,
     setZoomLevel,
     setActiveToolTab,
+    canvasMode,
+    setCanvasMode,
   } = useStudioStore();
   const { exportJson } = useProposal();
 
@@ -64,9 +66,40 @@ export const StudioToolbar: React.FC = () => {
           )}
         </button>
 
-        <div className="flex items-center space-x-2 font-mono font-bold bg-[#2563EB]/20 text-[#3B82F6] px-3 py-1 rounded-xl border border-[#2563EB]/30">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>CANVA / FIGMA STUDIO MODE</span>
+        {/* Mode Switcher: Seleccionar vs Dibujar/Arrastrar Recuadro */}
+        <div className="inline-flex p-1 rounded-xl bg-zinc-900 border border-zinc-800 text-[11px] font-bold">
+          <button
+            onClick={() => {
+              setCanvasMode("select");
+              toast.info("👆 Modo Seleccionar / Mover activo.");
+            }}
+            className={`px-3 py-1 rounded-lg flex items-center gap-1.5 cursor-pointer transition-all ${
+              canvasMode === "select"
+                ? "bg-[#2563EB] text-white shadow-md font-extrabold"
+                : "text-zinc-400 hover:text-white"
+            }`}
+            title="Modo Seleccionar y Mover Elementos (👆)"
+          >
+            <MousePointer className="w-3.5 h-3.5" />
+            <span>Seleccionar</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setCanvasMode("draw");
+              setActiveToolTab("texto");
+              toast.info("✏️ Modo Arrastrar / Dibujar Recuadro activo: Selecciona o arrastra en el lienzo.");
+            }}
+            className={`px-3 py-1 rounded-lg flex items-center gap-1.5 cursor-pointer transition-all ${
+              canvasMode === "draw"
+                ? "bg-[#2563EB] text-white shadow-md font-extrabold"
+                : "text-zinc-400 hover:text-white"
+            }`}
+            title="Modo Dibujar y Arrastrar Recuadro (✏️)"
+          >
+            <SquareDashed className="w-3.5 h-3.5" />
+            <span>Dibujar / Arrastrar</span>
+          </button>
         </div>
 
         {/* Quick Tab Switch Buttons */}

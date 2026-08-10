@@ -150,6 +150,23 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     }
   };
 
+  const getFontFamilyCSS = (fontName?: string) => {
+    if (!fontName) return undefined;
+    switch (fontName) {
+      case "Outfit":
+        return "var(--font-outfit), 'Outfit', sans-serif";
+      case "Roboto":
+        return "var(--font-roboto), 'Roboto', sans-serif";
+      case "Fira Code":
+        return "var(--font-fira-code), 'Fira Code', monospace";
+      case "Playfair Display":
+        return "var(--font-playfair), 'Playfair Display', serif";
+      case "Inter":
+      default:
+        return "var(--font-inter), 'Inter', sans-serif";
+    }
+  };
+
   const wrapperStyle: React.CSSProperties = {
     position: "absolute",
     left: `${element.x}px`,
@@ -159,6 +176,8 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     zIndex: isSelected ? 999 : element.zIndex || 10,
     display: element.isHidden && !isDesignMode ? "none" : "block",
     opacity: element.isHidden ? 0.35 : 1,
+    fontFamily: getFontFamilyCSS(element.fontFamily),
+    fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
   };
 
   return (
@@ -223,11 +242,13 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
         {element.type === "button" && (
           <button
             type="button"
-            className="w-full h-full py-1 px-3 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 border"
+            className="w-full h-full py-1 px-3 font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 border"
             style={{
               backgroundColor: element.customBg || "#2563EB",
               color: element.customText || "#FFFFFF",
               borderColor: element.customBorder || "transparent",
+              fontFamily: getFontFamilyCSS(element.fontFamily),
+              fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
             }}
           >
             <span
@@ -239,20 +260,30 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
                 })
               }
               className="outline-none"
+              style={{
+                fontFamily: getFontFamilyCSS(element.fontFamily),
+                fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
+              }}
             >
               {element.title || "Button"}
             </span>
           </button>
         )}
 
-        {/* 2. CARD TYPE */}
-        {element.type === "card" && (
+        {/* 2. CARD OR TEXT TYPE */}
+        {(element.type === "card" || element.type === "text") && (
           <div
-            className="w-full h-full p-3.5 rounded-2xl border flex flex-col justify-between text-left shadow-sm transition-colors"
+            className={`w-full h-full p-2 flex flex-col justify-start text-left transition-colors ${
+              element.type === "text" || (element.customBg === "transparent" && element.customBorder === "transparent")
+                ? "bg-transparent border-none shadow-none"
+                : "p-3.5 rounded-2xl border shadow-sm"
+            }`}
             style={{
-              backgroundColor: element.customBg || "#FFFFFF",
-              borderColor: element.customBorder || "#E4E4E7",
+              backgroundColor: element.customBg && element.customBg !== "transparent" ? element.customBg : "transparent",
+              borderColor: element.customBorder && element.customBorder !== "transparent" ? element.customBorder : "transparent",
               color: element.customText || "#18181B",
+              fontFamily: getFontFamilyCSS(element.fontFamily),
+              fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
             }}
           >
             {element.isMultiTab && !element.hideTabPills && (
@@ -298,7 +329,11 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
                           title: e.currentTarget.innerText,
                         })
                       }
-                      className="font-extrabold text-xs outline-none text-zinc-900"
+                      className="font-extrabold outline-none text-zinc-900"
+                      style={{
+                        fontFamily: getFontFamilyCSS(element.fontFamily),
+                        fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
+                      }}
                     >
                       {activeTab.title}
                     </span>
@@ -315,44 +350,64 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
                         subtitle: e.currentTarget.innerText,
                       })
                     }
-                    className="text-[11px] text-zinc-600 outline-none leading-relaxed"
+                    className="text-zinc-600 outline-none leading-relaxed"
+                    style={{
+                      fontFamily: getFontFamilyCSS(element.fontFamily),
+                      fontSize: element.fontSize ? `${Math.max(10, element.fontSize - 3)}px` : undefined,
+                    }}
                   >
                     {activeTab.subtitle}
                   </p>
                 </motion.div>
               </AnimatePresence>
             ) : (
-              <div className="flex-1 flex flex-col justify-between">
-                <div className="flex items-center justify-between border-b border-zinc-200/60 pb-1 mb-1">
-                  <span
-                    contentEditable={isDesignMode}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      updateCanvasElement(element.id, {
-                        title: e.currentTarget.innerText,
-                      })
-                    }
-                    className="font-extrabold text-xs outline-none"
-                  >
-                    {element.title || "Tarjeta Plain"}
-                  </span>
-                  <span className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 font-bold text-zinc-800">
-                    {element.id}
-                  </span>
-                </div>
-
-                <p
+              <div className="w-full h-full flex flex-col justify-start">
+                <div
                   contentEditable={isDesignMode}
                   suppressContentEditableWarning
                   onBlur={(e) =>
                     updateCanvasElement(element.id, {
-                      subtitle: e.currentTarget.innerText,
+                      title: e.currentTarget.innerText,
                     })
                   }
-                  className="text-[10px] opacity-80 outline-none leading-tight"
+                  className={`outline-none leading-tight font-extrabold ${
+                    element.textType === "h1"
+                      ? "text-3xl font-black"
+                      : element.textType === "h2"
+                      ? "text-xl font-extrabold"
+                      : element.textType === "quote"
+                      ? "text-base font-serif italic border-l-4 border-[#2563EB] pl-3 py-1 bg-blue-50/80 rounded-r-xl"
+                      : element.textType === "bullet"
+                      ? "whitespace-pre-line text-sm leading-relaxed"
+                      : ""
+                  }`}
+                  style={{
+                    fontFamily: getFontFamilyCSS(element.fontFamily),
+                    fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
+                    color: element.customText || undefined,
+                  }}
                 >
-                  {element.subtitle || "Doble clic para editar texto in-situ."}
-                </p>
+                  {element.title || (element.type === "text" ? "Texto" : "Tarjeta Plain")}
+                </div>
+
+                {element.subtitle && element.type !== "text" && (
+                  <p
+                    contentEditable={isDesignMode}
+                    suppressContentEditableWarning
+                    onBlur={(e) =>
+                      updateCanvasElement(element.id, {
+                        subtitle: e.currentTarget.innerText,
+                      })
+                    }
+                    className="opacity-80 outline-none leading-tight mt-1"
+                    style={{
+                      fontFamily: getFontFamilyCSS(element.fontFamily),
+                      fontSize: element.fontSize ? `${Math.max(10, element.fontSize - 3)}px` : undefined,
+                    }}
+                  >
+                    {element.subtitle}
+                  </p>
+                )}
               </div>
             )}
           </div>

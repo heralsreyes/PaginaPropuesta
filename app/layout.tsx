@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit, Roboto, Fira_Code, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-satoshi" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const roboto = Roboto({ weight: ["400", "500", "700"], subsets: ["latin"], variable: "--font-roboto" });
+const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
   title: "Propuesta Técnica y Económica | ENFOCO S.R.L.",
@@ -25,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="scroll-smooth">
-      <body className={`${inter.variable} font-sans bg-[#FAF9F6] text-[#111111] antialiased selection:bg-[#2563EB] selection:text-white`}>
+      <body className={`${inter.variable} ${outfit.variable} ${roboto.variable} ${firaCode.variable} ${playfair.variable} font-sans bg-[#FAF9F6] text-[#111111] antialiased selection:bg-[#2563EB] selection:text-white`}>
         {children}
         <Toaster position="bottom-right" theme="light" richColors />
       </body>

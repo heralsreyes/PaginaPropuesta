@@ -3,11 +3,41 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 export type StudioTab =
   | "plantillas"
+  | "secciones"
   | "texto"
   | "elementos"
   | "mockups"
   | "presupuesto"
   | "json";
+
+export interface PageSection {
+  id: string;
+  label: string;
+  componentType:
+    | "hero"
+    | "alcance"
+    | "cronograma"
+    | "equipo"
+    | "responsabilidades"
+    | "inversion"
+    | "empresa"
+    | "contacto"
+    | "custom";
+  enabled: boolean;
+  title?: string;
+  subtitle?: string;
+}
+
+export const DEFAULT_PAGE_SECTIONS: PageSection[] = [
+  { id: "hero", label: "Portada / Inicio", componentType: "hero", enabled: true },
+  { id: "alcance", label: "Alcance & Módulos", componentType: "alcance", enabled: true },
+  { id: "cronograma", label: "Cronograma & EDT", componentType: "cronograma", enabled: true },
+  { id: "equipo", label: "Equipo Especialista", componentType: "equipo", enabled: true },
+  { id: "responsabilidades", label: "Garantía & Matriz", componentType: "responsabilidades", enabled: true },
+  { id: "inversion", label: "Presupuesto & Pagos", componentType: "inversion", enabled: true },
+  { id: "empresa", label: "Sobre ENFOCO S.R.L.", componentType: "empresa", enabled: true },
+  { id: "contacto", label: "Cierre & Firma", componentType: "contacto", enabled: true },
+];
 
 export interface ButtonActionConfig {
   targetId: string;
@@ -70,7 +100,15 @@ interface StudioState {
   selectedCanvasElementId: string | null;
   canvasElements: CanvasElement[];
   buttonActionsMap: Record<string, ButtonActionConfig>;
-  zoomLevel: number;
+  sections: PageSection[];
+
+  // Canvas Interaction Mode (Select vs Draw/Drag)
+  canvasMode: "select" | "draw";
+  setCanvasMode: (mode: "select" | "draw") => void;
+
+  // Active Drawing Tool (PPTX Online Drawing Mode)
+  activeDrawingTool: Omit<CanvasElement, "id" | "x" | "y" | "width" | "height" | "zIndex"> | null;
+  setActiveDrawingTool: (tool: Omit<CanvasElement, "id" | "x" | "y" | "width" | "height" | "zIndex"> | null) => void;
 
   // Actions
   toggleDesignMode: () => void;
@@ -78,6 +116,14 @@ interface StudioState {
   togglePanel: () => void;
   setSelectedCanvasElementId: (id: string | null) => void;
   setZoomLevel: (level: number) => void;
+
+  // Section Mutators
+  toggleSectionVisibility: (id: string) => void;
+  removeSection: (id: string) => void;
+  addSection: (componentType: PageSection["componentType"], label?: string) => string;
+  moveSectionUp: (id: string) => void;
+  moveSectionDown: (id: string) => void;
+  resetSections: () => void;
 
   // Canvas Element Mutators
   addCanvasElement: (element: Omit<CanvasElement, "id" | "x" | "y" | "width" | "height" | "zIndex">) => string;
@@ -143,6 +189,31 @@ export const useStudioStore = create<StudioState>()(
       zoomLevel: 100,
       canvasElements: [],
       buttonActionsMap: {},
+      sections: DEFAULT_PAGE_SECTIONS,
+      canvasMode: "select",
+      activeDrawingTool: null,
+
+      setCanvasMode: (mode) =>
+        set({
+          canvasMode: mode,
+          activeDrawingTool:
+            mode === "select"
+              ? null
+              : get().activeDrawingTool || {
+                  type: "text",
+                  textType: "p",
+                  title: "Nuevo Recuadro de Texto",
+                  customBg: "transparent",
+                  customBorder: "transparent",
+                  customText: "#18181B",
+                },
+        }),
+
+      setActiveDrawingTool: (tool) =>
+        set({
+          activeDrawingTool: tool,
+          canvasMode: tool ? "draw" : "select",
+        }),
 
       toggleDesignMode: () =>
         set((state) => ({ isDesignMode: !state.isDesignMode })),
@@ -158,6 +229,78 @@ export const useStudioStore = create<StudioState>()(
 
       setZoomLevel: (level) =>
         set({ zoomLevel: Math.min(140, Math.max(60, level)) }),
+
+      // Section Mutators Implementation
+      toggleSectionVisibility: (id) => {
+        set((state) => ({
+          sections: state.sections.map((sec) =>
+            sec.id === id ? { ...sec, enabled: !sec.enabled } : sec
+          ),
+        }));
+      },
+
+      removeSection: (id) => {
+        set((state) => ({
+          sections: state.sections.filter((sec) => sec.id !== id),
+        }));
+      },
+
+      addSection: (componentType, label) => {
+        const uniqueId = `sec-${componentType}-${Date.now().toString().slice(-4)}`;
+        const typeLabels: Record<string, string> = {
+          hero: "Nueva Portada",
+          alcance: "Nuevo Alcance & Módulos",
+          cronograma: "Nuevo Cronograma",
+          equipo: "Nuevo Equipo Especialista",
+          responsabilidades: "Nueva Matriz de Garantía",
+          inversion: "Nuevo Presupuesto",
+          empresa: "Sobre ENFOCO Adicional",
+          contacto: "Nuevo Cierre & Contacto",
+          custom: "Sección Personalizada",
+        };
+
+        const newSec: PageSection = {
+          id: uniqueId,
+          label: label || typeLabels[componentType] || "Nueva Sección",
+          componentType,
+          enabled: true,
+          title: label || typeLabels[componentType] || "Nueva Sección",
+        };
+
+        set((state) => ({
+          sections: [...state.sections, newSec],
+        }));
+
+        return uniqueId;
+      },
+
+      moveSectionUp: (id) => {
+        set((state) => {
+          const index = state.sections.findIndex((sec) => sec.id === id);
+          if (index <= 0) return state;
+          const updated = [...state.sections];
+          const temp = updated[index - 1];
+          updated[index - 1] = updated[index];
+          updated[index] = temp;
+          return { sections: updated };
+        });
+      },
+
+      moveSectionDown: (id) => {
+        set((state) => {
+          const index = state.sections.findIndex((sec) => sec.id === id);
+          if (index < 0 || index >= state.sections.length - 1) return state;
+          const updated = [...state.sections];
+          const temp = updated[index + 1];
+          updated[index + 1] = updated[index];
+          updated[index] = temp;
+          return { sections: updated };
+        });
+      },
+
+      resetSections: () => {
+        set({ sections: DEFAULT_PAGE_SECTIONS });
+      },
 
       addCanvasElement: (element) => {
         const uniqueId = `${element.type}-${Date.now().toString().slice(-4)}`;
