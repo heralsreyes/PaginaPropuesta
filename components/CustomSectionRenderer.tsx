@@ -224,6 +224,9 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
   const [appSimTab, setAppSimTab] = useState<"portafolio" | "ticket" | "estados" | "asesor">("portafolio");
   const [isFaceIdScanning, setIsFaceIdScanning] = useState<boolean>(false);
   const [faceIdSigned, setFaceIdSigned] = useState<boolean>(false);
+  const [faceIdStep, setFaceIdStep] = useState<number>(0);
+  const [currencyMode, setCurrencyMode] = useState<"USD" | "DOP">("USD");
+  const [isPlayingVoiceNote, setIsPlayingVoiceNote] = useState<boolean>(false);
   const [pinDigits, setPinDigits] = useState<string>("");
   const [pdfUnlocked, setPdfUnlocked] = useState<boolean>(false);
   const [showPushAlert, setShowPushAlert] = useState<boolean>(true);
@@ -288,13 +291,26 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
     }, 1800);
   };
 
+  // Currency conversion helper for iPhone simulator
+  const DOP_RATE = 60.5;
+  const formatAppCurr = (usdVal: number) => {
+    if (currencyMode === "DOP") {
+      return `RD$ ${Math.round(usdVal * DOP_RATE).toLocaleString()}`;
+    }
+    return `$${Math.round(usdVal).toLocaleString()} USD`;
+  };
+
   // Helper for FaceID scan trigger
   const triggerFaceIdScan = () => {
     setIsFaceIdScanning(true);
+    setFaceIdStep(1);
+    setTimeout(() => setFaceIdStep(2), 700);
+    setTimeout(() => setFaceIdStep(3), 1400);
     setTimeout(() => {
       setIsFaceIdScanning(false);
       setFaceIdSigned(true);
-    }, 1800);
+      setFaceIdStep(0);
+    }, 2100);
   };
 
   // Helper for PIN digit press
@@ -1595,20 +1611,44 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                 {/* Main Phone Body */}
                 <div className="w-[360px] sm:w-[380px] h-[640px] bg-gradient-to-b from-slate-800 via-slate-900 to-black p-3.5 rounded-[52px] shadow-[0_30px_90px_-20px_rgba(0,0,0,0.7)] border-4 border-slate-700/80 flex flex-col justify-between relative overflow-hidden">
                   
-                  {/* FaceID Scanning Overlay Animation */}
+                  {/* FaceID Scanning Overlay Animation (Pro Multi-Step 3D Hologram) */}
                   <AnimatePresence>
                     {isFaceIdScanning && (
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="absolute inset-0 bg-[#0F172A]/92 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 z-50 text-white space-y-4"
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="absolute inset-0 bg-[#0F172A]/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 z-50 text-white space-y-4"
                       >
-                        <div className="w-20 h-20 rounded-3xl border-4 border-[#38BDF8] flex items-center justify-center animate-pulse shadow-2xl shadow-[#38BDF8]/50">
-                          <UserCheck className="w-10 h-10 text-[#38BDF8]" />
+                        <div className="relative w-24 h-24 flex items-center justify-center">
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+                            className={`absolute inset-0 rounded-3xl border-4 ${
+                              faceIdStep === 3 ? "border-emerald-400" : faceIdStep === 2 ? "border-[#F08D17]" : "border-[#38BDF8]"
+                            } border-t-transparent shadow-2xl`}
+                          />
+                          <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-sm shadow-inner">
+                            {faceIdStep === 3 ? (
+                              <CheckCircle2 className="w-10 h-10 text-emerald-400 animate-bounce" />
+                            ) : faceIdStep === 2 ? (
+                              <ShieldCheck className="w-10 h-10 text-[#F08D17] animate-pulse" />
+                            ) : (
+                              <UserCheck className="w-10 h-10 text-[#38BDF8] animate-pulse" />
+                            )}
+                          </div>
                         </div>
-                        <p className="font-extrabold text-base">Escaneando FaceID...</p>
-                        <span className="text-xs text-slate-300 font-mono">Verificando linderos KYC & SIMV</span>
+
+                        <div>
+                          <p className="font-extrabold text-base">
+                            {faceIdStep === 1 && "Alineando Rostro (TrueDepth)..."}
+                            {faceIdStep === 2 && "Validando Sello con SIMV Trust..."}
+                            {faceIdStep === 3 && "¡Firma Biométrica Aprobada!"}
+                          </p>
+                          <span className="text-[11px] text-slate-300 font-mono block mt-1">
+                            {faceIdStep === 3 ? "Certificado Cifrado #SIMV-9982" : "Cumplimiento Ley 126-02 de Comercio Electrónico"}
+                          </span>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -1640,10 +1680,16 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                     </motion.button>
                   )}
 
-                  {/* iOS Status Bar */}
+                  {/* iOS Status Bar with Currency Switcher */}
                   <div className="flex items-center justify-between px-4 text-[11px] text-slate-300 font-mono mb-1 shrink-0 font-bold">
-                    <span>9:41</span>
+                    <span>9:41 AM</span>
                     <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCurrencyMode(currencyMode === "USD" ? "DOP" : "USD")}
+                        className="px-2 py-0.5 rounded-full bg-[#004F54] hover:bg-[#006B70] text-[#38BDF8] text-[9px] font-mono font-extrabold cursor-pointer border border-[#38BDF8]/40 shadow-sm transition-all active:scale-95"
+                      >
+                        {currencyMode === "USD" ? "💵 USD $" : "🇩🇴 DOP RD$"}
+                      </button>
                       <span className="text-[10px] font-extrabold text-[#38BDF8]">5G</span>
                       <span className="text-[10px] font-mono text-emerald-400 font-bold">98% 🔋</span>
                     </div>
@@ -1666,9 +1712,9 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                             <span className="text-[10px] text-[#004F54] font-mono font-bold">● En Vivo</span>
                           </div>
                           <div className="p-3.5 bg-gradient-to-r from-[#004F54] to-[#006B70] rounded-2xl text-white space-y-1 shadow-lg">
-                            <span className="text-[10px] text-white/80 block font-mono font-bold">VALOR TOTAL INVERSIONES</span>
-                            <p className="text-2xl font-black text-white font-mono">${calcAmount.toLocaleString()} USD</p>
-                            <span className="text-[10px] text-[#F08D17] font-mono font-bold block">+${Math.round(calculatedYield).toLocaleString()} Ganancia Est.</span>
+                            <span className="text-[10px] text-white/80 block font-mono font-bold">VALOR TOTAL INVERSIONES ({currencyMode})</span>
+                            <p className="text-2xl font-black text-white font-mono">{formatAppCurr(calcAmount)}</p>
+                            <span className="text-[10px] text-[#F08D17] font-mono font-bold block">+{formatAppCurr(calculatedYield)} Ganancia Est.</span>
                           </div>
                           <div className="space-y-2 text-xs">
                             <div className="p-3 bg-white rounded-2xl flex items-center justify-between border border-[#E2E8F0] shadow-sm hover:border-[#004F54] cursor-pointer transition-all">
@@ -1676,21 +1722,21 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                                 <p className="font-extrabold text-xs text-[#0F172A]">Mutuo Estructurado ({mutuoPct}%)</p>
                                 <span className="text-[10px] text-[#F08D17] font-bold">Tasa: {(currentRate * 100).toFixed(1)}% • Vence 15d</span>
                               </div>
-                              <span className="font-mono text-[#F08D17] font-extrabold text-xs">${Math.round(calcAmount * (mutuoPct / 100)).toLocaleString()}</span>
+                              <span className="font-mono text-[#F08D17] font-extrabold text-xs">{formatAppCurr(calcAmount * (mutuoPct / 100))}</span>
                             </div>
                             <div className="p-3 bg-white rounded-2xl flex items-center justify-between border border-[#E2E8F0] shadow-sm hover:border-[#004F54] cursor-pointer transition-all">
                               <div>
                                 <p className="font-extrabold text-xs text-[#0F172A]">Fondo Inmobiliario II ({inmoPct}%)</p>
-                                <span className="text-[10px] text-[#64748B]">Cuotas • Div: $1,250.00</span>
+                                <span className="text-[10px] text-[#64748B]">Cuotas • Div: {formatAppCurr(1250)}</span>
                               </div>
-                              <span className="font-mono text-[#004F54] font-extrabold text-xs">${Math.round(calcAmount * (inmoPct / 100)).toLocaleString()}</span>
+                              <span className="font-mono text-[#004F54] font-extrabold text-xs">{formatAppCurr(calcAmount * (inmoPct / 100))}</span>
                             </div>
                             <div className="p-3 bg-white rounded-2xl flex items-center justify-between border border-[#E2E8F0] shadow-sm hover:border-[#004F54] cursor-pointer transition-all">
                               <div>
                                 <p className="font-extrabold text-xs text-[#0F172A]">Fondo Liquidez ESAFI ({esafiPct}%)</p>
                                 <span className="text-[10px] text-[#64748B]">Encargo #4092</span>
                               </div>
-                              <span className="font-mono text-[#334155] font-extrabold text-xs">${Math.round(calcAmount * (esafiPct / 100)).toLocaleString()}</span>
+                              <span className="font-mono text-[#334155] font-extrabold text-xs">{formatAppCurr(calcAmount * (esafiPct / 100))}</span>
                             </div>
                           </div>
                         </motion.div>
@@ -1714,7 +1760,7 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                               Aprobación Fehaciente Requerida
                             </span>
                             <p className="text-xs text-[#0F172A] leading-relaxed font-medium">
-                              Solicitud: <span className="font-bold text-[#004F54]">Renovación Mutuo USD ${calcAmount.toLocaleString()}</span> a {calcTermDays} Días ({(currentRate * 100).toFixed(1)}%).
+                              Solicitud: <span className="font-bold text-[#004F54]">Renovación Mutuo {formatAppCurr(calcAmount)}</span> a {calcTermDays} Días ({(currentRate * 100).toFixed(1)}%).
                             </p>
                           </div>
                           <div className="p-3 bg-white rounded-2xl border border-[#E2E8F0] space-y-3 text-center shadow-sm">
@@ -1739,7 +1785,7 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                         </motion.div>
                       )}
 
-                      {/* VIEW 3: ESTADOS PDF WITH PIN KEYPAD */}
+                      {/* VIEW 3: ESTADOS PDF WITH PIN KEYPAD & PDF PREVIEW */}
                       {appSimTab === "estados" && (
                         <motion.div
                           key="estados"
@@ -1778,15 +1824,43 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                               </div>
                             </div>
                           ) : (
-                            <div className="p-4 bg-[#F0FDF4] border border-[#A7F3D0] rounded-2xl space-y-3 shadow-sm text-center">
-                              <FileText className="w-9 h-9 text-[#166534] mx-auto" />
-                              <div>
-                                <p className="text-xs font-extrabold text-[#166534]">Estado_Julio_2026_DESBLOQUEADO.pdf</p>
-                                <span className="text-[10px] text-[#15803D]">Titular: Juan Pérez • RNC 001-XXXX-X</span>
+                            <div className="space-y-3">
+                              <div className="p-3.5 bg-white border border-[#CBD5E1] rounded-2xl space-y-2.5 shadow-sm text-left relative overflow-hidden">
+                                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-5 h-5 text-[#004F54]" />
+                                    <span className="font-bold text-xs text-[#0F172A]">Estado_Consolidado_Jul2026.pdf</span>
+                                  </div>
+                                  <span className="text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">ISO 27001</span>
+                                </div>
+
+                                <div className="space-y-1 font-mono text-[10px] text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                                  <div className="flex justify-between font-bold text-[#0F172A]">
+                                    <span>Titular: Juan Pérez</span>
+                                    <span>RNC: 001-XXXX-X</span>
+                                  </div>
+                                  <div className="flex justify-between text-[#004F54] font-extrabold">
+                                    <span>Total Portafolio:</span>
+                                    <span>{formatAppCurr(calcAmount)}</span>
+                                  </div>
+                                  <div className="flex justify-between text-[#F08D17]">
+                                    <span>Rendimiento Est.:</span>
+                                    <span>{formatAppCurr(calculatedYield)}</span>
+                                  </div>
+                                </div>
+
+                                <button
+                                  onClick={() => exportExcelCsv()}
+                                  className="w-full py-2 bg-[#004F54] hover:bg-[#006B70] text-white rounded-xl text-xs font-bold font-mono shadow-md cursor-pointer flex items-center justify-center gap-2"
+                                >
+                                  <Download className="w-4 h-4 text-[#F08D17]" />
+                                  <span>Descargar PDF Cifrado SIMV</span>
+                                </button>
                               </div>
+
                               <button
                                 onClick={() => { setPdfUnlocked(false); setPinDigits(""); }}
-                                className="py-2 px-4 bg-[#166534] text-white rounded-xl text-xs font-bold cursor-pointer hover:bg-[#15803D]"
+                                className="w-full py-1.5 bg-slate-200 hover:bg-slate-300 text-[#0F172A] rounded-xl text-[11px] font-bold cursor-pointer font-mono"
                               >
                                 🔒 Volver a Bloquear PDF
                               </button>
@@ -1795,7 +1869,7 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                         </motion.div>
                       )}
 
-                      {/* VIEW 4: AUTHENTIC WHATSAPP iOS STYLE CHAT SIMULATOR */}
+                      {/* VIEW 4: WHATSAPP iOS STYLE CHAT & VOICE NOTE SIMULATOR */}
                       {appSimTab === "asesor" && (
                         <motion.div
                           key="asesor"
@@ -1826,8 +1900,41 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
                             </div>
                           </div>
 
-                          {/* Chat Thread with WhatsApp Bubbles */}
+                          {/* Chat Thread with WhatsApp Bubbles & Voice Note */}
                           <div className="p-3 space-y-2.5 flex-1 overflow-y-auto text-xs font-sans">
+                            {/* Voice Note Player Simulator */}
+                            <div className="flex justify-start">
+                              <div className="p-2.5 bg-white rounded-2xl rounded-tl-none border border-slate-200 shadow-sm w-[88%] space-y-1.5">
+                                <div className="flex items-center gap-2.5">
+                                  <button
+                                    onClick={() => setIsPlayingVoiceNote(!isPlayingVoiceNote)}
+                                    className="w-8 h-8 rounded-full bg-[#008069] text-white flex items-center justify-center shrink-0 cursor-pointer shadow-md active:scale-95 transition-all text-xs font-bold"
+                                  >
+                                    {isPlayingVoiceNote ? "⏸" : "▶"}
+                                  </button>
+
+                                  <div className="flex-1 space-y-1">
+                                    {/* Animated Waveform Bars */}
+                                    <div className="flex items-center gap-0.5 h-4">
+                                      {[40, 70, 30, 90, 50, 80, 100, 60, 40, 70, 50, 90, 60, 30].map((h, idx) => (
+                                        <span
+                                          key={idx}
+                                          className={`w-1 rounded-full transition-all ${
+                                            isPlayingVoiceNote ? "bg-[#008069] animate-pulse" : "bg-slate-300"
+                                          }`}
+                                          style={{ height: `${isPlayingVoiceNote ? (h % 70) + 30 : 40}%` }}
+                                        />
+                                      ))}
+                                    </div>
+                                    <div className="flex justify-between text-[9px] font-mono text-slate-500 font-bold">
+                                      <span>{isPlayingVoiceNote ? "0:07 / 0:14" : "0:14"}</span>
+                                      <span className="text-[#008069]">🎙️ Nota de Voz María</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                             {chatMessages.map((msg, i) => (
                               <div
                                 key={i}
