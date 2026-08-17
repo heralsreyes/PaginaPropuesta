@@ -28,16 +28,22 @@ export interface PageSection {
   subtitle?: string;
 }
 
-export const DEFAULT_PAGE_SECTIONS: PageSection[] = [
-  { id: "hero", label: "Portada / Inicio", componentType: "hero", enabled: true },
-  { id: "alcance", label: "Alcance & Módulos", componentType: "alcance", enabled: true },
-  { id: "cronograma", label: "Cronograma & EDT", componentType: "cronograma", enabled: true },
-  { id: "equipo", label: "Equipo Especialista", componentType: "equipo", enabled: true },
-  { id: "responsabilidades", label: "Garantía & Matriz", componentType: "responsabilidades", enabled: true },
-  { id: "inversion", label: "Presupuesto & Pagos", componentType: "inversion", enabled: true },
-  { id: "empresa", label: "Sobre ENFOCO S.R.L.", componentType: "empresa", enabled: true },
-  { id: "contacto", label: "Cierre & Firma", componentType: "contacto", enabled: true },
+export const EXCEL_CUSTOM_SECTIONS: PageSection[] = [
+  { id: "sec-portada-excel", label: "01. Presentación Ejecutiva", componentType: "custom", enabled: true },
+  { id: "sec-valor-propuesta", label: "02. Arquitectura de Valor & Ecosistema", componentType: "custom", enabled: true },
+  { id: "sec-7-epicas-alcance", label: "03. Alcance Funcional — 7 Épicas SIMV", componentType: "custom", enabled: true },
+  { id: "sec-simulador-interactivo-app", label: "04. Simulador App Móvil & Trade Ticket", componentType: "custom", enabled: true },
+  { id: "sec-calculadora-inversion", label: "05. Calculadora Rendimiento & Mutuos", componentType: "custom", enabled: true },
+  { id: "sec-integracion-crm-sifi", label: "06. Integración Dynamics CRM & SIFI Fondos", componentType: "custom", enabled: true },
+  { id: "sec-supervision-dashboards", label: "07. Dashboards Operativos & Métricas KPI", componentType: "custom", enabled: true },
+  { id: "sec-equipo-cronograma", label: "08. Equipo Especialista & Cronograma", componentType: "custom", enabled: true },
+  { id: "sec-propuesta-economica", label: "09. Propuesta Económica & Inversión", componentType: "custom", enabled: true },
+  { id: "sec-sobre-enfoco-certificaciones", label: "10. Sobre ENFOCO S.R.L. & Certificaciones", componentType: "custom", enabled: true },
+  { id: "sec-experiencia-proyectos", label: "11. Experiencia en Proyectos Similares", componentType: "custom", enabled: true },
+  { id: "sec-cierre-acuerdo", label: "12. Cierre & Firma Digital", componentType: "custom", enabled: true },
 ];
+
+export const DEFAULT_PAGE_SECTIONS: PageSection[] = EXCEL_CUSTOM_SECTIONS;
 
 export interface ButtonActionConfig {
   targetId: string;
@@ -59,7 +65,17 @@ export interface PlainCardTab {
 export interface CanvasElement {
   id: string;
   type: "button" | "card" | "shape" | "line" | "graphic" | "text" | "module_template" | "mockup";
-  templateType?: "scope_master" | "team_master" | "company_master" | "clean_multitab";
+  templateType?:
+    | "scope_master"
+    | "team_master"
+    | "company_master"
+    | "clean_multitab"
+    | "kpi_card"
+    | "whatsapp_sim"
+    | "ai_expediente"
+    | "investment_calc"
+    | "pricing_block"
+    | "feature_grid";
   mockupType?: "macbook" | "iphone" | "ipad";
   sectionId: string;
   x: number;
@@ -85,9 +101,12 @@ export interface CanvasElement {
   customText?: string;
   customAccent?: string;
 
-  // Style variant / icon
+  // Style variant / icon / typography
   variant?: string;
   iconName?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  textType?: "h1" | "h2" | "p" | "bullet" | "quote" | string;
 
   // Button action binding
   actionConfig?: ButtonActionConfig;
@@ -98,6 +117,7 @@ interface StudioState {
   activeToolTab: StudioTab;
   isPanelOpen: boolean;
   selectedCanvasElementId: string | null;
+  zoomLevel: number;
   canvasElements: CanvasElement[];
   buttonActionsMap: Record<string, ButtonActionConfig>;
   sections: PageSection[];
@@ -126,8 +146,8 @@ interface StudioState {
   resetSections: () => void;
 
   // Canvas Element Mutators
-  addCanvasElement: (element: Omit<CanvasElement, "id" | "x" | "y" | "width" | "height" | "zIndex">) => string;
-  addCanvasElementAtPosition: (element: Omit<CanvasElement, "id" | "width" | "height" | "zIndex">) => string;
+  addCanvasElement: (element: Omit<CanvasElement, "id" | "x" | "y" | "width" | "height" | "zIndex"> & { x?: number; y?: number; width?: number; height?: number }) => string;
+  addCanvasElementAtPosition: (element: Omit<CanvasElement, "id" | "width" | "height" | "zIndex"> & { width?: number; height?: number }) => string;
   updateCanvasElement: (id: string, updates: Partial<CanvasElement>) => void;
   removeCanvasElement: (id: string) => void;
   duplicateCanvasElement: (id: string) => void;
@@ -201,6 +221,7 @@ export const useStudioStore = create<StudioState>()(
               ? null
               : get().activeDrawingTool || {
                   type: "text",
+                  sectionId: "hero",
                   textType: "p",
                   title: "Nuevo Recuadro de Texto",
                   customBg: "transparent",
@@ -316,7 +337,19 @@ export const useStudioStore = create<StudioState>()(
             ? element.mockupType === "macbook"
               ? 420
               : element.mockupType === "iphone"
-              ? 220
+              ? 260
+              : 360
+            : element.type === "module_template"
+            ? element.templateType === "whatsapp_sim"
+              ? 340
+              : element.templateType === "ai_expediente"
+              ? 380
+              : element.templateType === "investment_calc"
+              ? 380
+              : element.templateType === "pricing_block"
+              ? 460
+              : element.templateType === "feature_grid"
+              ? 520
               : 360
             : 300;
 
@@ -329,17 +362,29 @@ export const useStudioStore = create<StudioState>()(
             ? element.mockupType === "macbook"
               ? 260
               : element.mockupType === "iphone"
-              ? 380
+              ? 420
               : 280
+            : element.type === "module_template"
+            ? element.templateType === "whatsapp_sim"
+              ? 380
+              : element.templateType === "ai_expediente"
+              ? 220
+              : element.templateType === "investment_calc"
+              ? 210
+              : element.templateType === "pricing_block"
+              ? 220
+              : element.templateType === "feature_grid"
+              ? 240
+              : 200
             : 180;
 
         const newElement: CanvasElement = {
           ...element,
           id: uniqueId,
-          x: 60 + (currentElements.length * 20) % 200,
-          y: 80 + (currentElements.length * 20) % 150,
-          width: defaultW,
-          height: defaultH,
+          x: element.x !== undefined ? element.x : 60 + (currentElements.length * 20) % 200,
+          y: element.y !== undefined ? element.y : 80 + (currentElements.length * 20) % 150,
+          width: element.width || defaultW,
+          height: element.height || defaultH,
           zIndex: maxZ + 1,
         };
 
@@ -385,8 +430,8 @@ export const useStudioStore = create<StudioState>()(
         const newElement: CanvasElement = {
           ...element,
           id: uniqueId,
-          width: defaultW,
-          height: defaultH,
+          width: element.width || defaultW,
+          height: element.height || defaultH,
           zIndex: maxZ + 1,
         };
 
@@ -604,6 +649,7 @@ export const useStudioStore = create<StudioState>()(
       name: "enfoco-studio-canvas-storage",
       storage: createJSONStorage(() => debouncedStorageEngine as any),
       partialize: (state) => ({
+        sections: state.sections,
         canvasElements: state.canvasElements,
         buttonActionsMap: state.buttonActionsMap,
         zoomLevel: state.zoomLevel,

@@ -746,7 +746,7 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
                     Hitos de Pago ({proposal.budget.paymentTerms.length})
                   </h4>
                   <button
-                    onClick={addPaymentTerm}
+                    onClick={() => addPaymentTerm()}
                     className="inline-flex items-center space-x-1 text-xs font-bold text-[#2563EB] bg-[#EFF6FF] px-3 py-1 rounded-full border border-[#BFDBFE] hover:bg-[#2563EB] hover:text-white transition-all cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
@@ -802,7 +802,7 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
                   <p className="text-[11px] text-[#52525B]">Puedes agregar requerimientos ilimitados (REQ-01 ... REQ-N).</p>
                 </div>
                 <button
-                  onClick={addRequirement}
+                  onClick={() => addRequirement()}
                   className="inline-flex items-center space-x-1.5 text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1D4ED8] px-4 py-2 rounded-xl shadow-sm transition-all cursor-pointer shrink-0"
                 >
                   <Plus className="w-4 h-4" />
@@ -935,7 +935,7 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({ isOpen, onCl
                   <p className="text-[11px] text-[#52525B]">Modifica duraciones individuales, títulos, estatus e hitos.</p>
                 </div>
                 <button
-                  onClick={addRoadmapPhase}
+                  onClick={() => addRoadmapPhase()}
                   className="inline-flex items-center space-x-1.5 text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1D4ED8] px-4 py-2 rounded-xl shadow-sm transition-all cursor-pointer shrink-0"
                 >
                   <Plus className="w-4 h-4" />

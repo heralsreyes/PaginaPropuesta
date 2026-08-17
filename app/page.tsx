@@ -16,10 +16,16 @@ import { Footer } from "@/components/Footer";
 
 import { StudioLayout } from "@/components/studio/StudioLayout";
 
+import { useStudioStore } from "@/store/useStudioStore";
+import { CustomSectionRenderer } from "@/components/CustomSectionRenderer";
+
 function ProposalContent() {
   const { proposal } = useProposal();
+  const { sections } = useStudioStore();
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+
+  const activeSections = sections.filter((s) => s.enabled);
 
   return (
     <div className="w-full bg-[var(--bg-main)] text-[var(--text-primary)] relative transition-colors duration-300">
@@ -30,42 +36,68 @@ function ProposalContent() {
         onOpenCustomizer={() => setIsCustomizerOpen(true)}
       />
 
-      {/* Slide 1: Hero Cover (#hero) */}
-      <HeroSection
-        proposal={proposal}
-        onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
-      />
+      {/* Render Active Sections in Exact Order Defined in Design Studio */}
+      {activeSections.map((sec) => {
+        if (sec.componentType === "hero") {
+          return (
+            <HeroSection
+              key={sec.id}
+              proposal={proposal}
+              onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
+            />
+          );
+        }
+        if (sec.componentType === "alcance") {
+          return <ScopeSection key={sec.id} requirements={proposal.requirements} />;
+        }
+        if (sec.componentType === "cronograma") {
+          return (
+            <RoadmapSection
+              key={sec.id}
+              roadmap={proposal.roadmap}
+              estimatedDuration={proposal.project.estimatedDuration}
+            />
+          );
+        }
+        if (sec.componentType === "equipo") {
+          return <TeamSection key={sec.id} team={proposal.team} />;
+        }
+        if (sec.componentType === "responsabilidades") {
+          return (
+            <ResponsibilitiesSection
+              key={sec.id}
+              clientResponsibilities={proposal.clientResponsibilities}
+              enfocoResponsibilities={proposal.enfocoResponsibilities}
+              guaranteePeriod={proposal.project.guaranteePeriod}
+            />
+          );
+        }
+        if (sec.componentType === "inversion") {
+          return (
+            <BudgetSection
+              key={sec.id}
+              budget={proposal.budget}
+              onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
+            />
+          );
+        }
+        if (sec.componentType === "empresa") {
+          return <CompanySection key={sec.id} company={proposal.company} />;
+        }
+        if (sec.componentType === "contacto") {
+          return <Footer key={sec.id} proposal={proposal} />;
+        }
 
-      {/* Slide 2: Alcance & Funcionalidades Requeridas (#alcance) */}
-      <ScopeSection requirements={proposal.requirements} />
-
-      {/* Slide 3: Cronograma de Ejecución Estimado (#cronograma) */}
-      <RoadmapSection
-        roadmap={proposal.roadmap}
-        estimatedDuration={proposal.project.estimatedDuration}
-      />
-
-      {/* Slide 4: Recursos Necesarios & Roles del Proyecto (#equipo) */}
-      <TeamSection team={proposal.team} />
-
-      {/* Slide 5: Matriz de Responsabilidades & Garantía (#responsabilidades) */}
-      <ResponsibilitiesSection
-        clientResponsibilities={proposal.clientResponsibilities}
-        enfocoResponsibilities={proposal.enfocoResponsibilities}
-        guaranteePeriod={proposal.project.guaranteePeriod}
-      />
-
-      {/* Slide 6: Presupuesto & Esquema de Inversión (#inversion) */}
-      <BudgetSection
-        budget={proposal.budget}
-        onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
-      />
-
-      {/* Slide 7: Sobre ENFOCO (Misión & Visión) (#empresa) */}
-      <CompanySection company={proposal.company} />
-
-      {/* Slide 8: Contacto & Siguientes Pasos (#contacto) */}
-      <Footer proposal={proposal} />
+        // Custom Section Renderer (01 - 10 Custom Sections)
+        return (
+          <CustomSectionRenderer
+            key={sec.id}
+            section={sec}
+            proposal={proposal}
+            onOpenAcceptModal={() => setIsAcceptModalOpen(true)}
+          />
+        );
+      })}
 
       {/* Interactive Acceptance Modal */}
       <AcceptModal

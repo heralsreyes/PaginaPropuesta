@@ -38,7 +38,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
   };
 
   return (
-    <section id="equipo" className="h-screen w-full snap-start snap-always flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <section id="equipo" className="min-h-screen w-full flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       {/* 💻 Screen Interactive Inspector View */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -132,7 +132,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                     onClick={() =>
                       addTeamMember({
                         role: "Nuevo Rol Lead",
-                        category: "Especialista",
+                        category: "Construcción",
                         dedicationPercent: 100,
                         iconName: "Code",
                         responsibilities: ["Responsabilidad 1"],

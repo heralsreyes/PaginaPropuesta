@@ -14,19 +14,22 @@ interface SidebarNavProps {
 }
 
 export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptModal }) => {
-  const { isDesignMode } = useStudioStore();
+  const { isDesignMode, sections } = useStudioStore();
   const [activeSection, setActiveSection] = useState<string>("hero");
 
-  const slides = [
-    { id: "hero", label: "Inicio" },
-    { id: "alcance", label: "Alcance" },
-    { id: "cronograma", label: "Cronograma" },
-    { id: "equipo", label: "Equipo" },
-    { id: "responsabilidades", label: "Garantía" },
-    { id: "inversion", label: "Presupuesto" },
-    { id: "empresa", label: "Sobre ENFOCO" },
-    { id: "contacto", label: "Contacto" },
-  ];
+  const enabledSections = sections.filter((s) => s.enabled);
+  const slides = enabledSections.length > 0
+    ? enabledSections.map((s) => ({ id: s.id, label: s.label || s.title || s.id }))
+    : [
+        { id: "hero", label: "Inicio" },
+        { id: "alcance", label: "Alcance" },
+        { id: "cronograma", label: "Cronograma" },
+        { id: "equipo", label: "Equipo" },
+        { id: "responsabilidades", label: "Garantía" },
+        { id: "inversion", label: "Presupuesto" },
+        { id: "empresa", label: "Sobre ENFOCO" },
+        { id: "contacto", label: "Contacto" },
+      ];
 
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
@@ -119,7 +122,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ proposal, onOpenAcceptMo
             <span className="text-lg sm:text-xl font-bold font-display tracking-tight text-[var(--text-primary)]">
               ENFOCO<span className="text-[var(--accent-color)]">.</span>
             </span>
-            <span className="text-xs px-2 py-0.5 rounded bg-[var(--bg-main)] text-[var(--text-primary)] border border-[var(--border-color)] font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded-md bg-[#004F54] text-white border border-[#004F54] font-extrabold shadow-sm">
               S.R.L.
             </span>
           </div>

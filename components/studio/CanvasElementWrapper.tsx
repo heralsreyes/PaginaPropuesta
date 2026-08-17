@@ -26,6 +26,9 @@ import {
   Wifi,
   Battery,
   Target,
+  BarChart2,
+  TrendingUp,
+  MessageSquare,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -45,6 +48,7 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     updateCanvasElement,
     setActiveTabForCard,
     updateCardTabContent,
+    canvasMode,
   } = useStudioStore();
 
   const isSelected = isDesignMode && selectedCanvasElementId === element.id;
@@ -66,6 +70,10 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     if (!isDesignMode) return;
     e.stopPropagation();
     setSelectedCanvasElementId(element.id);
+
+    // In 'select' mode, ONLY select the element. Do NOT start dragging cards around.
+    if (canvasMode === "select") return;
+
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
     setInitialPos({ x: element.x, y: element.y });
@@ -177,8 +185,12 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     display: element.isHidden && !isDesignMode ? "none" : "block",
     opacity: element.isHidden ? 0.35 : 1,
     fontFamily: getFontFamilyCSS(element.fontFamily),
-    fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
   };
+
+  // Hide placeholder draft text elements from executive client view
+  if (!isDesignMode && (element.isHidden || (element.title && element.title.toLowerCase().includes("recuadro")))) {
+    return null;
+  }
 
   return (
     <div
@@ -187,7 +199,7 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       className={`group transition-all box-border select-none ${
-        isDesignMode ? "cursor-move" : "cursor-pointer"
+        isDesignMode ? (canvasMode === "draw" ? "cursor-move" : "cursor-pointer") : "cursor-pointer"
       } ${
         element.isHidden ? "border-2 border-dashed border-red-500 rounded-2xl" : ""
       } ${
@@ -492,6 +504,190 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
                     <span className="text-[10px] text-zinc-400 block">Arquitectura de Calidad ISO 27002</span>
                   </div>
                   <Monitor className="w-5 h-5 text-[#2563EB]" />
+                </div>
+              </div>
+            )}
+
+            {element.templateType === "kpi_card" && (
+              <div className="w-full h-full p-4 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-amber-500/30 text-white shadow-xl flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold">Métrica Clave KPI</span>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[9px] font-bold">
+                    +35% vs anterior
+                  </span>
+                </div>
+                <div className="my-2">
+                  <span className="text-3xl font-extrabold text-white tracking-tight">15 min</span>
+                  <p className="text-xs text-slate-300 mt-1 font-medium">Tiempo Promedio de Respuesta por WhatsApp</p>
+                </div>
+                <div className="pt-2 border-t border-slate-700/60 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                  <span>Operación Excel</span>
+                  <span className="text-amber-400 font-bold">Reducción del 40%</span>
+                </div>
+              </div>
+            )}
+
+            {element.templateType === "whatsapp_sim" && (
+              <div className="w-full h-full p-3 rounded-3xl bg-[#0B141A] border border-emerald-500/30 text-white shadow-2xl flex flex-col justify-between font-sans">
+                {/* Header */}
+                <div className="flex items-center justify-between bg-[#202C33] p-2.5 rounded-2xl border border-white/5">
+                  <div className="flex items-center space-x-2.5">
+                    <div className="w-8 h-8 rounded-full bg-amber-500 font-bold text-slate-950 flex items-center justify-center text-xs shadow-md">
+                      EX
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-white block leading-none">Excel Puesto de Bolsa</span>
+                      <span className="text-[9px] text-emerald-400 font-mono">en línea • WhatsApp Oficial</span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[8px] font-mono font-bold rounded-full border border-emerald-500/30">
+                    VERIFICADO ✅
+                  </span>
+                </div>
+
+                {/* Messages */}
+                <div className="my-2 space-y-2 text-xs">
+                  <div className="bg-[#202C33] p-2.5 rounded-2xl rounded-tl-xs max-w-[85%] border border-white/5 text-slate-200">
+                    <p className="leading-snug">¡Hola Sr. Rodríguez! 👋 Bienvenido al WhatsApp Oficial de Excel. ¿En qué podemos asistirte hoy?</p>
+                    <span className="text-[8px] text-slate-400 block text-right mt-1 font-mono">9:41 AM</span>
+                  </div>
+
+                  <div className="bg-[#005C4B] p-2.5 rounded-2xl rounded-tr-xs max-w-[85%] ml-auto text-white shadow-sm">
+                    <p className="leading-snug">Deseo consultar el estado de mi Mutuo Estructurado y renovar plazo.</p>
+                    <span className="text-[8px] text-emerald-200 block text-right mt-1 font-mono">9:42 AM • Visto</span>
+                  </div>
+                </div>
+
+                {/* Quick Action Pills */}
+                <div className="grid grid-cols-2 gap-1.5 pt-1">
+                  <button type="button" className="p-1.5 bg-[#202C33] hover:bg-[#2A3942] text-amber-300 rounded-xl text-[10px] font-bold border border-amber-500/20 text-center">
+                    📄 Ver Estados de Cuenta
+                  </button>
+                  <button type="button" className="p-1.5 bg-[#202C33] hover:bg-[#2A3942] text-emerald-300 rounded-xl text-[10px] font-bold border border-emerald-500/20 text-center">
+                    🔄 Renovar Mutuo (10.5%)
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {element.templateType === "ai_expediente" && (
+              <div className="w-full h-full p-4 rounded-3xl bg-slate-900 border border-indigo-500/30 text-white shadow-2xl flex flex-col justify-between font-sans">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-indigo-400" />
+                    <span>Expediente Inteligente CRM (IA Context)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-[9px] font-mono font-bold rounded-full border border-indigo-500/30">
+                    Prioridad Alta ⚡
+                  </span>
+                </div>
+
+                <div className="my-2 p-3 bg-slate-800/80 rounded-2xl border border-slate-700/60 space-y-1.5">
+                  <div className="text-[10px] text-slate-400 font-mono font-bold uppercase">Resumen IA para el Ejecutivo:</div>
+                  <p className="text-xs text-slate-200 leading-snug">
+                    "Cliente con portafolio diversificado en Bonos Soberanos. Su Mutuo Estructurado vence en 15 días. Documentación KYC 100% verificada."
+                  </p>
+                </div>
+
+                <div className="p-2.5 bg-amber-500/10 rounded-xl border border-amber-500/30 flex items-center justify-between">
+                  <div className="text-[10px]">
+                    <span className="text-amber-400 font-bold block">Siguiente Acción Recomendada</span>
+                    <span className="text-slate-300">Ofrecer renovación automática a 180 días (10.5%).</span>
+                  </div>
+                  <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 ml-2" />
+                </div>
+              </div>
+            )}
+
+            {element.templateType === "investment_calc" && (
+              <div className="w-full h-full p-4 rounded-3xl bg-slate-900 border border-emerald-500/30 text-white shadow-2xl flex flex-col justify-between font-sans">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <BarChart3 className="w-4 h-4 text-emerald-400" />
+                    <span>Calculadora de Renovación de Mutuo</span>
+                  </span>
+                  <span className="text-[9px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    Excel Puesto de Bolsa
+                  </span>
+                </div>
+
+                <div className="my-2 grid grid-cols-3 gap-2">
+                  <div className="p-2.5 bg-slate-800 rounded-xl border border-slate-700 text-center cursor-pointer hover:border-emerald-500">
+                    <span className="text-[9px] text-slate-400 block font-mono">90 Días</span>
+                    <span className="text-sm font-extrabold text-emerald-400">9.5%</span>
+                  </div>
+                  <div className="p-2.5 bg-emerald-500/20 rounded-xl border-2 border-emerald-500 text-center cursor-pointer">
+                    <span className="text-[9px] text-emerald-300 block font-mono">180 Días</span>
+                    <span className="text-sm font-extrabold text-white">10.5%</span>
+                  </div>
+                  <div className="p-2.5 bg-slate-800 rounded-xl border border-slate-700 text-center cursor-pointer hover:border-emerald-500">
+                    <span className="text-[9px] text-slate-400 block font-mono">360 Días</span>
+                    <span className="text-sm font-extrabold text-emerald-400">12.0%</span>
+                  </div>
+                </div>
+
+                <div className="p-2.5 bg-slate-800/90 rounded-xl border border-slate-700 flex items-center justify-between text-xs">
+                  <span className="text-slate-300 font-medium">Retorno Estimado de Inversión:</span>
+                  <span className="text-emerald-400 font-extrabold text-sm">USD 10,500</span>
+                </div>
+              </div>
+            )}
+
+            {element.templateType === "pricing_block" && (
+              <div className="w-full h-full p-4 rounded-3xl bg-slate-900 border border-slate-700 text-white shadow-2xl flex flex-col justify-between font-sans">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>Propuesta Económica Excel WSMAX</span>
+                  </span>
+                  <span className="text-[9px] font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                    Banca de Inversión
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 my-2">
+                  <div className="p-3 bg-slate-800/90 rounded-2xl border border-slate-700 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[9px] font-mono text-amber-400 uppercase font-bold block">Bloque 1 • Pago Único</span>
+                      <h4 className="text-sm font-extrabold text-white mt-0.5">Implementación & CRM</h4>
+                      <p className="text-[9px] text-slate-400 mt-1">Configuración WSMAX + Integración Dynamics CRM + Flujos.</p>
+                    </div>
+                    <div className="mt-3 text-lg font-black text-amber-400">USD 5,000</div>
+                  </div>
+
+                  <div className="p-3 bg-slate-800/90 rounded-2xl border border-emerald-500/40 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[9px] font-mono text-emerald-400 uppercase font-bold block">Bloque 2 • Recurrente</span>
+                      <h4 className="text-sm font-extrabold text-white mt-0.5">Licencias & IA</h4>
+                      <p className="text-[9px] text-slate-400 mt-1">5 Agentes Exec. + Super Agente IA + 5 Agentes Virtuales.</p>
+                    </div>
+                    <div className="mt-3 text-lg font-black text-emerald-400">USD 1,195 <span className="text-[10px] text-slate-400 font-normal">/mes</span></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {element.templateType === "feature_grid" && (
+              <div className="w-full h-full p-4 rounded-3xl bg-slate-900 border border-slate-700 text-white shadow-2xl flex flex-col justify-between font-sans">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <Globe className="w-4 h-4 text-blue-400" />
+                    <span>8 Objetivos Estratégicos del Proyecto</span>
+                  </span>
+                  <span className="text-[9px] font-mono text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
+                    Transformación 360°
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-4 gap-2 my-2 text-[10px]">
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">1. Número Único Corporativo</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">2. Trato Personalizado Asignado</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">3. Respuesta Inmediata (-40%)</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">4. Autoatención 24/7</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">5. Preparación previa con IA</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">6. Trazabilidad & Cumplimiento</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">7. Eliminación Tareas Repetitivas</div>
+                  <div className="p-2 bg-slate-800 rounded-xl border border-slate-700 font-bold text-slate-200">8. Humanización Digital</div>
                 </div>
               </div>
             )}

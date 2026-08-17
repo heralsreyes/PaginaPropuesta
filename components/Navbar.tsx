@@ -55,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({ proposal, onOpenAcceptModal }) =
     >
       {/* Scroll Progress Bar */}
       <div
-        className="absolute bottom-0 left-0 h-[2px] bg-[#2563EB] transition-all duration-150"
+        className="absolute bottom-0 left-0 h-[2px] bg-[var(--accent-color)] transition-all duration-150"
         style={{ width: `${progress}%` }}
       />
 
@@ -64,9 +64,9 @@ export const Navbar: React.FC<NavbarProps> = ({ proposal, onOpenAcceptModal }) =
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold font-display tracking-tight text-[#111111]">
-              ENFOCO<span className="text-[#2563EB]">.</span>
+              ENFOCO<span className="text-[var(--accent-color)]">.</span>
             </span>
-            <span className="text-xs px-2 py-0.5 rounded bg-[#F4F4F5] text-[#52525B] border border-[#E4E4E7] font-medium">
+            <span className="text-xs px-2.5 py-0.5 rounded-md bg-[#004F54] text-white border border-[#004F54] font-extrabold shadow-sm">
               S.R.L.
             </span>
           </div>

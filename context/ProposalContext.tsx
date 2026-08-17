@@ -1,7 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { ProposalData, sampleProposal, Requirement, PaymentTerm, RoadmapPhase } from "@/data/proposalData";
+import { ProposalData, sampleProposal, Requirement, PaymentTerm, RoadmapPhase, TeamMember } from "@/data/proposalData";
+import { useStudioStore, EXCEL_CUSTOM_SECTIONS } from "@/store/useStudioStore";
+import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
 import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = "enfoco_proposal_data_v2";
@@ -16,19 +18,23 @@ interface ProposalContextType {
   updateClient: (data: Partial<ProposalData["client"]>) => void;
   updateProject: (data: Partial<ProposalData["project"]>) => void;
   updateBudget: (data: Partial<ProposalData["budget"]>) => void;
-  addRequirement: () => void;
+  addRequirement: (data?: Partial<Requirement>) => void;
   removeRequirement: (index: number) => void;
   updateRequirement: (index: number, data: Partial<Requirement>) => void;
   addDeliverable: (reqIndex: number, deliverableText: string) => void;
   removeDeliverable: (reqIndex: number, delIndex: number) => void;
-  addRoadmapPhase: () => void;
+  addRoadmapPhase: (data?: Partial<RoadmapPhase>) => void;
   removeRoadmapPhase: (index: number) => void;
   updateRoadmapPhase: (index: number, data: Partial<RoadmapPhase>) => void;
   addMilestone: (phaseIndex: number, milestoneText: string) => void;
   removeMilestone: (phaseIndex: number, milestoneIndex: number) => void;
-  addPaymentTerm: () => void;
+  addPaymentTerm: (data?: Partial<PaymentTerm>) => void;
   removePaymentTerm: (index: number) => void;
   updatePaymentTerm: (index: number, data: Partial<PaymentTerm>) => void;
+  addTeamMember: (data?: Partial<TeamMember>) => void;
+  removeTeamMember: (index: number) => void;
+  updateEnfocoResponsibilities: (items: string[]) => void;
+  updateClientResponsibilities: (items: string[]) => void;
   exportJson: () => void;
   importJson: (jsonString: string) => boolean;
   resetToDefault: () => void;
@@ -56,10 +62,8 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           localStorage.setItem(ADMIN_MODE_KEY, "true");
         }
 
-        // If NO proposal URL param is present (http://localhost:3000), ALWAYS apply Default Executive Light Theme!
-        if (!proposalParam) {
-          useThemeStore.getState().applyPreset(PRESET_THEMES[0].theme);
-        }
+        // Always apply Default Executive White Theme on initialization
+        useThemeStore.getState().applyPreset(PRESET_THEMES[0].theme);
 
         // 2. Load proposal JSON dynamically if ?proposal=name parameter exists (Takes priority over LocalStorage)
         if (proposalParam) {
@@ -77,6 +81,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               if (res.ok) {
                 const remoteJson = await res.json();
                 setProposal(remoteJson);
+                hydrateExtendedState(remoteJson);
                 toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
                 setIsLoaded(true);
                 return;
@@ -93,13 +98,14 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           const parsed = JSON.parse(saved);
           if (!proposalParam && parsed.client?.shortName?.toUpperCase() === "EXCEL") {
             setProposal(sampleProposal);
-            useThemeStore.getState().applyPreset(PRESET_THEMES[2].theme);
+            hydrateExtendedState(sampleProposal);
           } else {
             setProposal(parsed);
+            hydrateExtendedState(parsed);
           }
         } else {
           setProposal(sampleProposal);
-          useThemeStore.getState().applyPreset(PRESET_THEMES[2].theme);
+          hydrateExtendedState(sampleProposal);
         }
       } catch (e) {
         console.error("Error loading proposal data:", e);
@@ -192,7 +198,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const discountType = data.discountType !== undefined ? data.discountType : (prev.budget.discountType !== undefined ? prev.budget.discountType : "fixed");
 
       // Descuento
-      const isPercent = discountType === "percent" || discountType === "percentage";
+      const isPercent = (discountType as string) === "percent" || (discountType as string) === "percentage";
       const discountAmount = hasDiscount
         ? isPercent
           ? newAmountWithoutTax * (discountValue / 100)
@@ -222,16 +228,16 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   // Add Requirement (Unlimited)
-  const addRequirement = () => {
+  const addRequirement = (data?: Partial<Requirement>) => {
     setProposal((prev) => {
       const nextNum = prev.requirements.length + 1;
-      const id = `REQ-${nextNum < 10 ? "0" + nextNum : nextNum}`;
+      const id = data?.id || `REQ-${nextNum < 10 ? "0" + nextNum : nextNum}`;
       const newReq: Requirement = {
         id,
-        category: "Core",
-        title: `Nuevo Módulo de Requerimiento ${nextNum}`,
-        description: "Descripción detallada de la nueva funcionalidad requerida por el cliente.",
-        deliverables: ["Entregable 1", "Entregable 2"],
+        category: data?.category || "Core",
+        title: data?.title || `Nuevo Módulo de Requerimiento ${nextNum}`,
+        description: data?.description || "Descripción detallada de la nueva funcionalidad requerida por el cliente.",
+        deliverables: data?.deliverables || ["Entregable 1", "Entregable 2"],
       };
 
       return {
@@ -303,16 +309,16 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   // Add Roadmap Phase
-  const addRoadmapPhase = () => {
+  const addRoadmapPhase = (data?: Partial<RoadmapPhase>) => {
     setProposal((prev) => {
       const nextNum = prev.roadmap.length + 1;
       const newPhase: RoadmapPhase = {
-        phase: `Fase ${nextNum}`,
-        title: `Nueva Fase EDT ${nextNum}`,
-        duration: `Semanas ${nextNum * 2 - 1} - ${nextNum * 2}`,
-        description: "Descripción de las actividades planificadas para esta fase del proyecto.",
-        status: "Pendiente",
-        milestones: ["Hito Clave 1", "Hito Clave 2"],
+        phase: data?.phase || `Fase ${nextNum}`,
+        title: data?.title || `Nueva Fase EDT ${nextNum}`,
+        duration: data?.duration || `Semanas ${nextNum * 2 - 1} - ${nextNum * 2}`,
+        description: data?.description || "Descripción de las actividades planificadas para esta fase del proyecto.",
+        status: data?.status || "Pendiente",
+        milestones: data?.milestones || ["Hito Clave 1", "Hito Clave 2"],
       };
       return {
         ...prev,
@@ -379,12 +385,12 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   // Add Payment Term
-  const addPaymentTerm = () => {
+  const addPaymentTerm = (data?: Partial<PaymentTerm>) => {
     setProposal((prev) => {
       const newTerm: PaymentTerm = {
-        milestone: "Nuevo Hito de Pago",
-        percentage: 10,
-        description: "Descripción de la entrega de hito.",
+        milestone: data?.milestone || "Nuevo Hito de Pago",
+        percentage: data?.percentage || 10,
+        description: data?.description || "Descripción de la entrega de hito.",
       };
       return {
         ...prev,
@@ -423,9 +429,44 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
   };
 
+  // Helper to hydrate Design Studio stores from imported JSON
+  const hydrateExtendedState = (data: any) => {
+    const isExcel =
+      data.client?.shortName?.toUpperCase() === "EXCEL" ||
+      data.project?.code?.includes("EXCEL") ||
+      data.project?.title?.toLowerCase().includes("excel");
+
+    if (data.sections && Array.isArray(data.sections) && data.sections.length > 0) {
+      useStudioStore.setState({ sections: data.sections });
+    } else if (isExcel) {
+      useStudioStore.setState({ sections: EXCEL_CUSTOM_SECTIONS });
+    }
+
+    if (data.canvasElements && Array.isArray(data.canvasElements)) {
+      useStudioStore.setState({ canvasElements: data.canvasElements });
+    }
+    if (data.buttonActionsMap && typeof data.buttonActionsMap === "object") {
+      useStudioStore.setState({ buttonActionsMap: data.buttonActionsMap });
+    }
+    if (data.theme) {
+      useThemeStore.getState().applyPreset(data.theme);
+    } else if (isExcel) {
+      useThemeStore.getState().applyPreset(PRESET_THEMES[2].theme);
+    }
+  };
+
   // Export JSON File
   const exportJson = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(proposal, null, 2));
+    const studioState = useStudioStore.getState();
+    const themeState = useThemeStore.getState();
+    const fullProposalData = {
+      ...proposal,
+      sections: studioState.sections,
+      canvasElements: studioState.canvasElements,
+      buttonActionsMap: studioState.buttonActionsMap,
+      theme: themeState.theme,
+    };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullProposalData, null, 2));
     const downloadAnchor = document.createElement("a");
     const safeClient = (proposal.client.shortName || "cliente").toLowerCase().replace(/[^a-z0-9]/gi, "_");
     downloadAnchor.setAttribute("href", dataStr);
@@ -445,6 +486,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         return false;
       }
       setProposal(parsed);
+      hydrateExtendedState(parsed);
       toast.success("Propuesta cargada exitosamente desde el archivo JSON.");
       return true;
     } catch (e) {
@@ -456,8 +498,58 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Reset to Default Sample Proposal
   const resetToDefault = () => {
     setProposal(sampleProposal);
+    useStudioStore.getState().resetSections();
+    useStudioStore.getState().clearAllCanvasElements();
+    useThemeStore.getState().resetTheme();
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     toast.info("Propuesta restablecida a los valores por defecto.");
+  };
+
+  // Team Member Mutators
+  const addTeamMember = (data?: Partial<TeamMember>) => {
+    setProposal((prev) => {
+      const newMember: TeamMember = {
+        role: data?.role || "Especialista Adjunto",
+        category: data?.category || "Construcción",
+        dedicationPercent: data?.dedicationPercent || 50,
+        responsibilities: data?.responsibilities || ["Apoyo en ejecución técnica y entregables."],
+        iconName: data?.iconName || "UserCheck",
+      };
+      return {
+        ...prev,
+        team: [...prev.team, newMember],
+      };
+    });
+    toast.success("Nuevo miembro del equipo añadido.");
+  };
+
+  const removeTeamMember = (index: number) => {
+    setProposal((prev) => {
+      if (prev.team.length <= 1) {
+        toast.error("Debe haber al menos 1 miembro del equipo.");
+        return prev;
+      }
+      return {
+        ...prev,
+        team: prev.team.filter((_, i) => i !== index),
+      };
+    });
+    toast.info("Miembro eliminado del equipo.");
+  };
+
+  // Update Responsibilities
+  const updateEnfocoResponsibilities = (items: string[]) => {
+    setProposal((prev) => ({
+      ...prev,
+      enfocoResponsibilities: items,
+    }));
+  };
+
+  const updateClientResponsibilities = (items: string[]) => {
+    setProposal((prev) => ({
+      ...prev,
+      clientResponsibilities: items,
+    }));
   };
 
   return (
@@ -484,6 +576,10 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         addPaymentTerm,
         removePaymentTerm,
         updatePaymentTerm,
+        addTeamMember,
+        removeTeamMember,
+        updateEnfocoResponsibilities,
+        updateClientResponsibilities,
         exportJson,
         importJson,
         resetToDefault,

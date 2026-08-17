@@ -259,7 +259,7 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
         }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className={`flex-1 min-w-0 h-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth relative bg-[var(--bg-main)] transition-all duration-300 ${
+        className={`flex-1 min-w-0 h-full overflow-y-auto overflow-x-hidden snap-y snap-proximity scroll-pt-16 scroll-smooth relative bg-[var(--bg-main)] transition-all duration-300 ${
           activeDrawingTool ? "cursor-crosshair select-none" : ""
         }`}
       >

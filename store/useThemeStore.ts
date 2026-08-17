@@ -18,24 +18,24 @@ export interface PresetTheme {
 export const PRESET_THEMES: PresetTheme[] = [
   {
     id: "default",
-    name: "Ejecutivo Claro (Default)",
+    name: "Excel Blanco Corporativo (Default)",
     theme: {
-      bgMain: "#FAF9F6",
-      accentColor: "#2563EB",
+      bgMain: "#FFFFFF",
+      accentColor: "#004F54",
       cardBg: "#FFFFFF",
-      textPrimary: "#18181B",
-      borderColor: "#E4E4E7",
+      textPrimary: "#0F172A",
+      borderColor: "#E2E8F0",
     },
   },
   {
     id: "dark",
-    name: "Dark Mode Elegante",
+    name: "Excel Dark Mode",
     theme: {
-      bgMain: "#09090B",
-      accentColor: "#3B82F6",
-      cardBg: "#18181B",
-      textPrimary: "#F4F4F5",
-      borderColor: "#27272A",
+      bgMain: "#061C1E",
+      accentColor: "#006B70",
+      cardBg: "#0B292C",
+      textPrimary: "#F8FAFC",
+      borderColor: "#163E42",
     },
   },
   {

@@ -16,7 +16,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
   const { updateProject, updateClient } = useProposal();
 
   return (
-    <section id="hero" className="h-screen w-full snap-start snap-always flex flex-col justify-between items-center relative overflow-hidden bg-[var(--bg-main)] px-4 sm:px-6 lg:px-8 pt-20 pb-8 transition-colors duration-300">
+    <section id="hero" className="min-h-screen w-full flex flex-col justify-between items-center relative overflow-hidden bg-[var(--bg-main)] px-4 sm:px-6 lg:px-8 pt-20 pb-8 transition-colors duration-300">
       {/* Background Accent Mesh */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] bg-[var(--accent-color)]/10 blur-[160px] rounded-full pointer-events-none" />
 

@@ -51,7 +51,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
   const baseSubtotal = budget.amountWithoutTax || storeBaseSubtotal || 12500;
 
   // Real-time calculation
-  const isPercent = discountTypeVal === "percent" || discountTypeVal === "percentage";
+  const isPercent = (discountTypeVal as string) === "percent" || (discountTypeVal as string) === "percentage";
   const discountAmount = isDiscountActive
     ? isPercent
       ? baseSubtotal * (discountValueVal / 100)
@@ -63,7 +63,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
   const totalFinal = subtotalNeto + taxAmount;
 
   return (
-    <section id="inversion" className="h-screen w-full snap-start snap-always flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <section id="inversion" className="min-h-screen w-full flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}

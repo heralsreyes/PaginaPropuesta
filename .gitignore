@@ -38,6 +38,12 @@ Thumbs.db
 # Media & Temp Docs
 *.mp4
 *.docx
+*.mp3
+*.msi
+*.exe
+*.zip
+scratch/
+scratch_*
 
 # TypeScript
 *.tsbuildinfo

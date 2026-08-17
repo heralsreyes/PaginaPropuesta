@@ -76,6 +76,7 @@ import {
   ListOrdered,
   Quote,
   Tag,
+  Globe,
 } from "lucide-react";
 import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
 import { toast } from "sonner";
@@ -102,7 +103,7 @@ export const CanvaSidebar: React.FC = () => {
     setActiveDrawingTool,
   } = useStudioStore();
 
-  const { theme, applyPreset, resetTheme } = useThemeStore();
+  const { theme, setTheme, applyPreset, resetTheme } = useThemeStore();
 
   const {
     proposal,
@@ -125,7 +126,9 @@ export const CanvaSidebar: React.FC = () => {
   const [taxPercent, setTaxPercent] = useState(budget?.taxPercent || 18);
   const [hasDiscount, setHasDiscount] = useState(budget?.hasDiscount ?? false);
   const [discountValue, setDiscountValue] = useState(budget?.discountValue || 0);
-  const [discountType, setDiscountType] = useState<"percentage" | "fixed">(budget?.discountType || "percentage");
+  const [discountType, setDiscountType] = useState<"percentage" | "fixed">(
+    budget?.discountType === "percent" ? "percentage" : (budget?.discountType as "fixed" | "percentage") || "percentage"
+  );
 
   const navItems = [
     { id: "plantillas" as StudioTab, label: "Plantillas", icon: Palette },
@@ -218,6 +221,54 @@ export const CanvaSidebar: React.FC = () => {
       desc: "Tarjeta con 3 estados de contenido conmutables mediante botones externos.",
       icon: Sparkles,
       badgeBg: "bg-amber-100 text-amber-800",
+    },
+    {
+      id: "mod-template-whatsapp-sim",
+      templateType: "whatsapp_sim",
+      title: "Simulador Chat WhatsApp Oficial (Interactive Bot)",
+      desc: "Burbujas de chat con respuestas automáticas, estado en línea y botones de acción.",
+      icon: MessageSquare,
+      badgeBg: "bg-emerald-100 text-emerald-800",
+    },
+    {
+      id: "mod-template-ai-expediente",
+      templateType: "ai_expediente",
+      title: "Expediente Inteligente CRM (IA Context Panel)",
+      desc: "Resumen automático de IA para el ejecutivo con perfil de riesgo y recomendación.",
+      icon: Sparkles,
+      badgeBg: "bg-indigo-100 text-indigo-800",
+    },
+    {
+      id: "mod-template-kpi-card",
+      templateType: "kpi_card",
+      title: "Métrica KPI Pro (Indicador con Tendencia)",
+      desc: "Tarjeta de estadísticas con número gigante, indicador de porcentaje y borde brillante.",
+      icon: BarChart2,
+      badgeBg: "bg-amber-100 text-amber-900",
+    },
+    {
+      id: "mod-template-investment-calc",
+      templateType: "investment_calc",
+      title: "Calculadora de Renovación Mutuo Estructurado",
+      desc: "Simulador interactivo de plazos (90d/180d/360d) y retorno estimado.",
+      icon: TrendingUp,
+      badgeBg: "bg-emerald-100 text-emerald-900",
+    },
+    {
+      id: "mod-template-pricing-block",
+      templateType: "pricing_block",
+      title: "Bloque Presupuestario Dual (Único + Recurrente)",
+      desc: "Tarjeta de propuesta económica comparativa con desgloses en USD.",
+      icon: Award,
+      badgeBg: "bg-slate-200 text-slate-900",
+    },
+    {
+      id: "mod-template-feature-grid",
+      templateType: "feature_grid",
+      title: "Grid de 8 Objetivos Estratégicos",
+      desc: "Matriz visual de 8 pilares de transformación operacional con iconos.",
+      icon: Globe,
+      badgeBg: "bg-blue-100 text-blue-900",
     },
   ];
 
@@ -458,44 +509,195 @@ export const CanvaSidebar: React.FC = () => {
 
         {/* Content Body Scrollable */}
         <div className="p-4 overflow-y-auto flex-1 space-y-6 text-xs min-w-[320px]">
-          {/* TAB 1: PLANTILLAS */}
+          {/* TAB 1: PLANTILLAS & PALETAS */}
           {activeToolTab === "plantillas" && (
-            <div className="space-y-5">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
-                  Presets Rápidos de Estilo
-                </h4>
-                <button
-                  onClick={resetTheme}
-                  className="text-[11px] font-bold text-[#71717A] hover:text-[#2563EB] transition-colors cursor-pointer"
-                >
-                  ↺ Defecto
-                </button>
+            <div className="space-y-6">
+              {/* Presets Rápidos */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
+                    Presets Rápidos de Estilo
+                  </h4>
+                  <button
+                    onClick={resetTheme}
+                    className="text-[11px] font-bold text-[#71717A] hover:text-[#2563EB] transition-colors cursor-pointer"
+                  >
+                    ↺ Defecto
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2.5">
+                  {PRESET_THEMES.map((preset) => {
+                    const isSelected =
+                      theme.bgMain === preset.theme.bgMain && theme.accentColor === preset.theme.accentColor;
+                    return (
+                      <button
+                        key={preset.id}
+                        onClick={() => applyPreset(preset.theme)}
+                        className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                          isSelected
+                            ? "bg-white border-[#2563EB] shadow-md ring-2 ring-[#2563EB]/20"
+                            : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-zinc-400"
+                        }`}
+                      >
+                        <span className="font-extrabold text-[#111111] text-xs">{preset.name}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: preset.theme.bgMain }} />
+                          <span className="w-4 h-4 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: preset.theme.accentColor }} />
+                          <span className="w-4 h-4 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: preset.theme.cardBg }} />
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-2.5">
-                {PRESET_THEMES.map((preset) => {
-                  const isSelected =
-                    theme.bgMain === preset.theme.bgMain && theme.accentColor === preset.theme.accentColor;
-                  return (
-                    <button
-                      key={preset.id}
-                      onClick={() => applyPreset(preset.theme)}
-                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
-                        isSelected
-                          ? "bg-white border-[#2563EB] shadow-md ring-2 ring-[#2563EB]/20"
-                          : "bg-[#FAF9F6] border-[#E4E4E7] hover:border-zinc-400"
-                      }`}
-                    >
-                      <span className="font-extrabold text-[#111111] text-xs">{preset.name}</span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full border border-zinc-300" style={{ backgroundColor: preset.theme.bgMain }} />
-                        <span className="w-4 h-4 rounded-full border border-zinc-300" style={{ backgroundColor: preset.theme.accentColor }} />
-                        <span className="w-4 h-4 rounded-full border border-zinc-300" style={{ backgroundColor: preset.theme.cardBg }} />
-                      </div>
-                    </button>
-                  );
-                })}
+              {/* Personalizador Libre de Colores de la Paleta */}
+              <div className="pt-4 border-t border-[#E4E4E7] space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono flex items-center gap-1.5">
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-[#2563EB]" />
+                    <span>Personalizar Paleta a Gusto</span>
+                  </h4>
+                </div>
+
+                <div className="space-y-3 bg-[#FAF9F6] p-3.5 rounded-2xl border border-[#E4E4E7]">
+                  {/* 1. Color Acento */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: theme.accentColor }} />
+                      <span className="font-bold text-xs text-zinc-800">Color Acento:</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <input
+                        type="color"
+                        value={theme.accentColor || "#004F54"}
+                        onChange={(e) => setTheme({ accentColor: e.target.value })}
+                        className="w-7 h-7 rounded-lg border-0 cursor-pointer p-0 bg-transparent"
+                      />
+                      <input
+                        type="text"
+                        value={theme.accentColor || "#004F54"}
+                        onChange={(e) => setTheme({ accentColor: e.target.value })}
+                        className="w-20 bg-white border border-[#E4E4E7] rounded-lg px-2 py-1 text-center font-mono text-[11px] font-bold text-zinc-900 focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 2. Color Fondo General */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: theme.bgMain }} />
+                      <span className="font-bold text-xs text-zinc-800">Fondo Lienzo:</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <input
+                        type="color"
+                        value={theme.bgMain || "#FFFFFF"}
+                        onChange={(e) => setTheme({ bgMain: e.target.value })}
+                        className="w-7 h-7 rounded-lg border-0 cursor-pointer p-0 bg-transparent"
+                      />
+                      <input
+                        type="text"
+                        value={theme.bgMain || "#FFFFFF"}
+                        onChange={(e) => setTheme({ bgMain: e.target.value })}
+                        className="w-20 bg-white border border-[#E4E4E7] rounded-lg px-2 py-1 text-center font-mono text-[11px] font-bold text-zinc-900 focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 3. Color Fondo Tarjetas */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: theme.cardBg }} />
+                      <span className="font-bold text-xs text-zinc-800">Fondo Tarjetas:</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <input
+                        type="color"
+                        value={theme.cardBg || "#FFFFFF"}
+                        onChange={(e) => setTheme({ cardBg: e.target.value })}
+                        className="w-7 h-7 rounded-lg border-0 cursor-pointer p-0 bg-transparent"
+                      />
+                      <input
+                        type="text"
+                        value={theme.cardBg || "#FFFFFF"}
+                        onChange={(e) => setTheme({ cardBg: e.target.value })}
+                        className="w-20 bg-white border border-[#E4E4E7] rounded-lg px-2 py-1 text-center font-mono text-[11px] font-bold text-zinc-900 focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 4. Color Texto Principal */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: theme.textPrimary }} />
+                      <span className="font-bold text-xs text-zinc-800">Texto Principal:</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <input
+                        type="color"
+                        value={theme.textPrimary || "#0F172A"}
+                        onChange={(e) => setTheme({ textPrimary: e.target.value })}
+                        className="w-7 h-7 rounded-lg border-0 cursor-pointer p-0 bg-transparent"
+                      />
+                      <input
+                        type="text"
+                        value={theme.textPrimary || "#0F172A"}
+                        onChange={(e) => setTheme({ textPrimary: e.target.value })}
+                        className="w-20 bg-white border border-[#E4E4E7] rounded-lg px-2 py-1 text-center font-mono text-[11px] font-bold text-zinc-900 focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 5. Color Bordes */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-3.5 h-3.5 rounded-full border border-zinc-300 shadow-xs" style={{ backgroundColor: theme.borderColor }} />
+                      <span className="font-bold text-xs text-zinc-800">Bordes & Líneas:</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <input
+                        type="color"
+                        value={theme.borderColor || "#E2E8F0"}
+                        onChange={(e) => setTheme({ borderColor: e.target.value })}
+                        className="w-7 h-7 rounded-lg border-0 cursor-pointer p-0 bg-transparent"
+                      />
+                      <input
+                        type="text"
+                        value={theme.borderColor || "#E2E8F0"}
+                        onChange={(e) => setTheme({ borderColor: e.target.value })}
+                        className="w-20 bg-white border border-[#E4E4E7] rounded-lg px-2 py-1 text-center font-mono text-[11px] font-bold text-zinc-900 focus:outline-none focus:border-[#2563EB]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Muestras Rápidas de Color */}
+                  <div className="pt-2">
+                    <span className="text-[10px] font-mono font-bold text-zinc-500 block uppercase mb-1.5">
+                      Acentos Rápidos:
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {[
+                        { name: "Verde Excel", hex: "#004F54" },
+                        { name: "Azul Rey", hex: "#2563EB" },
+                        { name: "Esmeralda", hex: "#059669" },
+                        { name: "Dorado", hex: "#D97706" },
+                        { name: "Púrpura", hex: "#7C3AED" },
+                        { name: "Carmín", hex: "#E11D48" },
+                        { name: "Negro", hex: "#0F172A" },
+                      ].map((swatch) => (
+                        <button
+                          key={swatch.hex}
+                          onClick={() => setTheme({ accentColor: swatch.hex })}
+                          className="w-6 h-6 rounded-full border border-zinc-300 shadow-xs hover:scale-110 transition-transform cursor-pointer"
+                          style={{ backgroundColor: swatch.hex }}
+                          title={swatch.name}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -1230,10 +1432,10 @@ export const CanvaSidebar: React.FC = () => {
                       <button
                         onClick={() => {
                           setDiscountType("percentage");
-                          updateBudget({ discountType: "percentage" });
+                          updateBudget({ discountType: "percent" });
                         }}
                         className={`py-1 rounded text-[10px] font-bold cursor-pointer ${
-                          discountType === "percentage" || discountType === "percent"
+                          discountType === "percentage" || (discountType as string) === "percent"
                             ? "bg-[#2563EB] text-white"
                             : "bg-white text-zinc-700 border border-[#E4E4E7]"
                         }`}

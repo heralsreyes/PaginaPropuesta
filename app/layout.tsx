@@ -30,6 +30,24 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${inter.variable} ${outfit.variable} ${roboto.variable} ${firaCode.variable} ${playfair.variable} font-sans bg-[#FAF9F6] text-[#111111] antialiased selection:bg-[#2563EB] selection:text-white`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                  for(let registration of registrations) {
+                    registration.unregister();
+                  }
+                });
+                if ('caches' in window) {
+                  caches.keys().then(function(names) {
+                    for (let name of names) caches.delete(name);
+                  });
+                }
+              }
+            `,
+          }}
+        />
         {children}
         <Toaster position="bottom-right" theme="light" richColors />
       </body>
