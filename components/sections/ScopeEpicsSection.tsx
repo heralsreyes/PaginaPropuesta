@@ -625,7 +625,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             <div className="flex items-center gap-1.5 pl-2">
               <button
                 type="button"
-                onClick={() => handlePhaseFilterChange("todos")}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePhaseFilterChange("todos");
+                }}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                   storyPhaseFilter === "todos"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
@@ -636,7 +640,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               </button>
               <button
                 type="button"
-                onClick={() => handlePhaseFilterChange("fase1")}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePhaseFilterChange("fase1");
+                }}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                   storyPhaseFilter === "fase1"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
@@ -647,7 +655,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               </button>
               <button
                 type="button"
-                onClick={() => handlePhaseFilterChange("fase2")}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePhaseFilterChange("fase2");
+                }}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                   storyPhaseFilter === "fase2"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
@@ -688,7 +700,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   <button
                     type="button"
                     key={epic.id}
-                    onClick={() => handleEpicSelect(epic.id)}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEpicSelect(epic.id);
+                    }}
                     className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden ${
                       isSelected
                         ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-[1.02]"
@@ -757,6 +773,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
+                    onMouseDown={(e) => e.stopPropagation()}
                     onClick={toggleExpandAllStories}
                     className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
                   >
@@ -784,9 +801,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               {filteredStories.map((story) => {
                 const isExpanded = expandedStoryIds.includes(story.id);
                 return (
-                  <motion.div
+                  <div
                     key={story.id}
-                    variants={sectionItemVariants}
                     className={`rounded-3xl border overflow-hidden transition-all shadow-xl ${
                       isExpanded
                         ? "bg-[#002224] border-[#F08D17] ring-2 ring-[#F08D17]/20"
@@ -797,10 +813,15 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     <div
                       role="button"
                       tabIndex={0}
-                      onClick={() => toggleStoryExpansion(story.id)}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleStoryExpansion(story.id);
+                      }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
+                          e.stopPropagation();
                           toggleStoryExpansion(story.id);
                         }
                       }}
@@ -817,6 +838,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         {"demoTab" in story && (
                           <button
                             type="button"
+                            onMouseDown={(e) => e.stopPropagation()}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
@@ -870,7 +892,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         </div>
                       </div>
                     )}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
