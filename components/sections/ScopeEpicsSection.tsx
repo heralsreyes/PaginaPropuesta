@@ -624,12 +624,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             <div className="flex items-center gap-1.5 pl-2">
               <button
                 type="button"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
                 onClick={(e) => {
-                  e.preventDefault();
                   e.stopPropagation();
                   handlePhaseFilterChange("todos");
                 }}
@@ -643,12 +638,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               </button>
               <button
                 type="button"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
                 onClick={(e) => {
-                  e.preventDefault();
                   e.stopPropagation();
                   handlePhaseFilterChange("fase1");
                 }}
@@ -662,12 +652,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               </button>
               <button
                 type="button"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
                 onClick={(e) => {
-                  e.preventDefault();
                   e.stopPropagation();
                   handlePhaseFilterChange("fase2");
                 }}
@@ -708,25 +693,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }).length;
 
                 return (
-                  <div
-                    role="button"
-                    tabIndex={0}
+                  <button
+                    type="button"
                     key={epic.id}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
                     onClick={(e) => {
-                      e.preventDefault();
                       e.stopPropagation();
                       handleEpicSelect(epic.id);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleEpicSelect(epic.id);
-                      }
                     }}
                     className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden select-none z-10 ${
                       isSelected
@@ -768,7 +740,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         isSelected ? "text-[#F08D17] translate-x-1" : "text-slate-400 group-hover:text-white"
                       }`}
                     />
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -796,7 +768,6 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onMouseDown={(e) => e.stopPropagation()}
                     onClick={toggleExpandAllStories}
                     className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
                   >
@@ -836,7 +807,6 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     <div
                       role="button"
                       tabIndex={0}
-                      onMouseDown={(e) => e.stopPropagation()}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleStoryExpansion(story.id);
