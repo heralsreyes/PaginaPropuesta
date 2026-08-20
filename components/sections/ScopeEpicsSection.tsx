@@ -523,7 +523,7 @@ const epicsData = [
 
 export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onNavigateToSimulator }) => {
   const [activeEpicTab, setActiveEpicTab] = useState<number>(1);
-  const [expandedStoryIds, setExpandedStoryIds] = useState<string[]>(["e1_s1", "e1_s2", "e1_s3", "e1_s4"]);
+  const [activeStoryId, setActiveStoryId] = useState<string | null>("e1_s1");
   const [storyPhaseFilter, setStoryPhaseFilter] = useState<"todos" | "fase1" | "fase2">("todos");
 
   const currentEpic = epicsData.find((e) => e.id === activeEpicTab) || epicsData[0];
@@ -534,16 +534,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
     return true;
   });
 
-  const allCurrentStoryIds = filteredStories.map((s) => s.id);
-  const areAllCurrentStoriesExpanded =
-    allCurrentStoryIds.length > 0 && allCurrentStoryIds.every((id) => expandedStoryIds.includes(id));
-
   const handleEpicSelect = (epicId: number) => {
     setActiveEpicTab(epicId);
     setStoryPhaseFilter("todos");
     const targetEpic = epicsData.find((e) => e.id === epicId);
-    if (targetEpic) {
-      setExpandedStoryIds(targetEpic.richStories.map((s) => s.id));
+    if (targetEpic && targetEpic.richStories.length > 0) {
+      setActiveStoryId(targetEpic.richStories[0].id);
     }
   };
 
@@ -554,13 +550,13 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
       if (phase === "fase2") return s.phase === "fase2";
       return true;
     });
-    setExpandedStoryIds(matching.map((s) => s.id));
+    if (matching.length > 0) {
+      setActiveStoryId(matching[0].id);
+    }
   };
 
   const toggleStoryExpansion = (storyId: string) => {
-    setExpandedStoryIds((prev) =>
-      prev.includes(storyId) ? prev.filter((id) => id !== storyId) : [...prev, storyId]
-    );
+    setActiveStoryId((prev) => (prev === storyId ? null : storyId));
   };
 
   const toggleExpandAllStories = (e?: React.MouseEvent) => {
@@ -568,10 +564,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
       e.preventDefault();
       e.stopPropagation();
     }
-    if (areAllCurrentStoriesExpanded) {
-      setExpandedStoryIds((prev) => prev.filter((id) => !allCurrentStoryIds.includes(id)));
-    } else {
-      setExpandedStoryIds((prev) => Array.from(new Set([...prev, ...allCurrentStoryIds])));
+    if (activeStoryId !== null) {
+      setActiveStoryId(null);
+    } else if (filteredStories.length > 0) {
+      setActiveStoryId(filteredStories[0].id);
     }
   };
 
@@ -771,11 +767,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   onClick={toggleExpandAllStories}
                   className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95 select-none"
                 >
-                  <ChevronDown className={`w-4 h-4 text-[#F08D17] transition-transform duration-200 ${areAllCurrentStoriesExpanded ? "rotate-180" : ""}`} />
-                  <span>{areAllCurrentStoriesExpanded ? "Colapsar Dropdowns" : `Desplegar Todos (${filteredStories.length})`}</span>
+                  <ChevronDown className={`w-4 h-4 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
+                  <span>{activeStoryId !== null ? "Colapsar Todo" : "Abrir Primera Historia"}</span>
                 </button>
                 <span className="text-xs font-mono font-bold px-3.5 py-2 rounded-xl bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
-                  {filteredStories.length} Dropdowns
+                  {filteredStories.length} Historias
                 </span>
               </div>
             </div>
@@ -793,7 +789,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             {/* Interactive User Story Dropdown Toggle Cards List */}
             <div className="space-y-3.5">
               {filteredStories.map((story) => {
-                const isExpanded = expandedStoryIds.includes(story.id);
+                const isExpanded = activeStoryId === story.id;
                 return (
                   <div
                     key={story.id}
