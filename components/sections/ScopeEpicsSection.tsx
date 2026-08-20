@@ -679,7 +679,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               <span>7 Épicas</span>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               {epicsData.map((epic) => {
                 const EpicIcon = epic.icon;
                 const isSelected = activeEpicTab === epic.id;
@@ -697,33 +697,33 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       e.stopPropagation();
                       handleEpicSelect(epic.id);
                     }}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden select-none z-10 ${
+                    className={`w-full text-left p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 shadow-md group relative overflow-hidden select-none z-10 ${
                       isSelected
-                        ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/40 scale-[1.02]"
-                        : "bg-[#003B3F]/80 border-white/15 hover:border-white/40 hover:bg-[#003B3F]"
+                        ? "bg-[#002224] border-[#F08D17] shadow-xl ring-1 ring-[#F08D17]/40 scale-[1.01]"
+                        : "bg-[#003B3F]/80 border-white/15 hover:border-white/30 hover:bg-[#003B3F]"
                     }`}
                   >
-                    <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
+                        className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
                           isSelected
-                            ? "bg-[#F08D17] text-white shadow-md"
+                            ? "bg-[#F08D17] text-white shadow-sm"
                             : "bg-[#F08D17]/10 text-[#F08D17] border border-[#F08D17]/30"
                         }`}
                       >
-                        <EpicIcon className="w-5.5 h-5.5" />
+                        <EpicIcon className="w-4.5 h-4.5" />
                       </div>
                       <div className="min-w-0 space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/30">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/30">
                             ÉPICA 0{epic.id}
                           </span>
-                          <span className="text-[10px] font-mono text-emerald-300 font-bold truncate">
+                          <span className="text-[9px] font-mono text-emerald-300 font-bold truncate">
                             {matchingStoriesCount} Stories
                           </span>
                         </div>
                         <h3
-                          className={`font-extrabold text-sm sm:text-base leading-snug truncate transition-colors ${
+                          className={`font-bold text-xs sm:text-sm leading-snug truncate transition-colors ${
                             isSelected ? "text-white" : "text-slate-100 group-hover:text-[#F08D17]"
                           }`}
                         >
@@ -733,8 +733,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     </div>
 
                     <ChevronRight
-                      className={`w-5 h-5 shrink-0 transition-transform ${
-                        isSelected ? "text-[#F08D17] translate-x-1" : "text-slate-400 group-hover:text-white"
+                      className={`w-4 h-4 shrink-0 transition-transform ${
+                        isSelected ? "text-[#F08D17] translate-x-0.5" : "text-slate-400 group-hover:text-white"
                       }`}
                     />
                   </button>
@@ -743,19 +743,19 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             </div>
           </div>
 
-          {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box */}
-          <div className="w-full lg:w-2/3 p-6 sm:p-8 rounded-3xl bg-[#002224]/90 backdrop-blur-xl border-2 border-[#F08D17]/40 shadow-2xl space-y-6">
+          {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box (Compact & Friendly) */}
+          <div className="w-full lg:w-2/3 p-5 sm:p-6 rounded-2xl bg-[#002224]/90 backdrop-blur-xl border border-[#F08D17]/40 shadow-xl space-y-4">
             {/* Selected Epic Header Banner (Inside Container) */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-5">
-              <div className="flex items-center gap-3.5 min-w-0">
-                <div className="w-12 h-12 rounded-2xl bg-[#F08D17] text-white shadow-lg flex items-center justify-center font-bold shrink-0">
-                  {React.createElement(currentEpic.icon, { className: "w-6 h-6" })}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-3.5">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-[#F08D17] text-white shadow-md flex items-center justify-center font-bold shrink-0">
+                  {React.createElement(currentEpic.icon, { className: "w-5 h-5" })}
                 </div>
                 <div className="min-w-0">
-                  <span className="text-xs font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
+                  <span className="text-[11px] font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
                     ÉPICA 0{currentEpic.id} • {currentEpic.badge}
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-black text-white truncate">
+                  <h3 className="text-base sm:text-lg font-extrabold text-white truncate">
                     {currentEpic.title}
                   </h3>
                 </div>
@@ -765,41 +765,41 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <button
                   type="button"
                   onClick={toggleExpandAllStories}
-                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95 select-none"
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
                 >
-                  <ChevronDown className={`w-4 h-4 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
                   <span>{activeStoryId !== null ? "Colapsar Todo" : "Abrir Primera Historia"}</span>
                 </button>
-                <span className="text-xs font-mono font-bold px-3.5 py-2 rounded-xl bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
+                <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-lg bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
                   {filteredStories.length} Historias
                 </span>
               </div>
             </div>
 
             {/* Key Deliverables Chips */}
-            <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-white/10 pb-4">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5 border-b border-white/10 pb-3">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
               {currentEpic.deliverables.map((item, idx) => (
-                <span key={idx} className="text-xs bg-white/10 text-slate-200 px-3 py-1 rounded-xl border border-white/15 font-medium">
+                <span key={idx} className="text-[11px] bg-white/10 text-slate-200 px-2.5 py-0.5 rounded-lg border border-white/15 font-medium">
                   ✓ {item}
                 </span>
               ))}
             </div>
 
-            {/* Interactive User Story Dropdown Toggle Cards List */}
-            <div className="space-y-4">
+            {/* Interactive User Story Dropdown Toggle Cards List (Compact & Friendly) */}
+            <div className="space-y-2.5">
               {filteredStories.map((story) => {
                 const isExpanded = activeStoryId === story.id;
                 return (
                   <div
                     key={story.id}
-                    className={`rounded-3xl border transition-all duration-200 overflow-hidden shadow-xl ${
+                    className={`rounded-xl border transition-all duration-200 overflow-hidden shadow-md ${
                       isExpanded
-                        ? "bg-[#00181A] border-2 border-[#F08D17] ring-2 ring-[#F08D17]/40 shadow-2xl scale-[1.01]"
-                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/20 hover:border-white/40"
+                        ? "bg-[#00181A] border-[#F08D17] ring-1 ring-[#F08D17]/30 shadow-lg"
+                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/15 hover:border-white/30"
                     }`}
                   >
-                    {/* Story Dropdown Header Bar (Larger & More Impactful Card) */}
+                    {/* Story Dropdown Header Bar (Compact & Sleek Card) */}
                     <div
                       role="button"
                       tabIndex={0}
@@ -814,18 +814,18 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                           toggleStoryExpansion(story.id);
                         }
                       }}
-                      className="p-5 sm:p-7 cursor-pointer flex items-center justify-between gap-5 select-none group"
+                      className="p-3.5 sm:p-4 cursor-pointer flex items-center justify-between gap-3.5 select-none group"
                     >
-                      <div className="flex flex-wrap items-center gap-3.5 min-w-0">
-                        <span className="text-xs font-mono font-black text-[#F08D17] px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 shrink-0 shadow-sm">
+                      <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+                        <span className="text-[10px] font-mono font-black text-[#F08D17] px-2.5 py-0.5 rounded-lg bg-white/10 border border-white/20 shrink-0 shadow-sm">
                           {story.status}
                         </span>
-                        <h4 className="font-black text-lg sm:text-xl text-white group-hover:text-[#F08D17] transition-colors truncate">
+                        <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-[#F08D17] transition-colors truncate">
                           {story.title}
                         </h4>
                       </div>
 
-                      <div className="flex items-center gap-3 shrink-0">
+                      <div className="flex items-center gap-2.5 shrink-0">
                         {"demoTab" in story && (
                           <button
                             type="button"
@@ -833,34 +833,34 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
                             }}
-                            className="px-3.5 py-1.5 rounded-xl bg-[#F08D17] text-white font-mono font-bold text-xs flex items-center gap-1.5 hover:bg-[#EA580C] active:scale-95 shadow-md transition-all cursor-pointer"
+                            className="px-2.5 py-1 rounded-lg bg-[#F08D17] text-white font-mono font-bold text-[11px] flex items-center gap-1.5 hover:bg-[#EA580C] active:scale-95 shadow-md transition-all cursor-pointer"
                           >
-                            <Play className="w-3.5 h-3.5 fill-current" />
+                            <Play className="w-3 h-3 fill-current" />
                             <span>Probar en App</span>
                           </button>
                         )}
 
                         {/* Dropdown Chevron Indicator */}
                         <div
-                          className={`w-9 h-9 rounded-2xl bg-white/10 flex items-center justify-center transition-transform duration-200 ${
-                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-lg" : "text-slate-300 group-hover:bg-white/20"
+                          className={`w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center transition-transform duration-200 ${
+                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-md" : "text-slate-300 group-hover:bg-white/20"
                           }`}
                         >
-                          <ChevronDown className="w-5 h-5" />
+                          <ChevronDown className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
 
-                    {/* Dropdown Content Body (Spacious & Easy to Read) */}
+                    {/* Dropdown Content Body (Compact & Easy to Read) */}
                     {isExpanded && (
-                      <div className="px-6 sm:px-8 pb-7 pt-2 border-t border-white/10 space-y-5 text-slate-200 bg-[#001214] transition-all">
+                      <div className="px-4 pb-4 pt-2 border-t border-white/10 space-y-3 text-slate-200 bg-[#001214] transition-all">
                         {/* Estructura Ágil Box */}
-                        <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
-                          <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-2">
-                            <UserCheck className="w-4.5 h-4.5 text-[#F08D17]" />
+                        <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
+                          <div className="text-[11px] font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
+                            <UserCheck className="w-3.5 h-3.5 text-[#F08D17]" />
                             <span>Estructura Ágil (User Story)</span>
                           </div>
-                          <div className="text-base font-medium leading-relaxed">
+                          <div className="text-xs sm:text-sm font-medium leading-relaxed">
                             <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
                             <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
                             <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
@@ -868,15 +868,15 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         </div>
 
                         {/* Criterios de Aceptación (DoD) */}
-                        <div className="space-y-3">
-                          <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-2">
-                            <Sparkles className="w-4.5 h-4.5 text-emerald-400" />
+                        <div className="space-y-2">
+                          <div className="text-[11px] font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
                             <span>Criterios de Aceptación (DoD - Definition of Done)</span>
                           </div>
-                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                             {story.dod.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 font-semibold">
-                                <CheckCircle2 className="w-4.5 h-4.5 text-[#F08D17] shrink-0 mt-0.5" />
+                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-white/5 border border-white/10 font-medium">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17] shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
                             ))}
