@@ -114,8 +114,8 @@ export const AcceptModalContent: React.FC<AcceptModalContentProps> = ({ onClose 
           </div>
         </div>
 
-        {/* Signature Box Component */}
-        <SignatureCanvas onSignatureChange={setSignatureData} />
+        {/* Signature Box Component (Draw or Type) */}
+        <SignatureCanvas onSignatureChange={setSignatureData} signerName={signerName} />
       </div>
 
       <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
