@@ -47,17 +47,12 @@ const sectionItemVariants = {
   },
 };
 
-export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onNavigateToSimulator }) => {
-  const [activeEpicTab, setActiveEpicTab] = useState<number>(1);
-  const [expandedStoryIds, setExpandedStoryIds] = useState<string[]>(["e1_s1", "e1_s2", "e1_s3", "e1_s4"]);
-  const [storyPhaseFilter, setStoryPhaseFilter] = useState<"todos" | "fase1" | "fase2">("todos");
-
-  const epicsData = [
-    {
-      id: 1,
-      title: "Épica 1: Registro, Autenticación Segura & Perfil KYC",
-      icon: UserCheck,
-      badge: "Seguridad SIMV",
+const epicsData = [
+  {
+    id: 1,
+    title: "Épica 1: Registro, Autenticación Segura & Perfil KYC",
+    icon: UserCheck,
+    badge: "Seguridad SIMV",
       coverage: "100% Cobertura SIMV",
       deliverables: ["Login Biométrico & OTP", "Perfilado Inversionista SIMV", "Sesiones Expirables Seguras"],
       richStories: [
@@ -524,6 +519,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
       ],
     },
   ];
+
+export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onNavigateToSimulator }) => {
+  const [activeEpicTab, setActiveEpicTab] = useState<number>(1);
+  const [expandedStoryIds, setExpandedStoryIds] = useState<string[]>(["e1_s1", "e1_s2", "e1_s3", "e1_s4"]);
+  const [storyPhaseFilter, setStoryPhaseFilter] = useState<"todos" | "fase1" | "fase2">("todos");
 
   const currentEpic = epicsData.find((e) => e.id === activeEpicTab) || epicsData[0];
 
