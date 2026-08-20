@@ -49,7 +49,7 @@ const sectionItemVariants = {
 
 export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onNavigateToSimulator }) => {
   const [activeEpicTab, setActiveEpicTab] = useState<number>(1);
-  const [expandedStoryId, setExpandedStoryId] = useState<string | null>("e1_s1");
+  const [expandedStoryIds, setExpandedStoryIds] = useState<string[]>(["e1_s1", "e1_s2", "e1_s3", "e1_s4"]);
   const [storyPhaseFilter, setStoryPhaseFilter] = useState<"todos" | "fase1" | "fase2">("todos");
 
   const epicsData = [
@@ -240,6 +240,20 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             "Consolidación por cuenta de corretaje",
           ],
         },
+        {
+          id: "e3_s4",
+          title: "Descarga Consolidada Certificada con Marca de Agua",
+          asA: "Auditor Externo / Inversionista",
+          iWant: "Exportar el estado de cuenta certificado con código de verificación QR",
+          soThat: "Se pueda validar su autenticidad ante instituciones bancarias o de crédito.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Generación de sello digital inmutable en pie de página PDF",
+            "Validación de firma via código QR escaneable",
+            "Registro de fecha y hora exacta de descarga",
+          ],
+        },
       ],
     },
     {
@@ -293,6 +307,20 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             "Webhook de integración directa con SIFI Fondos",
           ],
         },
+        {
+          id: "e4_s4",
+          title: "Confirmación Biométrica de Firmas Operativas",
+          asA: "Oficial de Cumplimiento Regulado",
+          iWant: "Solicitar autenticación biométrica obligatoria al autorizar un Trade Ticket",
+          soThat: "Se prevenga la suplantación de identidad en transacciones de alto valor.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Confirmación FaceID/TouchID en el modal de firma de instrucción",
+            "Vincular el ID de dispositivo al log de firma fehaciente",
+            "Rechazo automático tras 3 intentos fallidos",
+          ],
+        },
       ],
     },
     {
@@ -333,6 +361,34 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             "Registro del contacto como actividad en Dynamics 365 CRM",
           ],
         },
+        {
+          id: "e5_s3",
+          title: "Bandeja de Notificaciones Push Masivas & Segmentadas",
+          asA: "Gerente de Marketing & CRM",
+          iWant: "Enviar comunicaciones de mercado segmentadas por tipo de inversionista",
+          soThat: "Los clientes reciban alertas relevantes sobre nuevas emisiones de cuotas.",
+          status: "🟡 Integración API",
+          phase: "fase2",
+          dod: [
+            "Integración con canal Push Apple APNS & Firebase FCM",
+            "Segmentación por saldo de cartera y tipo de producto",
+            "Bitácora de entrega y tasa de lectura en Dynamics 365 CRM",
+          ],
+        },
+        {
+          id: "e5_s4",
+          title: "Sincronización Automática de Tareas en Dynamics 365 CRM",
+          asA: "Asesor Financiero Comercial",
+          iWant: "Que las solicitudes o renovaciones iniciadas en la app creen una Tarea en mi CRM",
+          soThat: "Pueda dar seguimiento comercial en menos de 2 horas hábiles.",
+          status: "🔵 UAT Cliente",
+          phase: "fase2",
+          dod: [
+            "Creación automática de objeto Lead / Task en CRM",
+            "Asignación por algoritmo de balanceo a ejecutivos libres",
+            "Notificación en Teams / Email corporativo al asesor",
+          ],
+        },
       ],
     },
     {
@@ -355,6 +411,48 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             "Actualización diaria de valor cuota tras cierre de mercado",
             "Gráfico de rendimiento histórico a 30, 90 y 365 días",
             "Diferenciación de marca entre EPB (Puesto de Bolsa) y ESAFI",
+          ],
+        },
+        {
+          id: "e6_s2",
+          title: "Directorio Completo de Productos EPB & ESAFI",
+          asA: "Prospecto o Inversionista Existente",
+          iWant: "Consultar la ficha de características de cada producto financiero disponible",
+          soThat: "Tenga la información necesaria antes de solicitar un nuevo aporte.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Fichas detalladas con tasa objetivo, plazo mínimo y calificación de riesgo",
+            "Enlace a prospecto de colocación aprobado por SIMV",
+            "Botón de contacto directo con ejecutivo especialista",
+          ],
+        },
+        {
+          id: "e6_s3",
+          title: "Comparador de Rendimientos Históricos",
+          asA: "Analista de Inversiones",
+          iWant: "Comparar la curva de rendimientos de Fondos Inmobiliarios vs Renta Fija",
+          soThat: "Evalúe la diversificación de mi portafolio personal.",
+          status: "🔵 UAT Cliente",
+          phase: "fase1",
+          dod: [
+            "Gráfico interactivo multi-serie con toggle de período",
+            "Cálculo de Tasa Interna de Retorno (TIR) proyectada",
+            "Exportación de datos tabulares a Excel/CSV",
+          ],
+        },
+        {
+          id: "e6_s4",
+          title: "Ficha Técnica Descargable de Fondos (Factsheets)",
+          asA: "Inversionista Institucional",
+          iWant: "Descargar el informe mensual oficial (Factsheet) en formato PDF",
+          soThat: "Presente la documentación a mi comité de inversiones.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Descarga directa de PDF firmado por auditor externo",
+            "Desglose de composición sectorial e inmuebles del fondo",
+            "Actualización mensual programada tras dictamen de riesgo",
           ],
         },
       ],
@@ -381,6 +479,48 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             "Exportación directa a formato CSV / Excel oficial",
           ],
         },
+        {
+          id: "e7_s2",
+          title: "Cifrado Extremo a Extremo TLS 1.3 / AES-256",
+          asA: "Oficial de Seguridad ISO 27001",
+          iWant: "Que todos los datos en tránsito y en reposo estén protegidos con estándares bancarios",
+          soThat: "Se elimine el riesgo de fuga o manipulación de información financiera.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Protocolo TLS 1.3 forzado en todos los endpoints REST API",
+            "Cifrado de base de datos AES-256 con llaves rotativas",
+            "Escaneo continuo de vulnerabilidades OWASP Top 10",
+          ],
+        },
+        {
+          id: "e7_s3",
+          title: "Control de Accesos Basado en Roles (RBAC)",
+          asA: "Administrador de Sistemas Excel",
+          iWant: "Asignar roles y permisos diferenciados a usuarios cliente, ejecutivos y auditores",
+          soThat: "Cada rol acceda estrictamente a las funciones autorizadas.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Matriz de permisos granulares por módulo",
+            "Autenticación corporativa SSO / Active Directory para empleados",
+            "Revocación inmediata de accesos por baja operativa",
+          ],
+        },
+        {
+          id: "e7_s4",
+          title: "Dashboard de Monitoreo & SLA Operativo",
+          asA: "Director de Tecnología (CTO)",
+          iWant: "Monitorear la disponibilidad 99.9% y tiempos de respuesta de la solución",
+          soThat: "Se garantice la continuidad del negocio exigida por la SIMV.",
+          status: "🟢 Sprint 1 (Listo)",
+          phase: "fase1",
+          dod: [
+            "Panel de métricas en tiempo real con latencia de endpoints",
+            "Alertas automáticas vía SMS/PagerDuty por caída de servicios",
+            "Reporte mensual de disponibilidad acumulada para auditoría",
+          ],
+        },
       ],
     },
   ];
@@ -392,6 +532,24 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
     if (storyPhaseFilter === "fase2") return story.phase === "fase2";
     return true;
   });
+
+  const allCurrentStoryIds = filteredStories.map((s) => s.id);
+  const areAllCurrentStoriesExpanded =
+    allCurrentStoryIds.length > 0 && allCurrentStoryIds.every((id) => expandedStoryIds.includes(id));
+
+  const toggleStoryExpansion = (storyId: string) => {
+    setExpandedStoryIds((prev) =>
+      prev.includes(storyId) ? prev.filter((id) => id !== storyId) : [...prev, storyId]
+    );
+  };
+
+  const toggleExpandAllStories = () => {
+    if (areAllCurrentStoriesExpanded) {
+      setExpandedStoryIds((prev) => prev.filter((id) => !allCurrentStoryIds.includes(id)));
+    } else {
+      setExpandedStoryIds((prev) => Array.from(new Set([...prev, ...allCurrentStoryIds])));
+    }
+  };
 
   const jumpToSimulatorTab = (simTab: "portafolio" | "ticket" | "estados" | "asesor") => {
     if (onNavigateToSimulator) {
@@ -426,7 +584,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
           <p className="text-base sm:text-lg text-slate-200/90 max-w-3xl mx-auto font-medium">
             <EditableField
               id="sec3_desc"
-              defaultText="Toca cualquier historia de usuario para desplegar su estructura ágil (Como/Quiero/Para), criterios de aceptación (DoD) y probar la acción en vivo en el simulador."
+              defaultText="Selecciona una Épica a la izquierda para consultar sus Historias de Usuario oficiales. Toca cualquier historia para desplegar su estructura ágil (Como/Quiero/Para), criterios DoD y probar la acción en vivo."
             />
           </p>
         </div>
@@ -472,7 +630,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
           <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-300 bg-white/10 px-3.5 py-1.5 rounded-xl border border-white/20">
             <CheckCircle2 className="w-4 h-4 text-[#F08D17]" />
-            <span>7 Épicas SIMV • 100% Cobertura</span>
+            <span>7 Épicas SIMV • 28 Historias Oficiales Excel</span>
           </div>
         </div>
 
@@ -500,7 +658,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     key={epic.id}
                     onClick={() => {
                       setActiveEpicTab(epic.id);
-                      setExpandedStoryId(epic.richStories[0]?.id || null);
+                      setExpandedStoryIds(epic.richStories.map((s) => s.id));
                     }}
                     className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden ${
                       isSelected
@@ -566,16 +724,23 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     </h3>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-full bg-white/10 text-emerald-300 border border-white/20">
-                    {filteredStories.length} Historias Disponibles
+                  <button
+                    onClick={toggleExpandAllStories}
+                    className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                  >
+                    <span>{areAllCurrentStoriesExpanded ? "Colapsar Todas" : "Desplegar Todas (4)"}</span>
+                  </button>
+                  <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
+                    {filteredStories.length} Historias
                   </span>
                 </div>
               </div>
 
               {/* Key Deliverables Chips */}
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables:</span>
+                <span className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
                 {currentEpic.deliverables.map((item, idx) => (
                   <span key={idx} className="text-xs bg-white/10 text-slate-200 px-3 py-1 rounded-xl border border-white/15 font-medium">
                     ✓ {item}
@@ -587,7 +752,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             {/* Interactive User Stories Cards */}
             <div className="space-y-4">
               {filteredStories.map((story) => {
-                const isExpanded = expandedStoryId === story.id;
+                const isExpanded = expandedStoryIds.includes(story.id);
                 return (
                   <motion.div
                     key={story.id}
@@ -600,7 +765,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   >
                     {/* Story Header Card Bar */}
                     <div
-                      onClick={() => setExpandedStoryId(isExpanded ? null : story.id)}
+                      onClick={() => toggleStoryExpansion(story.id)}
                       className="p-5 sm:p-6 cursor-pointer flex items-center justify-between gap-4 hover:bg-white/5 transition-colors"
                     >
                       <div className="flex flex-wrap items-center gap-3 min-w-0">
