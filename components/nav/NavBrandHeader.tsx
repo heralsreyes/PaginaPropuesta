@@ -31,16 +31,6 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 
       {/* Action Buttons Right */}
       <div className="pointer-events-auto flex items-center gap-2">
-        {onOpenCustomizer && (
-          <button
-            onClick={onOpenCustomizer}
-            className="p-2.5 rounded-2xl bg-white/90 hover:bg-white text-slate-700 border border-slate-200 shadow-md transition-all hover:scale-105 cursor-pointer"
-            title="Personalizar datos de la propuesta"
-          >
-            <Sliders className="w-4 h-4 text-[#004F54]" />
-          </button>
-        )}
-
         <button
           onClick={onOpenAcceptModal}
           className="px-4 py-2 rounded-2xl bg-[#004F54] hover:bg-[#006B70] text-white font-extrabold text-xs shadow-lg shadow-[#004F54]/20 transition-all hover:scale-105 cursor-pointer flex items-center gap-2"
