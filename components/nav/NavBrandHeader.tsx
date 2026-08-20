@@ -16,10 +16,10 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Clean Authentic Brand Badge Left (Slightly Larger Container) */}
-      <div className="pointer-events-auto flex items-center gap-3.5 px-5.5 py-2.5 rounded-2xl bg-[#002224]/90 backdrop-blur-xl border border-white/25 shadow-xl select-none">
+      {/* Clean Authentic Brand Badge Left (Fixed Generous Padding) */}
+      <div className="pointer-events-auto flex items-center gap-3.5 px-6 py-2.5 rounded-full bg-[#002224]/90 backdrop-blur-xl border border-white/25 shadow-xl select-none">
         {/* Live Status Dot */}
-        <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 shadow-sm shadow-[#F08D17]" />
+        <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 ml-1 shadow-sm shadow-[#F08D17]" />
 
         {/* Provider Brand */}
         <span className="font-extrabold text-xs sm:text-sm text-white tracking-wider uppercase">
