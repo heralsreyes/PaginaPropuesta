@@ -16,21 +16,21 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Clean Authentic Brand Badge Left (Fixed Generous Padding) */}
-      <div className="pointer-events-auto flex items-center gap-3.5 px-6 py-2.5 rounded-full bg-[#002224]/90 backdrop-blur-xl border border-white/25 shadow-xl select-none">
+      {/* Clean Streamlined Brand Badge Left (Low-Profile & Compact) */}
+      <div className="pointer-events-auto flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-[#002224]/90 backdrop-blur-xl border border-white/20 shadow-md select-none">
         {/* Live Status Dot */}
-        <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 ml-1 shadow-sm shadow-[#F08D17]" />
+        <span className="w-2 h-2 rounded-full bg-[#F08D17] animate-pulse shrink-0 shadow-sm shadow-[#F08D17]" />
 
         {/* Provider Brand */}
-        <span className="font-extrabold text-xs sm:text-sm text-white tracking-wider uppercase">
+        <span className="font-extrabold text-[11px] sm:text-xs text-white tracking-wider uppercase">
           ENFOCO
         </span>
 
         {/* Divider */}
-        <span className="text-slate-400 font-mono text-xs sm:text-sm font-bold">|</span>
+        <span className="text-slate-400 font-mono text-[11px] font-bold">|</span>
 
         {/* Client Brand */}
-        <span className="font-mono text-xs sm:text-sm font-bold text-slate-100">
+        <span className="font-mono text-[11px] sm:text-xs font-bold text-slate-100 truncate max-w-[200px] sm:max-w-none">
           Excel Puesto de Bolsa & ESAFI
         </span>
       </div>
@@ -40,7 +40,7 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
         <button
           type="button"
           onClick={onOpenAcceptModal}
-          className="px-3.5 py-1.5 rounded-xl bg-[#004F54] hover:bg-[#006B70] text-white font-extrabold text-xs shadow-lg shadow-[#004F54]/30 border border-[#F08D17]/40 transition-all hover:scale-105 cursor-pointer flex items-center gap-1.5"
+          className="px-3 py-1.5 rounded-xl bg-[#004F54] hover:bg-[#006B70] text-white font-extrabold text-[11px] sm:text-xs shadow-md border border-[#F08D17]/40 transition-all hover:scale-105 cursor-pointer flex items-center gap-1.5"
         >
           <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17]" />
           <span>Aceptar Propuesta</span>
