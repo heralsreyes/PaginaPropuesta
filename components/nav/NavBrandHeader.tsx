@@ -16,21 +16,21 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Brand Badge Left (Sleek Compact Dual-Tone Pill Badge) */}
-      <div className="pointer-events-auto flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#00383C]/95 via-[#002224]/95 to-[#001416]/95 backdrop-blur-xl border border-[#F08D17]/60 shadow-[0_4px_20px_rgba(0,0,0,0.4)] ring-1 ring-[#F08D17]/30 hover:border-[#F08D17] transition-all duration-300 hover:scale-[1.02] select-none group">
-        {/* Live Gold Pulse Dot */}
-        <span className="w-2 h-2 rounded-full bg-[#F08D17] animate-pulse shadow-sm shadow-[#F08D17] shrink-0" />
+      {/* Clean Authentic Brand Badge Left */}
+      <div className="pointer-events-auto flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#002224]/90 backdrop-blur-xl border border-white/20 shadow-lg select-none">
+        {/* Live Status Dot */}
+        <span className="w-2 h-2 rounded-full bg-[#F08D17] animate-pulse shrink-0" />
 
-        {/* Provider Brand Logo */}
-        <span className="font-black text-xs text-white tracking-wider uppercase group-hover:text-[#F08D17] transition-colors shrink-0">
+        {/* Provider Brand */}
+        <span className="font-extrabold text-xs text-white tracking-wider uppercase">
           ENFOCO
         </span>
 
-        {/* Divider Dot */}
-        <span className="text-[#F08D17] font-bold text-xs shrink-0">•</span>
+        {/* Divider */}
+        <span className="text-slate-400 font-mono text-xs">|</span>
 
-        {/* Client Brand with Emerald-to-Gold Gradient Text */}
-        <span className="font-mono text-[11px] font-black uppercase tracking-tight bg-gradient-to-r from-emerald-300 via-amber-200 to-[#F08D17] bg-clip-text text-transparent truncate max-w-[240px] sm:max-w-none">
+        {/* Client Brand */}
+        <span className="font-mono text-xs font-bold text-slate-100">
           Excel Puesto de Bolsa & ESAFI
         </span>
       </div>
