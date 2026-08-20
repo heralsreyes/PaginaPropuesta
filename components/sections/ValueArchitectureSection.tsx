@@ -10,29 +10,25 @@ interface ValueArchitectureSectionProps {
 }
 
 const sectionContainerVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 1, y: 0 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.12,
-      delayChildren: 0.08,
+      duration: 0.5,
+      staggerChildren: 0.1,
     },
   },
 };
 
 const sectionItemVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.96, filter: "blur(6px)" },
+  hidden: { opacity: 1, y: 0, scale: 1 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.55,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 0.4,
     },
   },
 };

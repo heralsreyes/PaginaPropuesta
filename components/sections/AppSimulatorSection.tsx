@@ -24,7 +24,7 @@ interface AppSimulatorSectionProps {
 }
 
 const sectionContainerVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 1, y: 0 },
   visible: {
     opacity: 1,
     y: 0,
@@ -33,6 +33,20 @@ const sectionContainerVariants = {
       ease: [0.22, 1, 0.36, 1],
       staggerChildren: 0.12,
       delayChildren: 0.08,
+    },
+  },
+};
+
+const sectionItemVariants = {
+  hidden: { opacity: 1, y: 0 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };

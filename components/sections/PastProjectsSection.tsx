@@ -10,7 +10,7 @@ interface PastProjectsSectionProps {
 }
 
 const sectionContainerVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 1, y: 0 },
   visible: {
     opacity: 1,
     y: 0,

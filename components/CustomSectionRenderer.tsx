@@ -40,7 +40,45 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
   const title = section.title || section.label;
   const cType = section.componentType;
 
-  // Base Section Component Types
+  // 1. Specific Proposal Sections (01 - 12) - Checked First
+  if (secId === "sec-portada-excel" || secId.includes("portada") || title.includes("Presentación Ejecutiva")) {
+    return <ExecutiveSummarySection secId={secId} proposal={proposal} onOpenAcceptModal={onOpenAcceptModal} />;
+  }
+  if (secId === "sec-valor-propuesta" || secId.includes("valor") || title.includes("Arquitectura de Valor") || title.includes("Ecosistema")) {
+    return <ValueArchitectureSection secId={secId} />;
+  }
+  if (secId === "sec-7-epicas-alcance" || secId === "sec-alcance-epicas" || secId.includes("epica") || secId.includes("alcance") || title.includes("7 Épicas") || title.includes("Alcance")) {
+    return <ScopeEpicsSection secId={secId} />;
+  }
+  if (secId === "sec-simulador-interactivo-app" || secId.includes("simulador") || title.includes("Simulador App")) {
+    return <AppSimulatorSection secId={secId} />;
+  }
+  if (secId === "sec-calculadora-inversion" || secId.includes("calculadora") || title.includes("Calculadora")) {
+    return <InvestmentCalculatorSection secId={secId} />;
+  }
+  if (secId === "sec-integracion-crm-sifi" || secId.includes("crm") || title.includes("Integración Dynamics")) {
+    return <CrmIntegrationSection secId={secId} />;
+  }
+  if (secId === "sec-supervision-dashboards" || secId.includes("dashboards") || title.includes("Dashboards")) {
+    return <KpiDashboardsSection secId={secId} />;
+  }
+  if (secId === "sec-equipo-cronograma" || secId.includes("equipo-cronograma") || title.includes("Equipo Especialista")) {
+    return <TeamRoadmapSection secId={secId} proposal={proposal} />;
+  }
+  if (secId === "sec-propuesta-economica" || secId.includes("economica") || title.includes("Propuesta Económica")) {
+    return <EconomicProposalSection secId={secId} />;
+  }
+  if (secId === "sec-sobre-enfoco-certificaciones" || secId.includes("sobre-enfoco") || title.includes("Sobre ENFOCO")) {
+    return <AboutEnfocoSection secId={secId} />;
+  }
+  if (secId === "sec-experiencia-proyectos" || secId.includes("experiencia") || title.includes("Experiencia en Proyectos")) {
+    return <PastProjectsSection secId={secId} />;
+  }
+  if (secId === "sec-cierre-acuerdo" || secId.includes("cierre") || title.includes("Cierre & Firma")) {
+    return <ClosingSignatureSection secId={secId} onOpenAcceptModal={onOpenAcceptModal} />;
+  }
+
+  // 2. Fallback Base Component Types
   if (cType === "hero") {
     return <HeroSection proposal={proposal} onOpenAcceptModal={onOpenAcceptModal} />;
   }
@@ -70,44 +108,6 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
   }
   if (cType === "contacto") {
     return <Footer proposal={proposal} />;
-  }
-
-  // Custom Detailed Proposal Sections (01 - 12)
-  if (secId === "sec-portada-excel" || title.includes("Presentación Ejecutiva")) {
-    return <ExecutiveSummarySection secId={secId} proposal={proposal} onOpenAcceptModal={onOpenAcceptModal} />;
-  }
-  if (secId === "sec-valor-propuesta" || title.includes("Arquitectura de Valor")) {
-    return <ValueArchitectureSection secId={secId} />;
-  }
-  if (secId === "sec-7-epicas-alcance" || title.includes("7 Épicas")) {
-    return <ScopeEpicsSection secId={secId} />;
-  }
-  if (secId === "sec-simulador-interactivo-app" || title.includes("Simulador App")) {
-    return <AppSimulatorSection secId={secId} />;
-  }
-  if (secId === "sec-calculadora-inversion" || title.includes("Calculadora Rendimiento")) {
-    return <InvestmentCalculatorSection secId={secId} />;
-  }
-  if (secId === "sec-integracion-crm-sifi" || title.includes("Integración Dynamics")) {
-    return <CrmIntegrationSection secId={secId} />;
-  }
-  if (secId === "sec-supervision-dashboards" || title.includes("Dashboards Operativos")) {
-    return <KpiDashboardsSection secId={secId} />;
-  }
-  if (secId === "sec-equipo-cronograma" || title.includes("Equipo Especialista")) {
-    return <TeamRoadmapSection secId={secId} proposal={proposal} />;
-  }
-  if (secId === "sec-propuesta-economica" || title.includes("Propuesta Económica")) {
-    return <EconomicProposalSection secId={secId} />;
-  }
-  if (secId === "sec-sobre-enfoco-certificaciones" || title.includes("Sobre ENFOCO")) {
-    return <AboutEnfocoSection secId={secId} />;
-  }
-  if (secId === "sec-experiencia-proyectos" || title.includes("Experiencia en Proyectos")) {
-    return <PastProjectsSection secId={secId} />;
-  }
-  if (secId === "sec-cierre-acuerdo" || title.includes("Cierre & Firma")) {
-    return <ClosingSignatureSection secId={secId} onOpenAcceptModal={onOpenAcceptModal} />;
   }
 
   // Fallback section renderer

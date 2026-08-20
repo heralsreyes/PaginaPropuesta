@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-display: var(--font-outfit), var(--font-inter), system-ui, -apple-system, sans-serif;
   --bg-main: #FFFFFF;
   --accent-color: #004F54;
   --accent-hover: #006B70;
@@ -15,8 +15,8 @@
 }
 
 body {
-  color: #0F172A;
-  background: #FFFFFF !important;
+  color: var(--text-primary);
+  background: var(--bg-main);
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
@@ -45,7 +45,6 @@ body {
   display: none !important;
 }
 
-/* 🖨️ Precision PDF Print Engine - 1 Page Per Slide (100% Zero-Clipping & Exact 8 Pages Fit) */
 @media print {
   @page {
     size: landscape;
@@ -79,7 +78,6 @@ body {
     display: block !important;
   }
 
-  /* Hide interactive floating UI controls, modals, toasts & navigation */
   .no-print,
   .screen-only,
   aside,
@@ -91,143 +89,14 @@ body {
     display: none !important;
   }
 
-  /* Display print-only fully expanded content */
   .print-only {
     display: block !important;
   }
 
-  /* Force exactly 1 slide per PDF page without vertical clipping or page overflows */
   section, footer {
-    width: 100% !important;
+    break-after: page !important;
+    page-break-after: always !important;
+    min-h-screen: auto !important;
     height: 100vh !important;
-    max-height: 100vh !important;
-    min-height: 100vh !important;
-    box-sizing: border-box !important;
-    page-break-before: always !important;
-    break-before: page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important; /* Top-aligned so headers never get clipped! */
-    align-items: center !important;
-    padding: 1rem 1.5rem !important;
-    margin: 0 !important;
-    background: #FAF9F6 !important;
-  }
-
-  section#hero {
-    page-break-before: avoid !important;
-    break-before: avoid !important;
-  }
-
-  /* 📏 Explicit PDF Grid Layout Column Ratios */
-  #hero .grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 0.75rem !important;
-  }
-
-  #alcance .grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 0.75rem !important;
-  }
-
-  #cronograma .grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 0.75rem !important;
-  }
-
-  #equipo .grid {
-    display: grid !important;
-    grid-template-columns: 5fr 7fr !important;
-    gap: 1rem !important;
-  }
-
-  #responsabilidades .grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 1rem !important;
-  }
-
-  #inversion .grid {
-    display: grid !important;
-    grid-template-columns: 5fr 7fr !important;
-    gap: 1.25rem !important;
-    width: 100% !important;
-  }
-
-  #empresa .grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 1rem !important;
-  }
-
-  #contacto .grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr 1fr !important;
-    gap: 1rem !important;
-  }
-
-  /* Reset column spans in print so they fill their grid slot 100% */
-  #inversion .lg\:col-span-5,
-  #inversion .lg\:col-span-7,
-  #equipo .lg\:col-span-5,
-  #equipo .lg\:col-span-7,
-  #empresa .lg\:col-span-6,
-  #contacto .lg\:col-span-4 {
-    grid-column: auto !important;
-    width: 100% !important;
-  }
-
-  /* Compact Padding & Margin Overrides for PDF Export */
-  .p-6, .p-7, .p-8, .p-9, .p-10, .p-12 {
-    padding: 0.85rem !important;
-  }
-
-  .p-4, .p-4.5, .p-5 {
-    padding: 0.65rem !important;
-  }
-
-  .mb-4, .mb-5, .mb-6, .mb-8, .mb-10 {
-    margin-bottom: 0.35rem !important;
-  }
-
-  .mt-4, .mt-6, .mt-8, .mt-10 {
-    margin-top: 0.35rem !important;
-  }
-
-  .space-y-3.5 > :not([hidden]) ~ :not([hidden]),
-  .space-y-4 > :not([hidden]) ~ :not([hidden]),
-  .space-y-6 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: 0.35rem !important;
-  }
-
-  .min-h-\[380px\], .min-h-\[440px\], .min-h-\[460px\], .min-h-\[480px\], .min-h-\[220px\] {
-    min-height: 0 !important;
-  }
-
-  .max-w-5xl, .max-w-6xl, .max-w-7xl {
-    max-width: 100% !important;
-    width: 100% !important;
-  }
-
-  /* Font Scale Adjustments for Printed Page Fitting */
-  .text-5xl, .text-6xl {
-    font-size: 2rem !important;
-    line-height: 2.25rem !important;
-  }
-
-  .text-3xl, .text-4xl {
-    font-size: 1.5rem !important;
-    line-height: 1.75rem !important;
-  }
-
-  .text-2xl {
-    font-size: 1.25rem !important;
-    line-height: 1.5rem !important;
   }
 }
