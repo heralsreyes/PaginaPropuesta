@@ -539,14 +539,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
   const handleEpicSelect = (epicId: number) => {
     setActiveEpicTab(epicId);
+    setStoryPhaseFilter("todos");
     const targetEpic = epicsData.find((e) => e.id === epicId);
     if (targetEpic) {
-      const matching = targetEpic.richStories.filter((s) => {
-        if (storyPhaseFilter === "fase1") return s.phase === "fase1";
-        if (storyPhaseFilter === "fase2") return s.phase === "fase2";
-        return true;
-      });
-      setExpandedStoryIds(matching.map((s) => s.id));
+      setExpandedStoryIds(targetEpic.richStories.map((s) => s.id));
     }
   };
 
@@ -567,7 +563,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
   };
 
   const toggleExpandAllStories = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (areAllCurrentStoriesExpanded) {
       setExpandedStoryIds((prev) => prev.filter((id) => !allCurrentStoryIds.includes(id)));
     } else {
@@ -625,12 +624,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             <div className="flex items-center gap-1.5 pl-2">
               <button
                 type="button"
-                onMouseDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   handlePhaseFilterChange("todos");
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "todos"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
                     : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
@@ -640,12 +643,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               </button>
               <button
                 type="button"
-                onMouseDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   handlePhaseFilterChange("fase1");
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "fase1"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
                     : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
@@ -655,12 +662,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               </button>
               <button
                 type="button"
-                onMouseDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   handlePhaseFilterChange("fase2");
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "fase2"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
                     : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
@@ -680,7 +691,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
         {/* Master-Detail Split Layout: Left Column = Epics Menu / Right Column = User Stories Cards */}
         <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
           {/* LEFT COLUMN: Vertical Epics Menu (w-full lg:w-1/3) */}
-          <div className="w-full lg:w-1/3 space-y-3 shrink-0">
+          <div className="w-full lg:w-1/3 space-y-3 shrink-0 z-10 relative">
             <div className="text-xs font-mono font-extrabold text-[#F08D17] uppercase tracking-wider px-2 flex items-center justify-between">
               <span>ÉPICAS DE LA SOLUCIÓN</span>
               <span>7 Épicas</span>
@@ -697,17 +708,29 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }).length;
 
                 return (
-                  <button
-                    type="button"
+                  <div
+                    role="button"
+                    tabIndex={0}
                     key={epic.id}
-                    onMouseDown={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                     onClick={(e) => {
+                      e.preventDefault();
                       e.stopPropagation();
                       handleEpicSelect(epic.id);
                     }}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden ${
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleEpicSelect(epic.id);
+                      }
+                    }}
+                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden select-none z-10 ${
                       isSelected
-                        ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-[1.02]"
+                        ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/40 scale-[1.02]"
                         : "bg-[#003B3F]/80 border-white/15 hover:border-white/40 hover:bg-[#003B3F]"
                     }`}
                   >
@@ -745,7 +768,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         isSelected ? "text-[#F08D17] translate-x-1" : "text-slate-400 group-hover:text-white"
                       }`}
                     />
-                  </button>
+                  </div>
                 );
               })}
             </div>
