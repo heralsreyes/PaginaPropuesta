@@ -476,180 +476,208 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
           </div>
         </div>
 
-        {/* Corporate Epic Cards Grid (3 Columns) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {epicsData.map((epic) => {
-            const EpicIcon = epic.icon;
-            const isSelected = activeEpicTab === epic.id;
-            const matchingStoriesCount = epic.richStories.filter((s) => {
-              if (storyPhaseFilter === "fase1") return s.phase === "fase1";
-              if (storyPhaseFilter === "fase2") return s.phase === "fase2";
-              return true;
-            }).length;
-
-            return (
-              <motion.div
-                key={epic.id}
-                variants={sectionItemVariants}
-                onClick={() => {
-                  setActiveEpicTab(epic.id);
-                  setExpandedStoryId(epic.richStories[0]?.id || null);
-                }}
-                className={`p-6 rounded-3xl backdrop-blur-xl border transition-all cursor-pointer flex flex-col justify-between space-y-5 shadow-xl relative overflow-hidden group ${
-                  isSelected
-                    ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-4 ring-[#F08D17]/20 scale-[1.02]"
-                    : "bg-[#003B3F]/80 border-white/15 hover:border-white/40 hover:bg-[#003B3F]"
-                }`}
-              >
-                {/* Header: Epic Number & Badge */}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
-                    ÉPICA 0{epic.id}
-                  </span>
-                  <span className="text-[11px] font-mono font-bold text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
-                    {epic.badge}
-                  </span>
-                </div>
-
-                {/* Body: Icon & Title */}
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[#F08D17]/10 text-[#F08D17] border border-[#F08D17]/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <EpicIcon className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-extrabold text-lg text-white group-hover:text-[#F08D17] transition-colors leading-snug">
-                    {epic.title.replace(/^Épica \d+: /, "")}
-                  </h3>
-                  <div className="text-xs font-mono text-emerald-300 font-bold flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17]" />
-                    <span>{epic.coverage}</span>
-                  </div>
-                </div>
-
-                {/* Key Deliverables Chips */}
-                <div className="space-y-2 pt-2 border-t border-white/10">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-300 block font-bold">Entregables Clave:</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {epic.deliverables.map((item, idx) => (
-                      <span key={idx} className="text-[11px] bg-white/10 text-slate-200 px-2.5 py-1 rounded-lg border border-white/10 font-medium">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Card Footer: Stories Count & Expand Trigger */}
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-slate-300">
-                    {matchingStoriesCount} Historias de Usuario
-                  </span>
-                  <button className={`text-xs font-mono font-bold px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
-                    isSelected
-                      ? "bg-[#F08D17] text-white shadow-md"
-                      : "bg-white/10 text-slate-200 border border-white/20 group-hover:bg-[#F08D17] group-hover:text-white"
-                  }`}>
-                    <span>Ver Historias</span>
-                    <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? "rotate-90" : ""}`} />
-                  </button>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Selected Epic Detailed Stories Panel */}
-        <div className="p-8 rounded-3xl bg-[#002224] border-2 border-[#F08D17]/80 shadow-2xl space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40 flex items-center justify-center font-bold">
-                {React.createElement(currentEpic.icon, { className: "w-5 h-5" })}
-              </div>
-              <div>
-                <span className="text-xs font-mono text-[#F08D17] font-bold uppercase tracking-wider block">
-                  DESGLOSE DE HISTORIAS · ÉPICA 0{currentEpic.id}
-                </span>
-                <h3 className="text-xl font-extrabold text-white">
-                  {currentEpic.title}
-                </h3>
-              </div>
+        {/* Master-Detail Split Layout: Left Column = Epics Menu / Right Column = User Stories Cards */}
+        <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
+          {/* LEFT COLUMN: Vertical Epics Menu (w-full lg:w-1/3) */}
+          <div className="w-full lg:w-1/3 space-y-3 shrink-0">
+            <div className="text-xs font-mono font-extrabold text-[#F08D17] uppercase tracking-wider px-2 flex items-center justify-between">
+              <span>ÉPICAS DE LA SOLUCIÓN</span>
+              <span>7 Épicas</span>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-white/10 text-emerald-300 border border-white/20">
-              {filteredStories.length} Historias Disponibles
-            </span>
+
+            <div className="space-y-3">
+              {epicsData.map((epic) => {
+                const EpicIcon = epic.icon;
+                const isSelected = activeEpicTab === epic.id;
+                const matchingStoriesCount = epic.richStories.filter((s) => {
+                  if (storyPhaseFilter === "fase1") return s.phase === "fase1";
+                  if (storyPhaseFilter === "fase2") return s.phase === "fase2";
+                  return true;
+                }).length;
+
+                return (
+                  <div
+                    key={epic.id}
+                    onClick={() => {
+                      setActiveEpicTab(epic.id);
+                      setExpandedStoryId(epic.richStories[0]?.id || null);
+                    }}
+                    className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden ${
+                      isSelected
+                        ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-[1.02]"
+                        : "bg-[#003B3F]/80 border-white/15 hover:border-white/40 hover:bg-[#003B3F]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
+                          isSelected
+                            ? "bg-[#F08D17] text-white shadow-md"
+                            : "bg-[#F08D17]/10 text-[#F08D17] border border-[#F08D17]/30"
+                        }`}
+                      >
+                        <EpicIcon className="w-5.5 h-5.5" />
+                      </div>
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/30">
+                            ÉPICA 0{epic.id}
+                          </span>
+                          <span className="text-[10px] font-mono text-emerald-300 font-bold truncate">
+                            {matchingStoriesCount} Stories
+                          </span>
+                        </div>
+                        <h3
+                          className={`font-extrabold text-sm sm:text-base leading-snug truncate transition-colors ${
+                            isSelected ? "text-white" : "text-slate-100 group-hover:text-[#F08D17]"
+                          }`}
+                        >
+                          {epic.title.replace(/^Épica \d+: /, "")}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <ChevronRight
+                      className={`w-5 h-5 shrink-0 transition-transform ${
+                        isSelected ? "text-[#F08D17] translate-x-1" : "text-slate-400 group-hover:text-white"
+                      }`}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Stories List inside Selected Epic */}
-          <div className="space-y-4">
-            {filteredStories.map((story) => {
-              const isExpanded = expandedStoryId === story.id;
-              return (
-                <div
-                  key={story.id}
-                  className="rounded-2xl bg-[#001618] border border-white/15 overflow-hidden transition-all shadow-lg hover:border-white/30"
-                >
-                  <div
-                    onClick={() => setExpandedStoryId(isExpanded ? null : story.id)}
-                    className="p-5 cursor-pointer flex items-center justify-between gap-4 hover:bg-white/5 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono font-bold text-[#F08D17] px-3 py-1 rounded-xl bg-white/10 border border-white/15">
-                        {story.status}
-                      </span>
-                      <h4 className="font-extrabold text-base text-white">{story.title}</h4>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {"demoTab" in story && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (story.demoTab) jumpToSimulatorTab(story.demoTab);
-                          }}
-                          className="px-3 py-1.5 rounded-xl bg-[#F08D17] text-white font-mono font-bold text-xs flex items-center gap-1.5 hover:bg-[#EA580C] shadow-md transition-all cursor-pointer"
-                        >
-                          <Play className="w-3.5 h-3.5 fill-current" />
-                          <span>Probar en App</span>
-                        </button>
-                      )}
-                      <ChevronRight className={`w-5 h-5 text-white transition-transform ${isExpanded ? "rotate-90" : ""}`} />
-                    </div>
+          {/* RIGHT COLUMN: Selected Epic User Stories Cards (w-full lg:w-2/3) */}
+          <div className="w-full lg:w-2/3 space-y-5">
+            {/* Selected Epic Header Banner */}
+            <div className="p-6 rounded-3xl bg-[#002224] border-2 border-[#F08D17]/80 shadow-2xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-[#F08D17] text-white shadow-lg flex items-center justify-center font-bold">
+                    {React.createElement(currentEpic.icon, { className: "w-6 h-6" })}
                   </div>
-
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="px-6 pb-6 pt-2 border-t border-white/10 space-y-4 text-slate-200"
-                      >
-                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                          <div className="text-xs font-mono font-bold text-[#F08D17] uppercase">Estructura Ágil</div>
-                          <div className="text-sm font-medium">
-                            <strong>Como:</strong> {story.asA} | <strong>Quiero:</strong> {story.iWant} | <strong>Para:</strong>{" "}
-                            {story.soThat}
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>Criterios de Aceptación (DoD)</span>
-                          </div>
-                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                            {story.dod.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-white/5 border border-white/10">
-                                <CheckCircle2 className="w-4 h-4 text-[#F08D17] shrink-0 mt-0.5" />
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div>
+                    <span className="text-xs font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
+                      ÉPICA 0{currentEpic.id} • {currentEpic.badge}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-white">
+                      {currentEpic.title}
+                    </h3>
+                  </div>
                 </div>
-              );
-            })}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-full bg-white/10 text-emerald-300 border border-white/20">
+                    {filteredStories.length} Historias Disponibles
+                  </span>
+                </div>
+              </div>
+
+              {/* Key Deliverables Chips */}
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables:</span>
+                {currentEpic.deliverables.map((item, idx) => (
+                  <span key={idx} className="text-xs bg-white/10 text-slate-200 px-3 py-1 rounded-xl border border-white/15 font-medium">
+                    ✓ {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Interactive User Stories Cards */}
+            <div className="space-y-4">
+              {filteredStories.map((story) => {
+                const isExpanded = expandedStoryId === story.id;
+                return (
+                  <motion.div
+                    key={story.id}
+                    variants={sectionItemVariants}
+                    className={`rounded-3xl border overflow-hidden transition-all shadow-xl ${
+                      isExpanded
+                        ? "bg-[#002224] border-[#F08D17] ring-2 ring-[#F08D17]/20"
+                        : "bg-[#003B3F]/90 backdrop-blur-xl border-white/15 hover:border-white/30"
+                    }`}
+                  >
+                    {/* Story Header Card Bar */}
+                    <div
+                      onClick={() => setExpandedStoryId(isExpanded ? null : story.id)}
+                      className="p-5 sm:p-6 cursor-pointer flex items-center justify-between gap-4 hover:bg-white/5 transition-colors"
+                    >
+                      <div className="flex flex-wrap items-center gap-3 min-w-0">
+                        <span className="text-xs font-mono font-black text-[#F08D17] px-3 py-1 rounded-xl bg-white/10 border border-white/20 shrink-0">
+                          {story.status}
+                        </span>
+                        <h4 className="font-extrabold text-base sm:text-lg text-white truncate">{story.title}</h4>
+                      </div>
+
+                      <div className="flex items-center gap-3 shrink-0">
+                        {"demoTab" in story && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (story.demoTab) jumpToSimulatorTab(story.demoTab);
+                            }}
+                            className="px-3.5 py-1.5 rounded-xl bg-[#F08D17] text-white font-mono font-bold text-xs flex items-center gap-1.5 hover:bg-[#EA580C] shadow-md transition-all cursor-pointer"
+                          >
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                            <span>Probar en App</span>
+                          </button>
+                        )}
+                        <div
+                          className={`w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform ${
+                            isExpanded ? "rotate-90 bg-[#F08D17] text-white" : "text-slate-300"
+                          }`}
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Expandable Content: Estructura Ágil & Criterios DoD */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="px-6 pb-6 pt-2 border-t border-white/10 space-y-4 text-slate-200 bg-[#001618]/60"
+                        >
+                          {/* Estructura Ágil Box */}
+                          <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                            <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
+                              <UserCheck className="w-4 h-4 text-[#F08D17]" />
+                              <span>Estructura Ágil (User Story)</span>
+                            </div>
+                            <div className="text-sm font-medium leading-relaxed">
+                              <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
+                              <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
+                              <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
+                            </div>
+                          </div>
+
+                          {/* Criterios de Aceptación (DoD) */}
+                          <div className="space-y-2.5">
+                            <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
+                              <Sparkles className="w-4 h-4 text-emerald-400" />
+                              <span>Criterios de Aceptación (DoD - Definition of Done)</span>
+                            </div>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+                              {story.dod.map((item, idx) => (
+                                <li key={idx} className="flex items-start gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 font-medium">
+                                  <CheckCircle2 className="w-4 h-4 text-[#F08D17] shrink-0 mt-0.5" />
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </motion.div>
