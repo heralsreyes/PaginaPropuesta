@@ -24,7 +24,7 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
     setShowActiveBubble(true);
     const timer = setTimeout(() => {
       setShowActiveBubble(false);
-    }, 2800);
+    }, 1800);
 
     return () => clearTimeout(timer);
   }, [activeSection]);

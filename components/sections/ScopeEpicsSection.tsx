@@ -787,19 +787,19 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             </div>
 
             {/* Interactive User Story Dropdown Toggle Cards List */}
-            <div className="space-y-3.5">
+            <div className="space-y-4">
               {filteredStories.map((story) => {
                 const isExpanded = activeStoryId === story.id;
                 return (
                   <div
                     key={story.id}
-                    className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-lg ${
+                    className={`rounded-3xl border transition-all duration-200 overflow-hidden shadow-xl ${
                       isExpanded
-                        ? "bg-[#00181A] border-[#F08D17] ring-1 ring-[#F08D17]/30 shadow-2xl"
-                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/15 hover:border-white/30"
+                        ? "bg-[#00181A] border-2 border-[#F08D17] ring-2 ring-[#F08D17]/40 shadow-2xl scale-[1.01]"
+                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/20 hover:border-white/40"
                     }`}
                   >
-                    {/* Story Dropdown Header Bar */}
+                    {/* Story Dropdown Header Bar (Larger & More Impactful Card) */}
                     <div
                       role="button"
                       tabIndex={0}
@@ -814,13 +814,13 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                           toggleStoryExpansion(story.id);
                         }
                       }}
-                      className="p-4 sm:p-5 cursor-pointer flex items-center justify-between gap-4 select-none group"
+                      className="p-5 sm:p-7 cursor-pointer flex items-center justify-between gap-5 select-none group"
                     >
-                      <div className="flex flex-wrap items-center gap-3 min-w-0">
-                        <span className="text-xs font-mono font-black text-[#F08D17] px-3 py-1 rounded-xl bg-white/10 border border-white/20 shrink-0">
+                      <div className="flex flex-wrap items-center gap-3.5 min-w-0">
+                        <span className="text-xs font-mono font-black text-[#F08D17] px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 shrink-0 shadow-sm">
                           {story.status}
                         </span>
-                        <h4 className="font-extrabold text-base sm:text-lg text-white group-hover:text-[#F08D17] transition-colors truncate">
+                        <h4 className="font-black text-lg sm:text-xl text-white group-hover:text-[#F08D17] transition-colors truncate">
                           {story.title}
                         </h4>
                       </div>
@@ -842,25 +842,25 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
                         {/* Dropdown Chevron Indicator */}
                         <div
-                          className={`w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center transition-transform duration-200 ${
-                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-md" : "text-slate-300 group-hover:bg-white/20"
+                          className={`w-9 h-9 rounded-2xl bg-white/10 flex items-center justify-center transition-transform duration-200 ${
+                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-lg" : "text-slate-300 group-hover:bg-white/20"
                           }`}
                         >
-                          <ChevronDown className="w-4 h-4" />
+                          <ChevronDown className="w-5 h-5" />
                         </div>
                       </div>
                     </div>
 
-                    {/* Dropdown Content Body */}
+                    {/* Dropdown Content Body (Spacious & Easy to Read) */}
                     {isExpanded && (
-                      <div className="px-5 pb-5 pt-2 border-t border-white/10 space-y-4 text-slate-200 bg-[#001214] transition-all">
+                      <div className="px-6 sm:px-8 pb-7 pt-2 border-t border-white/10 space-y-5 text-slate-200 bg-[#001214] transition-all">
                         {/* Estructura Ágil Box */}
-                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                          <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
-                            <UserCheck className="w-4 h-4 text-[#F08D17]" />
+                        <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
+                          <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-2">
+                            <UserCheck className="w-4.5 h-4.5 text-[#F08D17]" />
                             <span>Estructura Ágil (User Story)</span>
                           </div>
-                          <div className="text-sm font-medium leading-relaxed">
+                          <div className="text-base font-medium leading-relaxed">
                             <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
                             <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
                             <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
@@ -868,15 +868,15 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         </div>
 
                         {/* Criterios de Aceptación (DoD) */}
-                        <div className="space-y-2.5">
-                          <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
-                            <Sparkles className="w-4 h-4 text-emerald-400" />
+                        <div className="space-y-3">
+                          <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-2">
+                            <Sparkles className="w-4.5 h-4.5 text-emerald-400" />
                             <span>Criterios de Aceptación (DoD - Definition of Done)</span>
                           </div>
-                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
                             {story.dod.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 font-medium">
-                                <CheckCircle2 className="w-4 h-4 text-[#F08D17] shrink-0 mt-0.5" />
+                              <li key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 font-semibold">
+                                <CheckCircle2 className="w-4.5 h-4.5 text-[#F08D17] shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
                             ))}
