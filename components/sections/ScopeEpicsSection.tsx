@@ -13,6 +13,7 @@ import {
   Filter,
   CheckCircle2,
   ChevronRight,
+  ChevronDown,
   Play,
   Sparkles,
 } from "lucide-react";
@@ -746,64 +747,63 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Selected Epic User Stories Cards (w-full lg:w-2/3) */}
-          <div className="w-full lg:w-2/3 space-y-5">
-            {/* Selected Epic Header Banner */}
-            <div className="p-6 rounded-3xl bg-[#002224] border-2 border-[#F08D17]/80 shadow-2xl space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#F08D17] text-white shadow-lg flex items-center justify-center font-bold">
-                    {React.createElement(currentEpic.icon, { className: "w-6 h-6" })}
-                  </div>
-                  <div>
-                    <span className="text-xs font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
-                      ÉPICA 0{currentEpic.id} • {currentEpic.badge}
-                    </span>
-                    <h3 className="text-xl sm:text-2xl font-black text-white">
-                      {currentEpic.title}
-                    </h3>
-                  </div>
+          {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box */}
+          <div className="w-full lg:w-2/3 p-6 sm:p-8 rounded-3xl bg-[#002224]/90 backdrop-blur-xl border-2 border-[#F08D17]/40 shadow-2xl space-y-6">
+            {/* Selected Epic Header Banner (Inside Container) */}
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-5">
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="w-12 h-12 rounded-2xl bg-[#F08D17] text-white shadow-lg flex items-center justify-center font-bold shrink-0">
+                  {React.createElement(currentEpic.icon, { className: "w-6 h-6" })}
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={toggleExpandAllStories}
-                    className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
-                  >
-                    <span>{areAllCurrentStoriesExpanded ? "Colapsar Todas" : `Desplegar Todas (${filteredStories.length})`}</span>
-                  </button>
-                  <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
-                    {filteredStories.length} Historias
+                <div className="min-w-0">
+                  <span className="text-xs font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
+                    ÉPICA 0{currentEpic.id} • {currentEpic.badge}
                   </span>
+                  <h3 className="text-xl sm:text-2xl font-black text-white truncate">
+                    {currentEpic.title}
+                  </h3>
                 </div>
               </div>
 
-              {/* Key Deliverables Chips */}
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
-                {currentEpic.deliverables.map((item, idx) => (
-                  <span key={idx} className="text-xs bg-white/10 text-slate-200 px-3 py-1 rounded-xl border border-white/15 font-medium">
-                    ✓ {item}
-                  </span>
-                ))}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={toggleExpandAllStories}
+                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95 select-none"
+                >
+                  <ChevronDown className={`w-4 h-4 text-[#F08D17] transition-transform duration-200 ${areAllCurrentStoriesExpanded ? "rotate-180" : ""}`} />
+                  <span>{areAllCurrentStoriesExpanded ? "Colapsar Dropdowns" : `Desplegar Todos (${filteredStories.length})`}</span>
+                </button>
+                <span className="text-xs font-mono font-bold px-3.5 py-2 rounded-xl bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
+                  {filteredStories.length} Dropdowns
+                </span>
               </div>
             </div>
 
-            {/* Interactive User Stories Cards */}
-            <div className="space-y-4">
+            {/* Key Deliverables Chips */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-white/10 pb-4">
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
+              {currentEpic.deliverables.map((item, idx) => (
+                <span key={idx} className="text-xs bg-white/10 text-slate-200 px-3 py-1 rounded-xl border border-white/15 font-medium">
+                  ✓ {item}
+                </span>
+              ))}
+            </div>
+
+            {/* Interactive User Story Dropdown Toggle Cards List */}
+            <div className="space-y-3.5">
               {filteredStories.map((story) => {
                 const isExpanded = expandedStoryIds.includes(story.id);
                 return (
                   <div
                     key={story.id}
-                    className={`rounded-3xl border overflow-hidden transition-all shadow-xl ${
+                    className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-lg ${
                       isExpanded
-                        ? "bg-[#002224] border-[#F08D17] ring-2 ring-[#F08D17]/20"
-                        : "bg-[#003B3F]/90 backdrop-blur-xl border-white/15 hover:border-white/30"
+                        ? "bg-[#00181A] border-[#F08D17] ring-1 ring-[#F08D17]/30 shadow-2xl"
+                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/15 hover:border-white/30"
                     }`}
                   >
-                    {/* Story Header Card Bar */}
+                    {/* Story Dropdown Header Bar */}
                     <div
                       role="button"
                       tabIndex={0}
@@ -818,20 +818,21 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                           toggleStoryExpansion(story.id);
                         }
                       }}
-                      className="p-5 sm:p-6 cursor-pointer flex items-center justify-between gap-4 hover:bg-white/5 transition-colors select-none"
+                      className="p-4 sm:p-5 cursor-pointer flex items-center justify-between gap-4 select-none group"
                     >
                       <div className="flex flex-wrap items-center gap-3 min-w-0">
                         <span className="text-xs font-mono font-black text-[#F08D17] px-3 py-1 rounded-xl bg-white/10 border border-white/20 shrink-0">
                           {story.status}
                         </span>
-                        <h4 className="font-extrabold text-base sm:text-lg text-white truncate">{story.title}</h4>
+                        <h4 className="font-extrabold text-base sm:text-lg text-white group-hover:text-[#F08D17] transition-colors truncate">
+                          {story.title}
+                        </h4>
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0">
                         {"demoTab" in story && (
                           <button
                             type="button"
-                            onMouseDown={(e) => e.stopPropagation()}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
@@ -842,19 +843,21 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                             <span>Probar en App</span>
                           </button>
                         )}
+
+                        {/* Dropdown Chevron Indicator */}
                         <div
-                          className={`w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform ${
-                            isExpanded ? "rotate-90 bg-[#F08D17] text-white" : "text-slate-300"
+                          className={`w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center transition-transform duration-200 ${
+                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-md" : "text-slate-300 group-hover:bg-white/20"
                           }`}
                         >
-                          <ChevronRight className="w-4 h-4" />
+                          <ChevronDown className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
 
-                    {/* Expandable Content: Estructura Ágil & Criterios DoD */}
+                    {/* Dropdown Content Body */}
                     {isExpanded && (
-                      <div className="px-6 pb-6 pt-2 border-t border-white/10 space-y-4 text-slate-200 bg-[#001618]/90 transition-all duration-200">
+                      <div className="px-5 pb-5 pt-2 border-t border-white/10 space-y-4 text-slate-200 bg-[#001214] transition-all">
                         {/* Estructura Ágil Box */}
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
                           <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
