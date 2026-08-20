@@ -838,46 +838,38 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     </div>
 
                     {/* Expandable Content: Estructura Ágil & Criterios DoD */}
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="px-6 pb-6 pt-2 border-t border-white/10 space-y-4 text-slate-200 bg-[#001618]/60"
-                        >
-                          {/* Estructura Ágil Box */}
-                          <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                            <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
-                              <UserCheck className="w-4 h-4 text-[#F08D17]" />
-                              <span>Estructura Ágil (User Story)</span>
-                            </div>
-                            <div className="text-sm font-medium leading-relaxed">
-                              <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
-                              <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
-                              <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
-                            </div>
+                    {isExpanded && (
+                      <div className="px-6 pb-6 pt-2 border-t border-white/10 space-y-4 text-slate-200 bg-[#001618]/90 transition-all duration-200">
+                        {/* Estructura Ágil Box */}
+                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                          <div className="text-xs font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
+                            <UserCheck className="w-4 h-4 text-[#F08D17]" />
+                            <span>Estructura Ágil (User Story)</span>
                           </div>
+                          <div className="text-sm font-medium leading-relaxed">
+                            <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
+                            <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
+                            <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
+                          </div>
+                        </div>
 
-                          {/* Criterios de Aceptación (DoD) */}
-                          <div className="space-y-2.5">
-                            <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
-                              <Sparkles className="w-4 h-4 text-emerald-400" />
-                              <span>Criterios de Aceptación (DoD - Definition of Done)</span>
-                            </div>
-                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
-                              {story.dod.map((item, idx) => (
-                                <li key={idx} className="flex items-start gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 font-medium">
-                                  <CheckCircle2 className="w-4 h-4 text-[#F08D17] shrink-0 mt-0.5" />
-                                  <span>{item}</span>
-                                </li>
-                              ))}
-                            </ul>
+                        {/* Criterios de Aceptación (DoD) */}
+                        <div className="space-y-2.5">
+                          <div className="text-xs font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
+                            <Sparkles className="w-4 h-4 text-emerald-400" />
+                            <span>Criterios de Aceptación (DoD - Definition of Done)</span>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+                            {story.dod.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 font-medium">
+                                <CheckCircle2 className="w-4 h-4 text-[#F08D17] shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}
