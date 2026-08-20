@@ -7,7 +7,9 @@
   --font-display: 'Inter', system-ui, -apple-system, sans-serif;
   --bg-main: #FFFFFF;
   --accent-color: #004F54;
+  --accent-hover: #006B70;
   --card-bg: #FFFFFF;
+  --card-alt-bg: #F8FAFC;
   --text-primary: #0F172A;
   --border-color: #E2E8F0;
 }

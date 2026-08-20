@@ -61,21 +61,20 @@ export const Navbar: React.FC<NavbarProps> = ({ proposal, onOpenAcceptModal }) =
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Co-Branding Logo */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 bg-[#002224]/90 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/20 shadow-md">
           <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold font-display tracking-tight text-[#111111]">
-              ENFOCO<span className="text-[var(--accent-color)]">.</span>
+            <span className="text-lg font-black font-display tracking-tight text-white">
+              ENFOCO<span className="text-[#F08D17]">.</span>
             </span>
-            <span className="text-xs px-2.5 py-0.5 rounded-md bg-[#004F54] text-white border border-[#004F54] font-extrabold shadow-sm">
+            <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#F08D17] text-white font-black font-mono shadow-sm">
               S.R.L.
             </span>
           </div>
 
-          <span className="text-[#D4D4D8] font-light text-base">/</span>
+          <span className="text-white/30 font-light text-base">/</span>
 
-          {/* Client Badge - Subtle light grey background */}
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-medium uppercase tracking-wider text-[#52525B] bg-[#F4F4F5] px-2.5 py-1 rounded-md border border-[#E4E4E7]">
+            <span className="text-xs font-mono font-black uppercase tracking-widest text-[#F08D17]">
               {proposal.client.shortName}
             </span>
           </div>

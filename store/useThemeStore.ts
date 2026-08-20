@@ -18,7 +18,7 @@ export interface PresetTheme {
 export const PRESET_THEMES: PresetTheme[] = [
   {
     id: "default",
-    name: "Excel Blanco Corporativo (Default)",
+    name: "Excel Blanco Corporativo (#004F54 & #FFFFFF)",
     theme: {
       bgMain: "#FFFFFF",
       accentColor: "#004F54",
