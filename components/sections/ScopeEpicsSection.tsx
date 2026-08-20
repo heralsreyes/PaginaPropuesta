@@ -537,13 +537,37 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
   const areAllCurrentStoriesExpanded =
     allCurrentStoryIds.length > 0 && allCurrentStoryIds.every((id) => expandedStoryIds.includes(id));
 
+  const handleEpicSelect = (epicId: number) => {
+    setActiveEpicTab(epicId);
+    const targetEpic = epicsData.find((e) => e.id === epicId);
+    if (targetEpic) {
+      const matching = targetEpic.richStories.filter((s) => {
+        if (storyPhaseFilter === "fase1") return s.phase === "fase1";
+        if (storyPhaseFilter === "fase2") return s.phase === "fase2";
+        return true;
+      });
+      setExpandedStoryIds(matching.map((s) => s.id));
+    }
+  };
+
+  const handlePhaseFilterChange = (phase: "todos" | "fase1" | "fase2") => {
+    setStoryPhaseFilter(phase);
+    const matching = currentEpic.richStories.filter((s) => {
+      if (phase === "fase1") return s.phase === "fase1";
+      if (phase === "fase2") return s.phase === "fase2";
+      return true;
+    });
+    setExpandedStoryIds(matching.map((s) => s.id));
+  };
+
   const toggleStoryExpansion = (storyId: string) => {
     setExpandedStoryIds((prev) =>
       prev.includes(storyId) ? prev.filter((id) => id !== storyId) : [...prev, storyId]
     );
   };
 
-  const toggleExpandAllStories = () => {
+  const toggleExpandAllStories = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     if (areAllCurrentStoriesExpanded) {
       setExpandedStoryIds((prev) => prev.filter((id) => !allCurrentStoryIds.includes(id)));
     } else {
@@ -552,13 +576,17 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
   };
 
   const jumpToSimulatorTab = (simTab: "portafolio" | "ticket" | "estados" | "asesor") => {
+    try {
+      window.dispatchEvent(new CustomEvent("switch-simulator-tab", { detail: simTab }));
+    } catch (err) {
+      console.warn("Event dispatch warning:", err);
+    }
     if (onNavigateToSimulator) {
       onNavigateToSimulator(simTab);
-    } else {
-      const el = document.getElementById("sec-simulador-interactivo-app");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
+    }
+    const el = document.getElementById("sec-simulador-interactivo-app") || document.querySelector('[id*="simulador"]');
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -596,7 +624,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             <span className="text-xs font-mono font-bold text-slate-200">Fase de Implementación:</span>
             <div className="flex items-center gap-1.5 pl-2">
               <button
-                onClick={() => setStoryPhaseFilter("todos")}
+                type="button"
+                onClick={() => handlePhaseFilterChange("todos")}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                   storyPhaseFilter === "todos"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
@@ -606,7 +635,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 Todas (28 Stories)
               </button>
               <button
-                onClick={() => setStoryPhaseFilter("fase1")}
+                type="button"
+                onClick={() => handlePhaseFilterChange("fase1")}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                   storyPhaseFilter === "fase1"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
@@ -616,7 +646,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 Fase 1: App Inversionista
               </button>
               <button
-                onClick={() => setStoryPhaseFilter("fase2")}
+                type="button"
+                onClick={() => handlePhaseFilterChange("fase2")}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                   storyPhaseFilter === "fase2"
                     ? "bg-[#F08D17] text-white shadow-md scale-105"
@@ -654,13 +685,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }).length;
 
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={epic.id}
-                    onClick={() => {
-                      setActiveEpicTab(epic.id);
-                      setExpandedStoryIds(epic.richStories.map((s) => s.id));
-                    }}
-                    className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden ${
+                    onClick={() => handleEpicSelect(epic.id)}
+                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg group relative overflow-hidden ${
                       isSelected
                         ? "bg-[#002224] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-[1.02]"
                         : "bg-[#003B3F]/80 border-white/15 hover:border-white/40 hover:bg-[#003B3F]"
@@ -700,7 +729,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         isSelected ? "text-[#F08D17] translate-x-1" : "text-slate-400 group-hover:text-white"
                       }`}
                     />
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -727,10 +756,11 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
                 <div className="flex items-center gap-2">
                   <button
+                    type="button"
                     onClick={toggleExpandAllStories}
-                    className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                    className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
                   >
-                    <span>{areAllCurrentStoriesExpanded ? "Colapsar Todas" : "Desplegar Todas (4)"}</span>
+                    <span>{areAllCurrentStoriesExpanded ? "Colapsar Todas" : `Desplegar Todas (${filteredStories.length})`}</span>
                   </button>
                   <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
                     {filteredStories.length} Historias
@@ -765,8 +795,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   >
                     {/* Story Header Card Bar */}
                     <div
+                      role="button"
+                      tabIndex={0}
                       onClick={() => toggleStoryExpansion(story.id)}
-                      className="p-5 sm:p-6 cursor-pointer flex items-center justify-between gap-4 hover:bg-white/5 transition-colors"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          toggleStoryExpansion(story.id);
+                        }
+                      }}
+                      className="p-5 sm:p-6 cursor-pointer flex items-center justify-between gap-4 hover:bg-white/5 transition-colors select-none"
                     >
                       <div className="flex flex-wrap items-center gap-3 min-w-0">
                         <span className="text-xs font-mono font-black text-[#F08D17] px-3 py-1 rounded-xl bg-white/10 border border-white/20 shrink-0">
@@ -778,11 +816,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       <div className="flex items-center gap-3 shrink-0">
                         {"demoTab" in story && (
                           <button
+                            type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
                             }}
-                            className="px-3.5 py-1.5 rounded-xl bg-[#F08D17] text-white font-mono font-bold text-xs flex items-center gap-1.5 hover:bg-[#EA580C] shadow-md transition-all cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-xl bg-[#F08D17] text-white font-mono font-bold text-xs flex items-center gap-1.5 hover:bg-[#EA580C] active:scale-95 shadow-md transition-all cursor-pointer"
                           >
                             <Play className="w-3.5 h-3.5 fill-current" />
                             <span>Probar en App</span>

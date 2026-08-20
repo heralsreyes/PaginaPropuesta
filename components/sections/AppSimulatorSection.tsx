@@ -59,6 +59,16 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
   const [currencyMode, setCurrencyMode] = useState<"USD" | "DOP">("USD");
   const [showPushAlert, setShowPushAlert] = useState<boolean>(true);
 
+  React.useEffect(() => {
+    const handleSwitchTab = (e: CustomEvent<"portafolio" | "ticket" | "estados" | "asesor">) => {
+      if (e.detail) {
+        setAppSimTab(e.detail);
+      }
+    };
+    window.addEventListener("switch-simulator-tab" as any, handleSwitchTab as any);
+    return () => window.removeEventListener("switch-simulator-tab" as any, handleSwitchTab as any);
+  }, []);
+
   // Local state for simulators
   const [isFaceIdScanning, setIsFaceIdScanning] = useState<boolean>(false);
   const [faceIdSigned, setFaceIdSigned] = useState<boolean>(false);
