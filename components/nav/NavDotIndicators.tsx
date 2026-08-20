@@ -35,6 +35,10 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
         const isActive = activeSection === s.id;
         const isBubbleAutoVisible = isActive && showActiveBubble;
 
+        // Strip any existing leading numbers (e.g. "06. ") to prevent duplicate numbers like "6. 06."
+        const cleanLabel = s.label.replace(/^0?\d+[\.\s\-]+/, "").trim();
+        const displayTitle = `${idx + 1}. ${cleanLabel}`;
+
         return (
           <div key={s.id} className="group relative flex items-center">
             {/* Tooltip Label Bubble */}
@@ -48,9 +52,7 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-[#F08D17] shrink-0 shadow-sm" />
-              <span>
-                {idx + 1}. {s.label}
-              </span>
+              <span>{displayTitle}</span>
             </div>
 
             {/* Dot Indicator Button (Sleek & Compact) */}
@@ -62,7 +64,7 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
                   ? "bg-[#F08D17] scale-125 ring-2 ring-[#F08D17]/40 shadow-md"
                   : "bg-slate-300/70 hover:bg-white hover:scale-125"
               }`}
-              title={`${idx + 1}. ${s.label}`}
+              title={displayTitle}
             />
           </div>
         );
