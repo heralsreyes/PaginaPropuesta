@@ -16,28 +16,20 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Clean Mint Emerald & White Glass Brand Card */}
-      <div className="pointer-events-auto flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-[#002224]/95 backdrop-blur-2xl border border-white/20 shadow-xl select-none group hover:border-white/40 transition-all duration-300">
-        {/* White Live Status Indicator Dot */}
-        <span className="w-2.5 h-2.5 rounded-full bg-white shadow-sm shrink-0" />
+      {/* Authentic Human-Crafted Executive Brand Badge */}
+      <div className="pointer-events-auto flex items-center px-5 py-2.5 rounded-2xl bg-[#002224]/90 backdrop-blur-md border border-white/15 shadow-lg select-none">
+        {/* Provider Brand */}
+        <span className="font-extrabold text-sm text-white tracking-widest uppercase">
+          ENFOCO
+        </span>
 
-        {/* Enfoco Logo */}
-        <div className="flex items-center gap-0.5">
-          <span className="font-black text-base text-white tracking-wide">
-            Enfoco
-          </span>
-          <span className="text-emerald-400 font-black text-lg leading-none">.</span>
-        </div>
+        {/* Divider */}
+        <span className="text-slate-400/80 font-mono text-sm mx-2.5">|</span>
 
-        {/* Subtle White Divider Line */}
-        <div className="h-4 w-[1.5px] bg-white/20 mx-0.5" />
-
-        {/* Excel Mint Emerald Chip */}
-        <div className="flex items-center gap-1.5 bg-[#004F54]/40 px-3 py-1 rounded-xl border border-emerald-500/30">
-          <span className="font-mono text-sm font-extrabold text-emerald-300 tracking-wide">
-            Excel
-          </span>
-        </div>
+        {/* Client Brand */}
+        <span className="font-mono text-sm font-bold text-slate-200">
+          Excel Puesto de Bolsa & ESAFI
+        </span>
       </div>
 
       {/* Action Buttons Right */}
