@@ -19,8 +19,8 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
       {/* Authentic Human-Crafted Executive Brand Badge */}
       <div className="pointer-events-auto flex items-center px-5 py-2.5 rounded-2xl bg-[#002224]/90 backdrop-blur-md border border-white/15 shadow-lg select-none">
         {/* Provider Brand */}
-        <span className="font-extrabold text-sm text-white tracking-widest uppercase">
-          ENFOCO
+        <span className="font-extrabold text-sm text-white tracking-wide">
+          Enfoco
         </span>
 
         {/* Divider */}
@@ -28,7 +28,7 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 
         {/* Client Brand */}
         <span className="font-mono text-sm font-bold text-slate-200">
-          Excel Puesto de Bolsa & ESAFI
+          Excel Puesto de bolsa
         </span>
       </div>
 
