@@ -16,21 +16,21 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Horizontal Brand Card Container (Enfoco | Excel) */}
-      <div className="pointer-events-auto flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-[#002224]/95 backdrop-blur-xl border border-white/20 shadow-xl select-none group hover:border-[#F08D17] transition-all duration-300">
+      {/* Horizontal Brand Card Container (Larger Prominent Enfoco | Excel) */}
+      <div className="pointer-events-auto flex items-center gap-3.5 px-6 py-3.5 sm:px-7 rounded-2xl bg-[#002224]/95 backdrop-blur-xl border border-white/20 shadow-2xl select-none group hover:border-[#F08D17] transition-all duration-300">
         {/* Live Status Dot */}
-        <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 shadow-sm shadow-[#F08D17]" />
+        <span className="w-3.5 h-3.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 shadow-md shadow-[#F08D17]" />
 
         {/* Enfoco Brand */}
-        <span className="font-extrabold text-sm text-white tracking-wide">
+        <span className="font-black text-base sm:text-lg text-white tracking-wide">
           Enfoco
         </span>
 
         {/* Divider */}
-        <span className="text-slate-400 font-mono text-sm font-bold mx-0.5">|</span>
+        <span className="text-slate-400 font-mono text-base sm:text-lg font-bold mx-0.5">|</span>
 
         {/* Excel Brand */}
-        <span className="font-mono text-sm font-extrabold text-slate-100 tracking-tight">
+        <span className="font-mono text-base sm:text-lg font-black text-slate-100 tracking-tight">
           Excel
         </span>
       </div>
