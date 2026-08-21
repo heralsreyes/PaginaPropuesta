@@ -16,23 +16,31 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Horizontal Brand Card Container (Larger Prominent Enfoco | Excel) */}
-      <div className="pointer-events-auto flex items-center gap-3.5 px-6 py-3.5 sm:px-7 rounded-2xl bg-[#002224]/95 backdrop-blur-xl border border-white/20 shadow-2xl select-none group hover:border-[#F08D17] transition-all duration-300">
-        {/* Live Status Dot */}
-        <span className="w-3.5 h-3.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 shadow-md shadow-[#F08D17]" />
+      {/* Golden Luxury & Dark Emerald Brand Card */}
+      <div className="pointer-events-auto flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-[#002224]/95 backdrop-blur-2xl border border-[#F08D17]/60 shadow-[0_8px_25px_rgba(240,141,23,0.25)] ring-1 ring-[#F08D17]/20 select-none group hover:border-[#F08D17] transition-all duration-300">
+        {/* Live Radar Pulse Indicator */}
+        <div className="relative flex items-center justify-center">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-pulse shadow-sm shadow-[#F08D17]" />
+          <span className="absolute w-4 h-4 rounded-full bg-[#F08D17]/30 animate-ping" />
+        </div>
 
-        {/* Enfoco Brand */}
-        <span className="font-black text-base sm:text-lg text-white tracking-wide">
-          Enfoco
-        </span>
+        {/* Enfoco Logo */}
+        <div className="flex items-center gap-0.5">
+          <span className="font-black text-base text-white tracking-wide group-hover:text-[#F08D17] transition-colors">
+            Enfoco
+          </span>
+          <span className="text-[#F08D17] font-black text-lg leading-none">.</span>
+        </div>
 
-        {/* Divider */}
-        <span className="text-slate-400 font-mono text-base sm:text-lg font-bold mx-0.5">|</span>
+        {/* Metallic Gold Divider */}
+        <div className="h-4 w-[1.5px] bg-gradient-to-b from-transparent via-[#F08D17] to-transparent mx-0.5" />
 
-        {/* Excel Brand */}
-        <span className="font-mono text-base sm:text-lg font-black text-slate-100 tracking-tight">
-          Excel
-        </span>
+        {/* Excel Gold Chip */}
+        <div className="flex items-center gap-1.5 bg-[#F08D17]/15 px-3 py-1 rounded-xl border border-[#F08D17]/30">
+          <span className="font-mono text-sm font-extrabold text-[#F08D17] tracking-wide">
+            Excel
+          </span>
+        </div>
       </div>
 
       {/* Action Buttons Right */}
