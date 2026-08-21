@@ -16,33 +16,23 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 }) => {
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-      {/* Horizontal Brand Card Container (Spacious Fit, Single Row) */}
-      <div className="pointer-events-auto flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#002224]/95 backdrop-blur-xl border border-white/20 shadow-xl select-none group hover:border-[#F08D17] transition-all duration-300">
+      {/* Horizontal Brand Card Container (Enfoco | Excel) */}
+      <div className="pointer-events-auto flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-[#002224]/95 backdrop-blur-xl border border-white/20 shadow-xl select-none group hover:border-[#F08D17] transition-all duration-300">
         {/* Live Status Dot */}
         <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-pulse shrink-0 shadow-sm shadow-[#F08D17]" />
 
-        {/* Provider Logo */}
-        <span className="font-black text-xs sm:text-sm text-white tracking-widest uppercase group-hover:text-[#F08D17] transition-colors shrink-0">
-          ENFOCO
+        {/* Enfoco Brand */}
+        <span className="font-extrabold text-sm text-white tracking-wide">
+          Enfoco
         </span>
 
-        {/* Gold Proposal Badge */}
-        <span className="text-[9px] font-mono font-bold text-[#F08D17] uppercase bg-[#F08D17]/20 px-2 py-0.5 rounded-md border border-[#F08D17]/30 shrink-0">
-          PROPUESTA
+        {/* Divider */}
+        <span className="text-slate-400 font-mono text-sm font-bold mx-0.5">|</span>
+
+        {/* Excel Brand */}
+        <span className="font-mono text-sm font-extrabold text-slate-100 tracking-tight">
+          Excel
         </span>
-
-        {/* Divider Line */}
-        <div className="h-4 w-[1px] bg-white/20 shrink-0 mx-0.5" />
-
-        {/* Client Name */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider hidden md:inline">
-            PARA:
-          </span>
-          <span className="text-xs sm:text-sm font-mono font-extrabold text-slate-100 tracking-tight">
-            Excel Puesto de Bolsa & ESAFI
-          </span>
-        </div>
       </div>
 
       {/* Action Buttons Right */}
