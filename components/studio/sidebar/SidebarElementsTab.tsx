@@ -1,13 +1,64 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
-import { Sparkles, Layers, Cpu, Users, Building2, MessageSquare, BarChart2, TrendingUp, Award, Globe } from "lucide-react";
+import { Sparkles, Layers, Cpu, Users, Building2, MessageSquare, BarChart2, TrendingUp, Award, Globe, Upload, Image as ImageIcon, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 export const SidebarElementsTab: React.FC = () => {
   const { addCanvasElement } = useStudioStore();
-  const [activeSubCategory, setActiveSubCategory] = useState<"botones" | "tarjetas" | "modulos">("modulos");
+  const [activeSubCategory, setActiveSubCategory] = useState<"modulos" | "tarjetas" | "botones" | "imagenes">("modulos");
+  const [uploadedImages, setUploadedImages] = useState<{ id: string; name: string; url: string }[]>([]);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    Array.from(files).forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        toast.error(`'${file.name}' no es un archivo de imagen válido.`);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        if (dataUrl) {
+          const imgObj = {
+            id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+            name: file.name,
+            url: dataUrl,
+          };
+          setUploadedImages((prev) => [imgObj, ...prev]);
+
+          // Automatically insert on canvas
+          const newId = addCanvasElement({
+            type: "image",
+            imageUrl: dataUrl,
+            sectionId: "hero",
+            title: file.name,
+            width: 320,
+            height: 200,
+          });
+          toast.success(`Imagen '${file.name}' insertada en el lienzo.`);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleInsertUploadedImage = (img: { name: string; url: string }) => {
+    const newId = addCanvasElement({
+      type: "image",
+      imageUrl: img.url,
+      sectionId: "hero",
+      title: img.name,
+      width: 320,
+      height: 200,
+    });
+    toast.success(`Imagen '${img.name}' insertada en el lienzo.`);
+  };
 
   const allButtons = [
     { id: "btn-gray-01", label: "Button", style: "bg-zinc-600 hover:bg-zinc-700 text-white rounded-md shadow-xs", bg: "#52525B", text: "#FFFFFF" },
@@ -108,6 +159,14 @@ export const SidebarElementsTab: React.FC = () => {
           Módulos
         </button>
         <button
+          onClick={() => setActiveSubCategory("imagenes")}
+          className={`w-full py-1.5 rounded-lg font-bold text-center transition-all cursor-pointer ${
+            activeSubCategory === "imagenes" ? "bg-white text-[#2563EB] shadow-xs" : "text-[#71717A]"
+          }`}
+        >
+          Imágenes
+        </button>
+        <button
           onClick={() => setActiveSubCategory("tarjetas")}
           className={`w-full py-1.5 rounded-lg font-bold text-center transition-all cursor-pointer ${
             activeSubCategory === "tarjetas" ? "bg-white text-[#2563EB] shadow-xs" : "text-[#71717A]"
@@ -124,6 +183,62 @@ export const SidebarElementsTab: React.FC = () => {
           Botones
         </button>
       </div>
+
+      {activeSubCategory === "imagenes" && (
+        <div className="space-y-4">
+          <input
+            type="file"
+            ref={imageInputRef}
+            onChange={handleFileUpload}
+            accept="image/*"
+            multiple
+            className="hidden"
+          />
+
+          {/* Upload Drop Zone Button */}
+          <div
+            onClick={() => imageInputRef.current?.click()}
+            className="p-5 border-2 border-dashed border-[#2563EB]/40 bg-[#EFF6FF]/60 hover:bg-[#EFF6FF] hover:border-[#2563EB] rounded-2xl cursor-pointer text-center space-y-2 transition-all group"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center mx-auto shadow-md group-hover:scale-110 transition-transform">
+              <Upload className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-extrabold text-[#111111] block text-xs">
+                Haz clic para subir imágenes
+              </span>
+              <span className="text-[10px] text-zinc-500 font-mono">
+                Soporta PNG, JPG, WebP, SVG y Logos
+              </span>
+            </div>
+          </div>
+
+          {/* Gallery of Uploaded Images */}
+          {uploadedImages.length > 0 && (
+            <div className="space-y-2">
+              <span className="font-mono text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">
+                Galería de Imágenes Subidas ({uploadedImages.length})
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {uploadedImages.map((img) => (
+                  <div
+                    key={img.id}
+                    onClick={() => handleInsertUploadedImage(img)}
+                    className="p-2 border border-[#E4E4E7] rounded-xl bg-white hover:border-[#2563EB] cursor-pointer space-y-1 group relative transition-all shadow-2xs"
+                  >
+                    <div className="w-full h-20 bg-zinc-100 rounded-lg overflow-hidden flex items-center justify-center">
+                      <img src={img.url} alt={img.name} className="w-full h-full object-contain" />
+                    </div>
+                    <span className="font-bold text-[#111111] text-[10px] truncate block">
+                      {img.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {activeSubCategory === "modulos" && (
         <div className="space-y-3">

@@ -64,7 +64,7 @@ export interface PlainCardTab {
 
 export interface CanvasElement {
   id: string;
-  type: "button" | "card" | "shape" | "line" | "graphic" | "text" | "module_template" | "mockup";
+  type: "button" | "card" | "shape" | "line" | "graphic" | "text" | "module_template" | "mockup" | "image";
   templateType?:
     | "scope_master"
     | "team_master"
@@ -77,6 +77,8 @@ export interface CanvasElement {
     | "pricing_block"
     | "feature_grid";
   mockupType?: "macbook" | "iphone" | "ipad";
+  imageUrl?: string;
+  objectFit?: "contain" | "cover" | "fill";
   sectionId: string;
   x: number;
   y: number;

@@ -7,6 +7,7 @@ import { Move } from "lucide-react";
 import { ButtonCanvasElement } from "./canvas/ButtonCanvasElement";
 import { CardCanvasElement } from "./canvas/CardCanvasElement";
 import { MockupCanvasElement } from "./canvas/MockupCanvasElement";
+import { ImageCanvasElement } from "./canvas/ImageCanvasElement";
 
 interface CanvasElementWrapperProps {
   element: CanvasElement;
@@ -163,10 +164,13 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
         </div>
       )}
 
+      {element.type === "image" && <ImageCanvasElement element={element} />}
+
       {element.type !== "button" &&
         element.type !== "card" &&
         element.type !== "mockup" &&
-        element.type !== "text" && <CardCanvasElement element={element} />}
+        element.type !== "text" &&
+        element.type !== "image" && <CardCanvasElement element={element} />}
     </div>
   );
 };
