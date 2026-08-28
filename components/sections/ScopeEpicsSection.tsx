@@ -697,44 +697,43 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       e.stopPropagation();
                       handleEpicSelect(epic.id);
                     }}
-                    className={`w-full text-left p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 shadow-md group relative overflow-hidden select-none z-10 ${
+                    className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3.5 shadow-md group relative overflow-hidden select-none z-10 ${
                       isSelected
-                        ? "bg-[#002224] border-[#F08D17] shadow-xl ring-1 ring-[#F08D17]/40 scale-[1.01]"
-                        : "bg-[#003B3F]/80 border-white/15 hover:border-white/30 hover:bg-[#003B3F]"
+                        ? "bg-white border-[#F08D17] shadow-xl ring-2 ring-[#F08D17]/30 scale-[1.02]"
+                        : "bg-[#D5E4E2] border-[#B2D4CE] hover:bg-[#C8DCD8] hover:border-[#96C2BA]"
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-3.5 min-w-0">
                       <div
-                        className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
                           isSelected
-                            ? "bg-[#F08D17] text-white shadow-sm"
-                            : "bg-[#F08D17]/10 text-[#F08D17] border border-[#F08D17]/30"
+                            ? "bg-[#FFF2E2] text-[#F08D17] border border-[#F08D17]/40 shadow-sm"
+                            : "bg-[#B6D6D1] text-[#004F54] border border-[#9EC7C0]"
                         }`}
                       >
-                        <EpicIcon className="w-4.5 h-4.5" />
+                        <EpicIcon className="w-5 h-5" />
                       </div>
                       <div className="min-w-0 space-y-0.5">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/30">
-                            ÉPICA 0{epic.id}
-                          </span>
-                          <span className="text-[9px] font-mono text-emerald-300 font-bold truncate">
-                            {matchingStoriesCount} Stories
-                          </span>
-                        </div>
                         <h3
-                          className={`font-bold text-xs sm:text-sm leading-snug truncate transition-colors ${
-                            isSelected ? "text-white" : "text-slate-100 group-hover:text-[#F08D17]"
+                          className={`font-black text-sm sm:text-base leading-tight truncate transition-colors ${
+                            isSelected ? "text-[#002224]" : "text-[#004F54] group-hover:text-[#002224]"
                           }`}
                         >
-                          {epic.title.replace(/^Épica \d+: /, "")}
+                          {epic.id}. {epic.title.replace(/^Épica \d+: /, "")}
                         </h3>
+                        <p
+                          className={`text-xs font-medium truncate ${
+                            isSelected ? "text-slate-600" : "text-[#004F54]/80"
+                          }`}
+                        >
+                          {epic.deliverables ? epic.deliverables[0] : `${matchingStoriesCount} Historias Oficiales`}
+                        </p>
                       </div>
                     </div>
 
                     <ChevronRight
-                      className={`w-4 h-4 shrink-0 transition-transform ${
-                        isSelected ? "text-[#F08D17] translate-x-0.5" : "text-slate-400 group-hover:text-white"
+                      className={`w-5 h-5 shrink-0 transition-transform ${
+                        isSelected ? "text-[#F08D17] translate-x-1" : "text-[#004F54] group-hover:translate-x-0.5"
                       }`}
                     />
                   </button>
