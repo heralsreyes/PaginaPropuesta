@@ -46,12 +46,14 @@ export interface ProposalData {
     vision: string;
     values: string[];
     certifications: string[];
+    logoUrl?: string;
   };
   client: {
     name: string;
     shortName: string;
     contactName: string;
     contactRole: string;
+    logoUrl?: string;
   };
   project: {
     code: string;
