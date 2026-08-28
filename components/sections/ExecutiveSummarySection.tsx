@@ -35,22 +35,22 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
           <EditableField id="sec1_badge" defaultText="01. Presentación Ejecutiva Institucional" />
         </div>
 
-        {/* JUMBO CO-BRANDING HERO BANNER (ESTILO EXCEL EMERALD) */}
-        <div className="w-full max-w-5xl mx-auto my-3 p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl shadow-2xl border border-white/40 relative overflow-hidden transition-all text-[#0F172A]">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#004F54]/10 rounded-full blur-3xl pointer-events-none" />
+        {/* JUMBO CO-BRANDING HERO BANNER (ESTILO EXCEL EMERALD CARD) */}
+        <div className="w-full max-w-5xl mx-auto my-3 p-6 sm:p-8 rounded-3xl bg-[#002224]/90 backdrop-blur-2xl shadow-2xl border-2 border-[#F08D17]/50 ring-1 ring-[#F08D17]/30 relative overflow-hidden transition-all text-white">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#F08D17]/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center text-center md:text-left justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center text-center md:text-left justify-between relative z-10">
             {/* Lado Izquierdo: EMPRESA (ENFOCO S.R.L.) */}
             <div className="flex flex-col items-center md:items-start space-y-1">
-              <span className="text-xs font-mono font-extrabold text-[#64748B] uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-mono font-extrabold text-[#D5E4E2] uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                 EMPRESA DESARROLLADORA
               </span>
               <div className="flex items-center gap-3 pt-1">
-                <span className="text-3xl sm:text-4xl md:text-5xl font-black font-display text-[#0F172A] tracking-tight">
-                  ENFOCO<span className="text-[#004F54]">.</span>
+                <span className="text-3xl sm:text-4xl md:text-5xl font-black font-display text-white tracking-tight">
+                  ENFOCO<span className="text-[#F08D17]">.</span>
                 </span>
-                <span className="text-sm sm:text-base px-3 py-1 rounded-xl bg-[#004F54] text-white font-black font-mono border border-[#004F54] shadow-md">
+                <span className="text-sm sm:text-base px-3 py-1 rounded-xl bg-[#F08D17]/20 text-[#F08D17] font-black font-mono border border-[#F08D17]/40 shadow-md">
                   S.R.L.
                 </span>
               </div>
@@ -58,12 +58,12 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
 
             {/* Lado Derecho: CLIENTE (EXCEL PUESTO DE BOLSA & ESAFI) */}
             <div className="flex flex-col items-center md:items-end space-y-1 text-center md:text-right">
-              <span className="text-xs font-mono font-extrabold text-[#64748B] uppercase tracking-widest flex items-center gap-1.5">
+              <span className="text-xs font-mono font-extrabold text-[#D5E4E2] uppercase tracking-widest flex items-center gap-1.5">
                 CLIENTE INSTITUCIONAL
                 <Building2 className="w-4 h-4 text-[#F08D17]" />
               </span>
               <div className="pt-1">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-[#004F54] uppercase tracking-tight block leading-tight">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-tight block leading-tight drop-shadow-sm font-display">
                   EXCEL PUESTO DE BOLSA & ESAFI
                 </span>
               </div>
