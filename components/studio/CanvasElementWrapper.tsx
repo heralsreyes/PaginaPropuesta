@@ -40,10 +40,19 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     e.stopPropagation();
     setSelectedCanvasElementId(element.id);
 
-    if (canvasMode === "select") return;
-
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
+    setInitialPos({ x: element.x, y: element.y });
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!isDesignMode || e.touches.length !== 1) return;
+    e.stopPropagation();
+    setSelectedCanvasElementId(element.id);
+
+    const touch = e.touches[0];
+    setIsDragging(true);
+    setDragStart({ x: touch.clientX, y: touch.clientY });
     setInitialPos({ x: element.x, y: element.y });
   };
 
@@ -101,6 +110,7 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
     <div
       ref={wrapperRef}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       style={{
         position: "relative",
         width: element.width ? `${element.width}px` : "100%",

@@ -497,12 +497,38 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Reset to Default Sample Proposal
   const resetToDefault = () => {
+    if (typeof window !== "undefined") {
+      try {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (
+            key &&
+            (key.startsWith("editable_") ||
+              key.startsWith("enfoco_") ||
+              key.includes("studio") ||
+              key.includes("theme"))
+          ) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach((k) => localStorage.removeItem(k));
+      } catch (err) {
+        console.error("Error clearing localStorage on reset:", err);
+      }
+    }
+
     setProposal(sampleProposal);
     useStudioStore.getState().resetSections();
     useStudioStore.getState().clearAllCanvasElements();
     useThemeStore.getState().resetTheme();
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    toast.info("Propuesta restablecida a los valores por defecto.");
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("enfoco-reset-all"));
+    }
+
+    toast.success("Propuesta, textos y configuración de diseño restablecidos al estado inicial.");
   };
 
   // Team Member Mutators

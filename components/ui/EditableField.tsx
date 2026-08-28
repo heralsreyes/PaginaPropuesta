@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
 
 interface EditableFieldProps {
@@ -24,6 +24,14 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
     }
     return defaultText;
   });
+
+  useEffect(() => {
+    const handleReset = () => {
+      setText(defaultText);
+    };
+    window.addEventListener("enfoco-reset-all", handleReset);
+    return () => window.removeEventListener("enfoco-reset-all", handleReset);
+  }, [defaultText]);
 
   const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
     const newText = e.currentTarget.innerText;

@@ -143,6 +143,7 @@ interface StudioState {
   addSection: (componentType: PageSection["componentType"], label?: string) => string;
   moveSectionUp: (id: string) => void;
   moveSectionDown: (id: string) => void;
+  reorderSections: (newSections: PageSection[]) => void;
   resetSections: () => void;
 
   // Canvas Element Mutators
@@ -317,6 +318,10 @@ export const useStudioStore = create<StudioState>()(
           updated[index] = temp;
           return { sections: updated };
         });
+      },
+
+      reorderSections: (newSections) => {
+        set({ sections: newSections });
       },
 
       resetSections: () => {
