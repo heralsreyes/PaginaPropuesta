@@ -785,20 +785,20 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
               ))}
             </div>
 
-            {/* Interactive User Story Dropdown Toggle Cards List (Compact & Friendly) */}
-            <div className="space-y-2.5">
+            {/* Interactive User Story Dropdown Toggle Cards List (Harmonized Light Palette) */}
+            <div className="space-y-3">
               {filteredStories.map((story) => {
                 const isExpanded = activeStoryId === story.id;
                 return (
                   <div
                     key={story.id}
-                    className={`rounded-xl border transition-all duration-200 overflow-hidden shadow-md ${
+                    className={`rounded-2xl border-2 transition-all duration-200 overflow-hidden shadow-md ${
                       isExpanded
-                        ? "bg-[#00181A] border-[#F08D17] ring-1 ring-[#F08D17]/30 shadow-lg"
-                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/15 hover:border-white/30"
+                        ? "bg-white border-[#F08D17] ring-2 ring-[#F08D17]/30 shadow-xl"
+                        : "bg-[#D5E4E2] hover:bg-[#C8DCD8] border-[#B2D4CE]"
                     }`}
                   >
-                    {/* Story Dropdown Header Bar (Compact & Sleek Card) */}
+                    {/* Story Dropdown Header Bar (Harmonized Card) */}
                     <div
                       role="button"
                       tabIndex={0}
@@ -816,10 +816,20 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       className="p-3.5 sm:p-4 cursor-pointer flex items-center justify-between gap-3.5 select-none group"
                     >
                       <div className="flex flex-wrap items-center gap-2.5 min-w-0">
-                        <span className="text-[10px] font-mono font-black text-[#F08D17] px-2.5 py-0.5 rounded-lg bg-white/10 border border-white/20 shrink-0 shadow-sm">
+                        <span
+                          className={`text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-lg shrink-0 shadow-sm border ${
+                            isExpanded
+                              ? "bg-[#FFF2E2] text-[#F08D17] border-[#F08D17]/40"
+                              : "bg-[#B6D6D1] text-[#004F54] border-[#9EC7C0]"
+                          }`}
+                        >
                           {story.status}
                         </span>
-                        <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-[#F08D17] transition-colors truncate">
+                        <h4
+                          className={`font-black text-sm sm:text-base leading-tight truncate transition-colors ${
+                            isExpanded ? "text-[#002224]" : "text-[#004F54] group-hover:text-[#002224]"
+                          }`}
+                        >
                           {story.title}
                         </h4>
                       </div>
@@ -832,7 +842,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
                             }}
-                            className="px-2.5 py-1 rounded-lg bg-[#F08D17] text-white font-mono font-bold text-[11px] flex items-center gap-1.5 hover:bg-[#EA580C] active:scale-95 shadow-md transition-all cursor-pointer"
+                            className="px-3 py-1 rounded-xl bg-[#F08D17] text-white font-mono font-bold text-xs flex items-center gap-1.5 hover:bg-[#EA580C] active:scale-95 shadow-md transition-all cursor-pointer"
                           >
                             <Play className="w-3 h-3 fill-current" />
                             <span>Probar en App</span>
@@ -841,8 +851,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
                         {/* Dropdown Chevron Indicator */}
                         <div
-                          className={`w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center transition-transform duration-200 ${
-                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-md" : "text-slate-300 group-hover:bg-white/20"
+                          className={`w-8 h-8 rounded-xl flex items-center justify-center transition-transform duration-200 ${
+                            isExpanded
+                              ? "rotate-180 bg-[#FFF2E2] text-[#F08D17] border border-[#F08D17]/40 shadow-sm"
+                              : "bg-[#B6D6D1] text-[#004F54] border border-[#9EC7C0] group-hover:bg-[#A3C9C2]"
                           }`}
                         >
                           <ChevronDown className="w-4 h-4" />
@@ -850,31 +862,31 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       </div>
                     </div>
 
-                    {/* Dropdown Content Body (Compact & Easy to Read) */}
+                    {/* Dropdown Content Body (Light Harmonized Theme) */}
                     {isExpanded && (
-                      <div className="px-4 pb-4 pt-2 border-t border-white/10 space-y-3 text-slate-200 bg-[#001214] transition-all">
+                      <div className="px-4 pb-4 pt-2 border-t border-slate-200/80 space-y-3 text-slate-700 bg-[#F8FAFC] transition-all">
                         {/* Estructura Ágil Box */}
-                        <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
-                          <div className="text-[11px] font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-1.5">
+                          <div className="text-[11px] font-mono font-extrabold text-[#F08D17] uppercase flex items-center gap-1.5">
                             <UserCheck className="w-3.5 h-3.5 text-[#F08D17]" />
                             <span>Estructura Ágil (User Story)</span>
                           </div>
-                          <div className="text-xs sm:text-sm font-medium leading-relaxed">
-                            <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
-                            <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
-                            <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
+                          <div className="text-xs sm:text-sm font-semibold leading-relaxed text-[#002224]">
+                            <span className="text-[#F08D17] font-extrabold">Como:</span> {story.asA} |{" "}
+                            <span className="text-[#F08D17] font-extrabold">Quiero:</span> {story.iWant} |{" "}
+                            <span className="text-[#F08D17] font-extrabold">Para:</span> {story.soThat}
                           </div>
                         </div>
 
                         {/* Criterios de Aceptación (DoD) */}
                         <div className="space-y-2">
-                          <div className="text-[11px] font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                          <div className="text-[11px] font-mono font-extrabold text-[#004F54] uppercase flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-[#F08D17]" />
                             <span>Criterios de Aceptación (DoD - Definition of Done)</span>
                           </div>
                           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                             {story.dod.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-white/5 border border-white/10 font-medium">
+                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-800 font-semibold">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17] shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
