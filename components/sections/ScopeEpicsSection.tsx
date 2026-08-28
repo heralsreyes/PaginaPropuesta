@@ -747,14 +747,14 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             {/* Selected Epic Header Banner (Inside Container) */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-3.5">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-[#F08D17] text-white shadow-md flex items-center justify-center font-bold shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#A3622E] text-white shadow-md flex items-center justify-center font-bold shrink-0">
                   {React.createElement(currentEpic.icon, { className: "w-5 h-5" })}
                 </div>
                 <div className="min-w-0">
                   <span className="text-[11px] font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
                     ÉPICA 0{currentEpic.id} • {currentEpic.badge}
                   </span>
-                  <h3 className="text-base sm:text-lg font-extrabold text-white truncate">
+                  <h3 className="text-base sm:text-lg font-black text-white truncate">
                     {currentEpic.title}
                   </h3>
                 </div>
@@ -764,12 +764,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <button
                   type="button"
                   onClick={toggleExpandAllStories}
-                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-slate-100 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
+                  className="px-3.5 py-1.5 rounded-full bg-[#D5E4E2]/15 hover:bg-[#D5E4E2]/25 border border-[#D5E4E2]/30 text-xs font-mono font-bold text-[#D5E4E2] flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
                 >
                   <ChevronDown className={`w-3.5 h-3.5 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
                   <span>{activeStoryId !== null ? "Colapsar Todo" : "Abrir Primera Historia"}</span>
                 </button>
-                <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-lg bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
+                <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-[#D5E4E2]/15 text-[#D5E4E2] border border-[#D5E4E2]/30">
                   {filteredStories.length} Historias
                 </span>
               </div>
@@ -779,26 +779,26 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             <div className="flex flex-wrap items-center gap-1.5 pt-0.5 border-b border-white/10 pb-3">
               <span className="text-[11px] font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
               {currentEpic.deliverables.map((item, idx) => (
-                <span key={idx} className="text-[11px] bg-white/10 text-slate-200 px-2.5 py-0.5 rounded-lg border border-white/15 font-medium">
+                <span key={idx} className="text-[11px] bg-[#D5E4E2]/15 text-[#D5E4E2] px-3 py-1 rounded-full border border-[#D5E4E2]/30 font-medium">
                   ✓ {item}
                 </span>
               ))}
             </div>
 
-            {/* Interactive User Story Dropdown Toggle Cards List (Compact & Friendly Dark Emerald Glass) */}
-            <div className="space-y-2.5">
+            {/* Interactive User Story Dropdown Toggle Cards List (Matching User Mockup) */}
+            <div className="space-y-3">
               {filteredStories.map((story) => {
                 const isExpanded = activeStoryId === story.id;
                 return (
                   <div
                     key={story.id}
-                    className={`rounded-xl border transition-all duration-200 overflow-hidden shadow-md ${
+                    className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-md ${
                       isExpanded
-                        ? "bg-[#00181A] border-[#F08D17] ring-1 ring-[#F08D17]/30 shadow-lg"
-                        : "bg-[#003538]/90 hover:bg-[#003B3F] border-white/15 hover:border-white/30"
+                        ? "bg-[#001C1E] border-[#005B60] ring-1 ring-emerald-500/30 shadow-lg"
+                        : "bg-[#00282C]/90 hover:bg-[#002E32] border-emerald-500/20 hover:border-emerald-500/40"
                     }`}
                   >
-                    {/* Story Dropdown Header Bar (Compact & Sleek Card) */}
+                    {/* Story Dropdown Header Bar */}
                     <div
                       role="button"
                       tabIndex={0}
@@ -815,11 +815,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       }}
                       className="p-3.5 sm:p-4 cursor-pointer flex items-center justify-between gap-3.5 select-none group"
                     >
-                      <div className="flex flex-wrap items-center gap-2.5 min-w-0">
-                        <span className="text-[10px] font-mono font-black text-[#F08D17] px-2.5 py-0.5 rounded-lg bg-white/10 border border-white/20 shrink-0 shadow-sm">
+                      <div className="flex flex-wrap items-center gap-3 min-w-0">
+                        {/* Status Pill Badge (Matching Mockup Light Mint Pill) */}
+                        <span className="text-[11px] font-mono font-black text-[#00383C] px-3 py-1 rounded-full bg-[#D5E4E2] shrink-0 shadow-sm">
                           {story.status}
                         </span>
-                        <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-[#F08D17] transition-colors truncate">
+                        <h4 className="font-extrabold text-sm sm:text-base text-white group-hover:text-[#D5E4E2] transition-colors truncate">
                           {story.title}
                         </h4>
                       </div>
@@ -832,17 +833,17 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
                             }}
-                            className="px-2.5 py-1 rounded-lg bg-[#F08D17] text-white font-mono font-bold text-[11px] flex items-center gap-1.5 hover:bg-[#EA580C] active:scale-95 shadow-md transition-all cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-full bg-[#96D4C4] hover:bg-[#83C9B8] text-[#00383C] font-mono font-extrabold text-xs flex items-center gap-1.5 active:scale-95 shadow-md transition-all cursor-pointer"
                           >
                             <Play className="w-3 h-3 fill-current" />
                             <span>Probar en App</span>
                           </button>
                         )}
 
-                        {/* Dropdown Chevron Indicator */}
+                        {/* Dropdown Chevron Indicator Indicator */}
                         <div
-                          className={`w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center transition-transform duration-200 ${
-                            isExpanded ? "rotate-180 bg-[#F08D17] text-white shadow-md" : "text-slate-300 group-hover:bg-white/20"
+                          className={`w-8 h-8 rounded-xl bg-[#004F54] border border-emerald-500/20 text-[#D5E4E2] flex items-center justify-center transition-transform duration-200 ${
+                            isExpanded ? "rotate-180 bg-[#005B60] text-white shadow-md" : "group-hover:bg-[#005B60]"
                           }`}
                         >
                           <ChevronDown className="w-4 h-4" />
@@ -850,16 +851,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       </div>
                     </div>
 
-                    {/* Dropdown Content Body (Compact & Easy to Read) */}
+                    {/* Dropdown Content Body */}
                     {isExpanded && (
-                      <div className="px-4 pb-4 pt-2 border-t border-white/10 space-y-3 text-slate-200 bg-[#001214] transition-all">
+                      <div className="px-4 pb-4 pt-2 border-t border-white/10 space-y-3 text-slate-200 bg-[#001618] transition-all">
                         {/* Estructura Ágil Box */}
-                        <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
+                        <div className="p-3.5 rounded-xl bg-[#002224] border border-white/10 space-y-1.5">
                           <div className="text-[11px] font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
                             <UserCheck className="w-3.5 h-3.5 text-[#F08D17]" />
                             <span>Estructura Ágil (User Story)</span>
                           </div>
-                          <div className="text-xs sm:text-sm font-medium leading-relaxed">
+                          <div className="text-xs sm:text-sm font-medium leading-relaxed text-slate-100">
                             <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
                             <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
                             <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
@@ -874,7 +875,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                           </div>
                           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                             {story.dod.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-white/5 border border-white/10 font-medium">
+                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-[#002224] border border-white/10 font-medium text-slate-200">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17] shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
