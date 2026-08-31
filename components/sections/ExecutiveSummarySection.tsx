@@ -35,35 +35,36 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
           <EditableField id="sec1_badge" defaultText="01. Presentación Ejecutiva Institucional" />
         </div>
 
-        {/* JUMBO CO-BRANDING HERO BANNER (DELIMITADO CON BORDE DE CRISTAL BLANCO) */}
-        <div className="w-full max-w-5xl mx-auto my-3 p-6 sm:p-8 rounded-3xl bg-[#004F54]/80 backdrop-blur-2xl shadow-2xl border-2 border-white/25 relative overflow-hidden transition-all text-white">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center text-center md:text-left justify-between relative z-10">
+        {/* CO-BRANDING HERO BANNER (REFACTORIZADO GLASS) */}
+        <div className="w-full max-w-5xl mx-auto my-3 bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl rounded-2xl p-6 relative overflow-hidden transition-all text-white">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
             {/* Lado Izquierdo: EMPRESA (ENFOCO S.R.L.) */}
-            <div className="flex flex-col items-center md:items-start space-y-1">
-              <span className="text-xs font-mono font-extrabold text-emerald-200 uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 EMPRESA DESARROLLADORA
               </span>
-              <div className="flex items-center gap-3 pt-1">
-                <span className="text-3xl sm:text-4xl md:text-5xl font-black font-display text-white tracking-tight">
+              <div className="flex items-center gap-2.5 pt-0.5">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-white tracking-tight">
                   ENFOCO<span className="text-emerald-400">.</span>
                 </span>
-                <span className="text-sm sm:text-base px-3 py-1 rounded-xl bg-white/15 text-emerald-300 font-black font-mono border border-white/20 shadow-md">
+                <span className="text-xs px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-white/70 inline-flex items-center font-mono font-medium">
                   S.R.L.
                 </span>
               </div>
             </div>
 
+            {/* Línea divisoria sutil en Desktop */}
+            <div className="hidden md:block w-px h-12 bg-white/10" />
+
             {/* Lado Derecho: CLIENTE (EXCEL PUESTO DE BOLSA & ESAFI) */}
-            <div className="flex flex-col items-center md:items-end space-y-1 text-center md:text-right">
-              <span className="text-xs font-mono font-extrabold text-emerald-200 uppercase tracking-widest flex items-center gap-1.5">
+            <div className="flex flex-col items-center md:items-end text-center md:text-right">
+              <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-1.5">
                 CLIENTE INSTITUCIONAL
-                <Building2 className="w-4 h-4 text-emerald-300" />
+                <Building2 className="w-3.5 h-3.5 text-white/50" />
               </span>
-              <div className="pt-1">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-tight block leading-tight drop-shadow-sm font-display">
+              <div className="pt-0.5">
+                <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-tight block leading-tight font-display">
                   EXCEL PUESTO DE BOLSA & ESAFI
                 </span>
               </div>
