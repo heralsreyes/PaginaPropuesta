@@ -101,29 +101,35 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
             isDesignMode && activeDrawingTool ? "cursor-crosshair" : ""
           }`}
         >
-          {/* Base Document Content */}
-          <div className="relative z-10">{children}</div>
+          <div className="relative min-h-full w-full">
+            {/* Base Document Content */}
+            <div className="relative z-10">{children}</div>
 
-          {/* Absolute Drag & Drop Canvas Elements Layer */}
-          <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-            {canvasElements.map((el) => (
-              <div key={el.id} className="pointer-events-auto absolute" style={{ left: el.x, top: el.y }}>
-                <CanvasElementWrapper element={el} onExecuteAction={handleExecuteAction} />
-              </div>
-            ))}
+            {/* Absolute Drag & Drop Canvas Elements Layer */}
+            <div className="absolute inset-0 pointer-events-none z-30">
+              {canvasElements.map((el) => (
+                <div
+                  key={el.id}
+                  className="pointer-events-auto absolute"
+                  style={{ left: `${el.x}px`, top: `${el.y}px` }}
+                >
+                  <CanvasElementWrapper element={el} onExecuteAction={handleExecuteAction} />
+                </div>
+              ))}
 
-            {/* Active PPTX/Figma Drawing Rectangle Box */}
-            {isDrawing && currentBox && (
-              <div
-                style={{
-                  left: `${currentBox.x}px`,
-                  top: `${currentBox.y}px`,
-                  width: `${currentBox.width}px`,
-                  height: `${currentBox.height}px`,
-                }}
-                className="absolute border-2 border-dashed border-[#2563EB] bg-[#2563EB]/15 rounded-xl pointer-events-none z-40 transition-all"
-              />
-            )}
+              {/* Active PPTX/Figma Drawing Rectangle Box */}
+              {isDrawing && currentBox && (
+                <div
+                  style={{
+                    left: `${currentBox.x}px`,
+                    top: `${currentBox.y}px`,
+                    width: `${currentBox.width}px`,
+                    height: `${currentBox.height}px`,
+                  }}
+                  className="absolute border-2 border-dashed border-[#2563EB] bg-[#2563EB]/25 rounded-xl pointer-events-none z-50 transition-none shadow-xl"
+                />
+              )}
+            </div>
           </div>
         </div>
       </main>

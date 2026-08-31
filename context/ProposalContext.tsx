@@ -62,8 +62,10 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           localStorage.setItem(ADMIN_MODE_KEY, "true");
         }
 
-        // Always apply Default Executive White Theme on initialization
-        useThemeStore.getState().applyPreset(PRESET_THEMES[0].theme);
+        // Apply Default Theme only if not customized
+        if (!localStorage.getItem("enfoco-theme-storage")) {
+          useThemeStore.getState().applyPreset(PRESET_THEMES[0].theme);
+        }
 
         // 2. Load proposal JSON dynamically if ?proposal=name parameter exists (Takes priority over LocalStorage)
         if (proposalParam) {
