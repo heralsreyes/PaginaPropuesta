@@ -136,29 +136,29 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
               <tr className="border-b border-white/10 text-white/50 font-mono text-xs sm:text-sm uppercase tracking-wider">
                 <th className="pb-3 px-2">Proceso Operativo</th>
                 <th className="pb-3 px-2 text-white/50">Antes (Manual / Presencial)</th>
-                <th className="pb-3 px-2 text-[#F08D17] font-bold">Con Plataforma ENFOCO</th>
+                <th className="pb-3 px-2 text-white font-bold">Con Plataforma ENFOCO</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10 text-white/80">
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Solicitud de Estado de Cuenta</td>
                 <td className="py-4 px-2 text-white/60">Llamada/Email (Tiempo espera: 24h)</td>
-                <td className="py-4 px-2 font-extrabold text-[#F08D17]">Descarga Inmediata PDF Protegido 24/7</td>
+                <td className="py-4 px-2 font-bold text-white">Descarga Inmediata PDF Protegido 24/7</td>
               </tr>
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Pacto / Renovación de Mutuo</td>
                 <td className="py-4 px-2 text-white/60">Firma física en oficina / escaneo</td>
-                <td className="py-4 px-2 font-extrabold text-[#F08D17]">Trade Ticket Digital + Fehaciente OTP</td>
+                <td className="py-4 px-2 font-bold text-white">Trade Ticket Digital + Fehaciente OTP</td>
               </tr>
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Seguimiento Comercial EPB</td>
                 <td className="py-4 px-2 text-white/60">Registro manual de llamadas</td>
-                <td className="py-4 px-2 font-extrabold text-[#F08D17]">Oportunidad Autocreada en Dynamics CRM</td>
+                <td className="py-4 px-2 font-bold text-white">Oportunidad Autocreada en Dynamics CRM</td>
               </tr>
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Operaciones ESAFI (Fondos Abiertos)</td>
                 <td className="py-4 px-2 text-white/60">Trámite por formulario físico</td>
-                <td className="py-4 px-2 font-extrabold text-[#F08D17]">Integración Directa a SIFI Fondos</td>
+                <td className="py-4 px-2 font-bold text-white">Integración Directa a SIFI Fondos</td>
               </tr>
             </tbody>
           </table>
