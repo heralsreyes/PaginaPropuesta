@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { EditableField } from "@/components/ui/EditableField";
+import { useProposal } from "@/context/ProposalContext";
 
 interface EconomicProposalSectionProps {
   secId: string;
@@ -24,6 +25,29 @@ const sectionContainerVariants = {
 };
 
 export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = ({ secId }) => {
+  const { proposal } = useProposal();
+  const budget = proposal?.budget;
+
+  const baseSubtotal = budget?.amountWithoutTax || 5000;
+  const currency = budget?.currency || "USD";
+  const hasTax = budget?.hasTax ?? true;
+  const taxPercent = budget?.taxPercent || 18;
+  const hasDiscount = budget?.hasDiscount ?? false;
+  const discountValue = budget?.discountValue || 0;
+
+  const discountAmount = hasDiscount ? discountValue : 0;
+  const taxableAmount = Math.max(0, baseSubtotal - discountAmount);
+  const taxAmount = hasTax ? (taxableAmount * taxPercent) / 100 : 0;
+  const grandTotal = taxableAmount + taxAmount;
+
+  const currSymbol = currency === "USD" ? "USD" : "RD$";
+
+  const paymentTerms = budget?.paymentTerms && budget.paymentTerms.length > 0 ? budget.paymentTerms : [
+    { percentage: 50, description: "Aprobación de la propuesta y firma de contrato.", amount: (grandTotal * 50) / 100 },
+    { percentage: 40, description: "Entrega de desarrollo core y pruebas UAT.", amount: (grandTotal * 40) / 100 },
+    { percentage: 10, description: "Pase a producción y aceptación final.", amount: (grandTotal * 10) / 100 },
+  ];
+
   return (
     <section
       id={secId}
@@ -57,8 +81,15 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
                 <span className="text-sm text-[#F08D17] font-mono font-bold">Desarrollo Web, App & Integración Dynamics/SIFI</span>
               </div>
               <div className="text-right">
-                <span className="text-3xl sm:text-4xl font-black text-white font-mono">USD 5,000</span>
-                <span className="text-xs text-slate-300 font-mono block font-bold">+ 18% ITBIS (USD 900)</span>
+                <span className="text-3xl sm:text-4xl font-black text-white font-mono">{currSymbol} {baseSubtotal.toLocaleString()}</span>
+                <span className="text-xs text-slate-300 font-mono block font-bold">
+                  {hasTax ? `+ ${taxPercent}% ITBIS (${currSymbol} ${Math.round(taxAmount).toLocaleString()})` : "Exento de ITBIS"}
+                </span>
+                {hasDiscount && (
+                  <span className="text-xs text-amber-400 font-mono block font-bold">
+                    Descuento: -{currSymbol} {discountAmount.toLocaleString()}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -86,7 +117,7 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
                 <span className="text-sm text-emerald-300 font-mono font-bold">Operación, Mantenimiento & Soporte SLA</span>
               </div>
               <div className="text-right">
-                <span className="text-3xl sm:text-4xl font-black text-[#F08D17] font-mono">USD 1,195 / mo</span>
+                <span className="text-3xl sm:text-4xl font-black text-[#F08D17] font-mono">{currSymbol} 1,195 / mo</span>
                 <span className="text-xs text-slate-300 font-mono block font-bold">Licencias + Soporte SIMV</span>
               </div>
             </div>
@@ -114,18 +145,17 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
             CONDICIONES & HITOS DE PAGO (INVERSIÓN ÚNICA)
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm sm:text-base">
-            <div className="p-5 rounded-2xl bg-[#002D30] border border-white/10 space-y-1 shadow-sm">
-              <span className="font-extrabold text-[#F08D17] font-mono block text-lg">50% (USD 2,500)</span>
-              <span className="text-slate-200 font-medium">Aprobación de la propuesta y firma de contrato.</span>
-            </div>
-            <div className="p-5 rounded-2xl bg-[#002D30] border border-white/10 space-y-1 shadow-sm">
-              <span className="font-extrabold text-[#F08D17] font-mono block text-lg">40% (USD 2,000)</span>
-              <span className="text-slate-200 font-medium">Entrega de desarrollo core y pruebas UAT.</span>
-            </div>
-            <div className="p-5 rounded-2xl bg-[#002D30] border border-white/10 space-y-1 shadow-sm">
-              <span className="font-extrabold text-[#F08D17] font-mono block text-lg">10% (USD 500)</span>
-              <span className="text-slate-200 font-medium">Pase a producción y aceptación final.</span>
-            </div>
+            {paymentTerms.map((term, idx) => {
+              const termAmount = Math.round(term.amount || (grandTotal * (term.percentage || 33.33)) / 100);
+              return (
+                <div key={idx} className="p-5 rounded-2xl bg-[#002D30] border border-white/10 space-y-1 shadow-sm">
+                  <span className="font-extrabold text-[#F08D17] font-mono block text-lg">
+                    {term.percentage}% ({currSymbol} {termAmount.toLocaleString()})
+                  </span>
+                  <span className="text-slate-200 font-medium">{term.description}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </motion.div>
