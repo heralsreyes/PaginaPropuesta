@@ -56,9 +56,36 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       },
     ]);
 
+    const activeMod = modules[selectedModule] || modules[0];
+
+    const handleAddEpic = () => {
+      const nextNum = modules.length + 1;
+      const newEpic = {
+        name: `Nuevo Módulo ${nextNum}`,
+        epic: `Épica ${nextNum}`,
+        items: ["Nuevo Entregable Técnico", "Criterio de Aceptación SIMV"],
+      };
+      setModules([...modules, newEpic]);
+      setSelectedModule(modules.length);
+    };
+
+    const handleDeleteEpic = (idxToDelete: number, e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (modules.length <= 1) return;
+      const updated = modules.filter((_, i) => i !== idxToDelete);
+      setModules(updated);
+      setSelectedModule(Math.max(0, idxToDelete - 1));
+    };
+
     const handleAddDeliverable = () => {
       const updated = [...modules];
       updated[selectedModule].items.push("Nuevo Entregable Técnico");
+      setModules(updated);
+    };
+
+    const handleRemoveDeliverable = (itemIdx: number) => {
+      const updated = [...modules];
+      updated[selectedModule].items = updated[selectedModule].items.filter((_, i) => i !== itemIdx);
       setModules(updated);
     };
 
@@ -97,48 +124,98 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
         <div className="grid grid-cols-12 gap-3 my-3 flex-1 min-h-0">
           {/* Left Menu */}
           <div className="col-span-5 space-y-1.5 overflow-y-auto pr-1">
-            {modules.map((m, idx) => (
+            <div className="flex items-center justify-between px-1 pb-1">
+              <span className="text-[10px] font-mono uppercase text-zinc-400 font-bold">
+                Épicas ({modules.length})
+              </span>
               <button
+                onClick={handleAddEpic}
+                className="text-[9px] font-mono font-bold text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer bg-white/10 px-1.5 py-0.5 rounded-md"
+                title="Añadir nueva épica"
+              >
+                <Plus className="w-3 h-3" /> Añadir
+              </button>
+            </div>
+
+            {modules.map((m, idx) => (
+              <div
                 key={idx}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedModule(idx);
-                }}
-                className={`w-full p-2 rounded-xl text-left transition-all text-[11px] cursor-pointer ${
+                onClick={() => setSelectedModule(idx)}
+                className={`w-full p-2 rounded-xl text-left transition-all text-[11px] cursor-pointer relative group ${
                   selectedModule === idx
                     ? "bg-[#004F54] text-white font-bold border border-[#F08D17]/80 shadow-md"
                     : "bg-white/5 text-zinc-300 hover:bg-white/10"
                 }`}
               >
-                <span className="text-[9px] font-mono text-[#F08D17] block">{m.epic}</span>
-                <span className="truncate block">{m.name}</span>
-              </button>
+                <div className="flex items-center justify-between">
+                  <EditableText
+                    value={m.epic}
+                    onChange={(val) => {
+                      const copy = [...modules];
+                      copy[idx].epic = val;
+                      setModules(copy);
+                    }}
+                    className="text-[9px] font-mono text-[#F08D17] block font-bold"
+                  />
+                  {modules.length > 1 && (
+                    <button
+                      onClick={(e) => handleDeleteEpic(idx, e)}
+                      className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 transition-opacity p-0.5 cursor-pointer"
+                      title="Eliminar épica"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+                <EditableText
+                  value={m.name}
+                  onChange={(val) => {
+                    const copy = [...modules];
+                    copy[idx].name = val;
+                    setModules(copy);
+                  }}
+                  className="truncate block font-semibold text-xs"
+                />
+              </div>
             ))}
           </div>
 
           {/* Right Details Panel */}
           <div className="col-span-7 p-3 rounded-2xl bg-black/30 border border-white/10 flex flex-col justify-between">
             <div className="space-y-2 overflow-y-auto max-h-[140px]">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase text-zinc-400 font-bold block">
-                  Entregables Clave ({modules[selectedModule].items.length})
-                </span>
+              <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                <div>
+                  <span className="text-[10px] font-mono text-[#F08D17] block font-bold">{activeMod.epic}</span>
+                  <h6 className="font-extrabold text-xs text-white">{activeMod.name}</h6>
+                </div>
                 <button
                   onClick={handleAddDeliverable}
-                  className="text-[9px] font-mono text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer"
+                  className="text-[9px] font-mono text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer bg-white/10 px-1.5 py-0.5 rounded-md"
                 >
-                  <Plus className="w-3 h-3" /> Añadir
+                  <Plus className="w-3 h-3" /> Entregable
                 </button>
               </div>
+
               <ul className="space-y-1.5 text-xs text-zinc-200">
-                {modules[selectedModule].items.map((item, i) => (
-                  <li key={i} className="flex items-center space-x-1.5 group">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <EditableText
-                      value={item}
-                      onChange={(newVal) => handleUpdateDeliverable(i, newVal)}
-                      className="flex-1 truncate"
-                    />
+                {activeMod.items.map((item, i) => (
+                  <li key={i} className="flex items-center justify-between space-x-1.5 group p-1 rounded-lg hover:bg-white/5">
+                    <div className="flex items-center space-x-1.5 min-w-0 flex-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <EditableText
+                        value={item}
+                        onChange={(newVal) => handleUpdateDeliverable(i, newVal)}
+                        className="flex-1 truncate"
+                      />
+                    </div>
+                    {activeMod.items.length > 1 && (
+                      <button
+                        onClick={() => handleRemoveDeliverable(i)}
+                        className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 p-0.5 cursor-pointer"
+                        title="Eliminar entregable"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
