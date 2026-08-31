@@ -38,14 +38,18 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#006369] via-[#00555B] to-[#00474C] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#006369]/60"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#00383C] via-[#002D30] to-[#002224] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#00383C]/60"
     >
+      {/* Halo de Luz Ambiental Central Suave */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-[#D5E4E2]/12 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-12 left-12 w-[400px] h-[400px] bg-[#F08D17]/8 blur-[130px] rounded-full pointer-events-none" />
+
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.15 }}
         variants={sectionContainerVariants}
-        className="max-w-6xl mx-auto w-full space-y-10"
+        className="max-w-6xl mx-auto w-full space-y-10 relative z-10"
       >
         <div className="text-center space-y-3">
           <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
@@ -156,8 +160,8 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
           </div>
 
           <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] overflow-hidden py-6">
-            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#006369] via-[#006369]/90 to-transparent z-20 pointer-events-none" />
-            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#006369] via-[#006369]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#00383C] via-[#00383C]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#00383C] via-[#00383C]/90 to-transparent z-20 pointer-events-none" />
 
             <motion.div
               className="flex items-center gap-6 sm:gap-10 w-max px-4"

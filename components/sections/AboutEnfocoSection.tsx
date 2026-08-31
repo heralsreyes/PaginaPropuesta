@@ -27,14 +27,18 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#006369] via-[#00555B] to-[#00474C] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#006369]/60"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#00383C] via-[#002D30] to-[#002224] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#00383C]/60"
     >
+      {/* Halo de Luz Ambiental Central Suave (Ilumina sin deslavar) */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-[#D5E4E2]/12 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-12 right-12 w-[400px] h-[400px] bg-[#F08D17]/8 blur-[130px] rounded-full pointer-events-none" />
+
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.15 }}
         variants={sectionContainerVariants}
-        className="max-w-6xl mx-auto w-full space-y-10"
+        className="max-w-6xl mx-auto w-full space-y-10 relative z-10"
       >
         <div className="text-center space-y-4 max-w-4xl mx-auto">
           <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-flex items-center gap-2 shadow-md">
