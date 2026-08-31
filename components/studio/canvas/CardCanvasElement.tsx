@@ -3,13 +3,14 @@
 import React from "react";
 import { CanvasElement } from "@/types/studio";
 import { useStudioStore } from "@/store/useStudioStore";
+import { EditableText } from "@/components/studio/EditableText";
 
 interface CardCanvasElementProps {
   element: CanvasElement;
 }
 
 export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element }) => {
-  const { setActiveTabForCard } = useStudioStore();
+  const { setActiveTabForCard, updateCanvasElement } = useStudioStore();
 
   const activeTabId = element.activeTabId || element.tabs?.[0]?.id || "tab-1";
   const activeTab = element.tabs?.find((t) => t.id === activeTabId) || element.tabs?.[0];
@@ -24,8 +25,16 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
       className="w-full h-full p-5 rounded-2xl border shadow-md flex flex-col justify-between overflow-hidden"
     >
       <div>
-        <h4 className="font-extrabold text-sm sm:text-base mb-1">{element.title}</h4>
-        {element.subtitle && <p className="text-xs text-zinc-500">{element.subtitle}</p>}
+        <EditableText
+          value={element.title || "Título de Tarjeta"}
+          onChange={(val) => updateCanvasElement(element.id, { title: val })}
+          className="font-extrabold text-sm sm:text-base mb-1 block"
+        />
+        <EditableText
+          value={element.subtitle || "Haga doble clic para editar este texto in-situ."}
+          onChange={(val) => updateCanvasElement(element.id, { subtitle: val })}
+          className="text-xs text-zinc-500 block"
+        />
       </div>
 
       {element.isMultiTab && element.tabs && !element.hideTabPills && (
