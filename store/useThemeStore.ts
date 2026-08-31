@@ -10,6 +10,10 @@ export interface ThemeConfig {
   textPrimary: string;
   textSecondary: string;
   navBg: string;
+  h1Color?: string;
+  h2Color?: string;
+  textColor?: string;
+  cardBorderRadius?: string;
 }
 
 export interface PresetTheme {
@@ -31,6 +35,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       textPrimary: "#FFFFFF",
       textSecondary: "#D5E4E2",
       navBg: "#002224",
+      h1Color: "#FFFFFF",
+      h2Color: "#F08D17",
+      textColor: "#D5E4E2",
+      cardBorderRadius: "24px",
     },
   },
   {
@@ -45,6 +53,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       textPrimary: "#0F172A",
       textSecondary: "#475569",
       navBg: "#002224",
+      h1Color: "#0F172A",
+      h2Color: "#004F54",
+      textColor: "#475569",
+      cardBorderRadius: "24px",
     },
   },
   {
@@ -59,6 +71,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       textPrimary: "#FAFAFA",
       textSecondary: "#A3A3A3",
       navBg: "#171717",
+      h1Color: "#FAFAFA",
+      h2Color: "#F59E0B",
+      textColor: "#A3A3A3",
+      cardBorderRadius: "24px",
     },
   },
   {
@@ -73,6 +89,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       textPrimary: "#F8FAFC",
       textSecondary: "#94A3B8",
       navBg: "#0F172A",
+      h1Color: "#F8FAFC",
+      h2Color: "#38BDF8",
+      textColor: "#94A3B8",
+      cardBorderRadius: "24px",
     },
   },
   {
@@ -87,6 +107,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       textPrimary: "#ECFDF5",
       textSecondary: "#A7F3D0",
       navBg: "#022C22",
+      h1Color: "#ECFDF5",
+      h2Color: "#34D399",
+      textColor: "#A7F3D0",
+      cardBorderRadius: "24px",
     },
   },
   {
@@ -101,6 +125,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       textPrimary: "#EEF2FF",
       textSecondary: "#C7D2FE",
       navBg: "#1E1B4B",
+      h1Color: "#EEF2FF",
+      h2Color: "#818CF8",
+      textColor: "#C7D2FE",
+      cardBorderRadius: "24px",
     },
   },
 ];
@@ -116,6 +144,10 @@ const applyCssVars = (theme: ThemeConfig) => {
     document.documentElement.style.setProperty("--text-secondary", theme.textSecondary || "#D5E4E2");
     document.documentElement.style.setProperty("--nav-bg", theme.navBg || "#002224");
     document.documentElement.style.setProperty("--border-color", theme.cardBorder || theme.secondaryAccent || "#F08D17");
+    document.documentElement.style.setProperty("--theme-h1", theme.h1Color || theme.textPrimary);
+    document.documentElement.style.setProperty("--theme-h2", theme.h2Color || theme.secondaryAccent || theme.accentColor);
+    document.documentElement.style.setProperty("--theme-text", theme.textColor || theme.textSecondary || "#D5E4E2");
+    document.documentElement.style.setProperty("--card-radius", theme.cardBorderRadius || "24px");
   }
 };
 

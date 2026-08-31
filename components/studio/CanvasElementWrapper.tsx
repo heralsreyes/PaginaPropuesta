@@ -8,6 +8,7 @@ import { ButtonCanvasElement } from "./canvas/ButtonCanvasElement";
 import { CardCanvasElement } from "./canvas/CardCanvasElement";
 import { MockupCanvasElement } from "./canvas/MockupCanvasElement";
 import { ImageCanvasElement } from "./canvas/ImageCanvasElement";
+import { TextCanvasElement } from "./canvas/TextCanvasElement";
 
 interface CanvasElementWrapperProps {
   element: CanvasElement;
@@ -157,12 +158,7 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
 
       {element.type === "mockup" && <MockupCanvasElement element={element} />}
 
-      {element.type === "text" && (
-        <div className="w-full h-full p-2">
-          <h3 className="font-extrabold text-lg text-slate-800">{element.title}</h3>
-          {element.subtitle && <p className="text-xs text-slate-500">{element.subtitle}</p>}
-        </div>
-      )}
+      {element.type === "text" && <TextCanvasElement element={element} />}
 
       {element.type === "image" && <ImageCanvasElement element={element} />}
 

@@ -21,6 +21,7 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
     setActiveTabForCard,
     toggleElementVisibility,
     activeDrawingTool,
+    addCanvasElementAtPosition,
   } = useStudioStore();
 
   const {
@@ -36,6 +37,37 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
       setActiveTabForCard,
       toggleElementVisibility,
     });
+  };
+
+  const handleCanvasDragOver = (e: React.DragEvent) => {
+    if (!isDesignMode) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  const handleCanvasDrop = (e: React.DragEvent) => {
+    if (!isDesignMode) return;
+    e.preventDefault();
+    const rawData = e.dataTransfer.getData("application/json");
+    if (!rawData) return;
+
+    try {
+      const data = JSON.parse(rawData);
+      const canvasEl = document.getElementById("studio-canvas");
+      if (!canvasEl) return;
+
+      const rect = canvasEl.getBoundingClientRect();
+      const dropX = e.clientX - rect.left - (data.width ? data.width / 2 : 120);
+      const dropY = canvasEl.scrollTop + (e.clientY - rect.top) - (data.height ? data.height / 2 : 40);
+
+      addCanvasElementAtPosition({
+        ...data,
+        x: Math.max(10, Math.round(dropX)),
+        y: Math.max(10, Math.round(dropY)),
+      });
+    } catch (err) {
+      console.error("Error dropping element on canvas:", err);
+    }
   };
 
   return (
@@ -58,6 +90,8 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
           onMouseDown={handleCanvasMouseDown}
           onMouseMove={handleCanvasMouseMove}
           onMouseUp={handleCanvasMouseUp}
+          onDragOver={handleCanvasDragOver}
+          onDrop={handleCanvasDrop}
           onClick={(e) => {
             if (e.target === e.currentTarget && isDesignMode) {
               setSelectedCanvasElementId(null);

@@ -46,20 +46,21 @@ export const SidebarTemplatesTab: React.FC = () => {
         </div>
       </div>
 
-      <div className="pt-4 border-t border-[#E4E4E7] space-y-3">
+      <div className="pt-4 border-t border-[#E4E4E7] space-y-4">
         <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
-          Ajustes Personalizados de Color
+          Ajustes Personalizados de Estilo & Color
         </h4>
 
-        <div className="space-y-3">
+        <div className="space-y-3.5">
+          {/* Fondo Principal */}
           <div>
-            <label className="block text-zinc-600 font-medium mb-1">Color Principal (Fondo)</label>
+            <label className="block text-zinc-600 font-semibold mb-1">Color Principal (Fondo)</label>
             <div className="flex items-center space-x-2">
               <input
                 type="color"
                 value={theme.bgMain || "#FFFFFF"}
                 onChange={(e) => setTheme({ bgMain: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7]"
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
               />
               <input
                 type="text"
@@ -70,14 +71,72 @@ export const SidebarTemplatesTab: React.FC = () => {
             </div>
           </div>
 
+          {/* Titulares H1 */}
           <div>
-            <label className="block text-zinc-600 font-medium mb-1">Color de Acento</label>
+            <label className="block text-zinc-600 font-semibold mb-1">Titulares Principales (H1)</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="color"
+                value={theme.h1Color || theme.textPrimary || "#FFFFFF"}
+                onChange={(e) => setTheme({ h1Color: e.target.value })}
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
+              />
+              <input
+                type="text"
+                value={theme.h1Color || theme.textPrimary || "#FFFFFF"}
+                onChange={(e) => setTheme({ h1Color: e.target.value })}
+                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Subtítulos H2 */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Subtítulos & Secciones (H2)</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="color"
+                value={theme.h2Color || theme.secondaryAccent || "#F08D17"}
+                onChange={(e) => setTheme({ h2Color: e.target.value })}
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
+              />
+              <input
+                type="text"
+                value={theme.h2Color || theme.secondaryAccent || "#F08D17"}
+                onChange={(e) => setTheme({ h2Color: e.target.value })}
+                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Párrafos & Textos Generales */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Cuerpo de Párrafo & Textos</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="color"
+                value={theme.textColor || theme.textSecondary || "#D5E4E2"}
+                onChange={(e) => setTheme({ textColor: e.target.value })}
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
+              />
+              <input
+                type="text"
+                value={theme.textColor || theme.textSecondary || "#D5E4E2"}
+                onChange={(e) => setTheme({ textColor: e.target.value })}
+                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Acento Principal */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Color de Acento Principal</label>
             <div className="flex items-center space-x-2">
               <input
                 type="color"
                 value={theme.accentColor || "#004F54"}
                 onChange={(e) => setTheme({ accentColor: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7]"
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
               />
               <input
                 type="text"
@@ -86,6 +145,79 @@ export const SidebarTemplatesTab: React.FC = () => {
                 className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
               />
             </div>
+          </div>
+
+          {/* Acento Secundario */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Color de Acento Secundario (Oro/Detalles)</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="color"
+                value={theme.secondaryAccent || "#F08D17"}
+                onChange={(e) => setTheme({ secondaryAccent: e.target.value })}
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
+              />
+              <input
+                type="text"
+                value={theme.secondaryAccent || "#F08D17"}
+                onChange={(e) => setTheme({ secondaryAccent: e.target.value })}
+                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Fondo de Tarjeta */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Fondo de Tarjeta</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="color"
+                value={theme.cardBg || "#002224"}
+                onChange={(e) => setTheme({ cardBg: e.target.value })}
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
+              />
+              <input
+                type="text"
+                value={theme.cardBg || "#002224"}
+                onChange={(e) => setTheme({ cardBg: e.target.value })}
+                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Borde de Tarjeta */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Borde de Tarjeta</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="color"
+                value={theme.cardBorder || "#F08D17"}
+                onChange={(e) => setTheme({ cardBorder: e.target.value })}
+                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
+              />
+              <input
+                type="text"
+                value={theme.cardBorder || "#F08D17"}
+                onChange={(e) => setTheme({ cardBorder: e.target.value })}
+                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Radio de Redondeo */}
+          <div>
+            <label className="block text-zinc-600 font-semibold mb-1">Redondeo de Tarjeta</label>
+            <select
+              value={theme.cardBorderRadius || "24px"}
+              onChange={(e) => setTheme({ cardBorderRadius: e.target.value })}
+              className="w-full px-3 py-2 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-medium text-xs cursor-pointer"
+            >
+              <option value="8px">Pequeño (8px - Rounded-lg)</option>
+              <option value="16px">Medio (16px - Rounded-2xl)</option>
+              <option value="24px">Grande (24px - Rounded-3xl)</option>
+              <option value="36px">Extra Grande (36px - Rounded-4xl)</option>
+              <option value="9999px">Píldora Completa (Pill)</option>
+            </select>
           </div>
         </div>
       </div>

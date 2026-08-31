@@ -55,6 +55,66 @@ export const MockupCanvasElement: React.FC<MockupCanvasElementProps> = ({ elemen
     );
   }
 
+  if (element.mockupType === "financial_ticket" || (element.mockupType as string) === "ticket") {
+    return (
+      <div className="w-full h-full bg-[#002224] rounded-3xl p-5 border border-[#F08D17]/40 shadow-2xl flex flex-col justify-between text-white relative">
+        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-xs font-bold text-[#F08D17]">TRADE TICKET DIGITAL</span>
+          </div>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#7C9B8C]/25 text-emerald-300 border border-emerald-500/30 font-bold">
+            VALIDADO OTP
+          </span>
+        </div>
+
+        <div className="py-3 space-y-2">
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-zinc-400">Instrumento:</span>
+            <span className="font-bold text-white font-mono">MUTUOS EXCEL 2026</span>
+          </div>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-zinc-400">Rendimiento:</span>
+            <span className="font-bold text-emerald-400 font-mono">11.85% Anual</span>
+          </div>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-zinc-400">Monto Inversión:</span>
+            <span className="font-extrabold text-white text-base font-mono">$1,500,000 DOP</span>
+          </div>
+        </div>
+
+        <button className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#F08D17] to-[#D97706] text-white font-bold text-xs shadow-md">
+          Aprobar & Firmar Operación ➔
+        </button>
+      </div>
+    );
+  }
+
+  if (element.mockupType === "browser") {
+    return (
+      <div className="w-full h-full bg-[#18181B] rounded-2xl p-2 border border-zinc-700 shadow-2xl flex flex-col justify-between text-white">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900 rounded-t-lg border-b border-zinc-800">
+          <div className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+          </div>
+          <div className="px-4 py-0.5 rounded-md bg-black/50 text-[10px] font-mono text-zinc-400 truncate max-w-[200px]">
+            https://portal.excel.com.do/dashboard
+          </div>
+          <div className="w-4" />
+        </div>
+        <div className="flex-1 bg-[#0F172A] p-4 flex items-center justify-center text-center">
+          <div>
+            <Monitor className="w-8 h-8 text-[#38BDF8] mx-auto mb-1" />
+            <h5 className="font-extrabold text-sm text-white">{element.title}</h5>
+            <span className="text-[10px] text-zinc-400">Portal Web Corporativo</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Macbook Default Mockup
   return (
     <div className="w-full h-full bg-[#18181B] rounded-2xl p-2 border-2 border-zinc-700 shadow-2xl flex flex-col justify-between text-white">

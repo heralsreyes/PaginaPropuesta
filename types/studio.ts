@@ -56,7 +56,7 @@ export interface CanvasElement {
     | "investment_calc"
     | "pricing_block"
     | "feature_grid";
-  mockupType?: "macbook" | "iphone" | "ipad";
+  mockupType?: "macbook" | "iphone" | "ipad" | "browser" | "financial_ticket";
   imageUrl?: string;
   objectFit?: "contain" | "cover" | "fill";
   sectionId: string;
