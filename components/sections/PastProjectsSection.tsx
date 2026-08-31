@@ -176,11 +176,11 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
                   key={idx}
                   className="w-72 sm:w-80 md:w-[350px] p-6 sm:p-8 rounded-3xl bg-[#D2D8E1] shadow-md shadow-slate-900/5 border border-[#CBD1DC] flex flex-col items-center justify-center text-center space-y-4 hover:border-[#1B7A38]/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group shrink-0 cursor-pointer relative overflow-hidden"
                 >
-                  <div className="w-48 h-28 sm:w-56 sm:h-32 flex items-center justify-center overflow-hidden bg-[#E2E6EC] border border-[#CBD1DC] rounded-2xl p-4">
+                  <div className="w-full h-24 sm:h-28 flex items-center justify-center">
                     <img
                       src={client.logo}
                       alt={client.name}
-                      className="w-full h-full object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                      className="max-h-16 sm:max-h-20 max-w-[85%] object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                   <div>
