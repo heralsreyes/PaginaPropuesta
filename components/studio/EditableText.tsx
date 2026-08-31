@@ -86,6 +86,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
     );
   }
 
+  return (
     <Tag
       onClick={(e) => {
         e.stopPropagation();
