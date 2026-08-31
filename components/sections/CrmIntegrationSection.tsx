@@ -82,7 +82,7 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
         </div>
 
         {/* Dual Flow Selector */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#003B3F]/90 backdrop-blur-md border border-white/15 shadow-lg text-white">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-lg text-white">
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
@@ -93,7 +93,7 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
               className={`py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold font-mono transition-all cursor-pointer ${
                 activeFlowTab === "epb"
                   ? "bg-[#F08D17] text-white shadow-xl scale-105"
-                  : "bg-white/10 text-white border border-white/20 hover:bg-white/20"
+                  : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
               }`}
             >
               Flujo EPB (Puesto de Bolsa &rarr; Dynamics 365 CRM)
@@ -107,7 +107,7 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
               className={`py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold font-mono transition-all cursor-pointer ${
                 activeFlowTab === "esafi"
                   ? "bg-[#F08D17] text-white shadow-xl scale-105"
-                  : "bg-white/10 text-white border border-white/20 hover:bg-white/20"
+                  : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
               }`}
             >
               Flujo ESAFI (Fondos Abiertos &rarr; SIFI Fondos)
@@ -125,8 +125,8 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
         </div>
 
         {/* Interactive Step-by-Step Diagram Card */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-8 text-white">
-          <div className="flex items-center justify-between border-b border-white/15 pb-4">
+        <div className="p-8 sm:p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-8 text-white">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div className="flex items-center gap-4">
               <Database className="w-7 h-7 text-[#F08D17]" />
               <div>
@@ -135,7 +135,7 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
                     ? "Flujo Operaciones Excel Puesto de Bolsa (EPB)"
                     : "Flujo Operaciones Excel SAFI (Fondos Abiertos ESAFI)"}
                 </h3>
-                <span className="text-xs text-slate-300">Arquitectura con Conector Bidireccional RESTful</span>
+                <span className="text-xs text-white/60 font-mono">Arquitectura con Conector Bidireccional RESTful</span>
               </div>
             </div>
 

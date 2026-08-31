@@ -38,7 +38,7 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-[#F8F9FA] text-[#2D3748] px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#E2E8F0]"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
     >
       <motion.div
         initial="hidden"
@@ -48,13 +48,13 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
         className="max-w-6xl mx-auto w-full space-y-10"
       >
         <div className="text-center space-y-3">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#1B7A38] uppercase font-mono px-4 py-1.5 rounded-full bg-[#1B7A38]/10 border border-[#1B7A38]/30 inline-block">
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
             <EditableField id="sec11_badge" defaultText="11. CASOS DE ÉXITO & EXPERIENCIA DEMOSTRADA" />
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#2D3748]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">
             <EditableField id="sec11_h2" defaultText="Experiencia Comprobada en Proyectos Similares" />
           </h2>
-          <p className="text-base sm:text-lg text-[#4A5568] max-w-3xl mx-auto font-medium">
+          <p className="text-base sm:text-lg text-white/70 max-w-3xl mx-auto font-medium">
             <EditableField
               id="sec11_desc"
               defaultText="Casos de éxito desarrollados para grandes corporaciones e instituciones financieras en la República Dominicana."
@@ -63,82 +63,82 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-md space-y-4 hover:border-[#1B7A38] transition-all">
+          <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4 hover:border-white/20 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-lg text-[#2D3748]">App Somos Corripio</h3>
-                  <span className="text-xs font-mono text-[#1B7A38]">Distribuidora Corripio</span>
+                  <h3 className="font-extrabold text-lg text-white">App Somos Corripio</h3>
+                  <span className="text-xs font-mono text-white/60">Distribuidora Corripio</span>
                 </div>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 font-bold font-mono">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-white/5 text-white/70 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#4A5568]">
+            <p className="text-xs sm:text-sm text-white/70">
               Aplicación móvil nativa para autogestión de empleados e inversionistas del grupo, catálogo interactivo, notificaciones push transaccionales y consulta de beneficios 24/7.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-md space-y-4 hover:border-[#1B7A38] transition-all">
+          <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4 hover:border-white/20 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-lg text-[#2D3748]">App de Asegurados</h3>
-                  <span className="text-xs font-mono text-[#1B7A38]">Humano Seguros</span>
+                  <h3 className="font-extrabold text-lg text-white">App de Asegurados</h3>
+                  <span className="text-xs font-mono text-white/60">Humano Seguros</span>
                 </div>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 font-bold font-mono">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-white/5 text-white/70 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#4A5568]">
+            <p className="text-xs sm:text-sm text-white/70">
               App móvil de alto volumen transaccional con carnet digital cifrado, consulta de pólizas en tiempo real, seguimiento de reclamaciones e integración con core bancario/asegurador.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-md space-y-4 hover:border-[#1B7A38] transition-all">
+          <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4 hover:border-white/20 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-lg text-[#2D3748]">App de Intermediarios</h3>
-                  <span className="text-xs font-mono text-[#1B7A38]">Humano Seguros</span>
+                  <h3 className="font-extrabold text-lg text-white">App de Intermediarios</h3>
+                  <span className="text-xs font-mono text-white/60">Humano Seguros</span>
                 </div>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 font-bold font-mono">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-white/5 text-white/70 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#4A5568]">
+            <p className="text-xs sm:text-sm text-white/70">
               Plataforma móvil y portal web para corredores e intermediarios comerciales, cotizaciones rápidas en línea, gestión de comisiones y flujo de aprobación de solicitudes.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-[#E2E8F0] shadow-md space-y-4 hover:border-[#1B7A38] transition-all">
+          <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4 hover:border-white/20 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-lg text-[#2D3748]">Oficina Virtual OFV</h3>
-                  <span className="text-xs font-mono text-[#1B7A38]">Humano Seguros</span>
+                  <h3 className="font-extrabold text-lg text-white">Oficina Virtual OFV</h3>
+                  <span className="text-xs font-mono text-white/60">Humano Seguros</span>
                 </div>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/30 font-bold font-mono">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-white/5 text-white/70 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#4A5568]">
+            <p className="text-xs sm:text-sm text-white/70">
               Modernización del portal web de autogestión corporativa con descarga masiva de estados de cuenta en PDF cifrados, validación fehaciente OTP y firma electrónica.
             </p>
           </div>
@@ -146,18 +146,18 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
 
         <div className="w-full space-y-6 pt-4">
           <div className="text-center space-y-2 px-4">
-            <span className="text-xs sm:text-sm font-mono font-extrabold text-[#1B7A38] uppercase tracking-widest bg-[#1B7A38]/10 px-5 py-2 rounded-full border border-[#1B7A38]/30 inline-flex items-center gap-2 shadow-sm">
-              <Sparkles className="w-4 h-4 text-[#1B7A38]" />
+            <span className="text-xs sm:text-sm font-mono font-bold text-[#F08D17] uppercase tracking-widest bg-white/10 px-5 py-2 rounded-full border border-white/20 inline-flex items-center gap-2 shadow-sm">
+              <Sparkles className="w-4 h-4 text-[#F08D17]" />
               PORTAFOLIO DE EMPRESAS LÍDERES QUE CONFÍAN EN ENFOCO, S.R.L.
             </span>
-            <p className="text-sm sm:text-base text-[#718096] font-medium">
+            <p className="text-sm sm:text-base text-white/60 font-medium">
               Soluciones empresariales de software a la medida en producción continua 24/7
             </p>
           </div>
 
           <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] overflow-hidden py-6">
-            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#F8F9FA] via-[#F8F9FA]/90 to-transparent z-20 pointer-events-none" />
-            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#F8F9FA] via-[#F8F9FA]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#004F54] via-[#004F54]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#004F54] via-[#004F54]/90 to-transparent z-20 pointer-events-none" />
 
             <motion.div
               className="flex items-center gap-6 sm:gap-10 w-max px-4"
@@ -171,20 +171,20 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
               {marqueeClients.map((client, idx) => (
                 <div
                   key={idx}
-                  className="w-72 sm:w-80 md:w-[350px] p-6 sm:p-8 rounded-3xl bg-white shadow-md border border-[#E2E8F0] flex flex-col items-center justify-center text-center space-y-4 hover:border-[#1B7A38] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group shrink-0 cursor-pointer relative overflow-hidden"
+                  className="w-72 sm:w-80 md:w-[350px] p-6 sm:p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-2xl border border-white/10 flex flex-col items-center justify-center text-center space-y-4 hover:border-white/25 hover:-translate-y-1 transition-all duration-300 group shrink-0 cursor-pointer relative overflow-hidden"
                 >
-                  <div className="w-48 h-28 sm:w-56 sm:h-32 flex items-center justify-center overflow-hidden bg-slate-50/50 rounded-2xl p-4">
+                  <div className="w-48 h-28 sm:w-56 sm:h-32 flex items-center justify-center overflow-hidden bg-white/10 rounded-2xl p-4">
                     <img
                       src={client.logo}
                       alt={client.name}
-                      className="w-full h-full object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain filter brightness-110 drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                   <div>
-                    <h4 className="font-black text-lg sm:text-xl text-[#2D3748] tracking-tight group-hover:text-[#1B7A38] transition-colors">
+                    <h4 className="font-bold text-lg sm:text-xl text-white tracking-tight group-hover:text-[#F08D17] transition-colors">
                       {client.name}
                     </h4>
-                    <span className="text-xs font-mono font-extrabold px-3 py-1 rounded-full bg-[#1B7A38]/10 text-[#1B7A38] border border-[#1B7A38]/20 uppercase inline-block mt-1.5">
+                    <span className="text-xs font-mono font-medium px-3 py-1 rounded-full bg-white/5 text-white/60 border border-white/10 uppercase inline-block mt-1.5">
                       {client.sector}
                     </span>
                   </div>

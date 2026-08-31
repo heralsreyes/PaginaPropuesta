@@ -214,10 +214,10 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
         </div>
 
         {/* Time Period Filter Bar & Live Feed Toggle */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#003B3F]/90 backdrop-blur-md border border-white/15 shadow-lg text-white">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-lg text-white">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-[#F08D17]" />
-            <span className="text-xs font-mono font-bold text-slate-200">Período de Análisis:</span>
+            <span className="text-xs font-mono font-bold text-white/70">Período de Análisis:</span>
             <div className="flex items-center gap-1.5 pl-2">
               {(["hoy", "7d", "mes", "ano"] as const).map((period) => (
                 <button
@@ -229,7 +229,7 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
                   className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
                     kpiPeriodTab === period
                       ? "bg-[#F08D17] text-white shadow-md"
-                      : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
+                      : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {period === "hoy" ? "Hoy" : period === "7d" ? "7 Días" : period === "mes" ? "Este Mes" : "Año 2026"}
@@ -242,10 +242,10 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
             <button
               onClick={() => setIsLiveFeedActive(!isLiveFeedActive)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                isLiveFeedActive ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40" : "bg-white/10 text-slate-300 border border-white/20"
+                isLiveFeedActive ? "bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40" : "bg-white/5 text-white/70 border border-white/10"
               }`}
             >
-              <Radio className={`w-3.5 h-3.5 ${isLiveFeedActive ? "text-emerald-300 animate-pulse" : "text-slate-400"}`} />
+              <Radio className={`w-3.5 h-3.5 ${isLiveFeedActive ? "text-[#F08D17] animate-pulse" : "text-white/40"}`} />
               <span>{isLiveFeedActive ? "● Monitoreo en Vivo (ACTIVO)" : "⏸ Pausado"}</span>
             </button>
           </div>
@@ -260,23 +260,23 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
             }}
             className={`p-6 rounded-3xl transition-all cursor-pointer space-y-4 text-white ${
               selectedKpiCard === 1
-                ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
-                : "bg-[#003B3F]/90 border border-white/15 shadow-xl hover:border-white/30"
+                ? "bg-white/[0.08] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
+                : "bg-white/[0.03] border border-white/10 shadow-xl hover:border-white/20"
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-white/10 text-[#F08D17] flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                 <Users className="w-5 h-5" />
               </div>
-              <span className="text-[11px] font-mono font-bold text-emerald-300 bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+              <span className="text-[11px] font-mono font-bold text-white/80 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
                 {currentKpis.usersTrend}
               </span>
             </div>
             <div>
-              <span className="text-xs font-mono font-extrabold uppercase text-slate-300 block">KPI 01</span>
-              <h4 className="text-sm font-extrabold text-white">Usuarios Activos 24/7</h4>
+              <span className="text-xs font-mono font-medium uppercase text-white/50 block">KPI 01</span>
+              <h4 className="text-sm font-bold text-white">Usuarios Activos 24/7</h4>
               <p className="text-3xl font-black text-white font-mono mt-1">{currentKpis.users}</p>
-              <span className="text-xs text-emerald-300 font-mono font-bold block mt-1">{currentKpis.usersSub}</span>
+              <span className="text-xs text-white/60 font-mono font-medium block mt-1">{currentKpis.usersSub}</span>
             </div>
             <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
               <div className="bg-[#F08D17] h-full rounded-full w-[85%]" />
@@ -290,26 +290,26 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
             }}
             className={`p-6 rounded-3xl transition-all cursor-pointer space-y-4 text-white ${
               selectedKpiCard === 2
-                ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
-                : "bg-[#003B3F]/90 border border-white/15 shadow-xl hover:border-white/30"
+                ? "bg-white/[0.08] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
+                : "bg-white/[0.03] border border-white/10 shadow-xl hover:border-white/20"
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-white/10 text-[#F08D17] flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                 <Clock className="w-5 h-5" />
               </div>
-              <span className="text-[11px] font-mono font-bold text-emerald-300 bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+              <span className="text-[11px] font-mono font-bold text-white/80 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
                 {currentKpis.responseTrend}
               </span>
             </div>
             <div>
-              <span className="text-xs font-mono font-extrabold uppercase text-slate-300 block">KPI 02</span>
-              <h4 className="text-sm font-extrabold text-white">Tiempo Promedio Respuesta</h4>
-              <p className="text-3xl font-black text-emerald-300 font-mono mt-1">{currentKpis.responseTime}</p>
-              <span className="text-xs text-emerald-300 font-mono font-bold block mt-1">{currentKpis.responseSub}</span>
+              <span className="text-xs font-mono font-medium uppercase text-white/50 block">KPI 02</span>
+              <h4 className="text-sm font-bold text-white">Tiempo Promedio Respuesta</h4>
+              <p className="text-3xl font-black text-white font-mono mt-1">{currentKpis.responseTime}</p>
+              <span className="text-xs text-white/60 font-mono font-medium block mt-1">{currentKpis.responseSub}</span>
             </div>
             <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-emerald-400 h-full rounded-full w-[94%]" />
+              <div className="bg-[#F08D17] h-full rounded-full w-[94%]" />
             </div>
           </div>
 
@@ -320,23 +320,23 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
             }}
             className={`p-6 rounded-3xl transition-all cursor-pointer space-y-4 text-white ${
               selectedKpiCard === 3
-                ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
-                : "bg-[#003B3F]/90 border border-white/15 shadow-xl hover:border-white/30"
+                ? "bg-white/[0.08] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
+                : "bg-white/[0.03] border border-white/10 shadow-xl hover:border-white/20"
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-[#F08D17]/20 text-[#F08D17] flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                 <TrendingUp className="w-5 h-5" />
               </div>
-              <span className="text-[11px] font-mono font-bold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+              <span className="text-[11px] font-mono font-bold text-white/80 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
                 {currentKpis.productivTrend}
               </span>
             </div>
             <div>
-              <span className="text-xs font-mono font-extrabold uppercase text-slate-300 block">KPI 03</span>
-              <h4 className="text-sm font-extrabold text-white">Productividad Comercial</h4>
-              <p className="text-3xl font-black text-[#F08D17] font-mono mt-1">{currentKpis.productiv}</p>
-              <span className="text-xs text-slate-300 font-mono font-bold block mt-1">{currentKpis.productivSub}</span>
+              <span className="text-xs font-mono font-medium uppercase text-white/50 block">KPI 03</span>
+              <h4 className="text-sm font-bold text-white">Productividad Comercial</h4>
+              <p className="text-3xl font-black text-white font-mono mt-1">{currentKpis.productiv}</p>
+              <span className="text-xs text-white/60 font-mono font-medium block mt-1">{currentKpis.productivSub}</span>
             </div>
             <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
               <div className="bg-[#F08D17] h-full rounded-full w-[78%]" />
@@ -350,43 +350,43 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
             }}
             className={`p-6 rounded-3xl transition-all cursor-pointer space-y-4 text-white ${
               selectedKpiCard === 4
-                ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
-                : "bg-[#003B3F]/90 border border-white/15 shadow-xl hover:border-white/30"
+                ? "bg-white/[0.08] border-2 border-[#F08D17] shadow-2xl ring-2 ring-[#F08D17]/30 scale-102"
+                : "bg-white/[0.03] border border-white/10 shadow-xl hover:border-white/20"
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <span className="text-[11px] font-mono font-bold text-emerald-300 bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+              <span className="text-[11px] font-mono font-bold text-white/80 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
                 {currentKpis.simvAuditTrend}
               </span>
             </div>
             <div>
-              <span className="text-xs font-mono font-extrabold uppercase text-slate-300 block">KPI 04</span>
-              <h4 className="text-sm font-extrabold text-white">Auditoría & SIMV ISO 27002</h4>
+              <span className="text-xs font-mono font-medium uppercase text-white/50 block">KPI 04</span>
+              <h4 className="text-sm font-bold text-white">Auditoría & SIMV ISO 27002</h4>
               <p className="text-3xl font-black text-white font-mono mt-1">{currentKpis.simvAudit}</p>
-              <span className="text-xs text-emerald-300 font-mono font-bold block mt-1">{currentKpis.simvAuditSub}</span>
+              <span className="text-xs text-white/60 font-mono font-medium block mt-1">{currentKpis.simvAuditSub}</span>
             </div>
             <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-emerald-400 h-full rounded-full w-full" />
+              <div className="bg-[#F08D17] h-full rounded-full w-full" />
             </div>
           </div>
         </div>
 
         {/* Dynamic Chart + Audit Feed */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-7 p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-4">
+          <div className="lg:col-span-7 p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-6 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
                 <h3 className="font-extrabold text-lg text-white">{currentChart.title}</h3>
-                <span className="text-xs text-slate-300 font-mono">{currentChart.subtitle}</span>
+                <span className="text-xs text-white/60 font-mono">{currentChart.subtitle}</span>
               </div>
               <BarChart3 className="w-6 h-6 text-[#F08D17]" />
             </div>
 
             <div className="space-y-4">
-              <div className="h-48 flex items-end justify-between gap-3 pt-6 px-2 border-b border-white/15">
+              <div className="h-48 flex items-end justify-between gap-3 pt-6 px-2 border-b border-white/10">
                 {currentChart.bars.map((data, idx) => {
                   const isSelected = safeMonthIdx === idx;
                   const barHeightPercent = Math.min((data.val / currentChart.maxVal) * 100, 100);
@@ -397,7 +397,7 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
                       onClick={() => setSelectedMonthIdx(idx)}
                       className="flex-1 flex flex-col items-center gap-2 group cursor-pointer h-full justify-end"
                     >
-                      <span className={`text-[10px] font-mono font-bold ${isSelected ? "text-[#F08D17]" : "text-slate-300"}`}>
+                      <span className={`text-[10px] font-mono font-bold ${isSelected ? "text-[#F08D17]" : "text-white/60"}`}>
                         {data.val} {currentChart.unit === "$M USD" ? "M" : ""}
                       </span>
                       <div
@@ -406,7 +406,7 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
                           isSelected ? "bg-[#F08D17] shadow-lg scale-105" : "bg-white/20 hover:bg-white/40"
                         }`}
                       />
-                      <span className={`text-xs font-bold font-mono ${isSelected ? "text-[#F08D17]" : "text-slate-300"}`}>
+                      <span className={`text-xs font-bold font-mono ${isSelected ? "text-[#F08D17]" : "text-white/60"}`}>
                         {data.label}
                       </span>
                     </div>
@@ -415,34 +415,34 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
               </div>
 
               {currentSelectedBar && (
-                <div className="p-4 rounded-2xl bg-[#002D30] border border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-white">
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-white">
                   <div>
-                    <span className="text-slate-400 font-bold block">ELEMENTO SELECCIONADO:</span>
+                    <span className="text-white/50 font-medium block">ELEMENTO SELECCIONADO:</span>
                     <span className="text-sm font-extrabold text-[#F08D17]">{currentSelectedBar.label}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-bold block">MÉTRICA 1:</span>
-                    <span className="text-sm font-extrabold text-emerald-300">{currentSelectedBar.detail1}</span>
+                    <span className="text-white/50 font-medium block">MÉTRICA 1:</span>
+                    <span className="text-sm font-extrabold text-white">{currentSelectedBar.detail1}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-bold block">MÉTRICA 2:</span>
-                    <span className="text-sm font-extrabold text-white">{currentSelectedBar.detail2}</span>
+                    <span className="text-white/50 font-medium block">MÉTRICA 2:</span>
+                    <span className="text-sm font-extrabold text-white/80">{currentSelectedBar.detail2}</span>
                   </div>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="lg:col-span-5 p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-4">
+          <div className="lg:col-span-5 p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-6 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2.5">
                 <Activity className="w-5 h-5 text-[#F08D17]" />
                 <div>
                   <h3 className="font-extrabold text-base text-white">Bitácora de Eventos KPI 0{selectedKpiCard}</h3>
-                  <span className="text-[10px] text-slate-300 font-mono">Filtro: {kpiPeriodTab.toUpperCase()}</span>
+                  <span className="text-[10px] text-white/60 font-mono">Filtro: {kpiPeriodTab.toUpperCase()}</span>
                 </div>
               </div>
-              <span className="text-[10px] font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2.5 py-1 rounded-full border border-emerald-400/40">
+              <span className="text-[10px] font-mono font-bold text-[#F08D17] bg-[#F08D17]/10 px-2.5 py-1 rounded-full border border-[#F08D17]/30">
                 ● En Vivo
               </span>
             </div>

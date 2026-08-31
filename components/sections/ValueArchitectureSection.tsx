@@ -63,21 +63,21 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
 
         <motion.div variants={sectionItemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Model 1: Autogestión Inversionista 24/7 */}
-          <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl shadow-2xl border border-white/15 text-white space-y-6">
+          <div className="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-2xl border border-white/10 text-white space-y-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#F08D17]/20 border border-[#F08D17]/40 flex items-center justify-center text-[#F08D17] shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F08D17] shrink-0">
                 <Zap className="w-6 h-6" />
               </div>
               <div>
                 <h3 className="font-extrabold text-xl sm:text-2xl text-white">
                   <EditableField id="sec2_card1_title" defaultText="Autogestión Inversionista 24/7" />
                 </h3>
-                <span className="text-sm text-[#F08D17] font-bold font-mono">
+                <span className="text-sm text-white/60 font-medium font-mono">
                   <EditableField id="sec2_card1_sub" defaultText="App Móvil iOS/Android & Portal Web" />
                 </span>
               </div>
             </div>
-            <ul className="space-y-4 text-sm sm:text-base text-slate-200">
+            <ul className="space-y-4 text-sm sm:text-base text-white/80">
               <li className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
                 <span>Consulta unificada 360° de Renta Fija, Mutuos, Fondos Inmobiliarios Excel I y II y Fondos Abiertos ESAFI.</span>
@@ -94,21 +94,21 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
           </div>
 
           {/* Model 2: Relaciones de Alto Valor & CRM Dynamics */}
-          <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl shadow-2xl border border-white/15 text-white space-y-6">
+          <div className="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-2xl border border-white/10 text-white space-y-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-[#F08D17] shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F08D17] shrink-0">
                 <Users className="w-6 h-6" />
               </div>
               <div>
                 <h3 className="font-extrabold text-xl sm:text-2xl text-white">
                   <EditableField id="sec2_card2_title" defaultText="Gestión Comercial & CRM" />
                 </h3>
-                <span className="text-sm text-emerald-300 font-bold font-mono">
+                <span className="text-sm text-white/60 font-medium font-mono">
                   <EditableField id="sec2_card2_sub" defaultText="Ejecutivos Enfocados en Cierre y Valor" />
                 </span>
               </div>
             </div>
-            <ul className="space-y-4 text-sm sm:text-base text-slate-200">
+            <ul className="space-y-4 text-sm sm:text-base text-white/80">
               <li className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
                 <span>Creación automática de Oportunidades comerciales vinculadas al titular en Microsoft Dynamics 365.</span>
@@ -126,38 +126,38 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
         </motion.div>
 
         {/* ROI Comparison Table */}
-        <motion.div variants={sectionItemVariants} className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl shadow-2xl border border-white/15 text-white overflow-x-auto">
+        <motion.div variants={sectionItemVariants} className="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-2xl border border-white/10 text-white overflow-x-auto">
           <h3 className="font-extrabold text-base sm:text-lg uppercase font-mono text-[#F08D17] mb-6 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[#F08D17]" />
             <span>Impacto Operativo: Modelo Tradicional vs Solución Digital ENFOCO</span>
           </h3>
           <table className="w-full text-left text-sm sm:text-base">
             <thead>
-              <tr className="border-b border-white/20 text-emerald-200 font-mono text-xs sm:text-sm uppercase tracking-wider">
+              <tr className="border-b border-white/10 text-white/50 font-mono text-xs sm:text-sm uppercase tracking-wider">
                 <th className="pb-3 px-2">Proceso Operativo</th>
-                <th className="pb-3 px-2 text-slate-400">Antes (Manual / Presencial)</th>
+                <th className="pb-3 px-2 text-white/50">Antes (Manual / Presencial)</th>
                 <th className="pb-3 px-2 text-[#F08D17] font-bold">Con Plataforma ENFOCO</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10 text-slate-100">
+            <tbody className="divide-y divide-white/10 text-white/80">
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Solicitud de Estado de Cuenta</td>
-                <td className="py-4 px-2 text-slate-400">Llamada/Email (Tiempo espera: 24h)</td>
+                <td className="py-4 px-2 text-white/60">Llamada/Email (Tiempo espera: 24h)</td>
                 <td className="py-4 px-2 font-extrabold text-[#F08D17]">Descarga Inmediata PDF Protegido 24/7</td>
               </tr>
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Pacto / Renovación de Mutuo</td>
-                <td className="py-4 px-2 text-slate-400">Firma física en oficina / escaneo</td>
+                <td className="py-4 px-2 text-white/60">Firma física en oficina / escaneo</td>
                 <td className="py-4 px-2 font-extrabold text-[#F08D17]">Trade Ticket Digital + Fehaciente OTP</td>
               </tr>
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Seguimiento Comercial EPB</td>
-                <td className="py-4 px-2 text-slate-400">Registro manual de llamadas</td>
+                <td className="py-4 px-2 text-white/60">Registro manual de llamadas</td>
                 <td className="py-4 px-2 font-extrabold text-[#F08D17]">Oportunidad Autocreada en Dynamics CRM</td>
               </tr>
               <tr>
                 <td className="py-4 px-2 font-bold text-base text-white">Operaciones ESAFI (Fondos Abiertos)</td>
-                <td className="py-4 px-2 text-slate-400">Trámite por formulario físico</td>
+                <td className="py-4 px-2 text-white/60">Trámite por formulario físico</td>
                 <td className="py-4 px-2 font-extrabold text-[#F08D17]">Integración Directa a SIFI Fondos</td>
               </tr>
             </tbody>
