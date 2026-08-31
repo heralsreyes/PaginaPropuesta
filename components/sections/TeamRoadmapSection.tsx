@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { UserCheck } from "lucide-react";
+import { UserCheck, Plus, Trash2 } from "lucide-react";
 import { EditableField } from "@/components/ui/EditableField";
-import { ProposalData } from "@/data/proposalData";
+import { EditableBlockWrapper } from "@/components/studio/EditableBlockWrapper";
+import { useStudioStore } from "@/store/useStudioStore";
+import { ProposalData, TeamMember } from "@/data/proposalData";
 
 interface TeamRoadmapSectionProps {
   secId: string;
@@ -26,6 +28,27 @@ const sectionContainerVariants = {
 };
 
 export const TeamRoadmapSection: React.FC<TeamRoadmapSectionProps> = ({ secId, proposal }) => {
+  const { isDesignMode } = useStudioStore();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(proposal.team || []);
+
+  const handleDeleteMember = (index: number) => {
+    if (teamMembers.length <= 1) return;
+    setTeamMembers(teamMembers.filter((_, i) => i !== index));
+  };
+
+  const handleAddMember = () => {
+    const newMember: TeamMember = {
+      role: "Especialista Frontend / QA",
+      category: "Senior",
+      dedicationPercent: 100,
+      responsibilities: [
+        "Desarrollo e integración de interfaces",
+        "Aseguramiento de calidad y pruebas UAT",
+      ],
+    };
+    setTeamMembers([...teamMembers, newMember]);
+  };
+
   return (
     <section
       id={secId}
@@ -50,27 +73,56 @@ export const TeamRoadmapSection: React.FC<TeamRoadmapSectionProps> = ({ secId, p
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {proposal.team.map((member, i) => (
-            <div key={i} className="p-6 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-4 text-white">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-[#F08D17] shrink-0 font-bold">
-                  <UserCheck className="w-6 h-6 text-[#F08D17]" />
+        {/* Team Cards Grid */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {teamMembers.map((member, i) => (
+              <EditableBlockWrapper
+                key={i}
+                id={`team-member-${i}`}
+                label="Integrante"
+                onDelete={teamMembers.length > 1 ? () => handleDeleteMember(i) : undefined}
+                className="h-full"
+              >
+                <div className="p-6 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-4 text-white h-full flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-[#F08D17] shrink-0 font-bold">
+                        <UserCheck className="w-6 h-6 text-[#F08D17]" />
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-base sm:text-lg text-white">
+                          <EditableField id={`sec8_member_${i}_role`} defaultText={member.role} />
+                        </h3>
+                        <span className="text-xs text-emerald-300 font-mono font-bold">
+                          <EditableField id={`sec8_member_${i}_meta`} defaultText={`${member.category} • ${member.dedicationPercent}% Dedicación`} />
+                        </span>
+                      </div>
+                    </div>
+                    <ul className="space-y-2 text-xs sm:text-sm text-slate-200 pl-2">
+                      {member.responsibilities.map((resp, rIdx) => (
+                        <li key={rIdx}>
+                          • <EditableField id={`sec8_member_${i}_resp_${rIdx}`} defaultText={resp} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-extrabold text-base sm:text-lg text-white">{member.role}</h3>
-                  <span className="text-xs text-emerald-300 font-mono font-bold">
-                    {member.category} • {member.dedicationPercent}% Dedicación
-                  </span>
-                </div>
-              </div>
-              <ul className="space-y-2 text-xs sm:text-sm text-slate-200 pl-2">
-                {member.responsibilities.map((resp, rIdx) => (
-                  <li key={rIdx}>• {resp}</li>
-                ))}
-              </ul>
+              </EditableBlockWrapper>
+            ))}
+          </div>
+
+          {isDesignMode && (
+            <div className="flex justify-center pt-2">
+              <button
+                onClick={handleAddMember}
+                className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#F08D17] font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Añadir Integrante de Equipo</span>
+              </button>
             </div>
-          ))}
+          )}
         </div>
       </motion.div>
     </section>

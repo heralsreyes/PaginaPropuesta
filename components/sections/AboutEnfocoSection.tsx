@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Building2, Award, ShieldCheck } from "lucide-react";
+import { Sparkles, Building2, Award, ShieldCheck, Plus, Trash2 } from "lucide-react";
 import { EditableField } from "@/components/ui/EditableField";
+import { EditableBlockWrapper } from "@/components/studio/EditableBlockWrapper";
+import { useStudioStore } from "@/store/useStudioStore";
 
 interface AboutEnfocoSectionProps {
   secId: string;
@@ -23,13 +25,54 @@ const sectionContainerVariants = {
   },
 };
 
+const DEFAULT_CARDS = [
+  {
+    id: "about-card-1",
+    title: "Perfil & Trayectoria",
+    desc: "Empresa con sede en República Dominicana y más de 10 años en el mercado. Ejecutamos proyectos presenciales y remotos garantizando el acompañamiento continuo en cada fase.",
+    icon: "building",
+  },
+  {
+    id: "about-card-2",
+    title: "Filosofía Empresarial",
+    desc: "Nuestra misión es ser el mejor aliado tecnológico de nuestros clientes, fundamentados en valores de Innovación, Liderazgo, Integridad, Compromiso y Lealtad.",
+    icon: "award",
+  },
+  {
+    id: "about-card-3",
+    title: "Seguridad ISO 27001",
+    desc: "Desarrollo alineado a los estándares internacionales de confidencialidad, integridad y disponibilidad, asegurando la protección total de datos financieros.",
+    icon: "shield",
+  },
+];
+
 export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId }) => {
+  const { isDesignMode } = useStudioStore();
+  const [cards, setCards] = useState(DEFAULT_CARDS);
+
+  const handleDeleteCard = (id: string) => {
+    if (cards.length <= 1) return;
+    setCards(cards.filter((c) => c.id !== id));
+  };
+
+  const handleAddCard = () => {
+    const newId = `about-card-${Date.now()}`;
+    setCards([
+      ...cards,
+      {
+        id: newId,
+        title: "Nueva Credencial ENFOCO",
+        desc: "Descripción de capacidades técnicas, certificaciones y valor diferencial para el cliente.",
+        icon: "award",
+      },
+    ]);
+  };
+
   return (
     <section
       id={secId}
       className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-b from-[#D6E5DE] via-[#D0E0D9] to-[#C8DCD3] text-[#1E3A2F] px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#B2CCC1]"
     >
-      {/* Sutil halo ambiental suave en verde Enfoco */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-[#135A34]/6 blur-[160px] rounded-full pointer-events-none" />
 
       <motion.div
@@ -57,71 +100,77 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-7 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg shadow-emerald-950/5 hover:shadow-2xl hover:border-[#135A34]/40 transition-all space-y-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#135A34]/15 border border-[#135A34]/30 flex items-center justify-center text-[#135A34]">
-              <Building2 className="w-6 h-6" />
-            </div>
-            <h3 className="font-extrabold text-xl sm:text-2xl text-[#135A34] font-display">Perfil & Trayectoria</h3>
-            <p className="text-sm sm:text-base text-[#1E3A2F] leading-relaxed font-medium">
-              Empresa con sede en República Dominicana y más de 10 años en el mercado. Ejecutamos proyectos presenciales y remotos garantizando el acompañamiento continuo en cada fase.
-            </p>
+        {/* Corporate Cards Grid */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {cards.map((c) => (
+              <EditableBlockWrapper
+                key={c.id}
+                id={c.id}
+                label="Ficha Empresa"
+                onDelete={cards.length > 1 ? () => handleDeleteCard(c.id) : undefined}
+                className="h-full"
+              >
+                <div className="p-7 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg shadow-emerald-950/5 hover:shadow-2xl hover:border-[#135A34]/40 transition-all space-y-3.5 h-full flex flex-col justify-between">
+                  <div className="space-y-3.5">
+                    <div className="w-12 h-12 rounded-2xl bg-[#135A34]/15 border border-[#135A34]/30 flex items-center justify-center text-[#135A34]">
+                      {c.icon === "building" ? (
+                        <Building2 className="w-6 h-6" />
+                      ) : c.icon === "shield" ? (
+                        <ShieldCheck className="w-6 h-6" />
+                      ) : (
+                        <Award className="w-6 h-6" />
+                      )}
+                    </div>
+                    <h3 className="font-extrabold text-xl sm:text-2xl text-[#135A34] font-display">
+                      <EditableField id={`sec10_${c.id}_title`} defaultText={c.title} />
+                    </h3>
+                    <p className="text-sm sm:text-base text-[#1E3A2F] leading-relaxed font-medium">
+                      <EditableField id={`sec10_${c.id}_desc`} defaultText={c.desc} />
+                    </p>
+                  </div>
+                </div>
+              </EditableBlockWrapper>
+            ))}
           </div>
 
-          <div className="p-7 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg shadow-emerald-950/5 hover:shadow-2xl hover:border-[#135A34]/40 transition-all space-y-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#135A34]/15 border border-[#135A34]/30 flex items-center justify-center text-[#135A34]">
-              <Award className="w-6 h-6" />
+          {isDesignMode && (
+            <div className="flex justify-center pt-2">
+              <button
+                onClick={handleAddCard}
+                className="px-4 py-2 rounded-xl bg-[#135A34]/10 hover:bg-[#135A34]/20 border border-[#135A34]/30 text-[#135A34] font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Añadir Tarjeta Corporativa</span>
+              </button>
             </div>
-            <h3 className="font-extrabold text-xl sm:text-2xl text-[#135A34] font-display">Filosofía Empresarial</h3>
-            <p className="text-sm sm:text-base text-[#1E3A2F] leading-relaxed font-medium">
-              Nuestra misión es ser el mejor aliado tecnológico de nuestros clientes, fundamentados en valores de Innovación, Liderazgo, Integridad, Compromiso y Lealtad.
-            </p>
-          </div>
-
-          <div className="p-7 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg shadow-emerald-950/5 hover:shadow-2xl hover:border-[#135A34]/40 transition-all space-y-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#135A34]/15 border border-[#135A34]/30 flex items-center justify-center text-[#135A34]">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <h3 className="font-extrabold text-xl sm:text-2xl text-[#135A34] font-display">Calidad & Continuidad</h3>
-            <p className="text-sm sm:text-base text-[#1E3A2F] leading-relaxed font-medium">
-              Equipo multidisciplinario certificado en gestión de proyectos PMI, arquitectura de software, metodologías Ágiles (Scrum), BCP (Continuidad) y DRP (Recuperación).
-            </p>
-          </div>
+          )}
         </div>
 
-        <div className="p-7 sm:p-8 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg shadow-emerald-950/5 space-y-5">
-          <h3 className="font-extrabold text-base sm:text-lg uppercase font-mono text-[#135A34] flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#135A34]" />
-            <span>Estándares de Calidad & Certificaciones Internacionales</span>
-          </h3>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            <div className="p-4 rounded-2xl bg-[#AFCFC5] border border-[#97BDB1] text-center space-y-1 hover:border-[#135A34]/40 transition-all">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#135A34] block">ISO 27001 / 27002</span>
-              <span className="text-[11px] sm:text-xs text-[#244738] font-medium">Seguridad de Información</span>
+        {/* Security Box */}
+        <EditableBlockWrapper id="sec10_iso_box" label="Caja de Seguridad">
+          <div className="p-8 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg text-[#1E3A2F] flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#135A34] font-bold">
+                ESTÁNDAR DE SEGURIDAD & COMPLIANCE
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-[#135A34] font-display">
+                <EditableField id="sec10_iso_title" defaultText="Certificaciones ISO 27001 / ISO 27002" />
+              </h3>
+              <p className="text-sm sm:text-base text-[#1E3A2F] max-w-2xl font-medium">
+                <EditableField
+                  id="sec10_iso_desc"
+                  defaultText="Todos nuestros procesos de desarrollo siguen lineamientos rigurosos de seguridad de la información, auditoría de código y cifrado bancario AES-256."
+                />
+              </p>
             </div>
-            <div className="p-4 rounded-2xl bg-[#AFCFC5] border border-[#97BDB1] text-center space-y-1 hover:border-[#135A34]/40 transition-all">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#135A34] block">ISO 9001</span>
-              <span className="text-[11px] sm:text-xs text-[#244738] font-medium">Gestión de Calidad</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#AFCFC5] border border-[#97BDB1] text-center space-y-1 hover:border-[#135A34]/40 transition-all">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#135A34] block">DAMA CDMP</span>
-              <span className="text-[11px] sm:text-xs text-[#244738] font-medium">Gobierno de Datos</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#AFCFC5] border border-[#97BDB1] text-center space-y-1 hover:border-[#135A34]/40 transition-all">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#135A34] block">CMMI & COBIT</span>
-              <span className="text-[11px] sm:text-xs text-[#244738] font-medium">Ingeniería de Software</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#AFCFC5] border border-[#97BDB1] text-center space-y-1 hover:border-[#135A34]/40 transition-all">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#135A34] block">ITIL v4</span>
-              <span className="text-[11px] sm:text-xs text-[#244738] font-medium">Gestión de Servicios</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#AFCFC5] border border-[#97BDB1] text-center space-y-1 hover:border-[#135A34]/40 transition-all">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#135A34] block">Scrum / PMI</span>
-              <span className="text-[11px] sm:text-xs text-[#244738] font-medium">Metodología Ágil</span>
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="text-xs font-mono font-bold px-4 py-2 rounded-2xl bg-[#135A34] text-white shadow-md">
+                100% REGULADO SIMV
+              </span>
             </div>
           </div>
-        </div>
+        </EditableBlockWrapper>
       </motion.div>
     </section>
   );
