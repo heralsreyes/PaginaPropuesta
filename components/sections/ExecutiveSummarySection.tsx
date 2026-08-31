@@ -86,7 +86,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
           />
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-10 pt-4">
           <a
             href="#sec-7-epicas-alcance"
             className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#F08D17] to-[#EA580C] hover:from-[#EA580C] hover:to-[#D97706] text-white font-black px-9 py-4 rounded-2xl shadow-xl shadow-[#F08D17]/30 transition-all transform hover:scale-105 active:scale-95 text-base"
