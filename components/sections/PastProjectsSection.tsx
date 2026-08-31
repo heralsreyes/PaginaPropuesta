@@ -38,7 +38,7 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#00282C] via-[#001E21] to-[#001416] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#00282C]/60"
     >
       <motion.div
         initial="hidden"
@@ -156,8 +156,8 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
           </div>
 
           <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] overflow-hidden py-6">
-            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#004F54] via-[#004F54]/90 to-transparent z-20 pointer-events-none" />
-            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#004F54] via-[#004F54]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#00282C] via-[#00282C]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#00282C] via-[#00282C]/90 to-transparent z-20 pointer-events-none" />
 
             <motion.div
               className="flex items-center gap-6 sm:gap-10 w-max px-4"
