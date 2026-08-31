@@ -27,7 +27,7 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#00282C] via-[#001E21] to-[#001416] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#00282C]/60"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#091C23] via-[#06181C] to-[#031114] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#091C23]/60"
     >
       <motion.div
         initial="hidden"
