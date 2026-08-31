@@ -9,6 +9,8 @@ import { CardCanvasElement } from "./canvas/CardCanvasElement";
 import { MockupCanvasElement } from "./canvas/MockupCanvasElement";
 import { ImageCanvasElement } from "./canvas/ImageCanvasElement";
 import { TextCanvasElement } from "./canvas/TextCanvasElement";
+import { ModuleCanvasElement } from "./canvas/ModuleCanvasElement";
+import { UIComponentCanvasElement } from "./canvas/UIComponentCanvasElement";
 
 interface CanvasElementWrapperProps {
   element: CanvasElement;
@@ -156,6 +158,12 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
 
       {element.type === "card" && <CardCanvasElement element={element} />}
 
+      {element.type === "module_template" && <ModuleCanvasElement element={element} />}
+
+      {(element.type === "shape" || element.type === "line" || element.type === "graphic") && (
+        <UIComponentCanvasElement element={element} />
+      )}
+
       {element.type === "mockup" && <MockupCanvasElement element={element} />}
 
       {element.type === "text" && <TextCanvasElement element={element} />}
@@ -164,6 +172,10 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
 
       {element.type !== "button" &&
         element.type !== "card" &&
+        element.type !== "module_template" &&
+        element.type !== "shape" &&
+        element.type !== "line" &&
+        element.type !== "graphic" &&
         element.type !== "mockup" &&
         element.type !== "text" &&
         element.type !== "image" && <CardCanvasElement element={element} />}
