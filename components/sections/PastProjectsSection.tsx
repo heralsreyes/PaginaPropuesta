@@ -38,10 +38,11 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-b from-[#F4F8F7] via-[#EFF6F4] to-[#E5EFEB] text-[#1E293B] px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#E2EBE8]"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#0F172A] via-[#0C1322] to-[#080D18] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-slate-800"
     >
       {/* Sutil halo ambiental suave */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#004F54]/5 blur-[160px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-slate-500/5 blur-[160px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-12 left-12 w-[400px] h-[400px] bg-[#F08D17]/5 blur-[140px] rounded-full pointer-events-none" />
 
       <motion.div
         initial="hidden"
@@ -51,13 +52,13 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
         className="max-w-6xl mx-auto w-full space-y-10 relative z-10"
       >
         <div className="text-center space-y-3">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#004F54] uppercase font-mono px-4 py-1.5 rounded-full bg-[#004F54]/10 border border-[#004F54]/20 inline-block shadow-xs">
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/5 border border-white/10 inline-block shadow-xs">
             <EditableField id="sec11_badge" defaultText="11. CASOS DE ÉXITO & EXPERIENCIA DEMOSTRADA" />
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#00383C] font-display">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-display">
             <EditableField id="sec11_h2" defaultText="Experiencia Comprobada en Proyectos Similares" />
           </h2>
-          <p className="text-base sm:text-lg text-[#475569] max-w-3xl mx-auto font-medium">
+          <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto font-medium">
             <EditableField
               id="sec11_desc"
               defaultText="Casos de éxito desarrollados para grandes corporaciones e instituciones financieras en la República Dominicana."
@@ -66,82 +67,82 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-7 rounded-3xl bg-white border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 space-y-4 hover:border-[#004F54]/30 hover:shadow-2xl transition-all">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 hover:shadow-2xl transition-all space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 flex items-center justify-center font-bold">
+                <div className="w-11 h-11 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-xl text-[#00383C] font-display">App Somos Corripio</h3>
-                  <span className="text-xs font-mono text-[#004F54] font-bold">Distribuidora Corripio</span>
+                  <h3 className="font-extrabold text-xl text-white font-display">App Somos Corripio</h3>
+                  <span className="text-xs font-mono text-slate-400 font-bold">Distribuidora Corripio</span>
                 </div>
               </div>
-              <span className="text-xs px-3 py-1 rounded-full bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 font-bold font-mono">
+              <span className="text-xs px-3 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               Aplicación móvil nativa para autogestión de empleados e inversionistas del grupo, catálogo interactivo, notificaciones push transaccionales y consulta de beneficios 24/7.
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-white border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 space-y-4 hover:border-[#004F54]/30 hover:shadow-2xl transition-all">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 hover:shadow-2xl transition-all space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 flex items-center justify-center font-bold">
+                <div className="w-11 h-11 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-xl text-[#00383C] font-display">App de Asegurados</h3>
-                  <span className="text-xs font-mono text-[#004F54] font-bold">Humano Seguros</span>
+                  <h3 className="font-extrabold text-xl text-white font-display">App de Asegurados</h3>
+                  <span className="text-xs font-mono text-slate-400 font-bold">Humano Seguros</span>
                 </div>
               </div>
-              <span className="text-xs px-3 py-1 rounded-full bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 font-bold font-mono">
+              <span className="text-xs px-3 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               App móvil de alto volumen transaccional con carnet digital cifrado, consulta de pólizas en tiempo real, seguimiento de reclamaciones e integración con core bancario/asegurador.
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-white border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 space-y-4 hover:border-[#004F54]/30 hover:shadow-2xl transition-all">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 hover:shadow-2xl transition-all space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 flex items-center justify-center font-bold">
+                <div className="w-11 h-11 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-xl text-[#00383C] font-display">App de Intermediarios</h3>
-                  <span className="text-xs font-mono text-[#004F54] font-bold">Humano Seguros</span>
+                  <h3 className="font-extrabold text-xl text-white font-display">App de Intermediarios</h3>
+                  <span className="text-xs font-mono text-slate-400 font-bold">Humano Seguros</span>
                 </div>
               </div>
-              <span className="text-xs px-3 py-1 rounded-full bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 font-bold font-mono">
+              <span className="text-xs px-3 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               Plataforma móvil y portal web para corredores e intermediarios comerciales, cotizaciones rápidas en línea, gestión de comisiones y flujo de aprobación de solicitudes.
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-white border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 space-y-4 hover:border-[#004F54]/30 hover:shadow-2xl transition-all">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 hover:shadow-2xl transition-all space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 flex items-center justify-center font-bold">
+                <div className="w-11 h-11 rounded-2xl bg-white/5 text-[#F08D17] border border-white/10 flex items-center justify-center font-bold">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-xl text-[#00383C] font-display">Oficina Virtual OFV</h3>
-                  <span className="text-xs font-mono text-[#004F54] font-bold">Humano Seguros</span>
+                  <h3 className="font-extrabold text-xl text-white font-display">Oficina Virtual OFV</h3>
+                  <span className="text-xs font-mono text-slate-400 font-bold">Humano Seguros</span>
                 </div>
               </div>
-              <span className="text-xs px-3 py-1 rounded-full bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 font-bold font-mono">
+              <span className="text-xs px-3 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10 font-bold font-mono">
                 PRODUCCIÓN
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               Modernización del portal web de autogestión corporativa con descarga masiva de estados de cuenta en PDF cifrados, validación fehaciente OTP y firma electrónica.
             </p>
           </div>
@@ -149,18 +150,18 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
 
         <div className="w-full space-y-6 pt-4">
           <div className="text-center space-y-2 px-4">
-            <span className="text-xs sm:text-sm font-mono font-bold text-[#004F54] uppercase tracking-widest bg-[#004F54]/10 px-5 py-2 rounded-full border border-[#004F54]/20 inline-flex items-center gap-2 shadow-xs">
-              <Sparkles className="w-4 h-4 text-[#004F54]" />
+            <span className="text-xs sm:text-sm font-mono font-bold text-[#F08D17] uppercase tracking-widest bg-white/5 px-5 py-2 rounded-full border border-white/10 inline-flex items-center gap-2 shadow-xs">
+              <Sparkles className="w-4 h-4 text-[#F08D17]" />
               PORTAFOLIO DE EMPRESAS LÍDERES QUE CONFÍAN EN ENFOCO, S.R.L.
             </span>
-            <p className="text-sm sm:text-base text-[#64748B] font-medium">
+            <p className="text-sm sm:text-base text-slate-400 font-medium">
               Soluciones empresariales de software a la medida en producción continua 24/7
             </p>
           </div>
 
           <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] overflow-hidden py-6">
-            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#F4F8F7] via-[#F4F8F7]/90 to-transparent z-20 pointer-events-none" />
-            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#F4F8F7] via-[#F4F8F7]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 left-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[#0F172A] via-[#0F172A]/90 to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 right-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[#0F172A] via-[#0F172A]/90 to-transparent z-20 pointer-events-none" />
 
             <motion.div
               className="flex items-center gap-6 sm:gap-10 w-max px-4"
@@ -174,20 +175,20 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
               {marqueeClients.map((client, idx) => (
                 <div
                   key={idx}
-                  className="w-72 sm:w-80 md:w-[350px] p-6 sm:p-8 rounded-3xl bg-white shadow-xl shadow-[#00383C]/5 border border-[#E2EBE8] flex flex-col items-center justify-center text-center space-y-4 hover:border-[#004F54]/40 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group shrink-0 cursor-pointer relative overflow-hidden"
+                  className="w-72 sm:w-80 md:w-[350px] p-6 sm:p-8 rounded-3xl bg-slate-800/40 backdrop-blur-xl shadow-2xl border border-slate-700/50 flex flex-col items-center justify-center text-center space-y-4 hover:border-slate-500/60 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group shrink-0 cursor-pointer relative overflow-hidden"
                 >
-                  <div className="w-48 h-28 sm:w-56 sm:h-32 flex items-center justify-center overflow-hidden bg-[#F4F8F7] rounded-2xl p-4">
+                  <div className="w-48 h-28 sm:w-56 sm:h-32 flex items-center justify-center overflow-hidden bg-white/10 rounded-2xl p-4">
                     <img
                       src={client.logo}
                       alt={client.name}
-                      className="w-full h-full object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain filter brightness-110 drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg sm:text-xl text-[#00383C] tracking-tight group-hover:text-[#004F54] transition-colors font-display">
+                    <h4 className="font-bold text-lg sm:text-xl text-white tracking-tight group-hover:text-[#F08D17] transition-colors font-display">
                       {client.name}
                     </h4>
-                    <span className="text-xs font-mono font-medium px-3 py-1 rounded-full bg-[#004F54]/10 text-[#004F54] border border-[#004F54]/20 uppercase inline-block mt-1.5">
+                    <span className="text-xs font-mono font-medium px-3 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10 uppercase inline-block mt-1.5">
                       {client.sector}
                     </span>
                   </div>

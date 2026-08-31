@@ -27,10 +27,11 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-b from-[#F4F8F7] via-[#EFF6F4] to-[#E5EFEB] text-[#1E293B] px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#E2EBE8]"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#0F172A] via-[#0C1322] to-[#080D18] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-slate-800"
     >
       {/* Sutil halo ambiental suave */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#004F54]/5 blur-[160px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-slate-500/5 blur-[160px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-12 right-12 w-[400px] h-[400px] bg-[#F08D17]/5 blur-[140px] rounded-full pointer-events-none" />
 
       <motion.div
         initial="hidden"
@@ -40,16 +41,16 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
         className="max-w-6xl mx-auto w-full space-y-10 relative z-10"
       >
         <div className="text-center space-y-4 max-w-4xl mx-auto">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#004F54] uppercase font-mono px-4 py-1.5 rounded-full bg-[#004F54]/10 border border-[#004F54]/20 inline-flex items-center gap-2 shadow-xs">
-            <Sparkles className="w-4 h-4 text-[#004F54]" />
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/5 border border-white/10 inline-flex items-center gap-2 shadow-xs">
+            <Sparkles className="w-4 h-4 text-[#F08D17]" />
             <EditableField id="sec10_badge" defaultText="10. SOBRE ENFOCO S.R.L. · PERFIL CORPORATIVO & CERTIFICACIONES" />
           </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#00383C] tracking-tight leading-[1.1] pt-2 font-display">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-[1.1] pt-2 font-display">
             <EditableField id="sec10_h2" defaultText="Más de 10 Años Impulsando la Transformación Digital" />
           </h2>
 
-          <p className="text-base sm:text-lg text-[#475569] max-w-3xl mx-auto font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
             <EditableField
               id="sec10_desc"
               defaultText="Especialistas en desarrollo de software a la medida, automatización de procesos complejos y gobierno de datos para los sectores financiero, seguros y salud."
@@ -58,67 +59,67 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-7 rounded-3xl bg-white/90 backdrop-blur-md border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 hover:shadow-2xl hover:border-[#004F54]/30 transition-all space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#004F54]/10 border border-[#004F54]/20 flex items-center justify-center text-[#004F54]">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F08D17]">
               <Building2 className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-xl text-[#00383C] font-display">Perfil & Trayectoria</h3>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <h3 className="font-extrabold text-xl text-white font-display">Perfil & Trayectoria</h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               Empresa con sede en República Dominicana y más de 10 años en el mercado. Ejecutamos proyectos presenciales y remotos garantizando el acompañamiento continuo en cada fase.
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-white/90 backdrop-blur-md border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 hover:shadow-2xl hover:border-[#004F54]/30 transition-all space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#004F54]/10 border border-[#004F54]/20 flex items-center justify-center text-[#004F54]">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F08D17]">
               <Award className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-xl text-[#00383C] font-display">Filosofía Empresarial</h3>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <h3 className="font-extrabold text-xl text-white font-display">Filosofía Empresarial</h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               Nuestra misión es ser el mejor aliado tecnológico de nuestros clientes, fundamentados en valores de Innovación, Liderazgo, Integridad, Compromiso y Lealtad.
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-white/90 backdrop-blur-md border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 hover:shadow-2xl hover:border-[#004F54]/30 transition-all space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#004F54]/10 border border-[#004F54]/20 flex items-center justify-center text-[#004F54]">
+          <div className="p-7 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl hover:border-slate-500/50 transition-all space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F08D17]">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-xl text-[#00383C] font-display">Calidad & Continuidad</h3>
-            <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-medium">
+            <h3 className="font-extrabold text-xl text-white font-display">Calidad & Continuidad</h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
               Equipo multidisciplinario certificado en gestión de proyectos PMI, arquitectura de software, metodologías Ágiles (Scrum), BCP (Continuidad) y DRP (Recuperación).
             </p>
           </div>
         </div>
 
-        <div className="p-8 rounded-3xl bg-white/90 backdrop-blur-md border border-[#E2EBE8] shadow-xl shadow-[#00383C]/5 space-y-6">
-          <h3 className="font-extrabold text-base sm:text-lg uppercase font-mono text-[#004F54] flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#004F54]" />
+        <div className="p-8 rounded-3xl bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-2xl space-y-6">
+          <h3 className="font-extrabold text-base sm:text-lg uppercase font-mono text-[#F08D17] flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-[#F08D17]" />
             <span>Estándares de Calidad & Certificaciones Internacionales</span>
           </h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            <div className="p-4 rounded-2xl bg-[#F4F8F7] border border-[#E2EBE8] text-center space-y-1 hover:border-[#004F54]/30 transition-all">
-              <span className="text-xs font-mono font-bold text-[#00383C] block">ISO 27001 / 27002</span>
-              <span className="text-[10px] text-[#64748B]">Seguridad de Información</span>
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 hover:border-slate-500/50 transition-all">
+              <span className="text-xs font-mono font-bold text-white block">ISO 27001 / 27002</span>
+              <span className="text-[10px] text-slate-400">Seguridad de Información</span>
             </div>
-            <div className="p-4 rounded-2xl bg-[#F4F8F7] border border-[#E2EBE8] text-center space-y-1 hover:border-[#004F54]/30 transition-all">
-              <span className="text-xs font-mono font-bold text-[#00383C] block">ISO 9001</span>
-              <span className="text-[10px] text-[#64748B]">Gestión de Calidad</span>
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 hover:border-slate-500/50 transition-all">
+              <span className="text-xs font-mono font-bold text-white block">ISO 9001</span>
+              <span className="text-[10px] text-slate-400">Gestión de Calidad</span>
             </div>
-            <div className="p-4 rounded-2xl bg-[#F4F8F7] border border-[#E2EBE8] text-center space-y-1 hover:border-[#004F54]/30 transition-all">
-              <span className="text-xs font-mono font-bold text-[#00383C] block">DAMA CDMP</span>
-              <span className="text-[10px] text-[#64748B]">Gobierno de Datos</span>
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 hover:border-slate-500/50 transition-all">
+              <span className="text-xs font-mono font-bold text-white block">DAMA CDMP</span>
+              <span className="text-[10px] text-slate-400">Gobierno de Datos</span>
             </div>
-            <div className="p-4 rounded-2xl bg-[#F4F8F7] border border-[#E2EBE8] text-center space-y-1 hover:border-[#004F54]/30 transition-all">
-              <span className="text-xs font-mono font-bold text-[#00383C] block">CMMI & COBIT</span>
-              <span className="text-[10px] text-[#64748B]">Ingeniería de Software</span>
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 hover:border-slate-500/50 transition-all">
+              <span className="text-xs font-mono font-bold text-white block">CMMI & COBIT</span>
+              <span className="text-[10px] text-slate-400">Ingeniería de Software</span>
             </div>
-            <div className="p-4 rounded-2xl bg-[#F4F8F7] border border-[#E2EBE8] text-center space-y-1 hover:border-[#004F54]/30 transition-all">
-              <span className="text-xs font-mono font-bold text-[#00383C] block">ITIL v4</span>
-              <span className="text-[10px] text-[#64748B]">Gestión de Servicios</span>
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 hover:border-slate-500/50 transition-all">
+              <span className="text-xs font-mono font-bold text-white block">ITIL v4</span>
+              <span className="text-[10px] text-slate-400">Gestión de Servicios</span>
             </div>
-            <div className="p-4 rounded-2xl bg-[#F4F8F7] border border-[#E2EBE8] text-center space-y-1 hover:border-[#004F54]/30 transition-all">
-              <span className="text-xs font-mono font-bold text-[#00383C] block">Scrum / PMI</span>
-              <span className="text-[10px] text-[#64748B]">Metodología Ágil</span>
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 hover:border-slate-500/50 transition-all">
+              <span className="text-xs font-mono font-bold text-white block">Scrum / PMI</span>
+              <span className="text-[10px] text-slate-400">Metodología Ágil</span>
             </div>
           </div>
         </div>
