@@ -86,19 +86,15 @@ export const EditableText: React.FC<EditableTextProps> = ({
     );
   }
 
-  return (
     <Tag
       onClick={(e) => {
         e.stopPropagation();
         setIsEditing(true);
       }}
-      className={`cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-[#2563EB] hover:bg-[#2563EB]/10 rounded px-1 -mx-1 relative group ${className}`}
+      className={`cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-[#2563EB]/40 hover:bg-[#2563EB]/10 rounded px-1 -mx-1 relative ${className}`}
       title="Clic para editar este texto"
     >
       {value}
-      <span className="opacity-0 group-hover:opacity-100 absolute -top-5 right-0 bg-[#2563EB] text-white text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow pointer-events-none transition-opacity">
-        ✏️ Editar
-      </span>
     </Tag>
   );
 };

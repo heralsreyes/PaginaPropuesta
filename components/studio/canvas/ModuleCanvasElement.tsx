@@ -28,7 +28,7 @@ interface ModuleCanvasElementProps {
 }
 
 export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ element }) => {
-  const { updateCanvasElement } = useStudioStore();
+  const { updateCanvasElement, isDesignMode } = useStudioStore();
   const templateType = element.templateType || "scope_master";
 
   const customBg = element.customBg || "#002224";
@@ -106,7 +106,7 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       >
         <div className="flex items-center justify-between border-b border-white/15 pb-3">
           <div className="flex items-center space-x-2">
-            <Cpu className="w-5 h-5" style={{ color: customBorder }} />
+            <Cpu className="w-5 h-5 shrink-0" style={{ color: customBorder }} />
             <EditableText
               value={element.title || "Inspector de Alcance & Épicas"}
               onChange={(val) => updateCanvasElement(element.id, { title: val })}
@@ -128,13 +128,15 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
               <span className="text-[10px] font-mono uppercase text-zinc-400 font-bold">
                 Épicas ({modules.length})
               </span>
-              <button
-                onClick={handleAddEpic}
-                className="text-[9px] font-mono font-bold text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer bg-white/10 px-1.5 py-0.5 rounded-md"
-                title="Añadir nueva épica"
-              >
-                <Plus className="w-3 h-3" /> Añadir
-              </button>
+              {isDesignMode && (
+                <button
+                  onClick={handleAddEpic}
+                  className="text-[9px] font-mono font-bold text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer bg-white/10 px-1.5 py-0.5 rounded-md"
+                  title="Añadir nueva épica"
+                >
+                  <Plus className="w-3 h-3" /> Añadir
+                </button>
+              )}
             </div>
 
             {modules.map((m, idx) => (
@@ -157,7 +159,7 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
                     }}
                     className="text-[9px] font-mono text-[#F08D17] block font-bold"
                   />
-                  {modules.length > 1 && (
+                  {isDesignMode && modules.length > 1 && (
                     <button
                       onClick={(e) => handleDeleteEpic(idx, e)}
                       className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 transition-opacity p-0.5 cursor-pointer"
@@ -188,12 +190,14 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
                   <span className="text-[10px] font-mono text-[#F08D17] block font-bold">{activeMod.epic}</span>
                   <h6 className="font-extrabold text-xs text-white">{activeMod.name}</h6>
                 </div>
-                <button
-                  onClick={handleAddDeliverable}
-                  className="text-[9px] font-mono text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer bg-white/10 px-1.5 py-0.5 rounded-md"
-                >
-                  <Plus className="w-3 h-3" /> Entregable
-                </button>
+                {isDesignMode && (
+                  <button
+                    onClick={handleAddDeliverable}
+                    className="text-[9px] font-mono text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer bg-white/10 px-1.5 py-0.5 rounded-md"
+                  >
+                    <Plus className="w-3 h-3" /> Entregable
+                  </button>
+                )}
               </div>
 
               <ul className="space-y-1.5 text-xs text-zinc-200">
@@ -207,7 +211,7 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
                         className="flex-1 truncate"
                       />
                     </div>
-                    {activeMod.items.length > 1 && (
+                    {isDesignMode && activeMod.items.length > 1 && (
                       <button
                         onClick={() => handleRemoveDeliverable(i)}
                         className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 p-0.5 cursor-pointer"
@@ -242,6 +246,12 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       setTeam([...team, { name: "Nuevo Especialista", role: "Ingeniero de Software", tag: "Fullstack" }]);
     };
 
+    const handleRemoveMember = (idx: number, e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (team.length <= 1) return;
+      setTeam(team.filter((_, i) => i !== idx));
+    };
+
     return (
       <div
         style={{
@@ -253,24 +263,35 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       >
         <div className="flex items-center justify-between border-b border-white/15 pb-3">
           <div className="flex items-center space-x-2">
-            <Users className="w-5 h-5" style={{ color: customBorder }} />
+            <Users className="w-5 h-5 shrink-0" style={{ color: customBorder }} />
             <EditableText
               value={element.title || "Equipo Especialista Asignado"}
               onChange={(val) => updateCanvasElement(element.id, { title: val })}
               className="font-extrabold text-sm text-white"
             />
           </div>
-          <button
-            onClick={handleAddMember}
-            className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[#F08D17] border border-[#F08D17]/40 flex items-center gap-1 cursor-pointer"
-          >
-            <Plus className="w-3 h-3" /> Miembro
-          </button>
+          {isDesignMode && (
+            <button
+              onClick={handleAddMember}
+              className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[#F08D17] border border-[#F08D17]/40 flex items-center gap-1 cursor-pointer"
+            >
+              <Plus className="w-3 h-3" /> Miembro
+            </button>
+          )}
         </div>
 
-        <div className="grid grid-cols-3 gap-2.5 my-3">
+        <div className="grid grid-cols-3 gap-2.5 my-3 overflow-y-auto max-h-[160px]">
           {team.map((t, idx) => (
-            <div key={idx} className="p-3 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1">
+            <div key={idx} className="p-3 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1 relative group">
+              {isDesignMode && team.length > 1 && (
+                <button
+                  onClick={(e) => handleRemoveMember(idx, e)}
+                  className="opacity-0 group-hover:opacity-100 absolute top-1.5 right-1.5 text-red-400 hover:text-red-300 p-0.5 cursor-pointer"
+                  title="Eliminar miembro"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              )}
               <div
                 style={{ borderColor: customBorder, color: customBorder }}
                 className="w-8 h-8 rounded-full bg-black/40 font-bold mx-auto flex items-center justify-center text-xs border"
@@ -284,7 +305,7 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
                   copy[idx].name = val;
                   setTeam(copy);
                 }}
-                className="font-bold text-xs truncate block"
+                className="font-bold text-xs truncate block text-white"
               />
               <EditableText
                 value={t.role}
@@ -295,7 +316,15 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
                 }}
                 className="text-[10px] text-zinc-400 block truncate"
               />
-              <span className="text-[9px] font-mono text-emerald-400 block">{t.tag}</span>
+              <EditableText
+                value={t.tag}
+                onChange={(val) => {
+                  const copy = [...team];
+                  copy[idx].tag = val;
+                  setTeam(copy);
+                }}
+                className="text-[9px] font-mono text-emerald-400 block truncate"
+              />
             </div>
           ))}
         </div>
@@ -310,6 +339,20 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
 
   // 3. Company Master (Sobre ENFOCO)
   if (templateType === "company_master") {
+    const [metrics, setMetrics] = useState([
+      { title: "ISO 27001 / 27002", sub: "Estándar de Seguridad", desc: "Cifrado AES-256 en reposo y en tránsito." },
+      { title: "+10 Años en FinTech", sub: "Experiencia en Mercado", desc: "Dominio regulatorio SIMV y banca." },
+    ]);
+
+    const handleAddMetric = () => {
+      setMetrics([...metrics, { title: "Certificación Oficial", sub: "Nueva Garantía", desc: "Cumplimiento normativo 100%." }]);
+    };
+
+    const handleRemoveMetric = (idx: number) => {
+      if (metrics.length <= 1) return;
+      setMetrics(metrics.filter((_, i) => i !== idx));
+    };
+
     return (
       <div
         style={{
@@ -321,30 +364,73 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       >
         <div className="flex items-center justify-between border-b border-white/15 pb-3">
           <div className="flex items-center space-x-2">
-            <Building2 className="w-5 h-5" style={{ color: customBorder }} />
+            <Building2 className="w-5 h-5 shrink-0" style={{ color: customBorder }} />
             <div>
               <EditableText
                 value={element.title || "ENFOCO S.R.L."}
                 onChange={(val) => updateCanvasElement(element.id, { title: val })}
                 className="font-extrabold text-sm block text-white"
               />
-              <span className="text-[10px] text-zinc-400 font-mono">Consultoría Tecnológica & FinTech</span>
+              <EditableText
+                value={element.subtitle || "Consultoría Tecnológica & FinTech"}
+                onChange={(val) => updateCanvasElement(element.id, { subtitle: val })}
+                className="text-[10px] text-zinc-400 font-mono block"
+              />
             </div>
           </div>
-          <ShieldCheck className="w-6 h-6 text-emerald-400" />
+          <div className="flex items-center space-x-2">
+            {isDesignMode && (
+              <button
+                onClick={handleAddMetric}
+                className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/10 text-[#F08D17] border border-[#F08D17]/40 flex items-center gap-0.5 cursor-pointer"
+              >
+                <Plus className="w-3 h-3" /> Ficha
+              </button>
+            )}
+            <ShieldCheck className="w-6 h-6 text-emerald-400" />
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 my-3">
-          <div className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-1">
-            <span className="text-[10px] text-zinc-400 font-mono uppercase">Estándar de Seguridad</span>
-            <h6 className="font-bold text-xs text-white">ISO 27001 / 27002</h6>
-            <p className="text-[10px] text-zinc-300">Cifrado AES-256 en reposo y en tránsito.</p>
-          </div>
-          <div className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-1">
-            <span className="text-[10px] text-zinc-400 font-mono uppercase">Experiencia en Mercado</span>
-            <h6 style={{ color: customBorder }} className="font-bold text-xs">+10 Años en FinTech</h6>
-            <p className="text-[10px] text-zinc-300">Dominio regulatorio SIMV y banca.</p>
-          </div>
+        <div className="grid grid-cols-2 gap-3 my-3 overflow-y-auto max-h-[140px]">
+          {metrics.map((m, i) => (
+            <div key={i} className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-1 relative group">
+              {isDesignMode && metrics.length > 1 && (
+                <button
+                  onClick={() => handleRemoveMetric(i)}
+                  className="opacity-0 group-hover:opacity-100 absolute top-1.5 right-1.5 text-red-400 hover:text-red-300 p-0.5 cursor-pointer"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              )}
+              <EditableText
+                value={m.sub}
+                onChange={(val) => {
+                  const copy = [...metrics];
+                  copy[i].sub = val;
+                  setMetrics(copy);
+                }}
+                className="text-[10px] text-zinc-400 font-mono uppercase block"
+              />
+              <EditableText
+                value={m.title}
+                onChange={(val) => {
+                  const copy = [...metrics];
+                  copy[i].title = val;
+                  setMetrics(copy);
+                }}
+                className="font-bold text-xs text-white block"
+              />
+              <EditableText
+                value={m.desc}
+                onChange={(val) => {
+                  const copy = [...metrics];
+                  copy[i].desc = val;
+                  setMetrics(copy);
+                }}
+                className="text-[10px] text-zinc-300 block"
+              />
+            </div>
+          ))}
         </div>
 
         <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pt-2 border-t border-white/10">
@@ -374,6 +460,11 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       setInputText("");
     };
 
+    const handleRemoveMessage = (idx: number) => {
+      if (messages.length <= 1) return;
+      setMessages(messages.filter((_, i) => i !== idx));
+    };
+
     return (
       <div
         style={{
@@ -401,10 +492,18 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`p-2.5 rounded-2xl max-w-[85%] text-zinc-100 shadow-xs ${
+              className={`p-2.5 rounded-2xl max-w-[85%] text-zinc-100 shadow-xs relative group ${
                 msg.isBot ? "bg-[#128C7E]/50 rounded-tl-xs" : "bg-[#25D366]/30 rounded-tr-xs ml-auto border border-[#25D366]/40"
               }`}
             >
+              {isDesignMode && messages.length > 1 && (
+                <button
+                  onClick={() => handleRemoveMessage(i)}
+                  className="opacity-0 group-hover:opacity-100 absolute -top-1.5 -right-1.5 bg-red-600 text-white rounded-full p-0.5 cursor-pointer shadow"
+                >
+                  <Trash2 className="w-2.5 h-2.5" />
+                </button>
+              )}
               <EditableText
                 value={msg.text}
                 onChange={(newVal) => {
@@ -425,7 +524,7 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Escribe y presiona Enter..."
+            placeholder="Escribe un mensaje interactivo..."
             className="w-full bg-transparent text-xs text-white placeholder-zinc-400 outline-none px-2"
           />
           <button type="submit" className="w-7 h-7 rounded-xl bg-[#25D366] text-white flex items-center justify-center shrink-0 shadow-md cursor-pointer">
@@ -455,7 +554,11 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
           />
           <div className="flex items-center space-x-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
             <TrendingUp className="w-3 h-3" />
-            <span>+24.8%</span>
+            <EditableText
+              value="+24.8%"
+              onChange={() => {}}
+              className="inline-block"
+            />
           </div>
         </div>
 
@@ -463,7 +566,7 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
           <EditableText
             value={element.subtitle || "$18.4M"}
             onChange={(val) => updateCanvasElement(element.id, { subtitle: val })}
-            className="text-3xl sm:text-4xl font-black font-mono tracking-tight"
+            className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white"
           />
           <span className="text-xs font-mono text-zinc-400 pl-2">DOP / Mes</span>
         </div>
@@ -498,14 +601,18 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       >
         <div className="flex items-center justify-between border-b border-white/15 pb-3">
           <div className="flex items-center space-x-2">
-            <DollarSign className="w-5 h-5" style={{ color: customBorder }} />
+            <DollarSign className="w-5 h-5 shrink-0" style={{ color: customBorder }} />
             <EditableText
               value={element.title || "Calculadora de Rendimiento Mutuos"}
               onChange={(val) => updateCanvasElement(element.id, { title: val })}
               className="font-extrabold text-sm text-white"
             />
           </div>
-          <span className="text-xs font-mono font-bold text-emerald-400">11.85% Anual</span>
+          <EditableText
+            value="11.85% Anual"
+            onChange={() => {}}
+            className="text-xs font-mono font-bold text-emerald-400"
+          />
         </div>
 
         <div className="my-3 space-y-2">
@@ -522,7 +629,11 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
           </div>
           <div className="flex justify-between text-xs font-mono pt-1">
             <span className="text-zinc-400">Ganancia Anual Estimada:</span>
-            <span className="font-bold text-emerald-400">+$177,750 DOP</span>
+            <EditableText
+              value="+$177,750 DOP"
+              onChange={() => {}}
+              className="font-bold text-emerald-400"
+            />
           </div>
         </div>
 
@@ -538,6 +649,21 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
 
   // 7. Pricing Block
   if (templateType === "pricing_block") {
+    const [terms, setTerms] = useState([
+      { pct: "30%", label: "Anticipo" },
+      { pct: "40%", label: "Piloto" },
+      { pct: "30%", label: "Cierre" },
+    ]);
+
+    const handleAddTerm = () => {
+      setTerms([...terms, { pct: "20%", label: "Nuevo Hito" }]);
+    };
+
+    const handleRemoveTerm = (idx: number) => {
+      if (terms.length <= 1) return;
+      setTerms(terms.filter((_, i) => i !== idx));
+    };
+
     return (
       <div
         style={{
@@ -554,7 +680,11 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
               onChange={(val) => updateCanvasElement(element.id, { title: val })}
               className="font-extrabold text-sm text-white block"
             />
-            <span className="text-[10px] text-zinc-400 font-mono">Desarrollo Web & App Móvil iOS/Android</span>
+            <EditableText
+              value={element.subtitle || "Desarrollo Web & App Móvil iOS/Android"}
+              onChange={(val) => updateCanvasElement(element.id, { subtitle: val })}
+              className="text-[10px] text-zinc-400 font-mono block"
+            />
           </div>
           <EditableText
             value="USD $5,000"
@@ -564,19 +694,50 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-2 my-2 text-center text-[10px] font-mono">
-          <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-            <span style={{ color: customBorder }} className="font-bold block">30%</span>
-            <span className="text-zinc-400">Anticipo</span>
-          </div>
-          <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-            <span style={{ color: customBorder }} className="font-bold block">40%</span>
-            <span className="text-zinc-400">Piloto</span>
-          </div>
-          <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-            <span style={{ color: customBorder }} className="font-bold block">30%</span>
-            <span className="text-zinc-400">Cierre</span>
-          </div>
+        <div className="flex items-center justify-between py-1">
+          <span className="text-[10px] font-mono text-zinc-400 uppercase">Hitos de Pago</span>
+          {isDesignMode && (
+            <button
+              onClick={handleAddTerm}
+              className="text-[9px] font-mono text-[#F08D17] hover:underline flex items-center gap-0.5 cursor-pointer"
+            >
+              <Plus className="w-3 h-3" /> Hito
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 my-1 text-center text-[10px] font-mono overflow-y-auto max-h-[120px]">
+          {terms.map((t, idx) => (
+            <div key={idx} className="p-2 rounded-xl bg-white/5 border border-white/10 relative group">
+              {isDesignMode && terms.length > 1 && (
+                <button
+                  onClick={() => handleRemoveTerm(idx)}
+                  className="opacity-0 group-hover:opacity-100 absolute top-1 right-1 text-red-400 hover:text-red-300 p-0.5 cursor-pointer"
+                >
+                  <Trash2 className="w-2.5 h-2.5" />
+                </button>
+              )}
+              <EditableText
+                value={t.pct}
+                onChange={(val) => {
+                  const copy = [...terms];
+                  copy[idx].pct = val;
+                  setTerms(copy);
+                }}
+                style={{ color: customBorder }}
+                className="font-bold block text-xs"
+              />
+              <EditableText
+                value={t.label}
+                onChange={(val) => {
+                  const copy = [...terms];
+                  copy[idx].label = val;
+                  setTerms(copy);
+                }}
+                className="text-zinc-400 block truncate"
+              />
+            </div>
+          ))}
         </div>
 
         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400 pt-2 border-t border-white/10">
@@ -602,6 +763,12 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       setEpics([...epics, `${epics.length + 1}. Nueva Épica SIMV`]);
     };
 
+    const handleRemoveEpic = (idx: number, e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (epics.length <= 1) return;
+      setEpics(epics.filter((_, i) => i !== idx));
+    };
+
     return (
       <div
         style={{
@@ -613,34 +780,47 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
       >
         <div className="flex items-center justify-between border-b border-white/15 pb-3">
           <div className="flex items-center space-x-2">
-            <Layers className="w-5 h-5" style={{ color: customBorder }} />
+            <Layers className="w-5 h-5 shrink-0" style={{ color: customBorder }} />
             <EditableText
               value={element.title || "Grid de Épicas de Desarrollo"}
               onChange={(val) => updateCanvasElement(element.id, { title: val })}
               className="font-extrabold text-sm text-white"
             />
           </div>
-          <button
-            onClick={handleAddEpic}
-            className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[#F08D17] border border-[#F08D17]/40 flex items-center gap-1 cursor-pointer"
-          >
-            <Plus className="w-3 h-3" /> Épica
-          </button>
+          {isDesignMode && (
+            <button
+              onClick={handleAddEpic}
+              className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[#F08D17] border border-[#F08D17]/40 flex items-center gap-1 cursor-pointer"
+            >
+              <Plus className="w-3 h-3" /> Épica
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-3 gap-2 my-2 overflow-y-auto max-h-[140px]">
           {epics.map((epic, i) => (
-            <div key={i} className="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-2">
-              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" style={{ color: customBorder }} />
-              <EditableText
-                value={epic}
-                onChange={(newVal) => {
-                  const copy = [...epics];
-                  copy[i] = newVal;
-                  setEpics(copy);
-                }}
-                className="text-[11px] font-bold truncate"
-              />
+            <div key={i} className="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between space-x-1.5 relative group">
+              <div className="flex items-center space-x-1.5 min-w-0 flex-1">
+                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" style={{ color: customBorder }} />
+                <EditableText
+                  value={epic}
+                  onChange={(newVal) => {
+                    const copy = [...epics];
+                    copy[i] = newVal;
+                    setEpics(copy);
+                  }}
+                  className="text-[11px] font-bold truncate flex-1"
+                />
+              </div>
+              {isDesignMode && epics.length > 1 && (
+                <button
+                  onClick={(e) => handleRemoveEpic(i, e)}
+                  className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 p-0.5 cursor-pointer shrink-0"
+                  title="Eliminar épica"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -668,7 +848,11 @@ export const ModuleCanvasElement: React.FC<ModuleCanvasElementProps> = ({ elemen
         onChange={(val) => updateCanvasElement(element.id, { title: val })}
         className="font-extrabold text-sm"
       />
-      <p className="text-xs text-zinc-400">{element.subtitle || "Módulo dinámico de la propuesta"}</p>
+      <EditableText
+        value={element.subtitle || "Módulo dinámico de la propuesta"}
+        onChange={(val) => updateCanvasElement(element.id, { subtitle: val })}
+        className="text-xs text-zinc-400"
+      />
     </div>
   );
 };
