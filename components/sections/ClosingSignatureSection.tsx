@@ -42,11 +42,11 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
             <EditableField id="sec12_badge" defaultText="12. ACEPTACIÓN & CONCLUSIÓN" />
           </span>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white theme-h1-color">
-            <EditableField id="sec10_h2" defaultText="Cierre & Firma Digital de Aceptación" />
+            <EditableField id="sec12_h2" defaultText="Cierre & Firma Digital de Aceptación" />
           </h2>
           <p className="text-base sm:text-lg text-slate-200/90 theme-text-color max-w-2xl mx-auto leading-relaxed font-medium">
             <EditableField
-              id="sec10_desc"
+              id="sec12_desc"
               defaultText="Al confirmar esta propuesta, formalizamos el inicio del proyecto de desarrollo web y app móvil para Excel Puesto de Bolsa y ESAFI."
             />
           </p>
@@ -55,11 +55,16 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
         <div className="p-10 rounded-3xl bg-white/95 backdrop-blur-xl border border-white/40 shadow-2xl space-y-8 max-w-2xl mx-auto text-[#0F172A]">
           <div className="flex items-center justify-center gap-4">
             <ShieldCheck className="w-10 h-10 text-[#004F54]" />
-            <span className="font-extrabold text-2xl text-[#0F172A] font-display">Garantía de Satisfacción ENFOCO</span>
+            <span className="font-extrabold text-2xl text-[#0F172A] font-display">
+              <EditableField id="sec12_guarantee_title" defaultText="Garantía de Satisfacción ENFOCO" />
+            </span>
           </div>
 
           <p className="text-base text-[#334155] leading-relaxed font-medium">
-            Incluye 60 días de garantía total posterior al pase a producción, acompañamiento personalizado y soporte técnico certificado.
+            <EditableField
+              id="sec12_guarantee_desc"
+              defaultText="Incluye 60 días de garantía total posterior al pase a producción, acompañamiento personalizado y soporte técnico certificado."
+            />
           </p>
 
           <button
@@ -67,12 +72,17 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
             className="w-full py-5 px-10 rounded-2xl bg-[#004F54] hover:bg-[#006B70] text-white font-extrabold text-lg shadow-2xl shadow-[#004F54]/30 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center gap-4"
           >
             <CheckCircle2 className="w-6 h-6 text-[#F08D17]" />
-            <span>Aceptar & Firmar Propuesta Digital</span>
+            <span>
+              <EditableField id="sec12_btn_text" defaultText="Aceptar & Firmar Propuesta Digital" />
+            </span>
           </button>
         </div>
 
         <div className="text-sm font-mono text-[#64748B] pt-6">
-          ENFOCO, S.R.L. • RNC 1-31-44504-0 • jmartinez@enfoco.com.do • (809) 481-4035
+          <EditableField
+            id="sec12_footer_contact"
+            defaultText="ENFOCO, S.R.L. • RNC 1-31-44504-0 • jmartinez@enfoco.com.do • (809) 481-4035"
+          />
         </div>
       </motion.div>
     </section>

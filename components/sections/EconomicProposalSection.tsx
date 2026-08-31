@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { EditableField } from "@/components/ui/EditableField";
+import { EditableBlockWrapper } from "@/components/studio/EditableBlockWrapper";
 import { useProposal } from "@/context/ProposalContext";
 
 interface EconomicProposalSectionProps {
@@ -74,69 +75,89 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Bloque 1: Inversión Única */}
-          <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-4">
+          <EditableBlockWrapper id="sec9_card_single" label="Inversión Única" className="h-full">
+            <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white h-full flex flex-col justify-between">
               <div>
-                <h3 className="font-extrabold text-xl sm:text-2xl text-white">Inversión Única de Implementación</h3>
-                <span className="text-sm text-[#F08D17] font-mono font-bold">Desarrollo Web, App & Integración Dynamics/SIFI</span>
-              </div>
-              <div className="text-right">
-                <span className="text-3xl sm:text-4xl font-black text-white font-mono">{currSymbol} {baseSubtotal.toLocaleString()}</span>
-                <span className="text-xs text-slate-300 font-mono block font-bold">
-                  {hasTax ? `+ ${taxPercent}% ITBIS (${currSymbol} ${Math.round(taxAmount).toLocaleString()})` : "Exento de ITBIS"}
-                </span>
-                {hasDiscount && (
-                  <span className="text-xs text-amber-400 font-mono block font-bold">
-                    Descuento: -{currSymbol} {discountAmount.toLocaleString()}
-                  </span>
-                )}
+                <div className="flex items-center justify-between border-b border-white/15 pb-4">
+                  <div>
+                    <h3 className="font-extrabold text-xl sm:text-2xl text-white">
+                      <EditableField id="sec9_c1_title" defaultText="Inversión Única de Implementación" />
+                    </h3>
+                    <span className="text-sm text-[#F08D17] font-mono font-bold">
+                      <EditableField id="sec9_c1_sub" defaultText="Desarrollo Web, App & Integración Dynamics/SIFI" />
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-3xl sm:text-4xl font-black text-white font-mono">{currSymbol} {baseSubtotal.toLocaleString()}</span>
+                    <span className="text-xs text-slate-300 font-mono block font-bold">
+                      {hasTax ? `+ ${taxPercent}% ITBIS (${currSymbol} ${Math.round(taxAmount).toLocaleString()})` : "Exento de ITBIS"}
+                    </span>
+                    {hasDiscount && (
+                      <span className="text-xs text-amber-400 font-mono block font-bold">
+                        Descuento: -{currSymbol} {discountAmount.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <ul className="space-y-3 text-sm sm:text-base text-slate-200 font-medium pt-4">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                    <EditableField id="sec9_c1_b1" defaultText="Desarrollo completo del portal web Next.js y app móvil multiplataforma." />
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                    <EditableField id="sec9_c1_b2" defaultText="Integración de conectores bidireccionales con Microsoft Dynamics CRM & SIFI." />
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                    <EditableField id="sec9_c1_b3" defaultText="Desarrollo de las 7 Épicas funcionales, Trade Ticket digital y expedientes IA." />
+                  </li>
+                </ul>
               </div>
             </div>
-
-            <ul className="space-y-3 text-sm sm:text-base text-slate-200 font-medium">
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
-                <span>Desarrollo completo del portal web Next.js y app móvil multiplataforma.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
-                <span>Integración de conectores bidireccionales con Microsoft Dynamics CRM & SIFI.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
-                <span>Desarrollo de las 7 Épicas funcionales, Trade Ticket digital y expedientes IA.</span>
-              </li>
-            </ul>
-          </div>
+          </EditableBlockWrapper>
 
           {/* Bloque 2: Recurrente Mensual */}
-          <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-4">
+          <EditableBlockWrapper id="sec9_card_recurring" label="Recurrente Mensual" className="h-full">
+            <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white h-full flex flex-col justify-between">
               <div>
-                <h3 className="font-extrabold text-xl sm:text-2xl text-white">Recurrente Mensual</h3>
-                <span className="text-sm text-emerald-300 font-mono font-bold">Operación, Mantenimiento & Soporte SLA</span>
-              </div>
-              <div className="text-right">
-                <span className="text-3xl sm:text-4xl font-black text-[#F08D17] font-mono">{currSymbol} 1,195 / mo</span>
-                <span className="text-xs text-slate-300 font-mono block font-bold">Licencias + Soporte SIMV</span>
+                <div className="flex items-center justify-between border-b border-white/15 pb-4">
+                  <div>
+                    <h3 className="font-extrabold text-xl sm:text-2xl text-white">
+                      <EditableField id="sec9_c2_title" defaultText="Recurrente Mensual" />
+                    </h3>
+                    <span className="text-sm text-emerald-300 font-mono font-bold">
+                      <EditableField id="sec9_c2_sub" defaultText="Operación, Mantenimiento & Soporte SLA" />
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-3xl sm:text-4xl font-black text-[#F08D17] font-mono">
+                      <EditableField id="sec9_c2_price" defaultText={`${currSymbol} 1,195 / mo`} />
+                    </span>
+                    <span className="text-xs text-slate-300 font-mono block font-bold">
+                      <EditableField id="sec9_c2_lic" defaultText="Licencias + Soporte SIMV" />
+                    </span>
+                  </div>
+                </div>
+
+                <ul className="space-y-3 text-sm sm:text-base text-slate-200 font-medium pt-4">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                    <EditableField id="sec9_c2_b1" defaultText="Licenciamiento del motor de autogestión, notificaciones y resúmenes IA." />
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                    <EditableField id="sec9_c2_b2" defaultText="Mantenimiento correctivo/evolutivo, parches de seguridad e infraestructura cloud." />
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                    <EditableField id="sec9_c2_b3" defaultText="Soporte técnico con SLA prioritario y monitoreo continuo 24/7." />
+                  </li>
+                </ul>
               </div>
             </div>
-
-            <ul className="space-y-3 text-sm sm:text-base text-slate-200 font-medium">
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Licenciamiento del motor de autogestión, notificaciones y resúmenes IA.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Mantenimiento correctivo/evolutivo, parches de seguridad e infraestructura cloud.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Soporte técnico con SLA prioritario y monitoreo continuo 24/7.</span>
-              </li>
-            </ul>
-          </div>
+          </EditableBlockWrapper>
         </div>
 
         {/* Payment Terms */}

@@ -159,17 +159,25 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-extrabold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
-                  PASO 01
+                  <EditableField id="sec6_step1_badge" defaultText="PASO 01" />
                 </span>
                 <Smartphone className="w-6 h-6 text-[#F08D17]" />
               </div>
               <h4 className="font-extrabold text-base text-white">
-                {activeFlowTab === "epb" ? "Solicitud del Inversionista" : "Solicitud de Aporte / Rescate"}
+                <EditableField
+                  id="sec6_step1_title"
+                  defaultText={activeFlowTab === "epb" ? "Solicitud del Inversionista" : "Solicitud de Aporte / Rescate"}
+                />
               </h4>
               <p className="text-xs text-slate-300 leading-relaxed">
-                {activeFlowTab === "epb"
-                  ? "Pacto de Mutuo o Renta Fija con firma fehaciente por FaceID desde App Móvil."
-                  : "Inversionista solicita movimiento sobre su encargo de fondo abierto en la App."}
+                <EditableField
+                  id="sec6_step1_desc"
+                  defaultText={
+                    activeFlowTab === "epb"
+                      ? "Pacto de Mutuo o Renta Fija con firma fehaciente por FaceID desde App Móvil."
+                      : "Inversionista solicita movimiento sobre su encargo de fondo abierto en la App."
+                  }
+                />
               </p>
             </div>
 
@@ -183,17 +191,25 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-extrabold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
-                  PASO 02
+                  <EditableField id="sec6_step2_badge" defaultText="PASO 02" />
                 </span>
                 <Zap className="w-6 h-6 text-[#F08D17]" />
               </div>
               <h4 className="font-extrabold text-base text-white">
-                {activeFlowTab === "epb" ? "Conector CRM & Expediente IA" : "Notificación & Carga SIFI"}
+                <EditableField
+                  id="sec6_step2_title"
+                  defaultText={activeFlowTab === "epb" ? "Conector CRM & Expediente IA" : "Notificación & Carga SIFI"}
+                />
               </h4>
               <p className="text-xs text-slate-300 leading-relaxed">
-                {activeFlowTab === "epb"
-                  ? "Motor genera Oportunidad vinculada al titular e informe de intención analizado por IA."
-                  : "Servicio notifica al área de operaciones e integra la orden en SIFI Fondos."}
+                <EditableField
+                  id="sec6_step2_desc"
+                  defaultText={
+                    activeFlowTab === "epb"
+                      ? "Motor genera Oportunidad vinculada al titular e informe de intención analizado por IA."
+                      : "Servicio notifica al área de operaciones e integra la orden en SIFI Fondos."
+                  }
+                />
               </p>
             </div>
 
@@ -207,17 +223,25 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-extrabold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
-                  PASO 03
+                  <EditableField id="sec6_step3_badge" defaultText="PASO 03" />
                 </span>
                 <CheckCircle2 className="w-6 h-6 text-emerald-400" />
               </div>
               <h4 className="font-extrabold text-base text-white">
-                {activeFlowTab === "epb" ? "Cierre Comercial & Registro" : "Confirmación Inmediata"}
+                <EditableField
+                  id="sec6_step3_title"
+                  defaultText={activeFlowTab === "epb" ? "Cierre Comercial & Registro" : "Confirmación Inmediata"}
+                />
               </h4>
               <p className="text-xs text-slate-300 leading-relaxed">
-                {activeFlowTab === "epb"
-                  ? "Ejecutivo de cartera aprueba en Dynamics 365 e instruye liquidación final."
-                  : "Cliente recibe comprobante de procesamiento con sello de tiempo."}
+                <EditableField
+                  id="sec6_step3_desc"
+                  defaultText={
+                    activeFlowTab === "epb"
+                      ? "Ejecutivo de cartera aprueba en Dynamics 365 e instruye liquidación final."
+                      : "Cliente recibe comprobante de procesamiento con sello de tiempo."
+                  }
+                />
               </p>
             </div>
           </div>
