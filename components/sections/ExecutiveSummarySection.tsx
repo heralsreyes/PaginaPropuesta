@@ -18,7 +18,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-between items-center relative overflow-hidden bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 pt-24 pb-12 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-between items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 pt-24 pb-12 transition-colors duration-300 border-b border-[#004F54]/50"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[#F08D17]/10 blur-[200px] rounded-full pointer-events-none" />
 
@@ -30,8 +30,8 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
         className="max-w-6xl mx-auto text-center relative z-10 my-auto w-full flex flex-col items-center px-2 space-y-6"
       >
         {/* Top Section Tag */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#F08D17] text-xs sm:text-sm font-extrabold font-mono tracking-wider uppercase shadow-md">
-          <Sparkles className="w-4 h-4 text-[#F08D17]" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#F08D17] theme-h2-color text-xs sm:text-sm font-extrabold font-mono tracking-wider uppercase shadow-md">
+          <Sparkles className="w-4 h-4 text-[#F08D17] theme-h2-color" />
           <EditableField id="sec1_badge" defaultText="01. Presentación Ejecutiva Institucional" />
         </div>
 
@@ -72,14 +72,14 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
           </div>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display text-white text-center leading-[1.1] max-w-5xl mx-auto tracking-tight pt-2">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display text-white theme-h1-color text-center leading-[1.1] max-w-5xl mx-auto tracking-tight pt-2">
           <EditableField id="sec1_h1_part1" defaultText="Portal de Inversionistas & " />
-          <span className="text-[#F08D17]">
+          <span className="text-[#F08D17] theme-h2-color">
             <EditableField id="sec1_h1_part2" defaultText="App Móvil Inteligente" />
           </span>
         </h1>
 
-        <p className="text-base sm:text-lg md:text-xl text-slate-200/90 text-center max-w-3xl mx-auto leading-relaxed font-medium">
+        <p className="text-base sm:text-lg md:text-xl text-slate-200/90 theme-text-color text-center max-w-3xl mx-auto leading-relaxed font-medium">
           <EditableField
             id="sec1_desc"
             defaultText="Plataforma de autogestión 24/7 para clientes e inversionistas de Excel: Portafolio 360°, Trade Ticket digital con aprobación fehaciente, integración directa con Microsoft Dynamics CRM & SIFI Fondos, y resúmenes con Inteligencia Artificial."

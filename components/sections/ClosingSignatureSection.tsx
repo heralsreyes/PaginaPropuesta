@@ -28,7 +28,7 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 pt-24 pb-12 transition-colors duration-300"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 pt-24 pb-12 transition-colors duration-300"
     >
       <motion.div
         initial="hidden"
@@ -38,13 +38,13 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
         className="max-w-5xl mx-auto w-full text-center space-y-10 my-auto"
       >
         <div className="space-y-4">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] theme-h2-color uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
             <EditableField id="sec12_badge" defaultText="12. ACEPTACIÓN & CONCLUSIÓN" />
           </span>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white theme-h1-color">
             <EditableField id="sec10_h2" defaultText="Cierre & Firma Digital de Aceptación" />
           </h2>
-          <p className="text-base sm:text-lg text-slate-200/90 max-w-2xl mx-auto leading-relaxed font-medium">
+          <p className="text-base sm:text-lg text-slate-200/90 theme-text-color max-w-2xl mx-auto leading-relaxed font-medium">
             <EditableField
               id="sec10_desc"
               defaultText="Al confirmar esta propuesta, formalizamos el inicio del proyecto de desarrollo web y app móvil para Excel Puesto de Bolsa y ESAFI."

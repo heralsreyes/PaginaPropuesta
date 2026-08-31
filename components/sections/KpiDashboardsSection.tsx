@@ -189,7 +189,7 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
     >
       <motion.div
         initial="hidden"
@@ -199,13 +199,13 @@ export const KpiDashboardsSection: React.FC<KpiDashboardsSectionProps> = ({ secI
         className="max-w-6xl mx-auto w-full space-y-10"
       >
         <div className="text-center space-y-3">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] theme-h2-color uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
             <EditableField id="sec7_badge" defaultText="07. DASHBOARD DE CONTROL OPERATIVO & SIMV" />
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white theme-h1-color">
             <EditableField id="sec7_h2" defaultText="Supervisión Operativa & Métricas KPI en Tiempo Real" />
           </h2>
-          <p className="text-base sm:text-lg text-slate-200/90 max-w-3xl mx-auto font-medium">
+          <p className="text-base sm:text-lg text-slate-200/90 theme-text-color max-w-3xl mx-auto font-medium">
             <EditableField
               id="sec7_desc"
               defaultText="Toca cualquier tarjeta KPI o cambia el período para sincronizar automáticamente el gráfico y la bitácora en tiempo real."
