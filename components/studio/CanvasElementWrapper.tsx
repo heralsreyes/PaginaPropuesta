@@ -41,6 +41,22 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!isDesignMode) return;
+    const target = e.target as HTMLElement;
+    if (
+      target.isContentEditable ||
+      target.closest("[contenteditable='true']") ||
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.tagName === "BUTTON" ||
+      target.closest("button") ||
+      target.tagName === "A" ||
+      target.closest("a") ||
+      target.closest(".nodrag")
+    ) {
+      setSelectedCanvasElementId(element.id);
+      return;
+    }
+
     e.stopPropagation();
     setSelectedCanvasElementId(element.id);
 
@@ -51,6 +67,19 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!isDesignMode || e.touches.length !== 1) return;
+    const target = e.target as HTMLElement;
+    if (
+      target.isContentEditable ||
+      target.closest("[contenteditable='true']") ||
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.tagName === "BUTTON" ||
+      target.closest("button")
+    ) {
+      setSelectedCanvasElementId(element.id);
+      return;
+    }
+
     e.stopPropagation();
     setSelectedCanvasElementId(element.id);
 

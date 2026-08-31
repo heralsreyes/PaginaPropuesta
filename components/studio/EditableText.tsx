@@ -67,6 +67,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
           onChange={(e) => setTempValue(e.target.value)}
           onBlur={handleSave}
           onKeyDown={handleKeyDown}
+          onMouseDown={(e) => e.stopPropagation()}
           rows={3}
           className={`w-full bg-white text-[#111111] border-2 border-[#2563EB] rounded-xl p-2 outline-none shadow-lg font-sans text-sm z-30 ${className}`}
         />
@@ -81,6 +82,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         onChange={(e) => setTempValue(e.target.value)}
         onBlur={handleSave}
         onKeyDown={handleKeyDown}
+        onMouseDown={(e) => e.stopPropagation()}
         className={`w-full bg-white text-[#111111] border-2 border-[#2563EB] rounded-lg px-2 py-1 outline-none shadow-lg font-sans z-30 ${className}`}
       />
     );
@@ -88,6 +90,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
 
   return (
     <Tag
+      onMouseDown={(e) => e.stopPropagation()}
       onClick={(e) => {
         e.stopPropagation();
         setIsEditing(true);

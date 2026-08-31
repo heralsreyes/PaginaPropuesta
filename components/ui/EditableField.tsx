@@ -53,6 +53,7 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
     <Tag
       contentEditable
       suppressContentEditableWarning
+      onMouseDown={(e) => e.stopPropagation()}
       onBlur={handleBlur}
       className={`${className} outline-none cursor-text hover:ring-2 hover:ring-[#004F54] hover:bg-[#004F54]/10 rounded px-1 -mx-1 relative transition-all`}
     >
