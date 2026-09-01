@@ -104,6 +104,26 @@ export interface CanvasElement {
     | "glass_container";
   iconStyle?: "plain" | "circle_badge" | "square_badge" | "glass_badge";
   iconStrokeWidth?: number;
+  cardVariant?:
+    | "glass_translucent"
+    | "dotted_blueprint"
+    | "cyber_chamfer"
+    | "neon_glow"
+    | "split_accent"
+    | "pill_capsule"
+    | "metric_kpi"
+    | "testimonial_quote"
+    | "checklist_feature"
+    | "pricing_cta";
+  buttonVariant?:
+    | "glass_translucent"
+    | "dotted_blueprint"
+    | "cyber_chamfer"
+    | "pill_floating_icon"
+    | "two_line_tech"
+    | "neon_glow_cta"
+    | "live_pulse_badge"
+    | "circular_fab";
   templateType?:
     | "scope_master"
     | "team_master"
