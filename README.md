@@ -55,6 +55,98 @@ http://localhost:3000/?proposal=excel-puesto-de-bolsa
 
 ---
 
+## 💻 Cheat Sheet de Comandos de Terminal
+
+### 🚀 1. Instalación & Inicialización
+```bash
+# Clonar el repositorio
+git clone https://github.com/heralsreyes/PaginaPropuesta.git
+
+# Entrar al directorio
+cd PaginaPropuesta
+
+# Instalar todas las dependencias
+npm install
+```
+
+---
+
+### 🛠️ 2. Servidor de Desarrollo
+```bash
+# Iniciar servidor de desarrollo en puerto predeterminado (3000)
+npm run dev
+
+# Iniciar forzando específicamente el puerto 3000
+npx next dev -p 3000
+```
+
+---
+
+### 🏗️ 3. Compilación & Producción
+```bash
+# Validar tipos TypeScript y generar compilación optimizada
+npm run build
+
+# Iniciar servidor de producción con la compilación generada
+npm start
+
+# Ejecutar el linter para validación de código
+npm run lint
+```
+
+---
+
+### 🧹 4. Mantenimiento & Solución de Problemas (Troubleshooting)
+
+#### En Windows (PowerShell):
+```powershell
+# 1. Liberar el puerto 3000 o 3001 si quedó ocupado por otro proceso
+Get-NetTCPConnection -LocalPort 3000,3001 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
+
+# 2. Limpiar la caché de Next.js
+Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue
+
+# 3. Reinstalar dependencias limpias desde cero
+Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
+npm install
+```
+
+#### En macOS / Linux (Bash / Zsh):
+```bash
+# 1. Liberar el puerto 3000 si está ocupado
+npx kill-port 3000
+
+# 2. Limpiar la caché de compilación
+rm -rf .next
+
+# 3. Reinstalar dependencias limpias desde cero
+rm -rf node_modules package-lock.json
+npm install
+```
+
+---
+
+### 🌿 5. Comandos de Git & Despliegue
+```bash
+# Ver estado de cambios
+git status
+
+# Agregar todos los cambios y hacer commit
+git add .
+git commit -m "feat: descripción de la mejora"
+
+# Subir a la rama de trabajo
+git push origin feat/editable
+
+# Sincronizar y fusionar con la rama principal (main)
+git checkout main
+git merge feat/editable
+git push origin main
+git checkout feat/editable
+```
+
+---
+
 ## 📑 Las 12 Secciones Modulares Integradas
 
 1. **01. Presentación Ejecutiva Institucional**: Banner de co-branding (ENFOCO & Excel Puesto de Bolsa / ESAFI), propuesta de valor, objetivos estratégicos y accesos rápidos.
@@ -125,52 +217,6 @@ Cualquier botón puede vincularse a una tarjeta o sección para crear flujos din
    - **`TOGGLE_VISIBILITY`**: Muestra u oculta un elemento al hacer clic.
    - **`NAVIGATE_SECTION`**: Desplaza la página de forma fluida hacia cualquier sección (`#id`).
    - **`SYSTEM_TRIGGER`**: Dispara modales del sistema (Firma digital, exportar JSON, generar PDF).
-
----
-
-## 🛠️ Tecnologías Utilizadas
-
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router, TypeScript estricto).
-- **Estilos & UI**: [Tailwind CSS](https://tailwindcss.com/) + Variables CSS reactivas + Backdrop Filters.
-- **Gestión de Estado**: [Zustand](https://github.com/pmndrs/zustand) con persistencia local (`localStorage`) segura y sincronización post-montaje contra desajustes de hidratación.
-- **Iconografía**: [Lucide React](https://lucide.dev/).
-- **Notificaciones**: [Sonner](https://sonner.emilkowal.ski/).
-
----
-
-## 📦 Instalación y Puesta en Marcha
-
-### Requisitos Previos
-- [Node.js 18+](https://nodejs.org/) instalado en el sistema.
-- Gestor de paquetes `npm` o `pnpm`.
-
-### Pasos de Instalación:
-
-1. **Clonar el repositorio**:
-   ```bash
-   git clone https://github.com/heralsreyes/PaginaPropuesta.git
-   cd PaginaPropuesta
-   ```
-
-2. **Instalar dependencias**:
-   ```bash
-   npm install
-   ```
-
-3. **Iniciar el servidor de desarrollo**:
-   ```bash
-   npm run dev
-   ```
-
-4. **Acceder a la aplicación**:
-   - **Vista Cliente / Ejecutiva**: `http://localhost:3000/?proposal=excel-puesto-de-bolsa`
-   - **Modo Edición / Studio**: `http://localhost:3000/?proposal=excel-puesto-de-bolsa&admin=true`
-
-5. **Compilación para Producción**:
-   ```bash
-   npm run build
-   npm start
-   ```
 
 ---
 
