@@ -208,34 +208,26 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
       )}
 
       {/* Render Subcomponents based on element.type */}
-      {element.type === "button" && (
+      {element.type === "button" ? (
         <ButtonCanvasElement element={element} onExecuteAction={onExecuteAction} />
-      )}
-
-      {element.type === "card" && <CardCanvasElement element={element} />}
-
-      {element.type === "module_template" && <ModuleCanvasElement element={element} />}
-
-      {(element.type === "shape" ||
+      ) : element.type === "card" ? (
+        <CardCanvasElement element={element} />
+      ) : element.type === "module_template" ? (
+        <ModuleCanvasElement element={element} />
+      ) : element.type === "shape" ||
         element.type === "line" ||
         element.type === "graphic" ||
-        element.type === "icon") && <UIComponentCanvasElement element={element} />}
-
-      {element.type === "mockup" && <MockupCanvasElement element={element} />}
-
-      {element.type === "text" && <TextCanvasElement element={element} />}
-
-      {element.type === "image" && <ImageCanvasElement element={element} />}
-
-      {element.type !== "button" &&
-        element.type !== "card" &&
-        element.type !== "module_template" &&
-        element.type !== "shape" &&
-        element.type !== "line" &&
-        element.type !== "graphic" &&
-        element.type !== "mockup" &&
-        element.type !== "text" &&
-        element.type !== "image" && <CardCanvasElement element={element} />}
+        element.type === "icon" ? (
+        <UIComponentCanvasElement element={element} />
+      ) : element.type === "mockup" ? (
+        <MockupCanvasElement element={element} />
+      ) : element.type === "text" ? (
+        <TextCanvasElement element={element} />
+      ) : element.type === "image" ? (
+        <ImageCanvasElement element={element} />
+      ) : (
+        <CardCanvasElement element={element} />
+      )}
     </div>
   );
 };

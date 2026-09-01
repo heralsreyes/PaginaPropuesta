@@ -755,33 +755,6 @@ export const SidebarElementsTab: React.FC = () => {
             />
           </div>
 
-          {/* Selector de estilo de icono */}
-          <div className="space-y-1">
-            <span className="text-[10px] font-bold text-zinc-600 block">Estilo del Icono:</span>
-            <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 rounded-lg text-[9px] font-bold">
-              {(
-                [
-                  { id: "circle_badge", label: "Círculo" },
-                  { id: "square_badge", label: "Cuadrado" },
-                  { id: "glass_badge", label: "Glass" },
-                  { id: "plain", label: "Plano" },
-                ] as const
-              ).map((st) => (
-                <button
-                  key={st.id}
-                  onClick={() => setSelectedIconStyle(st.id)}
-                  className={`py-1 rounded-md transition-all cursor-pointer text-center ${
-                    selectedIconStyle === st.id
-                      ? "bg-[#2563EB] text-white shadow-2xs"
-                      : "text-zinc-600 hover:text-zinc-900"
-                  }`}
-                >
-                  {st.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Categorías de Iconos */}
           <div className="flex flex-wrap gap-1 p-1 bg-zinc-100 rounded-lg text-[10px] font-bold">
             {(
@@ -806,20 +779,17 @@ export const SidebarElementsTab: React.FC = () => {
             ))}
           </div>
 
-          {/* Grid de Iconos */}
-          <div className="grid grid-cols-3 gap-2 max-h-[420px] overflow-y-auto pr-1">
+          {/* Grid de Iconos Puros Vectoriales */}
+          <div className="grid grid-cols-3 gap-2 max-h-[460px] overflow-y-auto pr-1">
             {filteredIcons.map((ic) => {
               const IconComp = ICON_REGISTRY[ic.name] || Sparkles;
               const elementData: Parameters<typeof addCanvasElement>[0] = {
                 type: "icon",
                 iconName: ic.name,
-                iconStyle: selectedIconStyle,
                 title: ic.label,
-                width: selectedIconStyle === "plain" ? 48 : 56,
-                height: selectedIconStyle === "plain" ? 48 : 56,
-                customBg: selectedIconStyle === "circle_badge" ? "rgba(240, 141, 23, 0.15)" : selectedIconStyle === "square_badge" ? "#003B3F" : "rgba(255,255,255,0.08)",
-                customBorder: selectedIconStyle === "circle_badge" ? "rgba(240, 141, 23, 0.4)" : selectedIconStyle === "square_badge" ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.25)",
-                customText: selectedIconStyle === "circle_badge" ? "#F08D17" : "#FFFFFF",
+                width: 48,
+                height: 48,
+                customText: "#F08D17",
                 sectionId: "hero",
               };
 
@@ -829,10 +799,10 @@ export const SidebarElementsTab: React.FC = () => {
                   draggable
                   onDragStart={(e) => handleDragStart(e, elementData)}
                   onClick={() => addCanvasElement(elementData)}
-                  className="p-2.5 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all flex flex-col items-center justify-center gap-1.5 shadow-xs group text-center"
+                  className="p-3 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all flex flex-col items-center justify-center gap-2 shadow-xs group text-center"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-[#F08D17] group-hover:scale-110 group-hover:bg-[#2563EB]/10 group-hover:text-[#2563EB] transition-transform">
-                    <IconComp className="w-5 h-5" />
+                  <div className="w-9 h-9 flex items-center justify-center text-[#F08D17] group-hover:scale-125 transition-transform">
+                    <IconComp className="w-7 h-7 stroke-[2.2]" />
                   </div>
                   <span className="font-extrabold text-[#111111] text-[10px] truncate w-full block">
                     {ic.label}

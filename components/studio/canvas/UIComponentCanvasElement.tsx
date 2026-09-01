@@ -132,66 +132,28 @@ export const UIComponentCanvasElement: React.FC<UIComponentCanvasElementProps> =
   const accentColor = element.customAccent || "#F08D17";
 
   // ==========================================
-  // 1. RENDERIZADO DE ICONOS (TIPO ICON)
+  // 1. RENDERIZADO DE ICONOS (TIPO ICON) - PURO SIN FONDOS NI BORDES
   // ==========================================
   if (element.type === "icon" || element.iconName) {
     const iconKey = element.iconName ? element.iconName.toLowerCase() : "sparkles";
     const IconComponent = ICON_REGISTRY[iconKey] || Sparkles;
-    const styleMode = element.iconStyle || "plain";
     const strokeWidth = element.iconStrokeWidth || 2;
+    const iconColor =
+      element.customText ||
+      element.customBg ||
+      element.customBorder ||
+      element.customAccent ||
+      "#F08D17";
 
-    if (styleMode === "circle_badge") {
-      return (
-        <div
-          style={{
-            backgroundColor: element.customBg || "rgba(240, 141, 23, 0.15)",
-            borderColor: element.customBorder || "rgba(240, 141, 23, 0.4)",
-            color: element.customText || "#F08D17",
-          }}
-          className="w-full h-full rounded-full border flex items-center justify-center shadow-lg transition-transform"
-        >
-          <IconComponent className="w-1/2 h-1/2" strokeWidth={strokeWidth} />
-        </div>
-      );
-    }
-
-    if (styleMode === "square_badge") {
-      return (
-        <div
-          style={{
-            backgroundColor: element.customBg || "#003B3F",
-            borderColor: element.customBorder || "rgba(255, 255, 255, 0.2)",
-            color: element.customText || "#F08D17",
-          }}
-          className="w-full h-full rounded-2xl border flex items-center justify-center shadow-xl transition-transform"
-        >
-          <IconComponent className="w-1/2 h-1/2" strokeWidth={strokeWidth} />
-        </div>
-      );
-    }
-
-    if (styleMode === "glass_badge") {
-      return (
-        <div
-          style={{
-            backgroundColor: element.customBg || "rgba(255, 255, 255, 0.08)",
-            borderColor: element.customBorder || "rgba(255, 255, 255, 0.25)",
-            color: element.customText || "#FFFFFF",
-          }}
-          className="w-full h-full rounded-2xl border backdrop-blur-md flex items-center justify-center shadow-2xl transition-transform"
-        >
-          <IconComponent className="w-1/2 h-1/2" strokeWidth={strokeWidth} />
-        </div>
-      );
-    }
-
-    // Default Plain Icon
     return (
       <div
-        style={{ color: element.customText || element.customBg || "#F08D17" }}
-        className="w-full h-full flex items-center justify-center"
+        style={{ color: iconColor }}
+        className="w-full h-full flex items-center justify-center p-0.5"
       >
-        <IconComponent className="w-full h-full" strokeWidth={strokeWidth} />
+        <IconComponent
+          className="w-full h-full stroke-current"
+          strokeWidth={strokeWidth}
+        />
       </div>
     );
   }

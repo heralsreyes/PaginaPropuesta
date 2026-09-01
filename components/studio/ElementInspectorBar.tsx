@@ -104,9 +104,18 @@ export const ElementInspectorBar: React.FC = () => {
       cancelAnimationFrame(rafRef.current);
     }
     rafRef.current = requestAnimationFrame(() => {
-      setElementColorOverride(selectedElement.id, {
-        [type]: colorHex,
-      });
+      if (selectedElement.type === "icon") {
+        setElementColorOverride(selectedElement.id, {
+          bg: colorHex,
+          text: colorHex,
+          border: colorHex,
+          accent: colorHex,
+        });
+      } else {
+        setElementColorOverride(selectedElement.id, {
+          [type]: colorHex,
+        });
+      }
     });
   };
 
