@@ -365,6 +365,21 @@ export const SidebarElementsTab: React.FC = () => {
       desc: "Badge de recomendación, precio en USD y botón de acción incluido.",
       previewType: "pricing",
     },
+    {
+      id: "card-multitab-pro",
+      title: "Tarjeta Multi-Pestañas Pro",
+      variant: "glass_translucent" as const,
+      isMultiTab: true,
+      width: 360,
+      height: 220,
+      desc: "Tarjeta con pestañas conmutables (Fase 1, Fase 2, Alcance) y botón + Pestaña.",
+      previewType: "multitab",
+      tabs: [
+        { id: "tab-1", label: "Fase 1: SIMV", title: "Arquitectura & Core", subtitle: "Definición de modelos de datos e integración SIFI Fondos." },
+        { id: "tab-2", label: "Fase 2: App", title: "App Móvil & Trade Ticket", subtitle: "Autenticación biométrica FaceID y firma digital fehaciente." },
+        { id: "tab-3", label: "Fase 3: CRM", title: "Dynamics CRM & QA", subtitle: "Sincronización bidireccional y pruebas de carga SIMV." },
+      ],
+    },
   ];
 
   // ==========================================
@@ -840,6 +855,9 @@ export const SidebarElementsTab: React.FC = () => {
               title: c.title,
               subtitle: c.desc,
               badgeText: c.badgeText,
+              isMultiTab: "isMultiTab" in c ? (c.isMultiTab as boolean) : undefined,
+              tabs: "tabs" in c ? (c.tabs as any) : undefined,
+              activeTabId: "tabs" in c && (c as any).tabs?.[0] ? (c as any).tabs[0].id : undefined,
               width: c.width,
               height: c.height,
               sectionId: "hero",
@@ -933,6 +951,16 @@ export const SidebarElementsTab: React.FC = () => {
                       <span className="text-[8px] font-bold bg-[#F08D17] text-white px-2 py-0.5 rounded-full">
                         CTA PLAN
                       </span>
+                    </div>
+                  )}
+                  {c.previewType === "multitab" && (
+                    <div className="w-full h-full rounded-lg bg-[#002224] border border-white/20 p-2 flex flex-col justify-between">
+                      <div className="flex gap-1">
+                        <span className="px-1.5 py-0.5 rounded-md bg-[#F08D17] text-white text-[8px] font-bold">Fase 1</span>
+                        <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-white/70 text-[8px] font-bold">Fase 2</span>
+                        <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-white/70 text-[8px] font-bold">Fase 3</span>
+                      </div>
+                      <span className="text-[9px] font-bold text-white truncate">Arquitectura & Core</span>
                     </div>
                   )}
                 </div>
