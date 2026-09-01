@@ -4,18 +4,54 @@ Plataforma web de última generación desarrollada para **ENFOCO, S.R.L.**, dise
 
 ---
 
-## 🚀 Características Principales
+## 🎛️ Guía de Acceso: Cómo Entrar a los Distintos Modos
 
-### 1. 👔 Modo Doble: Vista Ejecutiva vs. Visual Design Studio
-- **Vista Ejecutiva para Clientes (`isDesignMode = false`)**:
-  - Experiencia 100% limpia, minimalista y de alto impacto visual.
-  - Sin botones flotantes, barras de edición ni herramientas que distraigan la atención.
-  - Simuladores interactivos, calculadoras financieras y firma digital totalmente operativas.
-- **Visual Design Studio (`isDesignMode = true` / `?admin=true`)**:
-  - Editor visual interactivo estilo Figma / Canva con arrastrar y soltar (*drag & drop*).
-  - Barra lateral de herramientas con subpestañas organizadas.
-  - Barra flotante superior de inspección (*Element Inspector*) con controles de coordenadas (X/Y), dimensiones (W/H), tipografía, colores y vinculación de acciones.
-  - Edición de texto in-situ (*in-situ contenteditable*) en cualquier título, párrafo, cifra o botón.
+La plataforma cuenta con 3 modos principales diseñados para diferentes audiencias (clientes, diseñadores/comerciales y evaluadores):
+
+### 1. 👔 Modo Cliente / Vista Ejecutiva (Presentación Oficial)
+Es el modo predeterminado para entregar al cliente final o inversionistas. Está optimizado para una lectura corporativa impecable, libre de barras de edición, bordes de diseño o botones de depuración.
+
+- **Cómo acceder mediante URL**:
+  ```text
+  http://localhost:3000/?proposal=excel-puesto-de-bolsa
+  ```
+  *(O simplemente ingresando a la URL base `http://localhost:3000/`)*.
+- **Cómo acceder desde la interfaz**:
+  - Si te encuentras en el Studio, haz clic en el botón superior **"Modo Cliente"** o **"Vista Previa"** para ocultar todas las herramientas de edición y verificar la experiencia exacta que verá el cliente.
+
+---
+
+### 2. 🎨 Modo Edición / Visual Design Studio (Administrador & Maquetación)
+Activa el motor de edición interactiva tipo Canva / Figma, permitiendo modificar textos in-situ, arrastrar y soltar nuevas formas, botones, tarjetas, subir imágenes locales y vincular acciones interactivas.
+
+- **Cómo acceder mediante URL**:
+  ```text
+  http://localhost:3000/?proposal=excel-puesto-de-bolsa&admin=true
+  ```
+  *(El parámetro `&admin=true` habilita de inmediato el panel lateral y el inspector flotante)*.
+- **Cómo acceder desde la interfaz**:
+  - En la barra superior de navegación, haz clic en el botón **"Studio"** o el icono de **Ajustes / Pincel** para conmutar el modo de diseño en tiempo real sin recargar la página.
+
+---
+
+### 3. 📄 Modo Impresión & Descarga PDF
+Diseñado para generar una copia física o exportar un documento PDF de alta fidelidad sin elementos interactivos de la interfaz web.
+
+- **Cómo acceder**:
+  - Haz clic en el botón **"Descargar PDF"** situado en la barra superior de navegación.
+  - O utiliza el atajo universal del navegador: `Ctrl + P` (Windows) o `Cmd + P` (Mac).
+- **Características**:
+  - Oculta automáticamente barras de navegación, botones flotantes y herramientas (`.no-print`).
+  - Ajusta los saltos de página y colores para impresión ejecutiva limpia.
+
+---
+
+### 4. 🏢 Carga de Propuestas Comerciales Específicas
+Puedes cargar propuestas personalizadas para diferentes clientes corporativos utilizando el parámetro `proposal`:
+
+```text
+http://localhost:3000/?proposal=excel-puesto-de-bolsa
+```
 
 ---
 
