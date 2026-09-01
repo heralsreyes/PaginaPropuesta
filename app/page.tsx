@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProposalProvider, useProposal } from "@/context/ProposalContext";
 import { SidebarNav } from "@/components/SidebarNav";
 import { AcceptModal } from "@/components/AcceptModal";
@@ -8,14 +8,15 @@ import { CustomizerDrawer } from "@/components/CustomizerDrawer";
 import { StudioLayout } from "@/components/studio/StudioLayout";
 import { useStudioStore } from "@/store/useStudioStore";
 import { CustomSectionRenderer } from "@/components/CustomSectionRenderer";
+import { toast } from "sonner";
 
 function ProposalContent() {
   const { proposal } = useProposal();
-  const { sections } = useStudioStore();
+  const { sections, isDesignMode, toggleDesignMode } = useStudioStore();
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
       if (
@@ -26,7 +27,21 @@ function ProposalContent() {
         return;
       }
 
-      // Toggle Customizer Drawer: Ctrl + Shift + P or Alt + P or Ctrl + Shift + C
+      // 1. Toggle Studio Design Mode: Ctrl + Shift + E or Cmd + Shift + E or Alt + E
+      if (
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "e") ||
+        (e.altKey && e.key.toLowerCase() === "e")
+      ) {
+        e.preventDefault();
+        toggleDesignMode();
+        toast.info(
+          !isDesignMode
+            ? "🎨 Modo Visual Design Studio Activado"
+            : "👔 Modo Vista Ejecutiva Cliente Activado"
+        );
+      }
+
+      // 2. Toggle Customizer Drawer: Ctrl + Shift + P or Alt + P or Ctrl + Shift + C
       if (
         ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "p") ||
         (e.altKey && e.key.toLowerCase() === "p") ||
@@ -39,7 +54,7 @@ function ProposalContent() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [isDesignMode, toggleDesignMode]);
 
   const activeSections = sections.filter((s) => s.enabled);
 

@@ -34,15 +34,16 @@ Activa el motor de edición interactiva tipo Canva / Figma, permitiendo modifica
 
 ---
 
-### 3. 📄 Modo Impresión & Descarga PDF
-Diseñado para generar una copia física o exportar un documento PDF de alta fidelidad sin elementos interactivos de la interfaz web.
+### ⌨️ Atajos de Teclado Globales (Hotkeys & Shortcuts)
 
-- **Cómo acceder**:
-  - Haz clic en el botón **"Descargar PDF"** situado en la barra superior de navegación.
-  - O utiliza el atajo universal del navegador: `Ctrl + P` (Windows) o `Cmd + P` (Mac).
-- **Características**:
-  - Oculta automáticamente barras de navegación, botones flotantes y herramientas (`.no-print`).
-  - Ajusta los saltos de página y colores para impresión ejecutiva limpia.
+Puedes conmutar entre los diferentes modos al instante sin tocar el ratón:
+
+| Atajo (Windows / Linux) | Atajo (macOS) | Acción que Ejecuta |
+| :--- | :--- | :--- |
+| **`Ctrl + Shift + E`** | **`Cmd + Shift + E`** | 🎨 **Conmutar Modo Edición Studio / Vista Cliente** (Abre o cierra el editor lateral y el inspector flotante). |
+| **`Alt + E`** | **`Option + E`** | 🎨 Atajo alternativo para conmutar el Modo Edición / Studio. |
+| **`Ctrl + Shift + P`** | **`Cmd + Shift + P`** | ⚙️ **Abrir / Cerrar Drawer de Personalización** (Colores, Presupuesto, Alcance y JSON). |
+| **`Ctrl + P`** | **`Cmd + P`** | 📄 **Exportar / Imprimir PDF Ejecutivo** (Abre el diálogo nativo de impresión con estilos `.no-print` optimizados). |
 
 ---
 
