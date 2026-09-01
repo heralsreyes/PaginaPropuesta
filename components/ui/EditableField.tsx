@@ -17,13 +17,16 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
   tag = "span",
 }) => {
   const { isDesignMode } = useStudioStore();
-  const [text, setText] = useState<string>(() => {
+  const [text, setText] = useState<string>(defaultText);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem(`editable_${id}`);
-      if (saved !== null) return saved;
+      if (saved !== null && saved !== "") {
+        setText(saved);
+      }
     }
-    return defaultText;
-  });
+  }, [id]);
 
   useEffect(() => {
     const handleReset = () => {
@@ -46,13 +49,18 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
   const Tag = tag;
 
   if (!isDesignMode) {
-    return <Tag className={className}>{text}</Tag>;
+    return (
+      <Tag className={className} suppressHydrationWarning>
+        {text}
+      </Tag>
+    );
   }
 
   return (
     <Tag
       contentEditable
       suppressContentEditableWarning
+      suppressHydrationWarning
       onMouseDown={(e) => e.stopPropagation()}
       onBlur={handleBlur}
       className={`${className} outline-none cursor-text hover:ring-2 hover:ring-[#004F54] hover:bg-[#004F54]/10 rounded px-1 -mx-1 relative transition-all`}
