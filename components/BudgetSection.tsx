@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
-import { useFinancialStore } from "@/store/useFinancialStore";
 import { useStudioStore } from "@/store/useStudioStore";
 import { EditableText } from "@/components/studio/EditableText";
 import { DeletableItem } from "@/components/studio/DeletableItem";
@@ -18,20 +17,11 @@ interface BudgetSectionProps {
 export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcceptModal }) => {
   const { updateBudget, addPaymentTerm, removePaymentTerm } = useProposal();
   const { isDesignMode } = useStudioStore();
-  const {
-    baseSubtotal: storeBaseSubtotal,
-    hasTax: storeHasTax,
-    taxPercent: storeTaxPercent,
-    hasDiscount: storeHasDiscount,
-    discountValue: storeDiscountValue,
-    discountType: storeDiscountType,
-    currency: storeCurrency,
-  } = useFinancialStore();
 
   const [selectedCurrency, setSelectedCurrency] = useState<"USD" | "DOP">("USD");
 
   const exchangeRate = 60.0;
-  const currentCurrency = selectedCurrency || budget.currency || storeCurrency || "USD";
+  const currentCurrency = selectedCurrency || budget.currency || "USD";
 
   const formatMoney = (amount: number, curr: "USD" | "DOP") => {
     const finalAmount = curr === "DOP" ? amount * exchangeRate : amount;
@@ -42,13 +32,12 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
     }).format(finalAmount);
   };
 
-  // Priority: Proposal Prop > Store > Default
-  const isTaxActive = budget.hasTax !== undefined ? budget.hasTax : storeHasTax;
-  const taxPercentVal = budget.taxPercent !== undefined ? budget.taxPercent : storeTaxPercent;
-  const isDiscountActive = budget.hasDiscount !== undefined ? budget.hasDiscount : storeHasDiscount;
-  const discountValueVal = budget.discountValue !== undefined ? budget.discountValue : storeDiscountValue;
-  const discountTypeVal = budget.discountType || storeDiscountType;
-  const baseSubtotal = budget.amountWithoutTax || storeBaseSubtotal || 12500;
+  const isTaxActive = budget.hasTax ?? true;
+  const taxPercentVal = budget.taxPercent ?? 18;
+  const isDiscountActive = budget.hasDiscount ?? false;
+  const discountValueVal = budget.discountValue ?? 0;
+  const discountTypeVal = budget.discountType || "fixed";
+  const baseSubtotal = budget.amountWithoutTax || 12500;
 
   // Real-time calculation
   const isPercent = (discountTypeVal as string) === "percent" || (discountTypeVal as string) === "percentage";
@@ -231,7 +220,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <h4 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] truncate">
                             <EditableText
-                              value={term.milestone}
+                              value={term.milestone || `Hito ${idx + 1}`}
                               onChange={(val) => {
                                 const nextTerms = [...budget.paymentTerms];
                                 nextTerms[idx] = { ...nextTerms[idx], milestone: val };

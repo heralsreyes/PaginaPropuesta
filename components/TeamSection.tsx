@@ -19,7 +19,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
   const [selectedRoleIndex, setSelectedRoleIndex] = useState<number>(0);
   const selectedMember = team[selectedRoleIndex] || team[0];
 
-  const getRoleIcon = (iconName: string) => {
+  const getRoleIcon = (iconName?: string) => {
     const iconClass = "w-5 h-5 text-[var(--accent-color)]";
     switch (iconName) {
       case "Briefcase":

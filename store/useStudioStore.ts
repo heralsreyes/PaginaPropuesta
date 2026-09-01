@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
+import { safeLocalStorage } from "@/lib/safeStorage";
 
 export type StudioTab =
   | "plantillas"
@@ -88,6 +89,7 @@ export interface CanvasElement {
   title: string;
   subtitle?: string;
   content?: string;
+  badgeText?: string;
 
   // Multi-Tab & Visibility Controls
   isMultiTab?: boolean;
@@ -112,6 +114,9 @@ export interface CanvasElement {
 
   // Button action binding
   actionConfig?: ButtonActionConfig;
+
+  // Custom data payload for persistent module templates
+  customData?: Record<string, unknown>;
 }
 
 interface StudioState {
@@ -172,33 +177,21 @@ interface StudioState {
   bindButtonAction: (buttonId: string, config: ButtonActionConfig) => void;
 }
 
-// Debounced Storage Engine to avoid main thread disk I/O lag during rapid color dragging
+// Debounced Storage Engine wrapping safeLocalStorage to avoid main thread disk I/O lag
 let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
-const debouncedStorageEngine = {
+const debouncedStorageEngine: StateStorage = {
   getItem: (name: string) => {
-    if (typeof window === "undefined") return null;
-    try {
-      const item = localStorage.getItem(name);
-      return item ? JSON.parse(item) : null;
-    } catch {
-      return null;
-    }
+    return safeLocalStorage.getItem(name);
   },
-  setItem: (name: string, value: any) => {
-    if (typeof window === "undefined") return;
+  setItem: (name: string, value: string) => {
     if (saveTimeout) clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
-      try {
-        localStorage.setItem(name, JSON.stringify(value));
-      } catch (err) {
-        console.error("Storage save error:", err);
-      }
+      safeLocalStorage.setItem(name, value);
     }, 300);
   },
   removeItem: (name: string) => {
-    if (typeof window === "undefined") return;
-    localStorage.removeItem(name);
+    safeLocalStorage.removeItem(name);
   },
 };
 
@@ -240,7 +233,17 @@ export const useStudioStore = create<StudioState>()(
         }),
 
       toggleDesignMode: () =>
-        set((state) => ({ isDesignMode: !state.isDesignMode })),
+        set((state) => {
+          const next = !state.isDesignMode;
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.setItem("enfoco_admin_mode", String(next));
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          return { isDesignMode: next, isPanelOpen: true };
+        }),
 
       setActiveToolTab: (tab) =>
         set({ activeToolTab: tab, isPanelOpen: true }),
@@ -654,7 +657,7 @@ export const useStudioStore = create<StudioState>()(
     }),
     {
       name: "enfoco-studio-canvas-storage",
-      storage: createJSONStorage(() => debouncedStorageEngine as any),
+      storage: createJSONStorage(() => debouncedStorageEngine),
       partialize: (state) => ({
         sections: state.sections,
         canvasElements: state.canvasElements,

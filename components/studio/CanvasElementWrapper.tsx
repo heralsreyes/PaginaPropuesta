@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { CanvasElement } from "@/types/studio";
+import { CanvasElement, ButtonActionConfig } from "@/types/studio";
 import { useStudioStore } from "@/store/useStudioStore";
 import { Move } from "lucide-react";
 import { ButtonCanvasElement } from "./canvas/ButtonCanvasElement";
@@ -14,7 +14,7 @@ import { UIComponentCanvasElement } from "./canvas/UIComponentCanvasElement";
 
 interface CanvasElementWrapperProps {
   element: CanvasElement;
-  onExecuteAction?: (config: any) => void;
+  onExecuteAction?: (config: ButtonActionConfig) => void;
 }
 
 export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
@@ -121,19 +121,46 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
       }
     };
 
-    const handleMouseUp = () => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      if (isDragging) {
+        const dx = touch.clientX - dragStart.x;
+        const dy = touch.clientY - dragStart.y;
+        updateCanvasElement(element.id, {
+          x: Math.max(0, initialPos.x + dx),
+          y: Math.max(0, initialPos.y + dy),
+        });
+      } else if (isResizing) {
+        const dx = touch.clientX - dragStart.x;
+        const dy = touch.clientY - dragStart.y;
+
+        if (isResizing.includes("e")) {
+          updateCanvasElement(element.id, { width: Math.max(80, initialSize.width + dx) });
+        }
+        if (isResizing.includes("s")) {
+          updateCanvasElement(element.id, { height: Math.max(40, initialSize.height + dy) });
+        }
+      }
+    };
+
+    const handleEnd = () => {
       setIsDragging(false);
       setIsResizing(null);
     };
 
     if (isDragging || isResizing) {
       window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mouseup", handleEnd);
+      window.addEventListener("touchmove", handleTouchMove, { passive: true });
+      window.addEventListener("touchend", handleEnd);
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleEnd);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleEnd);
     };
   }, [isDragging, isResizing, dragStart, initialPos, initialSize, element.id, updateCanvasElement]);
 

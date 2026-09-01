@@ -9,6 +9,7 @@ interface EditableTextProps {
   className?: string;
   multiline?: boolean;
   tag?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+  style?: React.CSSProperties;
 }
 
 export const EditableText: React.FC<EditableTextProps> = ({
@@ -17,6 +18,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
   className = "",
   multiline = false,
   tag = "span",
+  style,
 }) => {
   const { isDesignMode } = useStudioStore();
   const [isEditing, setIsEditing] = useState(false);
@@ -55,7 +57,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
   const Tag = tag;
 
   if (!isDesignMode) {
-    return <Tag className={className}>{value}</Tag>;
+    return <Tag className={className} style={style}>{value}</Tag>;
   }
 
   if (isEditing) {
@@ -69,6 +71,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
           onKeyDown={handleKeyDown}
           onMouseDown={(e) => e.stopPropagation()}
           rows={3}
+          style={style}
           className={`w-full bg-white text-[#111111] border-2 border-[#2563EB] rounded-xl p-2 outline-none shadow-lg font-sans text-sm z-30 ${className}`}
         />
       );
@@ -83,6 +86,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         onBlur={handleSave}
         onKeyDown={handleKeyDown}
         onMouseDown={(e) => e.stopPropagation()}
+        style={style}
         className={`w-full bg-white text-[#111111] border-2 border-[#2563EB] rounded-lg px-2 py-1 outline-none shadow-lg font-sans z-30 ${className}`}
       />
     );
@@ -95,6 +99,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         e.stopPropagation();
         setIsEditing(true);
       }}
+      style={style}
       className={`cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-[#2563EB]/40 hover:bg-[#2563EB]/10 rounded px-1 -mx-1 relative ${className}`}
       title="Clic para editar este texto"
     >

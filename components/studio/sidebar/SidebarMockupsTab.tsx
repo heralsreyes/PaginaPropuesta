@@ -72,7 +72,7 @@ export const SidebarMockupsTab: React.FC = () => {
   const handleAddMockup = (m: typeof mockupsList[0]) => {
     const newId = addCanvasElement({
       type: "mockup",
-      mockupType: m.mockupType as any,
+      mockupType: m.mockupType,
       sectionId: "hero",
       title: m.title,
       width: m.width,

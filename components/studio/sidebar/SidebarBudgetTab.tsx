@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useProposal } from "@/context/ProposalContext";
+import { PaymentTerm } from "@/types/proposal";
 import { DollarSign, Percent, Receipt, Sparkles, CheckCircle2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -14,23 +15,23 @@ export const SidebarBudgetTab: React.FC = () => {
   const [hasTax, setHasTax] = useState(budget?.hasTax ?? true);
   const [taxPercent, setTaxPercent] = useState(budget?.taxPercent || 18);
   const [hasDiscount, setHasDiscount] = useState(budget?.hasDiscount ?? false);
-  const [discountType, setDiscountType] = useState<"percentage" | "fixed">(
-    (budget?.discountType as "percentage" | "fixed") || "percentage"
+  const [discountType, setDiscountType] = useState<"percent" | "fixed">(
+    budget?.discountType || "percent"
   );
   const [discountValue, setDiscountValue] = useState(budget?.discountValue || 10);
 
   // Manual Payment Terms
-  const defaultTerms = [
+  const defaultTerms: PaymentTerm[] = [
     { percentage: 50, description: "Aprobación de la propuesta y firma de contrato.", amount: 0 },
     { percentage: 40, description: "Entrega de desarrollo core y pruebas UAT.", amount: 0 },
     { percentage: 10, description: "Pase a producción y aceptación final.", amount: 0 },
   ];
-  const [terms, setTerms] = useState(
+  const [terms, setTerms] = useState<PaymentTerm[]>(
     budget?.paymentTerms && budget.paymentTerms.length > 0 ? budget.paymentTerms : defaultTerms
   );
 
   const discountAmount = hasDiscount
-    ? discountType === "percentage"
+    ? discountType === "percent"
       ? (baseSubtotal * discountValue) / 100
       : discountValue
     : 0;
@@ -63,7 +64,7 @@ export const SidebarBudgetTab: React.FC = () => {
     });
   };
 
-  const handleDiscountTypeChange = (type: "percentage" | "fixed") => {
+  const handleDiscountTypeChange = (type: "percent" | "fixed") => {
     setDiscountType(type);
     updateBudget({ discountType: type });
   };
@@ -89,8 +90,8 @@ export const SidebarBudgetTab: React.FC = () => {
   };
 
   // Milestone Actions
-  const handleTermChange = (index: number, field: "percentage" | "description", val: any) => {
-    const updated = [...terms];
+  const handleTermChange = (index: number, field: "percentage" | "description", val: string | number) => {
+    const updated: PaymentTerm[] = [...terms];
     updated[index] = {
       ...updated[index],
       [field]: field === "percentage" ? Number(val) : val,
@@ -98,26 +99,26 @@ export const SidebarBudgetTab: React.FC = () => {
     // Recalculate amount
     updated[index].amount = (grandTotal * (updated[index].percentage || 0)) / 100;
     setTerms(updated);
-    updateBudget({ paymentTerms: updated as any });
+    updateBudget({ paymentTerms: updated });
   };
 
   const handleAddTerm = () => {
-    const newTerm = {
+    const newTerm: PaymentTerm = {
       percentage: 20,
       description: `Hito ${terms.length + 1}: Nueva Entrega`,
       amount: (grandTotal * 20) / 100,
     };
-    const updated = [...terms, newTerm];
+    const updated: PaymentTerm[] = [...terms, newTerm];
     setTerms(updated);
-    updateBudget({ paymentTerms: updated as any });
+    updateBudget({ paymentTerms: updated });
     toast.success("Nuevo hito de pago añadido");
   };
 
   const handleRemoveTerm = (index: number) => {
     if (terms.length <= 1) return;
-    const updated = terms.filter((_, i) => i !== index);
+    const updated: PaymentTerm[] = terms.filter((_, i) => i !== index);
     setTerms(updated);
-    updateBudget({ paymentTerms: updated as any });
+    updateBudget({ paymentTerms: updated });
     toast.info("Hito de pago eliminado");
   };
 
@@ -129,14 +130,14 @@ export const SidebarBudgetTab: React.FC = () => {
       "Cierre y entrega de documentación.",
     ];
 
-    const newTerms = split.map((pct, idx) => ({
+    const newTerms: PaymentTerm[] = split.map((pct, idx) => ({
       percentage: pct,
       description: defaultDescriptions[idx] || `Hito ${idx + 1}: Entrega intermedia`,
       amount: (grandTotal * pct) / 100,
     }));
 
     setTerms(newTerms);
-    updateBudget({ paymentTerms: newTerms as any });
+    updateBudget({ paymentTerms: newTerms });
     toast.success(`Hitos de pago actualizados a esquema ${split.join(" / ")}`);
   };
 
@@ -170,7 +171,7 @@ export const SidebarBudgetTab: React.FC = () => {
 
           {hasDiscount && (
             <div className="flex justify-between text-amber-300">
-              <span>Descuento ({discountType === "percentage" ? `${discountValue}%` : "Fijo"}):</span>
+              <span>Descuento ({discountType === "percent" ? `${discountValue}%` : "Fijo"}):</span>
               <span className="font-mono font-bold">- {currSymbol} {Math.round(discountAmount).toLocaleString()}</span>
             </div>
           )}
@@ -287,9 +288,9 @@ export const SidebarBudgetTab: React.FC = () => {
               <div className="grid grid-cols-2 gap-1.5 p-1 bg-zinc-200/60 rounded-xl">
                 <button
                   type="button"
-                  onClick={() => handleDiscountTypeChange("percentage")}
+                  onClick={() => handleDiscountTypeChange("percent")}
                   className={`py-1 rounded-lg font-bold text-[10px] transition-all cursor-pointer ${
-                    discountType === "percentage"
+                    discountType === "percent"
                       ? "bg-white text-[#2563EB] shadow-xs"
                       : "text-zinc-600 hover:text-zinc-900"
                   }`}
@@ -312,19 +313,19 @@ export const SidebarBudgetTab: React.FC = () => {
               {/* Value Input */}
               <div className="flex items-center justify-between">
                 <label className="text-zinc-600 font-semibold text-[11px]">
-                  {discountType === "percentage" ? "Porcentaje de Descuento" : `Monto (${currSymbol})`}
+                  {discountType === "percent" ? "Porcentaje de Descuento" : `Monto (${currSymbol})`}
                 </label>
                 <div className="flex items-center space-x-1.5">
                   <input
                     type="number"
                     min="0"
-                    max={discountType === "percentage" ? 100 : baseSubtotal}
+                    max={discountType === "percent" ? 100 : baseSubtotal}
                     value={discountValue}
                     onChange={(e) => handleDiscountValueChange(Number(e.target.value))}
                     className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg font-mono font-bold text-center text-[#111111]"
                   />
                   <span className="font-mono font-bold text-zinc-500">
-                    {discountType === "percentage" ? "%" : currSymbol}
+                    {discountType === "percent" ? "%" : currSymbol}
                   </span>
                 </div>
               </div>

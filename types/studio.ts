@@ -25,11 +25,20 @@ export interface PageSection {
   subtitle?: string;
 }
 
+export type ElementActionType =
+  | "CHANGE_TAB"
+  | "TOGGLE_VISIBILITY"
+  | "NAVIGATE_SECTION"
+  | "SYSTEM_TRIGGER"
+  | "NEXT_TAB";
+
 export interface ButtonActionConfig {
   targetId: string;
-  type: "CHANGE_TAB" | "TOGGLE_VISIBILITY" | "NAVIGATE_SECTION" | "SYSTEM_TRIGGER" | "NEXT_TAB";
+  type: ElementActionType;
   payload?: string;
 }
+
+export type ExecuteActionConfig = ButtonActionConfig;
 
 export interface PlainCardTab {
   id: string;
@@ -68,6 +77,7 @@ export interface CanvasElement {
   title: string;
   subtitle?: string;
   content?: string;
+  badgeText?: string;
 
   // Multi-Tab & Visibility Controls
   isMultiTab?: boolean;
@@ -92,4 +102,7 @@ export interface CanvasElement {
 
   // Button action binding
   actionConfig?: ButtonActionConfig;
+
+  // Custom data payload for persistent module templates
+  customData?: Record<string, unknown>;
 }

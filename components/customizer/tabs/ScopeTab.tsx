@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useProposal } from "@/context/ProposalContext";
+import { RequirementCategory } from "@/types/proposal";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 
 export const ScopeTab: React.FC = () => {
@@ -53,7 +54,7 @@ export const ScopeTab: React.FC = () => {
               />
               <select
                 value={req.category}
-                onChange={(e) => updateRequirement(reqIdx, { category: e.target.value as any })}
+                onChange={(e) => updateRequirement(reqIdx, { category: e.target.value as RequirementCategory })}
                 className="px-2 py-1.5 bg-white border border-[#E4E4E7] rounded-xl font-mono text-xs"
               >
                 {categoriesList.map((cat) => (

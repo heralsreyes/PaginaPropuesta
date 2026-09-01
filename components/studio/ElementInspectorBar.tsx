@@ -314,7 +314,7 @@ export const ElementInspectorBar: React.FC = () => {
                       ? selectedElement.customBg
                       : "#FFFFFF"
                   }
-                  onInput={(e: any) => handleApplyColor("bg", e.target.value)}
+                  onInput={(e: React.FormEvent<HTMLInputElement>) => handleApplyColor("bg", e.currentTarget.value)}
                   onChange={(e) => handleApplyColor("bg", e.target.value)}
                   className="w-7 h-7 rounded border-0 cursor-pointer p-0 bg-transparent"
                 />
@@ -391,7 +391,7 @@ export const ElementInspectorBar: React.FC = () => {
                       ? selectedElement.customBorder
                       : "#E4E4E7"
                   }
-                  onInput={(e: any) => handleApplyColor("border", e.target.value)}
+                  onInput={(e: React.FormEvent<HTMLInputElement>) => handleApplyColor("border", e.currentTarget.value)}
                   onChange={(e) => handleApplyColor("border", e.target.value)}
                   className="w-7 h-7 rounded border-0 cursor-pointer p-0 bg-transparent"
                 />
@@ -473,7 +473,7 @@ export const ElementInspectorBar: React.FC = () => {
                       ? selectedElement.customText
                       : "#18181B"
                   }
-                  onInput={(e: any) => handleApplyColor("text", e.target.value)}
+                  onInput={(e: React.FormEvent<HTMLInputElement>) => handleApplyColor("text", e.currentTarget.value)}
                   onChange={(e) => handleApplyColor("text", e.target.value)}
                   className="w-7 h-7 rounded border-0 cursor-pointer p-0 bg-transparent"
                 />
@@ -573,7 +573,7 @@ export const ElementInspectorBar: React.FC = () => {
           <select
             value={currentAction.type}
             onChange={(e) =>
-              handleActionChange({ type: e.target.value as any })
+              handleActionChange({ type: e.target.value as ButtonActionConfig["type"] })
             }
             className="bg-zinc-800 border border-zinc-600 rounded px-1.5 py-0.5 text-[10px] font-bold text-white focus:outline-none"
           >

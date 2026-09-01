@@ -60,13 +60,14 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
   const [showPushAlert, setShowPushAlert] = useState<boolean>(true);
 
   React.useEffect(() => {
-    const handleSwitchTab = (e: CustomEvent<"portafolio" | "ticket" | "estados" | "asesor">) => {
-      if (e.detail) {
-        setAppSimTab(e.detail);
+    const handleSwitchTab = (e: Event) => {
+      const customEvent = e as CustomEvent<"portafolio" | "ticket" | "estados" | "asesor">;
+      if (customEvent.detail) {
+        setAppSimTab(customEvent.detail);
       }
     };
-    window.addEventListener("switch-simulator-tab" as any, handleSwitchTab as any);
-    return () => window.removeEventListener("switch-simulator-tab" as any, handleSwitchTab as any);
+    window.addEventListener("switch-simulator-tab", handleSwitchTab);
+    return () => window.removeEventListener("switch-simulator-tab", handleSwitchTab);
   }, []);
 
   // Local state for simulators
@@ -95,16 +96,26 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
   const inmoPct = 25;
   const esafiPct = 25;
 
+  const timers = React.useRef<NodeJS.Timeout[]>([]);
+  React.useEffect(() => {
+    return () => {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
+    };
+  }, []);
+
   const triggerFaceIdScan = () => {
     setIsFaceIdScanning(true);
     setFaceIdStep(1);
-    setTimeout(() => setFaceIdStep(2), 700);
-    setTimeout(() => setFaceIdStep(3), 1400);
-    setTimeout(() => {
-      setIsFaceIdScanning(false);
-      setFaceIdSigned(true);
-      setFaceIdStep(0);
-    }, 2100);
+    timers.current.push(setTimeout(() => setFaceIdStep(2), 700));
+    timers.current.push(setTimeout(() => setFaceIdStep(3), 1400));
+    timers.current.push(
+      setTimeout(() => {
+        setIsFaceIdScanning(false);
+        setFaceIdSigned(true);
+        setFaceIdStep(0);
+      }, 2100)
+    );
   };
 
   const handlePinKeyPress = (digit: string) => {
@@ -112,9 +123,11 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
       const nextPin = pinDigits + digit;
       setPinDigits(nextPin);
       if (nextPin.length === 4) {
-        setTimeout(() => {
-          setPdfUnlocked(true);
-        }, 300);
+        timers.current.push(
+          setTimeout(() => {
+            setPdfUnlocked(true);
+          }, 300)
+        );
       }
     }
   };
@@ -122,17 +135,19 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
   const sendChatMessage = (userMsg: string) => {
     setChatMessages((prev) => [...prev, { sender: "user", text: userMsg }]);
     setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      let replyText =
-        "Perfecto. He registrado su consulta en Dynamics 365 CRM. Le enviaré el documento adjunto de inmediato.";
-      if (userMsg.includes("tasa")) {
-        replyText = `Su tasa personalizada actual es del ${customRatePercent.toFixed(1)}% p.a. para Mutuos a ${calcTermDays} días.`;
-      } else if (userMsg.includes("renovación")) {
-        replyText = `Excelente. Su orden de renovación de USD $${calcAmount.toLocaleString()} ha sido pre-aprobada.`;
-      }
-      setChatMessages((prev) => [...prev, { sender: "asesor", text: replyText }]);
-    }, 1400);
+    timers.current.push(
+      setTimeout(() => {
+        setIsTyping(false);
+        let replyText =
+          "Perfecto. He registrado su consulta en Dynamics 365 CRM. Le enviaré el documento adjunto de inmediato.";
+        if (userMsg.includes("tasa")) {
+          replyText = `Su tasa personalizada actual es del ${customRatePercent.toFixed(1)}% p.a. para Mutuos a ${calcTermDays} días.`;
+        } else if (userMsg.includes("renovación")) {
+          replyText = `Excelente. Su orden de renovación de USD $${calcAmount.toLocaleString()} ha sido pre-aprobada.`;
+        }
+        setChatMessages((prev) => [...prev, { sender: "asesor", text: replyText }]);
+      }, 1400)
+    );
   };
 
   const formatCurr = (val: number) => formatAppCurrency(val, currencyMode);

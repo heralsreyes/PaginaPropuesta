@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
+import { CanvasElement } from "@/types/studio";
 import {
   Sparkles,
   Layers,
@@ -36,7 +37,10 @@ export const SidebarElementsTab: React.FC = () => {
   const [uploadedImages, setUploadedImages] = useState<{ id: string; name: string; url: string }[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDragStart = (e: React.DragEvent, elementData: any) => {
+  const handleDragStart = (
+    e: React.DragEvent,
+    elementData: Parameters<typeof addCanvasElement>[0]
+  ) => {
     e.dataTransfer.setData("application/json", JSON.stringify(elementData));
     e.dataTransfer.effectAllowed = "copy";
   };
@@ -354,9 +358,9 @@ export const SidebarElementsTab: React.FC = () => {
         <div className="space-y-3">
           {moduleTemplates.map((tmpl) => {
             const Icon = tmpl.icon;
-            const elementData = {
+            const elementData: Parameters<typeof addCanvasElement>[0] = {
               type: "module_template",
-              templateType: tmpl.templateType,
+              templateType: tmpl.templateType as CanvasElement["templateType"],
               title: tmpl.title,
               width: tmpl.width,
               height: tmpl.height,
@@ -368,7 +372,7 @@ export const SidebarElementsTab: React.FC = () => {
                 key={tmpl.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
-                onClick={() => addCanvasElement(elementData as any)}
+                onClick={() => addCanvasElement(elementData)}
                 className="p-3.5 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all space-y-1.5 shadow-xs group"
               >
                 <div className="flex items-center space-x-2">
@@ -388,7 +392,7 @@ export const SidebarElementsTab: React.FC = () => {
       {activeSubCategory === "tarjetas" && (
         <div className="space-y-2.5">
           {plainShapeCards.map((c) => {
-            const elementData = {
+            const elementData: Parameters<typeof addCanvasElement>[0] = {
               type: "card",
               title: c.title,
               subtitle: "Haga doble clic para editar este texto in-situ.",
@@ -405,7 +409,7 @@ export const SidebarElementsTab: React.FC = () => {
                 key={c.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
-                onClick={() => addCanvasElement(elementData as any)}
+                onClick={() => addCanvasElement(elementData)}
                 className="p-3.5 rounded-2xl border text-left transition-all cursor-grab active:cursor-grabbing space-y-1.5 bg-[#FAF9F6] border-[#E4E4E7] hover:bg-white hover:border-[#2563EB] shadow-xs"
               >
                 <div className="flex items-center justify-between">
@@ -426,12 +430,12 @@ export const SidebarElementsTab: React.FC = () => {
       {activeSubCategory === "botones" && (
         <div className="grid grid-cols-1 gap-2.5">
           {allButtons.map((btn) => {
-            const elementData = {
+            const elementData: Parameters<typeof addCanvasElement>[0] = {
               type: "button",
               title: btn.label,
               customBg: btn.bg,
               customText: btn.text,
-              customBorder: (btn as any).border,
+              customBorder: "border" in btn ? (btn.border as string) : undefined,
               width: btn.width,
               height: btn.height,
               sectionId: "hero",
@@ -442,7 +446,7 @@ export const SidebarElementsTab: React.FC = () => {
                 key={btn.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
-                onClick={() => addCanvasElement(elementData as any)}
+                onClick={() => addCanvasElement(elementData)}
                 className="p-2.5 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] flex items-center justify-between cursor-grab active:cursor-grabbing transition-all shadow-xs"
               >
                 <span className="font-bold text-[#111111] text-xs">{btn.label}</span>
@@ -459,8 +463,8 @@ export const SidebarElementsTab: React.FC = () => {
       {activeSubCategory === "componentes" && (
         <div className="space-y-2.5">
           {uiComponents.map((comp) => {
-            const elementData = {
-              type: comp.type,
+            const elementData: Parameters<typeof addCanvasElement>[0] = {
+              type: comp.type as CanvasElement["type"],
               title: comp.title,
               customBg: comp.bg,
               customBorder: comp.border,
@@ -475,7 +479,7 @@ export const SidebarElementsTab: React.FC = () => {
                 key={comp.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
-                onClick={() => addCanvasElement(elementData as any)}
+                onClick={() => addCanvasElement(elementData)}
                 className="p-3.5 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all space-y-1 shadow-xs"
               >
                 <span className="font-extrabold text-[#111111] text-xs block">{comp.title}</span>
@@ -523,7 +527,7 @@ export const SidebarElementsTab: React.FC = () => {
               </span>
               <div className="grid grid-cols-2 gap-2">
                 {uploadedImages.map((img) => {
-                  const elementData = {
+                  const elementData: Parameters<typeof addCanvasElement>[0] = {
                     type: "image",
                     imageUrl: img.url,
                     title: img.name,
@@ -536,7 +540,7 @@ export const SidebarElementsTab: React.FC = () => {
                       key={img.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, elementData)}
-                      onClick={() => addCanvasElement(elementData as any)}
+                      onClick={() => addCanvasElement(elementData)}
                       className="p-2 border border-[#E4E4E7] rounded-xl bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing space-y-1 group relative transition-all shadow-2xs"
                     >
                       <div className="w-full h-16 bg-zinc-100 rounded-lg overflow-hidden flex items-center justify-center">

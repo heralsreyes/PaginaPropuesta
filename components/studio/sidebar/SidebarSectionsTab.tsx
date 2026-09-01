@@ -139,7 +139,7 @@ export const SidebarSectionsTab: React.FC = () => {
             <label className="block text-zinc-700 font-semibold mb-1 text-[11px]">Tipo de Plantilla Base</label>
             <select
               value={newSectionType}
-              onChange={(e) => setNewSectionType(e.target.value as any)}
+              onChange={(e) => setNewSectionType(e.target.value as PageSection["componentType"])}
               className="w-full px-3 py-2 bg-white border border-[#BFDBFE] rounded-xl text-[#111111] font-medium text-xs cursor-pointer"
             >
               <option value="custom">Lienzo en Blanco (Diseño Libre)</option>

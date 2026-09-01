@@ -2,13 +2,54 @@
 
 import React from "react";
 import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
-import { RefreshCw } from "lucide-react";
+import { useProposal } from "@/context/ProposalContext";
+import { RefreshCw, Building2 } from "lucide-react";
 
 export const SidebarTemplatesTab: React.FC = () => {
   const { theme, applyPreset, resetTheme, setTheme } = useThemeStore();
+  const { proposal, updateCompany, updateClient } = useProposal();
 
   return (
     <div className="space-y-6 text-xs p-4">
+      {/* Brand & Header Identifiers */}
+      <div className="p-3.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-2xl space-y-3">
+        <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono flex items-center gap-1.5">
+          <Building2 className="w-3.5 h-3.5 text-[#2563EB]" />
+          <span>Identidad de Marca (Cabecera)</span>
+        </h4>
+        <div className="space-y-2.5">
+          <div>
+            <label className="block text-[10px] font-bold text-zinc-600 mb-1">Nombre Proveedor (Header Izq)</label>
+            <input
+              type="text"
+              value={proposal?.company?.name || ""}
+              onChange={(e) => updateCompany({ name: e.target.value })}
+              placeholder="Ej. Enfoco"
+              className="w-full px-2.5 py-1.5 bg-white border border-[#E4E4E7] rounded-xl text-[#111111] font-semibold text-xs focus:ring-2 focus:ring-[#2563EB]/30 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold text-zinc-600 mb-1">Nombre Cliente (Header Der)</label>
+            <input
+              type="text"
+              value={proposal?.client?.name || ""}
+              onChange={(e) => updateClient({ name: e.target.value })}
+              placeholder="Ej. Excel Puesto de Bolsa, S.A. & ESAFI"
+              className="w-full px-2.5 py-1.5 bg-white border border-[#E4E4E7] rounded-xl text-[#111111] font-semibold text-xs focus:ring-2 focus:ring-[#2563EB]/30 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold text-zinc-600 mb-1">Nombre Corto Cliente (Siglas)</label>
+            <input
+              type="text"
+              value={proposal?.client?.shortName || ""}
+              onChange={(e) => updateClient({ shortName: e.target.value })}
+              placeholder="Ej. Excel"
+              className="w-full px-2.5 py-1.5 bg-white border border-[#E4E4E7] rounded-xl text-[#111111] font-semibold text-xs focus:ring-2 focus:ring-[#2563EB]/30 outline-none"
+            />
+          </div>
+        </div>
+      </div>
       <div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">

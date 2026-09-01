@@ -115,7 +115,7 @@ export const ColorsTab: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {colorFields.map((field) => {
-            const currentValue = (theme as any)[field.key] || field.defaultVal;
+            const currentValue = theme[field.key] || field.defaultVal;
 
             return (
               <div key={field.key} className="p-3 bg-[#FAF9F6] border border-[#E4E4E7] rounded-2xl space-y-2">

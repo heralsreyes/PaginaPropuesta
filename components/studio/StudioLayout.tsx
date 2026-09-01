@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useStudioStore } from "@/store/useStudioStore";
+import { useStudioStore, ButtonActionConfig } from "@/store/useStudioStore";
 import { CanvaSidebar } from "@/components/studio/CanvaSidebar";
 import { StudioToolbar } from "@/components/studio/StudioToolbar";
 import { ElementInspectorBar } from "@/components/studio/ElementInspectorBar";
@@ -28,11 +28,9 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
     isDrawing,
     currentBox,
     handleCanvasMouseDown,
-    handleCanvasMouseMove,
-    handleCanvasMouseUp,
   } = useCanvasDrawing();
 
-  const handleExecuteAction = (actionConfig: any) => {
+  const handleExecuteAction = (actionConfig: ButtonActionConfig) => {
     executeButtonAction(actionConfig, {
       setActiveTabForCard,
       toggleElementVisibility,
@@ -71,7 +69,7 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-zinc-950 font-sans select-none">
+    <div className="flex h-screen w-screen overflow-hidden bg-zinc-950 font-sans">
       {/* Design Studio Left Sidebar */}
       {isDesignMode && <CanvaSidebar />}
 
@@ -88,8 +86,6 @@ export const StudioLayout: React.FC<StudioLayoutProps> = ({ children }) => {
         <div
           id="studio-canvas"
           onMouseDown={handleCanvasMouseDown}
-          onMouseMove={handleCanvasMouseMove}
-          onMouseUp={handleCanvasMouseUp}
           onDragOver={handleCanvasDragOver}
           onDrop={handleCanvasDrop}
           onClick={(e) => {

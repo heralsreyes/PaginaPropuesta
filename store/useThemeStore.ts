@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { safeLocalStorage } from "@/lib/safeStorage";
 
 export interface ThemeConfig {
   bgMain: string;
@@ -133,7 +134,7 @@ export const PRESET_THEMES: PresetTheme[] = [
   },
 ];
 
-const applyCssVars = (theme: ThemeConfig) => {
+export const applyCssVars = (theme: ThemeConfig) => {
   if (typeof document !== "undefined") {
     document.documentElement.style.setProperty("--bg-main", theme.bgMain);
     document.documentElement.style.setProperty("--accent-color", theme.accentColor);
@@ -184,6 +185,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: "enfoco-theme-storage",
+      storage: createJSONStorage(() => safeLocalStorage),
       onRehydrateStorage: () => (state) => {
         if (state?.theme) {
           applyCssVars(state.theme);

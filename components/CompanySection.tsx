@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { EditableText } from "@/components/studio/EditableText";
+import { replaceAt } from "@/lib/arrayUtils";
 import { Target, Compass, Award, ShieldCheck, CheckCircle2, Monitor, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -256,9 +257,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                                 <EditableText
                                   value={val}
                                   onChange={(newVal) => {
-                                    const updatedValues = [...company.values];
-                                    updatedValues[idx] = newVal;
-                                    updateCompany({ values: updatedValues });
+                                    updateCompany({ values: replaceAt(company.values, idx, newVal) });
                                   }}
                                   tag="span"
                                 />
@@ -293,9 +292,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                                 <EditableText
                                   value={cert}
                                   onChange={(newCert) => {
-                                    const updatedCerts = [...company.certifications];
-                                    updatedCerts[idx] = newCert;
-                                    updateCompany({ certifications: updatedCerts });
+                                    updateCompany({ certifications: replaceAt(company.certifications, idx, newCert) });
                                   }}
                                   tag="span"
                                 />

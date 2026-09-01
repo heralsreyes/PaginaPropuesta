@@ -4,9 +4,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, CheckCircle2 } from "lucide-react";
 import { EditableField } from "@/components/ui/EditableField";
+import { useProposal } from "@/context/ProposalContext";
+import { ProposalData } from "@/types/proposal";
 
 interface ClosingSignatureSectionProps {
   secId: string;
+  proposal?: ProposalData;
   onOpenAcceptModal: () => void;
 }
 
@@ -24,7 +27,17 @@ const sectionContainerVariants = {
   },
 };
 
-export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = ({ secId, onOpenAcceptModal }) => {
+export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = ({ secId, proposal: propProp, onOpenAcceptModal }) => {
+  const { proposal: contextProp } = useProposal();
+  const proposal = propProp || contextProp;
+
+  const clientName = proposal?.client?.name || "el Cliente";
+  const companyName = proposal?.company?.name || "ENFOCO";
+  const rnc = proposal?.company?.rnc ? `RNC ${proposal.company.rnc}` : "RNC Oficial";
+  const email = proposal?.project?.authorEmail || "contacto@enfoco.com.do";
+  const phone = proposal?.project?.authorPhone || "(809) 481-4035";
+  const guarantee = proposal?.project?.guaranteePeriod || "60 días";
+
   return (
     <section
       id={secId}
@@ -47,7 +60,7 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
           <p className="text-base sm:text-lg text-slate-200/90 theme-text-color max-w-2xl mx-auto leading-relaxed font-medium">
             <EditableField
               id="sec12_desc"
-              defaultText="Al confirmar esta propuesta, formalizamos el inicio del proyecto de desarrollo web y app móvil para Excel Puesto de Bolsa y ESAFI."
+              defaultText={`Al confirmar esta propuesta, formalizamos el inicio del proyecto de desarrollo web y app móvil para ${clientName}.`}
             />
           </p>
         </div>
@@ -56,14 +69,14 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
           <div className="flex items-center justify-center gap-4">
             <ShieldCheck className="w-10 h-10 text-[#004F54]" />
             <span className="font-extrabold text-2xl text-[#0F172A] font-display">
-              <EditableField id="sec12_guarantee_title" defaultText="Garantía de Satisfacción ENFOCO" />
+              <EditableField id="sec12_guarantee_title" defaultText={`Garantía de Satisfacción ${companyName}`} />
             </span>
           </div>
 
           <p className="text-base text-[#334155] leading-relaxed font-medium">
             <EditableField
               id="sec12_guarantee_desc"
-              defaultText="Incluye 60 días de garantía total posterior al pase a producción, acompañamiento personalizado y soporte técnico certificado."
+              defaultText={`Incluye ${guarantee} de garantía total posterior al pase a producción, acompañamiento personalizado y soporte técnico certificado.`}
             />
           </p>
 
@@ -81,7 +94,7 @@ export const ClosingSignatureSection: React.FC<ClosingSignatureSectionProps> = (
         <div className="text-sm font-mono text-[#64748B] pt-6">
           <EditableField
             id="sec12_footer_contact"
-            defaultText="ENFOCO, S.R.L. • RNC 1-31-44504-0 • jmartinez@enfoco.com.do • (809) 481-4035"
+            defaultText={`${companyName} • ${rnc} • ${email} • ${phone}`}
           />
         </div>
       </motion.div>

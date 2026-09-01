@@ -2,12 +2,15 @@
 
 import React from "react";
 import { useProposal } from "@/context/ProposalContext";
-import { useFinancialStore } from "@/store/useFinancialStore";
 import { Plus, Trash2 } from "lucide-react";
 
 export const BudgetTab: React.FC = () => {
   const { proposal, updateBudget, addPaymentTerm, removePaymentTerm, updatePaymentTerm } = useProposal();
-  const { hasTax, taxPercent, hasDiscount, discountValue, discountType, setHasTax, setTaxPercent, setHasDiscount, setDiscountValue, setDiscountType } = useFinancialStore();
+  const hasTax = proposal.budget.hasTax ?? true;
+  const taxPercent = proposal.budget.taxPercent ?? 18;
+  const hasDiscount = proposal.budget.hasDiscount ?? false;
+  const discountValue = proposal.budget.discountValue ?? 0;
+  const discountType = proposal.budget.discountType ?? "fixed";
 
   return (
     <div className="space-y-6 text-xs">
@@ -26,13 +29,12 @@ export const BudgetTab: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-zinc-600 font-medium mb-1">Monto Total Estimado</label>
-            <input
-              type="number"
-              value={proposal.budget.totalAmount}
-              onChange={(e) => updateBudget({ totalAmount: Number(e.target.value) })}
-              className="w-full px-3 py-2 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono font-bold text-[#F08D17]"
-            />
+            <label className="block text-zinc-600 font-medium mb-1">
+              Monto Total Estimado <span className="text-[10px] text-zinc-400">(calculado automáticamente)</span>
+            </label>
+            <div className="w-full px-3 py-2 bg-zinc-100 border border-[#E4E4E7] rounded-xl text-[#111111] font-mono font-bold text-[#F08D17]">
+              ${proposal.budget.totalAmount.toLocaleString()}
+            </div>
           </div>
         </div>
 
@@ -43,7 +45,7 @@ export const BudgetTab: React.FC = () => {
               <input
                 type="checkbox"
                 checked={hasTax}
-                onChange={(e) => setHasTax(e.target.checked)}
+                onChange={(e) => updateBudget({ hasTax: e.target.checked })}
                 className="w-4 h-4 rounded border-zinc-300 text-[#2563EB]"
               />
               <span className="font-bold text-[#111111]">Aplicar Impuesto / ITBIS</span>
@@ -53,7 +55,7 @@ export const BudgetTab: React.FC = () => {
                 <input
                   type="number"
                   value={taxPercent}
-                  onChange={(e) => setTaxPercent(Number(e.target.value))}
+                  onChange={(e) => updateBudget({ taxPercent: Number(e.target.value) })}
                   className="w-16 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-right font-mono"
                 />
                 <span className="font-bold">%</span>
@@ -66,7 +68,7 @@ export const BudgetTab: React.FC = () => {
               <input
                 type="checkbox"
                 checked={hasDiscount}
-                onChange={(e) => setHasDiscount(e.target.checked)}
+                onChange={(e) => updateBudget({ hasDiscount: e.target.checked })}
                 className="w-4 h-4 rounded border-zinc-300 text-[#2563EB]"
               />
               <span className="font-bold text-[#111111]">Aplicar Descuento Especial</span>
@@ -76,12 +78,12 @@ export const BudgetTab: React.FC = () => {
                 <input
                   type="number"
                   value={discountValue}
-                  onChange={(e) => setDiscountValue(Number(e.target.value))}
+                  onChange={(e) => updateBudget({ discountValue: Number(e.target.value) })}
                   className="w-20 px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg text-right font-mono"
                 />
                 <select
                   value={discountType}
-                  onChange={(e) => setDiscountType(e.target.value as "percent" | "fixed")}
+                  onChange={(e) => updateBudget({ discountType: e.target.value as "percent" | "fixed" })}
                   className="px-2 py-1 bg-white border border-[#E4E4E7] rounded-lg"
                 >
                   <option value="percent">%</option>

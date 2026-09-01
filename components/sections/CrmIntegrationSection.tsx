@@ -37,21 +37,33 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
   const [isSimulatingTransmission, setIsSimulatingTransmission] = useState<boolean>(false);
   const [transmissionSuccess, setTransmissionSuccess] = useState<boolean>(false);
 
+  const timers = React.useRef<NodeJS.Timeout[]>([]);
+  React.useEffect(() => {
+    return () => {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
+    };
+  }, []);
+
   const calcAmount = 50000;
   const calcTermDays = 180;
   const currentRate = 0.095;
 
   const triggerTransmissionSimulation = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
     setIsSimulatingTransmission(true);
     setTransmissionSuccess(false);
     setSelectedFlowStep(1);
 
-    setTimeout(() => setSelectedFlowStep(2), 600);
-    setTimeout(() => setSelectedFlowStep(3), 1200);
-    setTimeout(() => {
-      setIsSimulatingTransmission(false);
-      setTransmissionSuccess(true);
-    }, 1800);
+    timers.current.push(setTimeout(() => setSelectedFlowStep(2), 600));
+    timers.current.push(setTimeout(() => setSelectedFlowStep(3), 1200));
+    timers.current.push(
+      setTimeout(() => {
+        setIsSimulatingTransmission(false);
+        setTransmissionSuccess(true);
+      }, 1800)
+    );
   };
 
   return (

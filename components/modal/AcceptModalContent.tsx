@@ -3,11 +3,20 @@
 import React, { useState } from "react";
 import { SignatureCanvas } from "./SignatureCanvas";
 import { ShieldCheck, CheckCircle2, Building, User, Mail, FileText } from "lucide-react";
+import { sanitizeText } from "@/lib/proposalValidation";
+import { z } from "zod";
 import { toast } from "sonner";
 
 interface AcceptModalContentProps {
   onClose: () => void;
 }
+
+const acceptFormSchema = z.object({
+  signerName: z.string().min(3, "El nombre debe contener al menos 3 caracteres"),
+  signerRole: z.string().min(2, "Debe especificar el cargo o posición del firmante"),
+  signerEmail: z.string().email("Correo electrónico corporativo inválido"),
+  companyRnc: z.string().regex(/^[0-9\-\s]*$/, "El RNC debe contener solo números o guiones").optional(),
+});
 
 export const AcceptModalContent: React.FC<AcceptModalContentProps> = ({ onClose }) => {
   const [signerName, setSignerName] = useState("");
@@ -19,10 +28,20 @@ export const AcceptModalContent: React.FC<AcceptModalContentProps> = ({ onClose 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!signerName.trim() || !signerEmail.trim()) {
-      toast.error("Por favor complete los campos obligatorios del firmante.");
+
+    const cleanData = {
+      signerName: sanitizeText(signerName),
+      signerRole: sanitizeText(signerRole),
+      signerEmail: sanitizeText(signerEmail),
+      companyRnc: sanitizeText(companyRnc),
+    };
+
+    const validation = acceptFormSchema.safeParse(cleanData);
+    if (!validation.success) {
+      toast.error(validation.error.errors[0]?.message || "Por favor verifique los datos del formulario.");
       return;
     }
+
     if (!signatureData) {
       toast.error("Por favor dibuje su firma manuscrita digital antes de confirmar.");
       return;

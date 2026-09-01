@@ -15,7 +15,17 @@ interface ExecutiveSummarySectionProps {
 
 export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = ({
   secId,
+  proposal,
 }) => {
+  const companyName = proposal?.company?.name || "ENFOCO";
+  const clientName = proposal?.client?.name || "CLIENTE INSTITUCIONAL";
+  const titlePart1 = proposal?.project?.heroTitlePrefix || "Portal de Inversionistas & ";
+  const titlePart2 = proposal?.project?.heroTitleAccent || "App Móvil Inteligente";
+  const projectDesc =
+    proposal?.project?.heroSubtitle ||
+    proposal?.project?.heroHeadline ||
+    `Plataforma de autogestión 24/7 para clientes e inversionistas de ${proposal?.client?.shortName || clientName}: Portafolio 360°, Trade Ticket digital con aprobación fehaciente, integración directa con Microsoft Dynamics CRM & SIFI Fondos, y resúmenes con Inteligencia Artificial.`;
+
   return (
     <section
       id={secId}
@@ -40,7 +50,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
         <EditableBlockWrapper id="sec1_banner" label="Banner Co-Branding" className="w-full max-w-5xl mx-auto my-3">
           <div className="w-full bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl rounded-2xl p-6 relative overflow-hidden transition-all text-white">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-              {/* Lado Izquierdo: EMPRESA (ENFOCO S.R.L.) */}
+              {/* Lado Izquierdo: EMPRESA */}
               <div className="flex flex-col items-center md:items-start text-center md:text-left">
                 <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -48,7 +58,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
                 </span>
                 <div className="flex items-center gap-2.5 pt-0.5">
                   <span className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-white tracking-tight">
-                    <EditableField id="sec1_dev_name" defaultText="ENFOCO" />
+                    <EditableField id="sec1_dev_name" defaultText={companyName} />
                     <span className="text-emerald-400">.</span>
                   </span>
                   <span className="text-xs px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-white/70 inline-flex items-center font-mono font-medium">
@@ -60,7 +70,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
               {/* Línea divisoria sutil en Desktop */}
               <div className="hidden md:block w-px h-12 bg-white/10" />
 
-              {/* Lado Derecho: CLIENTE (EXCEL PUESTO DE BOLSA & ESAFI) */}
+              {/* Lado Derecho: CLIENTE */}
               <div className="flex flex-col items-center md:items-end text-center md:text-right">
                 <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-1.5">
                   <EditableField id="sec1_client_label" defaultText="CLIENTE INSTITUCIONAL" />
@@ -68,7 +78,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
                 </span>
                 <div className="pt-0.5">
                   <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-tight block leading-tight font-display">
-                    <EditableField id="sec1_client_name" defaultText="EXCEL PUESTO DE BOLSA & ESAFI" />
+                    <EditableField id="sec1_client_name" defaultText={clientName} />
                   </span>
                 </div>
               </div>
@@ -77,16 +87,16 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
         </EditableBlockWrapper>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display text-white theme-h1-color text-center leading-[1.1] max-w-5xl mx-auto tracking-tight pt-2">
-          <EditableField id="sec1_h1_part1" defaultText="Portal de Inversionistas & " />
+          <EditableField id="sec1_h1_part1" defaultText={titlePart1} />
           <span className="text-[#F08D17] theme-h2-color">
-            <EditableField id="sec1_h1_part2" defaultText="App Móvil Inteligente" />
+            <EditableField id="sec1_h1_part2" defaultText={titlePart2} />
           </span>
         </h1>
 
         <p className="text-base sm:text-lg md:text-xl text-slate-200/90 theme-text-color text-center max-w-3xl mx-auto leading-relaxed font-medium">
           <EditableField
             id="sec1_desc"
-            defaultText="Plataforma de autogestión 24/7 para clientes e inversionistas de Excel: Portafolio 360°, Trade Ticket digital con aprobación fehaciente, integración directa con Microsoft Dynamics CRM & SIFI Fondos, y resúmenes con Inteligencia Artificial."
+            defaultText={projectDesc}
           />
         </p>
 

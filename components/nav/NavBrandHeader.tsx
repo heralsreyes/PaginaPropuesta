@@ -1,8 +1,8 @@
-"use client";
-
 import React from "react";
 import { ProposalData } from "@/types/proposal";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { useProposal } from "@/context/ProposalContext";
+import { EditableText } from "@/components/studio/EditableText";
+import { CheckCircle2 } from "lucide-react";
 
 interface NavBrandHeaderProps {
   proposal: ProposalData;
@@ -14,26 +14,38 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
   proposal,
   onOpenAcceptModal,
 }) => {
+  const { updateCompany, updateClient } = useProposal();
+
+  const companyName = proposal?.company?.name || "Enfoco";
+  const clientName = proposal?.client?.name || "Excel Puesto de bolsa";
+
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
       {/* Authentic Human-Crafted Executive Brand Badge */}
-      <div className="pointer-events-auto flex items-center px-5 py-2.5 rounded-2xl bg-[#002224]/90 backdrop-blur-md border border-white/15 shadow-lg select-none">
+      <div className="pointer-events-auto flex items-center px-5 py-2.5 rounded-2xl bg-[#002224]/90 backdrop-blur-md border border-white/15 shadow-lg">
         {/* Provider Brand */}
-        <span className="font-extrabold text-sm text-white tracking-wide">
-          Enfoco
-        </span>
+        <EditableText
+          value={companyName}
+          onChange={(val) => updateCompany({ name: val })}
+          className="font-extrabold text-sm text-white tracking-wide"
+          tag="span"
+        />
 
         {/* Divider */}
-        <span className="text-slate-400/80 font-mono text-sm mx-2.5">|</span>
+        <span className="text-slate-400/80 font-mono text-sm mx-2.5 select-none">|</span>
 
         {/* Client Brand */}
-        <span className="font-mono text-sm font-bold text-slate-200">
-          Excel Puesto de bolsa
-        </span>
+        <EditableText
+          value={clientName}
+          onChange={(val) => updateClient({ name: val })}
+          className="font-mono text-sm font-bold text-slate-200"
+          tag="span"
+        />
       </div>
 
       {/* Action Buttons Right */}
       <div className="pointer-events-auto flex items-center gap-2">
+        {/* Accept Proposal Modal Button */}
         <button
           type="button"
           onClick={onOpenAcceptModal}

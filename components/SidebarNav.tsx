@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ProposalData } from "@/types/proposal";
 import { useStudioStore } from "@/store/useStudioStore";
 import { NavBrandHeader } from "./nav/NavBrandHeader";
@@ -20,34 +20,40 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
   const { sections } = useStudioStore();
   const [activeSection, setActiveSection] = useState<string>("hero");
 
-  const enabledSections = sections.filter((s) => s.enabled);
-  const slides =
-    enabledSections.length > 0
+  const slides = useMemo(() => {
+    const enabledSections = sections.filter((s) => s.enabled);
+    return enabledSections.length > 0
       ? enabledSections.map((s) => ({ id: s.id, label: s.label || s.title || s.id }))
       : [{ id: "hero", label: "Inicio" }];
+  }, [sections]);
 
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
     let canvasEl: HTMLElement | null = null;
+    let rafId: number | null = null;
 
     const handleScroll = () => {
-      canvasEl = document.getElementById("studio-canvas");
-      if (!canvasEl) return;
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        if (!canvasEl) canvasEl = document.getElementById("studio-canvas");
+        if (!canvasEl) return;
 
-      const canvasRect = canvasEl.getBoundingClientRect();
-      const triggerY = canvasRect.top + canvasRect.height * 0.4;
+        const canvasRect = canvasEl.getBoundingClientRect();
+        const triggerY = canvasRect.top + canvasRect.height * 0.4;
 
-      for (let i = slides.length - 1; i >= 0; i--) {
-        const slide = slides[i];
-        const sectionEl = document.getElementById(slide.id);
-        if (sectionEl) {
-          const rect = sectionEl.getBoundingClientRect();
-          if (rect.top <= triggerY) {
-            setActiveSection(slide.id);
-            break;
+        for (let i = slides.length - 1; i >= 0; i--) {
+          const slide = slides[i];
+          const sectionEl = document.getElementById(slide.id);
+          if (sectionEl) {
+            const rect = sectionEl.getBoundingClientRect();
+            if (rect.top <= triggerY) {
+              setActiveSection(slide.id);
+              break;
+            }
           }
         }
-      }
+      });
     };
 
     const initNav = () => {
@@ -81,6 +87,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
     initNav();
 
     return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
       if (observer) observer.disconnect();
       if (canvasEl) canvasEl.removeEventListener("scroll", handleScroll);
     };

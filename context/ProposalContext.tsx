@@ -2,9 +2,17 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { ProposalData, sampleProposal, Requirement, PaymentTerm, RoadmapPhase, TeamMember } from "@/data/proposalData";
-import { useStudioStore, EXCEL_CUSTOM_SECTIONS } from "@/store/useStudioStore";
-import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
+import { useStudioStore, EXCEL_CUSTOM_SECTIONS, PageSection, CanvasElement, ButtonActionConfig } from "@/store/useStudioStore";
+import { useThemeStore, PRESET_THEMES, ThemeConfig, applyCssVars } from "@/store/useThemeStore";
+import { validateProposalData } from "@/lib/proposalValidation";
 import { toast } from "sonner";
+
+export type ExtendedProposalPayload = Partial<ProposalData> & {
+  sections?: PageSection[];
+  canvasElements?: CanvasElement[];
+  buttonActionsMap?: Record<string, ButtonActionConfig>;
+  theme?: ThemeConfig;
+};
 
 const LOCAL_STORAGE_KEY = "enfoco_proposal_data_v2";
 const ADMIN_MODE_KEY = "enfoco_admin_mode";
@@ -60,11 +68,22 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (adminParam === "true" || adminParam === "1" || savedAdmin === "true") {
           setIsAdminState(true);
           localStorage.setItem(ADMIN_MODE_KEY, "true");
+          useStudioStore.setState({ isDesignMode: true });
         }
 
-        // Apply Default Theme only if not customized
-        if (!localStorage.getItem("enfoco-theme-storage")) {
+        // Apply Default Theme only if not customized in localStorage
+        const savedThemeStorage = localStorage.getItem("enfoco-theme-storage");
+        if (!savedThemeStorage) {
           useThemeStore.getState().applyPreset(PRESET_THEMES[0].theme);
+        } else {
+          try {
+            const parsedThemeStore = JSON.parse(savedThemeStorage);
+            if (parsedThemeStore?.state?.theme) {
+              applyCssVars(parsedThemeStore.state.theme);
+            }
+          } catch (e) {
+            console.error("Error reading saved theme:", e);
+          }
         }
 
         // 2. Load proposal JSON dynamically if ?proposal=name parameter exists (Takes priority over LocalStorage)
@@ -82,14 +101,19 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               const res = await fetch(candidatePath);
               if (res.ok) {
                 const remoteJson = await res.json();
-                setProposal(remoteJson);
-                hydrateExtendedState(remoteJson);
-                toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
-                setIsLoaded(true);
-                return;
+                const validation = validateProposalData(remoteJson);
+                if (validation.success && validation.data) {
+                  setProposal(remoteJson);
+                  hydrateExtendedState(remoteJson);
+                  toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
+                  setIsLoaded(true);
+                  return;
+                } else {
+                  console.warn(`[ProposalContext] Formato JSON inválido en ${candidatePath}:`, validation.error);
+                }
               }
             } catch (err) {
-              // Try next candidate
+              console.warn(`[ProposalContext] No se pudo cargar desde ${candidatePath}:`, err);
             }
           }
         }
@@ -97,13 +121,21 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // 3. Fallback to LocalStorage if no URL param was provided
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
-          const parsed = JSON.parse(saved);
-          if (!proposalParam && parsed.client?.shortName?.toUpperCase() === "EXCEL") {
+          try {
+            const parsed = JSON.parse(saved);
+            const validation = validateProposalData(parsed);
+            if (validation.success && validation.data) {
+              setProposal(parsed);
+              hydrateExtendedState(parsed);
+            } else {
+              console.warn("[ProposalContext] LocalStorage con esquema inválido, usando sampleProposal:", validation.error);
+              setProposal(sampleProposal);
+              hydrateExtendedState(sampleProposal);
+            }
+          } catch (err) {
+            console.error("Error reading saved proposal:", err);
             setProposal(sampleProposal);
             hydrateExtendedState(sampleProposal);
-          } else {
-            setProposal(parsed);
-            hydrateExtendedState(parsed);
           }
         } else {
           setProposal(sampleProposal);
@@ -119,21 +151,31 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     initProposalData();
   }, []);
 
-  // Keyboard shortcut Ctrl + Shift + E (or Cmd + Shift + E) to toggle Admin Mode
+  // Universal keyboard shortcuts to toggle Edit / Design Mode:
+  // - Ctrl + Shift + E / Cmd + Shift + E
+  // - Ctrl + E / Cmd + E
+  // - Alt + E / Alt + D
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "e") {
+      const target = e.target as HTMLElement;
+      if (
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      const isEditShortcut =
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && key === "e") ||
+        (e.altKey && (key === "e" || key === "d")) ||
+        ((e.ctrlKey || e.metaKey) && key === "e");
+
+      if (isEditShortcut) {
         e.preventDefault();
-        setIsAdminState((prev) => {
-          const next = !prev;
-          localStorage.setItem(ADMIN_MODE_KEY, String(next));
-          if (next) {
-            toast.success("🔐 Modo Editor Activado (ENFOCO)");
-          } else {
-            toast.info("👁️ Modo Vista Cliente Final Activado");
-          }
-          return next;
-        });
+        e.stopPropagation();
+        toggleAdminMode();
       }
     };
 
@@ -155,14 +197,18 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const setIsAdmin = (val: boolean) => {
     setIsAdminState(val);
     localStorage.setItem(ADMIN_MODE_KEY, String(val));
+    useStudioStore.setState({ isDesignMode: val, isPanelOpen: true });
   };
 
   const toggleAdminMode = () => {
-    setIsAdminState((prev) => {
-      const next = !prev;
-      localStorage.setItem(ADMIN_MODE_KEY, String(next));
-      return next;
-    });
+    useStudioStore.getState().toggleDesignMode();
+    const next = useStudioStore.getState().isDesignMode;
+    setIsAdminState(next);
+    if (next) {
+      toast.success("🎨 Modo Edición / Design Studio Activado");
+    } else {
+      toast.info("👁️ Modo Vista Ejecutiva Cliente Activado");
+    }
   };
 
   // Update Company
@@ -432,7 +478,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   // Helper to hydrate Design Studio stores from imported JSON
-  const hydrateExtendedState = (data: any) => {
+  const hydrateExtendedState = (data: ExtendedProposalPayload) => {
     const isExcel =
       data.client?.shortName?.toUpperCase() === "EXCEL" ||
       data.project?.code?.includes("EXCEL") ||
@@ -452,8 +498,6 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
     if (data.theme) {
       useThemeStore.getState().applyPreset(data.theme);
-    } else if (isExcel) {
-      useThemeStore.getState().applyPreset(PRESET_THEMES[2].theme);
     }
   };
 
@@ -483,8 +527,9 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const importJson = (jsonString: string): boolean => {
     try {
       const parsed = JSON.parse(jsonString);
-      if (!parsed.client || !parsed.project || !parsed.requirements) {
-        toast.error("El archivo JSON no tiene la estructura válida de propuesta.");
+      const validation = validateProposalData(parsed);
+      if (!validation.success) {
+        toast.error(`Estructura JSON inválida: ${validation.error || "Campos requeridos faltantes"}`);
         return false;
       }
       setProposal(parsed);
@@ -492,7 +537,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       toast.success("Propuesta cargada exitosamente desde el archivo JSON.");
       return true;
     } catch (e) {
-      toast.error("Error al procesar el archivo JSON.");
+      toast.error("Error al procesar el archivo JSON. Formato no válido.");
       return false;
     }
   };

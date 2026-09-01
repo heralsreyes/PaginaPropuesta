@@ -75,7 +75,7 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
     return <PastProjectsSection secId={secId} />;
   }
   if (secId === "sec-cierre-acuerdo" || secId.includes("cierre") || title.includes("Cierre & Firma")) {
-    return <ClosingSignatureSection secId={secId} onOpenAcceptModal={onOpenAcceptModal} />;
+    return <ClosingSignatureSection secId={secId} proposal={proposal} onOpenAcceptModal={onOpenAcceptModal} />;
   }
 
   // 2. Fallback Base Component Types

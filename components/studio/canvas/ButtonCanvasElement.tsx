@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { CanvasElement } from "@/types/studio";
+import { CanvasElement, ButtonActionConfig } from "@/types/studio";
 
 interface ButtonCanvasElementProps {
   element: CanvasElement;
-  onExecuteAction?: (config: any) => void;
+  onExecuteAction?: (config: ButtonActionConfig) => void;
 }
 
 export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({

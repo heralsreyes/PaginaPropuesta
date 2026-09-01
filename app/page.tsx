@@ -15,6 +15,32 @@ function ProposalContent() {
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+
+      // Toggle Customizer Drawer: Ctrl + Shift + P or Alt + P or Ctrl + Shift + C
+      if (
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "p") ||
+        (e.altKey && e.key.toLowerCase() === "p") ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "c")
+      ) {
+        e.preventDefault();
+        setIsCustomizerOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const activeSections = sections.filter((s) => s.enabled);
 
   return (

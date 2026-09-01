@@ -1,14 +1,16 @@
 export interface TeamMember {
   role: string;
-  category: "Dirección" | "Arquitectura" | "Calidad" | "Construcción";
+  category: "Dirección" | "Arquitectura" | "Calidad" | "Construcción" | "Senior" | string;
   dedicationPercent: number;
   responsibilities: string[];
-  iconName: string;
+  iconName?: string;
 }
+
+export type RequirementCategory = "Core" | "Automatización" | "Integración" | "Reportes" | "Seguridad";
 
 export interface Requirement {
   id: string;
-  category: "Core" | "Automatización" | "Integración" | "Reportes" | "Seguridad";
+  category: RequirementCategory;
   title: string;
   description: string;
   deliverables: string[];
@@ -24,9 +26,10 @@ export interface RoadmapPhase {
 }
 
 export interface PaymentTerm {
-  milestone: string;
+  milestone?: string;
   percentage: number;
   description: string;
+  amount?: number;
 }
 
 export interface StrategicContact {
