@@ -11,12 +11,12 @@ La plataforma cuenta con 3 modos principales diseñados para diferentes audienci
 ### 1. 👔 Modo Cliente / Vista Ejecutiva (Presentación Oficial)
 Es el modo predeterminado para entregar al cliente final o inversionistas. Está optimizado para una lectura corporativa impecable, libre de barras de edición, bordes de diseño o botones de depuración.
 
-- **Cómo acceder mediante URL**:
+- **URL Directa**:
   ```text
   http://localhost:3000/?proposal=excel-puesto-de-bolsa
   ```
   *(O simplemente ingresando a la URL base `http://localhost:3000/`)*.
-- **Cómo acceder desde la interfaz**:
+- **Desde la interfaz**:
   - Si te encuentras en el Studio, haz clic en el botón superior **"Modo Cliente"** o **"Vista Previa"** para ocultar todas las herramientas de edición y verificar la experiencia exacta que verá el cliente.
 
 ---
@@ -24,12 +24,12 @@ Es el modo predeterminado para entregar al cliente final o inversionistas. Está
 ### 2. 🎨 Modo Edición / Visual Design Studio (Administrador & Maquetación)
 Activa el motor de edición interactiva tipo Canva / Figma, permitiendo modificar textos in-situ, arrastrar y soltar nuevas formas, botones, tarjetas, subir imágenes locales y vincular acciones interactivas.
 
-- **Cómo acceder mediante URL**:
+- **URL Directa**:
   ```text
   http://localhost:3000/?proposal=excel-puesto-de-bolsa&admin=true
   ```
   *(El parámetro `&admin=true` habilita de inmediato el panel lateral y el inspector flotante)*.
-- **Cómo acceder desde la interfaz**:
+- **Desde la interfaz**:
   - En la barra superior de navegación, haz clic en el botón **"Studio"** o el icono de **Ajustes / Pincel** para conmutar el modo de diseño en tiempo real sin recargar la página.
 
 ---
@@ -46,11 +46,80 @@ Diseñado para generar una copia física o exportar un documento PDF de alta fid
 
 ---
 
-### 4. 🏢 Carga de Propuestas Comerciales Específicas
-Puedes cargar propuestas personalizadas para diferentes clientes corporativos utilizando el parámetro `proposal`:
+## 🌐 Comandos de Terminal para Abrir las Vistas Directamente
 
-```text
-http://localhost:3000/?proposal=excel-puesto-de-bolsa
+Puedes lanzar cualquiera de las vistas o secciones directamente desde tu terminal de comandos:
+
+### 🪟 En Windows (PowerShell):
+```powershell
+# 1. Abrir Vista Cliente / Ejecutiva
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa"
+
+# 2. Abrir Modo Edición / Visual Studio
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa&admin=true"
+
+# 3. Abrir directamente en una Sección Específica:
+# -> 03. Alcance Funcional 7 Épicas SIMV
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-7-epicas-alcance"
+
+# -> 04. Simulador App Móvil & Trade Ticket
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-simulador-interactivo-app"
+
+# -> 05. Calculadora de Rendimiento Financiero
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-calculadora-inversion"
+
+# -> 06. Integración Dynamics CRM & SIFI Fondos
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-integracion-crm-sifi"
+
+# -> 09. Propuesta Económica & Hitos de Inversión
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-propuesta-economica"
+
+# -> 12. Cierre & Firma Digital Fehaciente
+Start-Process "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-cierre-acuerdo"
+```
+
+### 🍎 En macOS (Terminal):
+```bash
+# Vista Cliente / Ejecutiva
+open "http://localhost:3000/?proposal=excel-puesto-de-bolsa"
+
+# Modo Edición / Studio
+open "http://localhost:3000/?proposal=excel-puesto-de-bolsa&admin=true"
+
+# Sección de Presupuesto & Hitos
+open "http://localhost:3000/?proposal=excel-puesto-de-bolsa#sec-propuesta-economica"
+```
+
+### 🐧 En Linux (Bash):
+```bash
+# Vista Cliente / Ejecutiva
+xdg-open "http://localhost:3000/?proposal=excel-puesto-de-bolsa"
+
+# Modo Edición / Studio
+xdg-open "http://localhost:3000/?proposal=excel-puesto-de-bolsa&admin=true"
+```
+
+---
+
+## ⚡ Comandos de Consola JavaScript (DevTools / F12)
+
+Si tienes la consola de desarrollo abierta en el navegador (`F12` / `Ctrl+Shift+I`), puedes ejecutar estos comandos rápidos:
+
+```javascript
+// 1. Activar Modo Edición / Studio al instante
+window.location.search = '?proposal=excel-puesto-de-bolsa&admin=true';
+
+// 2. Regresar a la Vista Ejecutiva Cliente limpia
+window.location.search = '?proposal=excel-puesto-de-bolsa';
+
+// 3. Abrir el Modal de Aceptación & Firma Digital Manuscrita
+window.dispatchEvent(new CustomEvent('enfoco-open-accept-modal'));
+
+// 4. Restablecer todos los textos editados a sus valores originales de fábrica
+window.dispatchEvent(new CustomEvent('enfoco-reset-all'));
+
+// 5. Desplazarse suavemente a una sección específica
+document.getElementById('sec-propuesta-economica')?.scrollIntoView({ behavior: 'smooth' });
 ```
 
 ---
