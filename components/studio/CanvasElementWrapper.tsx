@@ -216,9 +216,10 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
 
       {element.type === "module_template" && <ModuleCanvasElement element={element} />}
 
-      {(element.type === "shape" || element.type === "line" || element.type === "graphic") && (
-        <UIComponentCanvasElement element={element} />
-      )}
+      {(element.type === "shape" ||
+        element.type === "line" ||
+        element.type === "graphic" ||
+        element.type === "icon") && <UIComponentCanvasElement element={element} />}
 
       {element.type === "mockup" && <MockupCanvasElement element={element} />}
 

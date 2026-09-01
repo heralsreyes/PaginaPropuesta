@@ -53,7 +53,57 @@ export interface PlainCardTab {
 
 export interface CanvasElement {
   id: string;
-  type: "button" | "card" | "shape" | "line" | "graphic" | "text" | "module_template" | "mockup" | "image";
+  type:
+    | "button"
+    | "card"
+    | "shape"
+    | "icon"
+    | "line"
+    | "graphic"
+    | "text"
+    | "module_template"
+    | "mockup"
+    | "image";
+  shapeType?:
+    | "circle"
+    | "ellipse"
+    | "square"
+    | "rounded_rect"
+    | "sharp_rect"
+    | "triangle_up"
+    | "triangle_down"
+    | "triangle_right"
+    | "triangle_left"
+    | "diamond"
+    | "pentagon"
+    | "hexagon"
+    | "octagon"
+    | "trapezoid"
+    | "parallelogram"
+    | "star_4"
+    | "star_5"
+    | "star_6"
+    | "cross"
+    | "arrow_right"
+    | "arrow_left"
+    | "arrow_up"
+    | "arrow_down"
+    | "arrow_block_right"
+    | "arrow_block_left"
+    | "arrow_curved"
+    | "arrow_double_h"
+    | "arrow_double_v"
+    | "chevron_right"
+    | "line_solid"
+    | "line_dashed"
+    | "line_neon"
+    | "line_vertical"
+    | "pill_badge"
+    | "speech_bubble"
+    | "banner_ribbon"
+    | "glass_container";
+  iconStyle?: "plain" | "circle_badge" | "square_badge" | "glass_badge";
+  iconStrokeWidth?: number;
   templateType?:
     | "scope_master"
     | "team_master"
