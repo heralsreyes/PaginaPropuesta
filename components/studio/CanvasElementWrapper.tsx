@@ -184,8 +184,9 @@ export const CanvasElementWrapper: React.FC<CanvasElementWrapperProps> = ({
       {/* Design Mode Overlay Handles */}
       {isSelected && isDesignMode && (
         <>
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white px-2 py-0.5 rounded-full text-[10px] font-mono font-bold flex items-center gap-1 z-30 shadow-md">
-            <Move className="w-3 h-3" />
+          {/* Floating Label placed strictly ABOVE the element */}
+          <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white px-2 py-0.5 rounded-md text-[9px] font-mono font-bold flex items-center gap-1 z-40 shadow-xl whitespace-nowrap pointer-events-none">
+            <Move className="w-2.5 h-2.5" />
             <span>
               {element.type.toUpperCase()} ({element.id})
             </span>
