@@ -458,7 +458,7 @@ export const useStudioStore = create<StudioState>()(
               return {
                 ...el,
                 isMultiTab: true,
-                hideTabPills: false,
+                hideTabPills: true,
                 activeTabId: "tab-1",
                 tabStyle: "pills",
                 tabs: initialTabs,
