@@ -29,7 +29,7 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-between items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 pt-24 pb-12 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-between items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 pt-24 pb-12 border-b border-[#004F54]/50"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[#F08D17]/10 blur-[200px] rounded-full pointer-events-none" />
 

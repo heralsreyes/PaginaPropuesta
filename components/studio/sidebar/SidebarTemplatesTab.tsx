@@ -1,9 +1,70 @@
 "use client";
 
-import React from "react";
-import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
+import React, { useState, useEffect, useRef } from "react";
+import { useThemeStore, PRESET_THEMES, applyCssVarDirect, ThemeConfig } from "@/store/useThemeStore";
 import { useProposal } from "@/context/ProposalContext";
 import { RefreshCw, Building2 } from "lucide-react";
+
+interface ColorFieldRowProps {
+  label: string;
+  fieldKey: keyof ThemeConfig;
+  value: string;
+  onChange: (val: string) => void;
+}
+
+const ColorFieldRow: React.FC<ColorFieldRowProps> = React.memo(({ label, fieldKey, value, onChange }) => {
+  const [localVal, setLocalVal] = useState(value || "#FFFFFF");
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setLocalVal(value || "#FFFFFF");
+  }, [value]);
+
+  const handleDrag = (newVal: string) => {
+    setLocalVal(newVal);
+    // Instant CSS Variable Update (0ms, 120fps smooth)
+    applyCssVarDirect(fieldKey, newVal);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onChange(newVal);
+    }, 80);
+  };
+
+  const handleBlurOrCommit = (newVal: string) => {
+    setLocalVal(newVal);
+    applyCssVarDirect(fieldKey, newVal);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    onChange(newVal);
+  };
+
+  return (
+    <div>
+      <label className="block text-zinc-600 font-semibold mb-1 text-[11px]">{label}</label>
+      <div className="flex items-center space-x-2">
+        <input
+          type="color"
+          value={localVal || "#FFFFFF"}
+          onInput={(e) => handleDrag((e.target as HTMLInputElement).value)}
+          onChange={(e) => handleDrag(e.target.value)}
+          className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0 p-0"
+        />
+        <input
+          type="text"
+          value={localVal || "#FFFFFF"}
+          onChange={(e) => {
+            setLocalVal(e.target.value);
+            applyCssVarDirect(fieldKey, e.target.value);
+          }}
+          onBlur={(e) => handleBlurOrCommit(e.target.value)}
+          className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
+        />
+      </div>
+    </div>
+  );
+});
+
+ColorFieldRow.displayName = "ColorFieldRow";
 
 export const SidebarTemplatesTab: React.FC = () => {
   const { theme, applyPreset, resetTheme, setTheme } = useThemeStore();
@@ -93,157 +154,61 @@ export const SidebarTemplatesTab: React.FC = () => {
         </h4>
 
         <div className="space-y-3.5">
-          {/* Fondo Principal */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Color Principal (Fondo)</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.bgMain || "#FFFFFF"}
-                onChange={(e) => setTheme({ bgMain: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.bgMain || "#FFFFFF"}
-                onChange={(e) => setTheme({ bgMain: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Color Principal (Fondo)"
+            fieldKey="bgMain"
+            value={theme.bgMain || "#004F54"}
+            onChange={(val) => setTheme({ bgMain: val })}
+          />
 
-          {/* Titulares H1 */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Titulares Principales (H1)</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.h1Color || theme.textPrimary || "#FFFFFF"}
-                onChange={(e) => setTheme({ h1Color: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.h1Color || theme.textPrimary || "#FFFFFF"}
-                onChange={(e) => setTheme({ h1Color: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Titulares Principales (H1)"
+            fieldKey="h1Color"
+            value={theme.h1Color || theme.textPrimary || "#FFFFFF"}
+            onChange={(val) => setTheme({ h1Color: val })}
+          />
 
-          {/* Subtítulos H2 */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Subtítulos & Secciones (H2)</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.h2Color || theme.secondaryAccent || "#F08D17"}
-                onChange={(e) => setTheme({ h2Color: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.h2Color || theme.secondaryAccent || "#F08D17"}
-                onChange={(e) => setTheme({ h2Color: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Subtítulos & Secciones (H2)"
+            fieldKey="h2Color"
+            value={theme.h2Color || theme.secondaryAccent || "#F08D17"}
+            onChange={(val) => setTheme({ h2Color: val })}
+          />
 
-          {/* Párrafos & Textos Generales */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Cuerpo de Párrafo & Textos</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.textColor || theme.textSecondary || "#D5E4E2"}
-                onChange={(e) => setTheme({ textColor: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.textColor || theme.textSecondary || "#D5E4E2"}
-                onChange={(e) => setTheme({ textColor: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Cuerpo de Párrafo & Textos"
+            fieldKey="textColor"
+            value={theme.textColor || theme.textSecondary || "#D5E4E2"}
+            onChange={(val) => setTheme({ textColor: val })}
+          />
 
-          {/* Acento Principal */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Color de Acento Principal</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.accentColor || "#004F54"}
-                onChange={(e) => setTheme({ accentColor: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.accentColor || "#004F54"}
-                onChange={(e) => setTheme({ accentColor: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Color de Acento Principal"
+            fieldKey="accentColor"
+            value={theme.accentColor || "#004F54"}
+            onChange={(val) => setTheme({ accentColor: val })}
+          />
 
-          {/* Acento Secundario */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Color de Acento Secundario (Oro/Detalles)</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.secondaryAccent || "#F08D17"}
-                onChange={(e) => setTheme({ secondaryAccent: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.secondaryAccent || "#F08D17"}
-                onChange={(e) => setTheme({ secondaryAccent: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Color de Acento Secundario (Oro/Detalles)"
+            fieldKey="secondaryAccent"
+            value={theme.secondaryAccent || "#F08D17"}
+            onChange={(val) => setTheme({ secondaryAccent: val })}
+          />
 
-          {/* Fondo de Tarjeta */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Fondo de Tarjeta</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.cardBg || "#002224"}
-                onChange={(e) => setTheme({ cardBg: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.cardBg || "#002224"}
-                onChange={(e) => setTheme({ cardBg: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Fondo de Tarjeta"
+            fieldKey="cardBg"
+            value={theme.cardBg || "#002224"}
+            onChange={(val) => setTheme({ cardBg: val })}
+          />
 
-          {/* Borde de Tarjeta */}
-          <div>
-            <label className="block text-zinc-600 font-semibold mb-1">Borde de Tarjeta</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="color"
-                value={theme.cardBorder || "#F08D17"}
-                onChange={(e) => setTheme({ cardBorder: e.target.value })}
-                className="w-8 h-8 rounded-lg cursor-pointer border border-[#E4E4E7] shrink-0"
-              />
-              <input
-                type="text"
-                value={theme.cardBorder || "#F08D17"}
-                onChange={(e) => setTheme({ cardBorder: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs"
-              />
-            </div>
-          </div>
+          <ColorFieldRow
+            label="Borde de Tarjeta"
+            fieldKey="cardBorder"
+            value={theme.cardBorder || "#F08D17"}
+            onChange={(val) => setTheme({ cardBorder: val })}
+          />
 
           {/* Radio de Redondeo */}
           <div>
@@ -260,6 +225,49 @@ export const SidebarTemplatesTab: React.FC = () => {
               <option value="9999px">Píldora Completa (Pill)</option>
             </select>
           </div>
+        </div>
+      </div>
+
+      {/* Sección Sobre ENFOCO & Credenciales */}
+      <div className="pt-4 border-t border-[#E4E4E7] space-y-3.5">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
+            Sección Sobre ENFOCO & Credenciales
+          </h4>
+        </div>
+        <p className="text-zinc-500 text-[10px] leading-tight">
+          Personaliza el color de fondo, textos y tarjetas del apartado institucional Sobre ENFOCO.
+        </p>
+
+        <div className="space-y-3">
+          <ColorFieldRow
+            label="Color Fondo (Sobre ENFOCO)"
+            fieldKey="aboutBg"
+            value={theme.aboutBg || "#D6E5DE"}
+            onChange={(val) => setTheme({ aboutBg: val })}
+          />
+
+          <ColorFieldRow
+            label="Títulos & Acentos (Sobre ENFOCO)"
+            fieldKey="aboutTextColor"
+            value={theme.aboutTextColor || "#135A34"}
+            onChange={(val) => setTheme({ aboutTextColor: val })}
+          />
+
+          <ColorFieldRow
+            label="Fondo de Tarjetas (Sobre ENFOCO)"
+            fieldKey="aboutCardBg"
+            value={theme.aboutCardBg || "#BFDAD1"}
+            onChange={(val) => setTheme({ aboutCardBg: val })}
+          />
+
+          <ColorFieldRow
+            label="Bordes de Tarjetas (Sobre ENFOCO)"
+            fieldKey="aboutCardBorder"
+            value={theme.aboutCardBorder || "#A6C5BB"}
+            onChange={(val) => setTheme({ aboutCardBorder: val })}
+          />
         </div>
       </div>
     </div>

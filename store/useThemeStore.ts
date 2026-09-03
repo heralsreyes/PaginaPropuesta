@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { safeLocalStorage } from "@/lib/safeStorage";
+import { debouncedSafeLocalStorage } from "@/lib/safeStorage";
 
 export interface ThemeConfig {
   bgMain: string;
@@ -15,6 +15,10 @@ export interface ThemeConfig {
   h2Color?: string;
   textColor?: string;
   cardBorderRadius?: string;
+  aboutBg?: string;
+  aboutCardBg?: string;
+  aboutTextColor?: string;
+  aboutCardBorder?: string;
 }
 
 export interface PresetTheme {
@@ -40,6 +44,10 @@ export const PRESET_THEMES: PresetTheme[] = [
       h2Color: "#F08D17",
       textColor: "#D5E4E2",
       cardBorderRadius: "24px",
+      aboutBg: "#D6E5DE",
+      aboutCardBg: "#BFDAD1",
+      aboutTextColor: "#135A34",
+      aboutCardBorder: "#A6C5BB",
     },
   },
   {
@@ -134,21 +142,82 @@ export const PRESET_THEMES: PresetTheme[] = [
   },
 ];
 
+export const applyCssVarDirect = (key: keyof ThemeConfig, value: string) => {
+  if (typeof document === "undefined") return;
+  const s = document.documentElement.style;
+  switch (key) {
+    case "bgMain":
+      s.setProperty("--bg-main", value);
+      break;
+    case "accentColor":
+      s.setProperty("--accent-color", value);
+      break;
+    case "secondaryAccent":
+      s.setProperty("--secondary-accent", value);
+      break;
+    case "cardBg":
+      s.setProperty("--card-bg", value);
+      break;
+    case "cardBorder":
+      s.setProperty("--card-border", value);
+      s.setProperty("--border-color", value);
+      break;
+    case "textPrimary":
+      s.setProperty("--text-primary", value);
+      break;
+    case "textSecondary":
+      s.setProperty("--text-secondary", value);
+      break;
+    case "navBg":
+      s.setProperty("--nav-bg", value);
+      break;
+    case "h1Color":
+      s.setProperty("--theme-h1", value);
+      break;
+    case "h2Color":
+      s.setProperty("--theme-h2", value);
+      break;
+    case "textColor":
+      s.setProperty("--theme-text", value);
+      break;
+    case "cardBorderRadius":
+      s.setProperty("--card-radius", value);
+      break;
+    case "aboutBg":
+      s.setProperty("--about-bg", value);
+      break;
+    case "aboutCardBg":
+      s.setProperty("--about-card-bg", value);
+      break;
+    case "aboutTextColor":
+      s.setProperty("--about-text", value);
+      break;
+    case "aboutCardBorder":
+      s.setProperty("--about-border", value);
+      break;
+  }
+};
+
 export const applyCssVars = (theme: ThemeConfig) => {
   if (typeof document !== "undefined") {
-    document.documentElement.style.setProperty("--bg-main", theme.bgMain);
-    document.documentElement.style.setProperty("--accent-color", theme.accentColor);
-    document.documentElement.style.setProperty("--secondary-accent", theme.secondaryAccent || "#F08D17");
-    document.documentElement.style.setProperty("--card-bg", theme.cardBg);
-    document.documentElement.style.setProperty("--card-border", theme.cardBorder || theme.secondaryAccent || "#F08D17");
-    document.documentElement.style.setProperty("--text-primary", theme.textPrimary);
-    document.documentElement.style.setProperty("--text-secondary", theme.textSecondary || "#D5E4E2");
-    document.documentElement.style.setProperty("--nav-bg", theme.navBg || "#002224");
-    document.documentElement.style.setProperty("--border-color", theme.cardBorder || theme.secondaryAccent || "#F08D17");
-    document.documentElement.style.setProperty("--theme-h1", theme.h1Color || theme.textPrimary);
-    document.documentElement.style.setProperty("--theme-h2", theme.h2Color || theme.secondaryAccent || theme.accentColor);
-    document.documentElement.style.setProperty("--theme-text", theme.textColor || theme.textSecondary || "#D5E4E2");
-    document.documentElement.style.setProperty("--card-radius", theme.cardBorderRadius || "24px");
+    const s = document.documentElement.style;
+    s.setProperty("--bg-main", theme.bgMain);
+    s.setProperty("--accent-color", theme.accentColor);
+    s.setProperty("--secondary-accent", theme.secondaryAccent || "#F08D17");
+    s.setProperty("--card-bg", theme.cardBg);
+    s.setProperty("--card-border", theme.cardBorder || theme.secondaryAccent || "#F08D17");
+    s.setProperty("--text-primary", theme.textPrimary);
+    s.setProperty("--text-secondary", theme.textSecondary || "#D5E4E2");
+    s.setProperty("--nav-bg", theme.navBg || "#002224");
+    s.setProperty("--border-color", theme.cardBorder || theme.secondaryAccent || "#F08D17");
+    s.setProperty("--theme-h1", theme.h1Color || theme.textPrimary);
+    s.setProperty("--theme-h2", theme.h2Color || theme.secondaryAccent || theme.accentColor);
+    s.setProperty("--theme-text", theme.textColor || theme.textSecondary || "#D5E4E2");
+    s.setProperty("--card-radius", theme.cardBorderRadius || "24px");
+    s.setProperty("--about-bg", theme.aboutBg || "#D6E5DE");
+    s.setProperty("--about-card-bg", theme.aboutCardBg || "#BFDAD1");
+    s.setProperty("--about-text", theme.aboutTextColor || "#135A34");
+    s.setProperty("--about-border", theme.aboutCardBorder || "#A6C5BB");
   }
 };
 
@@ -185,7 +254,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: "enfoco-theme-storage",
-      storage: createJSONStorage(() => safeLocalStorage),
+      storage: createJSONStorage(() => debouncedSafeLocalStorage),
       onRehydrateStorage: () => (state) => {
         if (state?.theme) {
           applyCssVars(state.theme);

@@ -1,35 +1,123 @@
 "use client";
 
-import React from "react";
-import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
+import React, { useState, useEffect, useRef } from "react";
+import { useThemeStore, PRESET_THEMES, applyCssVarDirect, ThemeConfig } from "@/store/useThemeStore";
 import { RefreshCw, Palette, Check } from "lucide-react";
+
+const QUICK_SWATCHES = [
+  "#004F54",
+  "#F08D17",
+  "#002224",
+  "#D5E4E2",
+  "#FFFFFF",
+  "#0F172A",
+  "#0284C7",
+  "#D97706",
+  "#059669",
+  "#4338CA",
+];
+
+interface FastColorCardProps {
+  label: string;
+  fieldKey: keyof ThemeConfig;
+  value: string;
+  swatches?: string[];
+  bgClass?: string;
+  borderClass?: string;
+  onChange: (val: string) => void;
+}
+
+const FastColorCard: React.FC<FastColorCardProps> = React.memo(
+  ({ label, fieldKey, value, swatches = QUICK_SWATCHES, bgClass = "bg-[#FAF9F6]", borderClass = "border-[#E4E4E7]", onChange }) => {
+    const [localVal, setLocalVal] = useState(value || "#FFFFFF");
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+      setLocalVal(value || "#FFFFFF");
+    }, [value]);
+
+    const handleDrag = (newVal: string) => {
+      setLocalVal(newVal);
+      applyCssVarDirect(fieldKey, newVal);
+
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        onChange(newVal);
+      }, 80);
+    };
+
+    const handleCommit = (newVal: string) => {
+      setLocalVal(newVal);
+      applyCssVarDirect(fieldKey, newVal);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      onChange(newVal);
+    };
+
+    return (
+      <div className={`p-3 ${bgClass} border ${borderClass} rounded-2xl space-y-2`}>
+        <label className="block text-zinc-700 font-bold text-[11px] leading-tight">{label}</label>
+        <div className="flex items-center space-x-2">
+          <input
+            type="color"
+            value={localVal || "#FFFFFF"}
+            onInput={(e) => handleDrag((e.target as HTMLInputElement).value)}
+            onChange={(e) => handleDrag(e.target.value)}
+            className="w-8 h-8 rounded-xl cursor-pointer border border-[#E4E4E7] shrink-0 p-0.5"
+          />
+          <input
+            type="text"
+            value={localVal || "#FFFFFF"}
+            onChange={(e) => {
+              setLocalVal(e.target.value);
+              applyCssVarDirect(fieldKey, e.target.value);
+            }}
+            onBlur={(e) => handleCommit(e.target.value)}
+            className="w-full px-2.5 py-1 bg-white border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs font-semibold"
+          />
+        </div>
+
+        {/* Quick Swatches */}
+        <div className="flex items-center space-x-1 pt-1 overflow-x-auto">
+          {swatches.map((hex) => (
+            <button
+              key={hex}
+              type="button"
+              onClick={() => handleCommit(hex)}
+              className="w-3.5 h-3.5 rounded-full border border-black/10 transition-transform hover:scale-125 cursor-pointer shrink-0"
+              style={{ backgroundColor: hex }}
+              title={`Aplicar ${hex}`}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+);
+
+FastColorCard.displayName = "FastColorCard";
 
 export const ColorsTab: React.FC = () => {
   const { theme, setTheme, applyPreset, resetTheme } = useThemeStore();
 
-  const QUICK_SWATCHES = [
-    "#004F54",
-    "#F08D17",
-    "#002224",
-    "#D5E4E2",
-    "#FFFFFF",
-    "#0F172A",
-    "#0284C7",
-    "#D97706",
-    "#059669",
-    "#4338CA",
+  const globalColorFields = [
+    { key: "bgMain" as keyof ThemeConfig, label: "Fondo Principal de Página", defaultVal: "#004F54" },
+    { key: "accentColor" as keyof ThemeConfig, label: "Acento Primario", defaultVal: "#004F54" },
+    { key: "secondaryAccent" as keyof ThemeConfig, label: "Acento Secundario (Oro / Destacados)", defaultVal: "#F08D17" },
+    { key: "cardBg" as keyof ThemeConfig, label: "Fondo de Tarjetas & Contenedores", defaultVal: "#002224" },
+    { key: "cardBorder" as keyof ThemeConfig, label: "Bordes & Resplandores", defaultVal: "#F08D17" },
+    { key: "textPrimary" as keyof ThemeConfig, label: "Texto Principal (Títulos & Encabezados)", defaultVal: "#FFFFFF" },
+    { key: "textSecondary" as keyof ThemeConfig, label: "Texto Secundario (Descripciones)", defaultVal: "#D5E4E2" },
+    { key: "navBg" as keyof ThemeConfig, label: "Fondo de Navegación & Header", defaultVal: "#002224" },
   ];
 
-  const colorFields = [
-    { key: "bgMain", label: "Fondo Principal de Página", defaultVal: "#004F54" },
-    { key: "accentColor", label: "Acento Primario", defaultVal: "#004F54" },
-    { key: "secondaryAccent", label: "Acento Secundario (Oro / Destacados)", defaultVal: "#F08D17" },
-    { key: "cardBg", label: "Fondo de Tarjetas & Contenedores", defaultVal: "#002224" },
-    { key: "cardBorder", label: "Bordes & Resplandores", defaultVal: "#F08D17" },
-    { key: "textPrimary", label: "Texto Principal (Títulos & Encabezados)", defaultVal: "#FFFFFF" },
-    { key: "textSecondary", label: "Texto Secundario (Descripciones)", defaultVal: "#D5E4E2" },
-    { key: "navBg", label: "Fondo de Navegación & Header", defaultVal: "#002224" },
-  ] as const;
+  const aboutColorFields = [
+    { key: "aboutBg" as keyof ThemeConfig, label: "Fondo Sección Sobre ENFOCO", defaultVal: "#D6E5DE" },
+    { key: "aboutCardBg" as keyof ThemeConfig, label: "Fondo Tarjetas Sobre ENFOCO", defaultVal: "#BFDAD1" },
+    { key: "aboutTextColor" as keyof ThemeConfig, label: "Color de Texto & Acento Sobre ENFOCO", defaultVal: "#135A34" },
+    { key: "aboutCardBorder" as keyof ThemeConfig, label: "Bordes & Resaltados Sobre ENFOCO", defaultVal: "#A6C5BB" },
+  ];
+
+  const aboutSwatches = ["#D6E5DE", "#BFDAD1", "#135A34", "#004F54", "#002224", "#F08D17", "#FFFFFF", "#F8FAFC", "#0F172A"];
 
   return (
     <div className="space-y-6 text-xs">
@@ -102,57 +190,57 @@ export const ColorsTab: React.FC = () => {
         </div>
       </div>
 
-      {/* Advanced Custom Color Controls */}
-      <div className="pt-4 border-t border-[#E4E4E7] space-y-4">
+      {/* SECTION: Custom Palette for Sobre ENFOCO */}
+      <div className="pt-4 border-t border-[#E4E4E7] space-y-3">
         <div>
-          <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
-            Ajustes Personalizados de Paleta
-          </h4>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
+              Sección Sobre ENFOCO & Credenciales
+            </h4>
+          </div>
           <p className="text-zinc-500 font-medium text-[11px] mt-0.5">
-            Personaliza independientemente cada capa cromática de la propuesta.
+            Modifica el color de fondo, las tarjetas y los acentos del apartado institucional Sobre ENFOCO.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          {colorFields.map((field) => {
-            const currentValue = theme[field.key] || field.defaultVal;
+          {aboutColorFields.map((field) => (
+            <FastColorCard
+              key={field.key}
+              label={field.label}
+              fieldKey={field.key}
+              value={theme[field.key] || field.defaultVal}
+              swatches={aboutSwatches}
+              bgClass="bg-emerald-50/40"
+              borderClass="border-emerald-200/60"
+              onChange={(val) => setTheme({ [field.key]: val })}
+            />
+          ))}
+        </div>
+      </div>
 
-            return (
-              <div key={field.key} className="p-3 bg-[#FAF9F6] border border-[#E4E4E7] rounded-2xl space-y-2">
-                <label className="block text-zinc-700 font-bold text-[11px] leading-tight">
-                  {field.label}
-                </label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="color"
-                    value={currentValue}
-                    onChange={(e) => setTheme({ [field.key]: e.target.value })}
-                    className="w-8 h-8 rounded-xl cursor-pointer border border-[#E4E4E7] shrink-0 p-0.5"
-                  />
-                  <input
-                    type="text"
-                    value={currentValue}
-                    onChange={(e) => setTheme({ [field.key]: e.target.value })}
-                    className="w-full px-2.5 py-1 bg-white border border-[#E4E4E7] rounded-xl text-[#111111] font-mono text-xs font-semibold"
-                  />
-                </div>
+      {/* Advanced Custom Color Controls (Global) */}
+      <div className="pt-4 border-t border-[#E4E4E7] space-y-4">
+        <div>
+          <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono">
+            Ajustes Globales de Paleta
+          </h4>
+          <p className="text-zinc-500 font-medium text-[11px] mt-0.5">
+            Personaliza independientemente cada capa cromática global de la propuesta.
+          </p>
+        </div>
 
-                {/* Quick Swatches bar for rapid color pick */}
-                <div className="flex items-center space-x-1 pt-1 overflow-x-auto">
-                  {QUICK_SWATCHES.map((hex) => (
-                    <button
-                      key={hex}
-                      type="button"
-                      onClick={() => setTheme({ [field.key]: hex })}
-                      className="w-3.5 h-3.5 rounded-full border border-black/10 transition-transform hover:scale-125 cursor-pointer shrink-0"
-                      style={{ backgroundColor: hex }}
-                      title={`Aplicar ${hex}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          {globalColorFields.map((field) => (
+            <FastColorCard
+              key={field.key}
+              label={field.label}
+              fieldKey={field.key}
+              value={theme[field.key] || field.defaultVal}
+              onChange={(val) => setTheme({ [field.key]: val })}
+            />
+          ))}
         </div>
       </div>
     </div>

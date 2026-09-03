@@ -63,7 +63,7 @@ const epicsData = [
           asA: "Inversionista de Excel",
           iWant: "Autenticarme en la App Móvil con mi rostro (FaceID) o huella dactilar",
           soThat: "Pueda consultar mi portafolio en 1 segundo con la máxima seguridad sin digitar claves.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "ticket" as const,
           dod: [
@@ -78,7 +78,7 @@ const epicsData = [
           asA: "Usuario Institucional o Inversionista",
           iWant: "Recibir un código OTP de 6 dígitos al registrarme o ingresar desde un dispositivo nuevo",
           soThat: "Se garantice que únicamente el titular autorizado puede acceder a su cuenta.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Motor de envío OTP SMS vía conector corporativo",
@@ -92,7 +92,7 @@ const epicsData = [
           asA: "Oficial de Cumplimiento & Inversionista",
           iWant: "Completar mi perfil KYC y prueba de tolerancia al riesgo de manera 100% digital",
           soThat: "Se me asignen los instrumentos financieros acordes a mi perfil (Conservador, Moderado, Agresivo).",
-          status: "🔵 UAT Cliente",
+          status: "UAT Cliente",
           phase: "fase1",
           dod: [
             "Matriz de puntuación según normativa regulada SIMV",
@@ -106,7 +106,7 @@ const epicsData = [
           asA: "Responsable de Seguridad ISO 27002",
           iWant: "Que la sesión expire tras 15 minutos de inactividad",
           soThat: "Se eviten accesos no autorizados si el dispositivo queda desatendido.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Timer de inactividad de 15 min en cliente y backend",
@@ -130,7 +130,7 @@ const epicsData = [
           asA: "Cliente Titular de Excel",
           iWant: "Ver el valor consolidado de todas mis inversiones en una sola pantalla",
           soThat: "Tenga visibilidad inmediata de mis Mutuos, Fondos Inmobiliarios y ESAFI.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "portafolio" as const,
           dod: [
@@ -145,7 +145,7 @@ const epicsData = [
           asA: "Inversionista de Fondos Cerrados",
           iWant: "Consultar las cuotas poseídas, valor del valor cuota y dividendos recibidos",
           soThat: "Pueda medir el retorno de mis inversiones inmobiliarias.",
-          status: "🔵 UAT Cliente",
+          status: "UAT Cliente",
           phase: "fase1",
           dod: [
             "Tabla de desglose de cuotas y valor liquidativo por cuota",
@@ -159,7 +159,7 @@ const epicsData = [
           asA: "Inversionista de Mutuos EPB",
           iWant: "Revisar la tasa pactada, fecha de emisión y fecha exacta de vencimiento de mis mutuos",
           soThat: "Sepa exactamente cuándo vence mi capital y el interés a recibir.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "portafolio" as const,
           dod: [
@@ -174,7 +174,7 @@ const epicsData = [
           asA: "Titular de Cuentas Conjuntas",
           iWant: "Alternar fácilmente entre mis cuentas de corretaje donde participo como cotitular",
           soThat: "Visualice de forma separada mis inversiones individuales y compartidas.",
-          status: "🟡 Integración API",
+          status: "Integración API",
           phase: "fase2",
           dod: [
             "Selector desplegable de cuenta de corretaje o encargo",
@@ -198,7 +198,7 @@ const epicsData = [
           asA: "Inversionista de Excel",
           iWant: "Abrir mi estado de cuenta directamente dentro de la aplicación móvil o web",
           soThat: "No tenga que recurrir a lectores externos o salir del canal seguro.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "estados" as const,
           dod: [
@@ -213,7 +213,7 @@ const epicsData = [
           asA: "Oficial de Seguridad de la Información",
           iWant: "Que cada archivo PDF descargado requiera la clave de acceso del titular",
           soThat: "Se garantice la confidencialidad en caso de reenvío por correo o almacenamiento.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "estados" as const,
           dod: [
@@ -228,7 +228,7 @@ const epicsData = [
           asA: "Cliente de Excel",
           iWant: "Acceder al histórico de mis estados de cuenta de los últimos 12 meses",
           soThat: "Pueda descargar declaraciones pasadas para fines impositivos o personales.",
-          status: "🔵 UAT Cliente",
+          status: "UAT Cliente",
           phase: "fase1",
           dod: [
             "Listado filtrable por mes y año fiscal",
@@ -242,7 +242,7 @@ const epicsData = [
           asA: "Auditor Externo / Inversionista",
           iWant: "Exportar el estado de cuenta certificado con código de verificación QR",
           soThat: "Se pueda validar su autenticidad ante instituciones bancarias o de crédito.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Generación de sello digital inmutable en pie de página PDF",
@@ -266,7 +266,7 @@ const epicsData = [
           asA: "Inversionista de Mutuos & Renta Fija",
           iWant: "Generar un Trade Ticket digital al solicitar una inversión o renovación",
           soThat: "Exista un comprobante legal fehaciente de mi instrucción operativa.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "ticket" as const,
           dod: [
@@ -281,7 +281,7 @@ const epicsData = [
           asA: "Director de Operaciones Excel",
           iWant: "Que el sistema valide automáticamente el horario de mercado y el perfil KYC",
           soThat: "No se ejecuten órdenes fuera de horario ni por encima del perfil del cliente.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Verificación de días hábiles y horario SIMV (8:00 AM a 4:00 PM)",
@@ -295,7 +295,7 @@ const epicsData = [
           asA: "Cliente de Fondos ESAFI",
           iWant: "Solicitar aportes o rescates de cuotas de Fondos Abiertos directamente desde la App",
           soThat: "Mis instrucciones ingresen de inmediato al sistema de SIFI Fondos.",
-          status: "🟡 Integración API",
+          status: "Integración API",
           phase: "fase2",
           dod: [
             "Cálculo de valor cuota proyectado y fecha de liquidación",
@@ -309,7 +309,7 @@ const epicsData = [
           asA: "Oficial de Cumplimiento Regulado",
           iWant: "Solicitar autenticación biométrica obligatoria al autorizar un Trade Ticket",
           soThat: "Se prevenga la suplantación de identidad en transacciones de alto valor.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Confirmación FaceID/TouchID en el modal de firma de instrucción",
@@ -333,7 +333,7 @@ const epicsData = [
           asA: "Inversionista de Mutuos Estructurados",
           iWant: "Recibir una notificación push 15 días antes de que venza mi mutuo",
           soThat: "Pueda instruir su renovación a tasa preferencial en 1 clic.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "ticket" as const,
           dod: [
@@ -348,7 +348,7 @@ const epicsData = [
           asA: "Cliente de Alto Valor (Banca Privada)",
           iWant: "Iniciar una conversación por WhatsApp directamente con mi ejecutiva asignada",
           soThat: "Reciba asesoría personalizada sin llamadas frías.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           demoTab: "asesor" as const,
           dod: [
@@ -363,7 +363,7 @@ const epicsData = [
           asA: "Gerente de Marketing & CRM",
           iWant: "Enviar comunicaciones de mercado segmentadas por tipo de inversionista",
           soThat: "Los clientes reciban alertas relevantes sobre nuevas emisiones de cuotas.",
-          status: "🟡 Integración API",
+          status: "Integración API",
           phase: "fase2",
           dod: [
             "Integración con canal Push Apple APNS & Firebase FCM",
@@ -377,7 +377,7 @@ const epicsData = [
           asA: "Asesor Financiero Comercial",
           iWant: "Que las solicitudes o renovaciones iniciadas en la app creen una Tarea en mi CRM",
           soThat: "Pueda dar seguimiento comercial en menos de 2 horas hábiles.",
-          status: "🔵 UAT Cliente",
+          status: "UAT Cliente",
           phase: "fase2",
           dod: [
             "Creación automática de objeto Lead / Task en CRM",
@@ -401,7 +401,7 @@ const epicsData = [
           asA: "Inversionista de Fondos Excel",
           iWant: "Ver el valor cuota actualizado diariamente de los fondos de ESAFI y EPB",
           soThat: "Conozca el desempeño de mercado de mis activos.",
-          status: "🔵 UAT Cliente",
+          status: "UAT Cliente",
           phase: "fase1",
           dod: [
             "Actualización diaria de valor cuota tras cierre de mercado",
@@ -415,7 +415,7 @@ const epicsData = [
           asA: "Prospecto o Inversionista Existente",
           iWant: "Consultar la ficha de características de cada producto financiero disponible",
           soThat: "Tenga la información necesaria antes de solicitar un nuevo aporte.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Fichas detalladas con tasa objetivo, plazo mínimo y calificación de riesgo",
@@ -429,7 +429,7 @@ const epicsData = [
           asA: "Analista de Inversiones",
           iWant: "Comparar la curva de rendimientos de Fondos Inmobiliarios vs Renta Fija",
           soThat: "Evalúe la diversificación de mi portafolio personal.",
-          status: "🔵 UAT Cliente",
+          status: "UAT Cliente",
           phase: "fase1",
           dod: [
             "Gráfico interactivo multi-serie con toggle de período",
@@ -443,7 +443,7 @@ const epicsData = [
           asA: "Inversionista Institucional",
           iWant: "Descargar el informe mensual oficial (Factsheet) en formato PDF",
           soThat: "Presente la documentación a mi comité de inversiones.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Descarga directa de PDF firmado por auditor externo",
@@ -467,7 +467,7 @@ const epicsData = [
           asA: "Oficial de Cumplimiento & Auditor SIMV",
           iWant: "Que todas las interacciones, logins y transacciones queden registradas en una bitácora inmutable",
           soThat: "Se pueda presentar evidencia fehaciente en auditorías de la SIMV.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Registro inmutable con timestamp UTC y hash SHA-256",
@@ -481,7 +481,7 @@ const epicsData = [
           asA: "Oficial de Seguridad ISO 27001",
           iWant: "Que todos los datos en tránsito y en reposo estén protegidos con estándares bancarios",
           soThat: "Se elimine el riesgo de fuga o manipulación de información financiera.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Protocolo TLS 1.3 forzado en todos los endpoints REST API",
@@ -495,7 +495,7 @@ const epicsData = [
           asA: "Administrador de Sistemas Excel",
           iWant: "Asignar roles y permisos diferenciados a usuarios cliente, ejecutivos y auditores",
           soThat: "Cada rol acceda estrictamente a las funciones autorizadas.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Matriz de permisos granulares por módulo",
@@ -509,7 +509,7 @@ const epicsData = [
           asA: "Director de Tecnología (CTO)",
           iWant: "Monitorear la disponibilidad 99.9% y tiempos de respuesta de la solución",
           soThat: "Se garantice la continuidad del negocio exigida por la SIMV.",
-          status: "🟢 Sprint 1 (Listo)",
+          status: "Sprint 1 (Listo)",
           phase: "fase1",
           dod: [
             "Panel de métricas en tiempo real con latencia de endpoints",
@@ -589,7 +589,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 border-b border-[#004F54]/50"
     >
       <motion.div
         initial="hidden"
@@ -614,21 +614,23 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
         </div>
 
         {/* Phase Filter Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#003B3F]/90 backdrop-blur-md border border-white/15 shadow-lg text-white">
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-[#F08D17]" />
-            <span className="text-xs font-mono font-bold text-slate-200">Fase de Implementación:</span>
-            <div className="flex items-center gap-1.5 pl-2">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-xl text-white">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 flex items-center gap-1.5">
+              <Filter className="w-3.5 h-3.5 text-[#F08D17]" />
+              <span>Fase de Implementación:</span>
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5 pl-1">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   handlePhaseFilterChange("todos");
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all select-none ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "todos"
-                    ? "bg-[#F08D17] text-white shadow-md scale-105"
-                    : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
+                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 Todas (28 Stories)
@@ -639,10 +641,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   e.stopPropagation();
                   handlePhaseFilterChange("fase1");
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all select-none ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "fase1"
-                    ? "bg-[#F08D17] text-white shadow-md scale-105"
-                    : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
+                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 Fase 1: App Inversionista
@@ -653,10 +655,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   e.stopPropagation();
                   handlePhaseFilterChange("fase2");
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all select-none ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "fase2"
-                    ? "bg-[#F08D17] text-white shadow-md scale-105"
-                    : "bg-white/10 text-slate-200 border border-white/20 hover:bg-white/20"
+                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 Fase 2: CRM Dynamics & Core
@@ -664,19 +666,22 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-300 bg-white/10 px-3.5 py-1.5 rounded-xl border border-white/20">
-            <CheckCircle2 className="w-4 h-4 text-[#F08D17]" />
+          <div className="flex items-center gap-2 text-xs font-mono font-medium text-white/70 bg-white/5 px-3.5 py-1.5 rounded-lg border border-white/10">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>7 Épicas SIMV • 28 Historias Oficiales Excel</span>
           </div>
         </div>
 
         {/* Master-Detail Split Layout: Left Column = Epics Menu / Right Column = User Stories Cards */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
+        <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
           {/* LEFT COLUMN: Vertical Epics Menu (w-full lg:w-1/3) */}
           <div className="w-full lg:w-1/3 space-y-3 shrink-0 z-10 relative">
-            <div className="text-xs font-mono font-extrabold text-[#F08D17] uppercase tracking-wider px-2 flex items-center justify-between">
-              <span>ÉPICAS DE LA SOLUCIÓN</span>
-              <span>7 Épicas</span>
+            <div className="text-[11px] font-mono font-medium tracking-widest text-white/50 uppercase px-1 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#F08D17]" />
+                ÉPICAS DE LA SOLUCIÓN
+              </span>
+              <span className="text-[#F08D17]/70 font-bold">7 Épicas</span>
             </div>
 
             <div className="space-y-2">
@@ -697,33 +702,33 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       e.stopPropagation();
                       handleEpicSelect(epic.id);
                     }}
-                    className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3.5 shadow-md group relative overflow-hidden select-none z-10 ${
+                    className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3.5 shadow-sm group relative overflow-hidden select-none z-10 ${
                       isSelected
-                        ? "bg-white border-[#F08D17] shadow-xl ring-2 ring-[#F08D17]/30 scale-[1.02]"
-                        : "bg-[#D5E4E2] border-[#B2D4CE] hover:bg-[#C8DCD8] hover:border-[#96C2BA]"
+                        ? "bg-white/[0.08] backdrop-blur-md border-[#F08D17]/50 shadow-xl ring-1 ring-[#F08D17]/25 text-white scale-[1.01]"
+                        : "bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-sm border-white/10 hover:border-white/20 text-white/80"
                     }`}
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
                       <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
                           isSelected
-                            ? "bg-[#FFF2E2] text-[#F08D17] border border-[#F08D17]/40 shadow-sm"
-                            : "bg-[#B6D6D1] text-[#004F54] border border-[#9EC7C0]"
+                            ? "bg-[#F08D17]/15 border border-[#F08D17]/35 text-[#F08D17] shadow-sm"
+                            : "bg-white/5 border border-white/10 text-white/70 group-hover:text-white"
                         }`}
                       >
                         <EpicIcon className="w-5 h-5" />
                       </div>
                       <div className="min-w-0 space-y-0.5">
                         <h3
-                          className={`font-black text-sm sm:text-base leading-tight truncate transition-colors ${
-                            isSelected ? "text-[#002224]" : "text-[#004F54] group-hover:text-[#002224]"
+                          className={`font-bold text-sm sm:text-base leading-tight truncate transition-colors font-display ${
+                            isSelected ? "text-white" : "text-white/85 group-hover:text-white"
                           }`}
                         >
                           {epic.id}. {epic.title.replace(/^Épica \d+: /, "")}
                         </h3>
                         <p
-                          className={`text-xs font-medium truncate ${
-                            isSelected ? "text-slate-600" : "text-[#004F54]/80"
+                          className={`text-xs truncate font-mono ${
+                            isSelected ? "text-[#F08D17]/90 font-medium" : "text-white/40 group-hover:text-white/60"
                           }`}
                         >
                           {epic.deliverables ? epic.deliverables[0] : `${matchingStoriesCount} Historias Oficiales`}
@@ -732,8 +737,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     </div>
 
                     <ChevronRight
-                      className={`w-5 h-5 shrink-0 transition-transform ${
-                        isSelected ? "text-[#F08D17] translate-x-1" : "text-[#004F54] group-hover:translate-x-0.5"
+                      className={`w-4 h-4 shrink-0 transition-transform ${
+                        isSelected ? "text-[#F08D17] translate-x-0.5" : "text-white/30 group-hover:text-white/70"
                       }`}
                     />
                   </button>
@@ -742,60 +747,84 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             </div>
           </div>
 
-          {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box (Compact & Friendly) */}
-          <div className="w-full lg:w-2/3 p-5 sm:p-6 rounded-2xl bg-[#002224]/90 backdrop-blur-xl border border-[#F08D17]/40 shadow-xl space-y-4">
-            {/* Selected Epic Header Banner (Inside Container) */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-3.5">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-[#A3622E] text-white shadow-md flex items-center justify-center font-bold shrink-0">
-                  {React.createElement(currentEpic.icon, { className: "w-5 h-5" })}
-                </div>
-                <div className="min-w-0">
-                  <span className="text-[11px] font-mono text-[#F08D17] font-extrabold uppercase tracking-wider block">
-                    ÉPICA 0{currentEpic.id} • {currentEpic.badge}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-black text-white truncate">
-                    {currentEpic.title}
-                  </h3>
-                </div>
-              </div>
+          {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box (Hero-inspired glass card) */}
+          <div className="w-full lg:w-2/3 p-5 sm:p-7 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl space-y-5 relative overflow-hidden text-white">
+            {/* Ambient subtle glow */}
+            <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#F08D17]/5 blur-3xl rounded-full pointer-events-none" />
 
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={toggleExpandAllStories}
-                  className="px-3.5 py-1.5 rounded-full bg-[#D5E4E2]/15 hover:bg-[#D5E4E2]/25 border border-[#D5E4E2]/30 text-xs font-mono font-bold text-[#D5E4E2] flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
-                >
-                  <ChevronDown className={`w-3.5 h-3.5 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
-                  <span>{activeStoryId !== null ? "Colapsar Todo" : "Abrir Primera Historia"}</span>
-                </button>
-                <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-[#D5E4E2]/15 text-[#D5E4E2] border border-[#D5E4E2]/30">
-                  {filteredStories.length} Historias
-                </span>
+            {/* CO-BRANDING INSPIRED EPIC HERO BANNER */}
+            <div className="w-full bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all text-white">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative z-10">
+                {/* Left side: Epic metadata & title */}
+                <div className="flex flex-col items-start text-left">
+                  <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1.5 flex items-center gap-2 font-mono">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>ÉPICA 0{currentEpic.id} • <span className="text-[#F08D17] font-semibold">{currentEpic.badge}</span></span>
+                  </span>
+                  <div className="flex flex-wrap items-center gap-3 pt-0.5">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-display text-white tracking-tight">
+                      {currentEpic.title.replace(/^Épica \d+: /, "")}
+                      <span className="text-emerald-400">.</span>
+                    </h3>
+                    <span className="text-xs px-2.5 py-0.5 rounded-md bg-[#F08D17]/10 border border-[#F08D17]/30 text-[#F08D17] inline-flex items-center font-mono font-medium">
+                      {currentEpic.coverage}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Línea divisoria sutil en Desktop */}
+                <div className="hidden md:block w-px h-12 bg-white/10" />
+
+                {/* Right side: Quick stats & collapse action */}
+                <div className="flex flex-wrap items-start md:items-end gap-2 md:flex-col shrink-0">
+                  <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-0.5 hidden md:flex items-center gap-1.5">
+                    <span>HISTORIAS ÁGILES</span>
+                    <Sparkles className="w-3.5 h-3.5 text-[#F08D17]" />
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={toggleExpandAllStories}
+                      className="px-3.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono font-medium text-white/80 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
+                    >
+                      <ChevronDown className={`w-3.5 h-3.5 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
+                      <span>{activeStoryId !== null ? "Colapsar Todo" : "Expandir Primera"}</span>
+                    </button>
+                    <span className="text-xs font-mono font-medium px-3 py-1.5 rounded-lg bg-white/5 text-white/70 border border-white/10">
+                      {filteredStories.length} Historias
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Key Deliverables Chips */}
-            <div className="flex flex-wrap items-center gap-1.5 pt-0.5 border-b border-white/10 pb-3">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-300 font-bold mr-1">Entregables Clave:</span>
+            <div className="flex flex-wrap items-center gap-2 pt-0.5 border-b border-white/10 pb-4">
+              <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mr-1 flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17]" />
+                <span>Entregables Clave:</span>
+              </span>
               {currentEpic.deliverables.map((item, idx) => (
-                <span key={idx} className="text-[11px] bg-[#D5E4E2]/15 text-[#D5E4E2] px-3 py-1 rounded-full border border-[#D5E4E2]/30 font-medium">
-                  ✓ {item}
+                <span
+                  key={idx}
+                  className="text-xs bg-white/5 hover:bg-white/10 text-white/80 px-3 py-1 rounded-md border border-white/10 font-mono font-medium transition-all inline-flex items-center gap-1.5"
+                >
+                  <span className="text-[#F08D17]">✓</span> {item}
                 </span>
               ))}
             </div>
 
-            {/* Interactive User Story Dropdown Toggle Cards List (Matching User Mockup) */}
+            {/* Interactive User Story Dropdown Toggle Cards List (Hero Glass Style) */}
             <div className="space-y-3">
               {filteredStories.map((story) => {
                 const isExpanded = activeStoryId === story.id;
                 return (
                   <div
                     key={story.id}
-                    className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-md ${
+                    className={`rounded-xl border transition-all duration-200 overflow-hidden shadow-md ${
                       isExpanded
-                        ? "bg-[#001C1E] border-[#005B60] ring-1 ring-emerald-500/30 shadow-lg"
-                        : "bg-[#00282C]/90 hover:bg-[#002E32] border-emerald-500/20 hover:border-emerald-500/40"
+                        ? "bg-white/[0.05] border-white/20 shadow-xl ring-1 ring-white/10"
+                        : "bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-white/20"
                     }`}
                   >
                     {/* Story Dropdown Header Bar */}
@@ -813,14 +842,15 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                           toggleStoryExpansion(story.id);
                         }
                       }}
-                      className="p-3.5 sm:p-4 cursor-pointer flex items-center justify-between gap-3.5 select-none group"
+                      className="p-3.5 sm:p-4 cursor-pointer flex items-center justify-between gap-3 select-none group"
                     >
                       <div className="flex flex-wrap items-center gap-3 min-w-0">
-                        {/* Status Pill Badge (Matching Mockup Light Mint Pill) */}
-                        <span className="text-[11px] font-mono font-black text-[#00383C] px-3 py-1 rounded-full bg-[#D5E4E2] shrink-0 shadow-sm">
+                        {/* Status Pill Badge (Hero Glass Pill) */}
+                        <span className="text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-md bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 shrink-0 inline-flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           {story.status}
                         </span>
-                        <h4 className="font-extrabold text-sm sm:text-base text-white group-hover:text-[#D5E4E2] transition-colors truncate">
+                        <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-emerald-300 transition-colors truncate font-display">
                           {story.title}
                         </h4>
                       </div>
@@ -833,17 +863,17 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                               e.stopPropagation();
                               if (story.demoTab) jumpToSimulatorTab(story.demoTab);
                             }}
-                            className="px-3.5 py-1.5 rounded-full bg-[#96D4C4] hover:bg-[#83C9B8] text-[#00383C] font-mono font-extrabold text-xs flex items-center gap-1.5 active:scale-95 shadow-md transition-all cursor-pointer"
+                            className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-emerald-300 font-mono font-medium text-xs flex items-center gap-1.5 active:scale-95 shadow-sm transition-all cursor-pointer"
                           >
                             <Play className="w-3 h-3 fill-current" />
-                            <span>Probar en App</span>
+                            <span className="hidden sm:inline">Probar en App</span>
                           </button>
                         )}
 
-                        {/* Dropdown Chevron Indicator Indicator */}
+                        {/* Dropdown Chevron Indicator */}
                         <div
-                          className={`w-8 h-8 rounded-xl bg-[#004F54] border border-emerald-500/20 text-[#D5E4E2] flex items-center justify-center transition-transform duration-200 ${
-                            isExpanded ? "rotate-180 bg-[#005B60] text-white shadow-md" : "group-hover:bg-[#005B60]"
+                          className={`w-7 h-7 rounded-lg bg-white/5 border border-white/10 text-white/70 flex items-center justify-center transition-transform duration-200 ${
+                            isExpanded ? "rotate-180 bg-white/10 text-white" : "group-hover:bg-white/10 group-hover:text-white"
                           }`}
                         >
                           <ChevronDown className="w-4 h-4" />
@@ -853,14 +883,14 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
                     {/* Dropdown Content Body */}
                     {isExpanded && (
-                      <div className="px-4 pb-4 pt-2 border-t border-white/10 space-y-3 text-slate-200 bg-[#001618] transition-all">
+                      <div className="px-4 sm:px-5 pb-5 pt-3 border-t border-white/10 space-y-3.5 bg-black/20 text-slate-200 transition-all">
                         {/* Estructura Ágil Box */}
-                        <div className="p-3.5 rounded-xl bg-[#002224] border border-white/10 space-y-1.5">
-                          <div className="text-[11px] font-mono font-bold text-[#F08D17] uppercase flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-1.5">
+                          <div className="text-[11px] font-medium font-mono tracking-widest uppercase text-[#F08D17] flex items-center gap-1.5">
                             <UserCheck className="w-3.5 h-3.5 text-[#F08D17]" />
                             <span>Estructura Ágil (User Story)</span>
                           </div>
-                          <div className="text-xs sm:text-sm font-medium leading-relaxed text-slate-100">
+                          <div className="text-xs sm:text-sm font-normal leading-relaxed text-slate-200">
                             <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
                             <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
                             <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
@@ -869,13 +899,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
                         {/* Criterios de Aceptación (DoD) */}
                         <div className="space-y-2">
-                          <div className="text-[11px] font-mono font-bold text-emerald-300 uppercase flex items-center gap-1.5">
+                          <div className="text-[11px] font-medium font-mono tracking-widest uppercase text-white/50 flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
                             <span>Criterios de Aceptación (DoD - Definition of Done)</span>
                           </div>
                           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                             {story.dod.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-[#002224] border border-white/10 font-medium text-slate-200">
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2.5 p-3 rounded-lg bg-white/[0.02] border border-white/10 font-normal text-slate-200"
+                              >
                                 <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17] shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit, Roboto, Fira_Code, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ServiceWorkerCleaner } from "@/components/ServiceWorkerCleaner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -28,26 +29,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="scroll-smooth">
-      <body className={`${inter.variable} ${outfit.variable} ${roboto.variable} ${firaCode.variable} ${playfair.variable} font-sans bg-[#FAF9F6] text-[#111111] antialiased selection:bg-[#2563EB] selection:text-white`}>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                  for(let registration of registrations) {
-                    registration.unregister();
-                  }
-                });
-                if ('caches' in window) {
-                  caches.keys().then(function(names) {
-                    for (let name of names) caches.delete(name);
-                  });
-                }
-              }
-            `,
-          }}
-        />
+    <html lang="es" className="scroll-smooth" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${inter.variable} ${outfit.variable} ${roboto.variable} ${firaCode.variable} ${playfair.variable} font-sans bg-[#FAF9F6] text-[#111111] antialiased selection:bg-[#2563EB] selection:text-white`}
+      >
+        <ServiceWorkerCleaner />
         {children}
         <Toaster position="bottom-right" theme="light" richColors />
       </body>

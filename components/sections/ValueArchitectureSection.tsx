@@ -135,7 +135,7 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 border-b border-[#004F54]/50"
     >
       <motion.div
         initial="hidden"
@@ -177,7 +177,7 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
                         {pillar.icon === "users" ? <Users className="w-6 h-6" /> : <Zap className="w-6 h-6" />}
                       </div>
                       <div>
-                        <h3 className="font-extrabold text-xl sm:text-2xl text-white">
+                        <h3 className="font-extrabold text-xl sm:text-2xl text-[#F08D17] font-display">
                           <EditableField id={`sec2_${pillar.id}_title`} defaultText={pillar.title} />
                         </h3>
                         <span className="text-sm text-white/60 font-medium font-mono">

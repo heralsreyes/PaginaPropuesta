@@ -101,10 +101,13 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
       </div>
 
       {/* Category Legend & Breakdown Box (A qué pertenece cada categoría) */}
-      <div className="w-full space-y-2 pt-3 border-t border-white/15">
-        <div className="text-xs font-mono font-extrabold text-[#F08D17] uppercase tracking-wider text-left px-1 mb-1 flex items-center justify-between">
-          <span>Desglose por Categoría:</span>
-          <span className="text-[10px] text-slate-400 font-normal">Pasa el cursor sobre el gráfico</span>
+      <div className="w-full space-y-2 pt-3 border-t border-white/10">
+        <div className="text-xs font-mono font-medium tracking-wider text-white/50 uppercase text-left px-1 mb-1 flex items-center justify-between">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#F08D17]" />
+            <span className="text-[#F08D17] font-bold">Desglose por Categoría:</span>
+          </span>
+          <span className="text-[10px] text-white/40 font-normal">Pasa el cursor sobre el gráfico</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-left">
           {allocations.map((item, idx) => {
@@ -119,23 +122,23 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
                 onMouseLeave={() => setHoveredIdx(null)}
                 className={`flex items-center justify-between p-2.5 rounded-xl border transition-all text-xs font-mono cursor-pointer select-none ${
                   isHovered
-                    ? "bg-[#002B2E] border-[#F08D17] shadow-lg scale-[1.02] ring-1 ring-[#F08D17]/40"
-                    : "bg-[#001416] border-white/10 hover:border-white/30"
+                    ? "bg-white/[0.08] backdrop-blur-md border-[#F08D17]/50 shadow-lg scale-[1.02] ring-1 ring-[#F08D17]/25 text-white"
+                    : "bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-white/20 text-white/80"
                 }`}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <span
-                    className={`w-3 h-3 rounded-full shrink-0 transition-transform ${isHovered ? "scale-125 shadow-md" : ""}`}
+                    className={`w-2.5 h-2.5 rounded-full shrink-0 transition-transform ${isHovered ? "scale-125 shadow-md" : ""}`}
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className={`font-bold truncate ${isHovered ? "text-white" : "text-slate-100"}`}>
+                  <span className={`font-medium truncate ${isHovered ? "text-white font-bold" : "text-white/80"}`}>
                     {categoryName}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                  <span className="font-black text-[#F08D17]">{item.percent}%</span>
+                  <span className="font-bold text-[#F08D17]">{item.percent}%</span>
                   {dollarVal > 0 && (
-                    <span className="text-slate-400 text-[10px]">
+                    <span className="text-white/40 text-[10px]">
                       (${Math.round(dollarVal).toLocaleString()})
                     </span>
                   )}

@@ -6,6 +6,7 @@ import { Sparkles, Building2, Award, ShieldCheck, Plus, Trash2 } from "lucide-re
 import { EditableField } from "@/components/ui/EditableField";
 import { EditableBlockWrapper } from "@/components/studio/EditableBlockWrapper";
 import { useStudioStore } from "@/store/useStudioStore";
+import { useThemeStore } from "@/store/useThemeStore";
 
 interface AboutEnfocoSectionProps {
   secId: string;
@@ -48,7 +49,13 @@ const DEFAULT_CARDS = [
 
 export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId }) => {
   const { isDesignMode } = useStudioStore();
+  const { theme } = useThemeStore();
   const [cards, setCards] = useState(DEFAULT_CARDS);
+
+  const aboutBg = theme.aboutBg || "#D6E5DE";
+  const aboutCardBg = theme.aboutCardBg || "#BFDAD1";
+  const aboutTextColor = theme.aboutTextColor || "#135A34";
+  const aboutCardBorder = theme.aboutCardBorder || "#A6C5BB";
 
   const handleDeleteCard = (id: string) => {
     if (cards.length <= 1) return;
@@ -71,9 +78,20 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-b from-[#D6E5DE] via-[#D0E0D9] to-[#C8DCD3] text-[#1E3A2F] px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#B2CCC1]"
+      style={{
+        background: aboutBg.includes("gradient")
+          ? aboutBg
+          : `linear-gradient(to bottom, ${aboutBg}, color-mix(in srgb, ${aboutBg} 92%, black), color-mix(in srgb, ${aboutBg} 84%, black))`,
+      }}
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden px-4 sm:px-8 lg:px-12 py-20"
     >
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-[#135A34]/6 blur-[160px] rounded-full pointer-events-none" />
+      <div
+        style={{
+          backgroundColor: aboutTextColor,
+          opacity: 0.08,
+        }}
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] blur-[160px] rounded-full pointer-events-none"
+      />
 
       <motion.div
         initial="hidden"
@@ -83,16 +101,29 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
         className="max-w-6xl mx-auto w-full space-y-10 relative z-10"
       >
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#135A34] uppercase font-mono px-4 py-1.5 rounded-full bg-[#7C9B8C]/25 border border-[#7C9B8C]/40 inline-flex items-center gap-2 shadow-xs">
-            <Sparkles className="w-4 h-4 text-[#135A34]" />
+          <span
+            style={{
+              color: aboutTextColor,
+              backgroundColor: `color-mix(in srgb, ${aboutTextColor} 12%, transparent)`,
+              borderColor: `color-mix(in srgb, ${aboutTextColor} 25%, transparent)`,
+            }}
+            className="text-xs sm:text-sm font-bold tracking-widest uppercase font-mono px-4 py-1.5 rounded-full inline-flex items-center gap-2 shadow-xs border"
+          >
+            <Sparkles className="w-4 h-4" />
             <EditableField id="sec10_badge" defaultText="10. SOBRE ENFOCO S.R.L. · PERFIL CORPORATIVO & CERTIFICACIONES" />
           </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#135A34] tracking-tight leading-[1.1] pt-2 font-display">
+          <h2
+            style={{ color: aboutTextColor }}
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.1] pt-2 font-display"
+          >
             <EditableField id="sec10_h2" defaultText="Más de 10 Años Impulsando la Transformación Digital" />
           </h2>
 
-          <p className="text-base sm:text-lg md:text-xl text-[#1E3A2F] max-w-2xl mx-auto font-medium leading-relaxed">
+          <p
+            style={{ color: `color-mix(in srgb, ${aboutTextColor} 80%, black)` }}
+            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed"
+          >
             <EditableField
               id="sec10_desc"
               defaultText="Especialistas en desarrollo de software a la medida, automatización de procesos complejos y gobierno de datos para los sectores financiero, seguros y salud."
@@ -111,9 +142,22 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
                 onDelete={cards.length > 1 ? () => handleDeleteCard(c.id) : undefined}
                 className="h-full"
               >
-                <div className="p-7 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg shadow-emerald-950/5 hover:shadow-2xl hover:border-[#135A34]/40 transition-all space-y-3.5 h-full flex flex-col justify-between">
+                <div
+                  style={{
+                    backgroundColor: aboutCardBg,
+                    borderColor: aboutCardBorder,
+                  }}
+                  className="p-7 rounded-3xl border shadow-lg hover:shadow-2xl transition-all space-y-3.5 h-full flex flex-col justify-between"
+                >
                   <div className="space-y-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-[#135A34]/15 border border-[#135A34]/30 flex items-center justify-center text-[#135A34]">
+                    <div
+                      style={{
+                        backgroundColor: `color-mix(in srgb, ${aboutTextColor} 15%, transparent)`,
+                        borderColor: `color-mix(in srgb, ${aboutTextColor} 30%, transparent)`,
+                        color: aboutTextColor,
+                      }}
+                      className="w-12 h-12 rounded-2xl border flex items-center justify-center"
+                    >
                       {c.icon === "building" ? (
                         <Building2 className="w-6 h-6" />
                       ) : c.icon === "shield" ? (
@@ -122,10 +166,16 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
                         <Award className="w-6 h-6" />
                       )}
                     </div>
-                    <h3 className="font-extrabold text-xl sm:text-2xl text-[#135A34] font-display">
+                    <h3
+                      style={{ color: aboutTextColor }}
+                      className="font-extrabold text-xl sm:text-2xl font-display"
+                    >
                       <EditableField id={`sec10_${c.id}_title`} defaultText={c.title} />
                     </h3>
-                    <p className="text-sm sm:text-base text-[#1E3A2F] leading-relaxed font-medium">
+                    <p
+                      style={{ color: `color-mix(in srgb, ${aboutTextColor} 80%, black)` }}
+                      className="text-sm sm:text-base leading-relaxed font-medium"
+                    >
                       <EditableField id={`sec10_${c.id}_desc`} defaultText={c.desc} />
                     </p>
                   </div>
@@ -138,7 +188,12 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
             <div className="flex justify-center pt-2">
               <button
                 onClick={handleAddCard}
-                className="px-4 py-2 rounded-xl bg-[#135A34]/10 hover:bg-[#135A34]/20 border border-[#135A34]/30 text-[#135A34] font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                style={{
+                  color: aboutTextColor,
+                  backgroundColor: `color-mix(in srgb, ${aboutTextColor} 10%, transparent)`,
+                  borderColor: `color-mix(in srgb, ${aboutTextColor} 30%, transparent)`,
+                }}
+                className="px-4 py-2 rounded-xl border font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Añadir Tarjeta Corporativa</span>
@@ -149,15 +204,30 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
 
         {/* Security Box */}
         <EditableBlockWrapper id="sec10_iso_box" label="Caja de Seguridad">
-          <div className="p-8 rounded-3xl bg-[#BFDAD1] border border-[#A6C5BB] shadow-lg text-[#1E3A2F] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div
+            style={{
+              backgroundColor: aboutCardBg,
+              borderColor: aboutCardBorder,
+            }}
+            className="p-8 rounded-3xl border shadow-lg flex flex-col md:flex-row items-center justify-between gap-6"
+          >
             <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#135A34] font-bold">
+              <span
+                style={{ color: aboutTextColor }}
+                className="text-xs font-mono uppercase tracking-widest font-bold"
+              >
                 ESTÁNDAR DE SEGURIDAD & COMPLIANCE
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-[#135A34] font-display">
+              <h3
+                style={{ color: aboutTextColor }}
+                className="text-xl sm:text-2xl font-black font-display"
+              >
                 <EditableField id="sec10_iso_title" defaultText="Certificaciones ISO 27001 / ISO 27002" />
               </h3>
-              <p className="text-sm sm:text-base text-[#1E3A2F] max-w-2xl font-medium">
+              <p
+                style={{ color: `color-mix(in srgb, ${aboutTextColor} 80%, black)` }}
+                className="text-sm sm:text-base max-w-2xl font-medium"
+              >
                 <EditableField
                   id="sec10_iso_desc"
                   defaultText="Todos nuestros procesos de desarrollo siguen lineamientos rigurosos de seguridad de la información, auditoría de código y cifrado bancario AES-256."
@@ -165,8 +235,15 @@ export const AboutEnfocoSection: React.FC<AboutEnfocoSectionProps> = ({ secId })
               </p>
             </div>
             <div className="flex items-center gap-3 shrink-0">
-              <span className="text-xs font-mono font-bold px-4 py-2 rounded-2xl bg-[#135A34] text-white shadow-md">
-                100% REGULADO SIMV
+              <span
+                style={{
+                  backgroundColor: `color-mix(in srgb, ${aboutTextColor} 15%, transparent)`,
+                  color: aboutTextColor,
+                  borderColor: `color-mix(in srgb, ${aboutTextColor} 35%, transparent)`,
+                }}
+                className="text-xs font-mono font-bold px-4 py-2 rounded-2xl shadow-md border"
+              >
+                <EditableField id="sec10_iso_badge" defaultText="100% REGULADO SIMV" />
               </span>
             </div>
           </div>

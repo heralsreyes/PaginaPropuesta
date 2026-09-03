@@ -113,7 +113,7 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
   return (
     <section
       id={secId}
-      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 transition-colors duration-300 border-b border-[#004F54]/50"
+      className="min-h-screen w-full snap-start scroll-mt-16 flex flex-col justify-center items-center relative overflow-hidden theme-section-bg bg-gradient-to-br from-[#004F54] via-[#003B3F] to-[#002B2E] text-white px-4 sm:px-8 lg:px-12 py-20 border-b border-[#004F54]/50"
     >
       <motion.div
         initial="hidden"
@@ -138,20 +138,32 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
         </div>
 
         {/* TOP MULTI-BAR PARAMETER CONTROL SUITE */}
-        <div className="p-8 rounded-3xl bg-[#002224]/95 backdrop-blur-xl shadow-2xl border border-white/15 text-white space-y-6">
-          <div className="flex items-center justify-between border-b border-white/15 pb-4">
-            <div className="flex items-center gap-3">
-              <SlidersHorizontal className="w-6 h-6 text-[#F08D17]" />
-              <h3 className="font-extrabold text-base sm:text-lg text-white font-mono uppercase">
-                SUITE DE BARRAS DESLIZANTES & CONTROL DINÁMICO DE VALORES
-              </h3>
+        <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.03] backdrop-blur-md shadow-2xl border border-white/10 text-white space-y-6 relative overflow-hidden">
+          {/* Subtle ambient glow */}
+          <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#F08D17]/5 blur-3xl rounded-full pointer-events-none" />
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4 relative z-10">
+            <div className="flex flex-col items-start text-left">
+              <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-2 font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>CONTROL DINÁMICO DE VALORES</span>
+              </span>
+              <div className="flex items-center gap-2.5">
+                <SlidersHorizontal className="w-5 h-5 text-[#F08D17]" />
+                <h3 className="font-bold text-lg sm:text-xl text-white font-display tracking-tight">
+                  Simulador de Portafolio & Rendimientos<span className="text-emerald-400">.</span>
+                </h3>
+              </div>
             </div>
+
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold text-slate-300">Modo Interés:</span>
+              <span className="text-xs font-mono font-medium text-white/50">Modo Interés:</span>
               <button
                 onClick={() => setCalcCompound(!calcCompound)}
-                className={`px-3 py-1 rounded-full text-xs font-mono font-bold transition-all cursor-pointer ${
-                  calcCompound ? "bg-[#F08D17] text-white shadow-md" : "bg-white/10 text-white border border-white/20"
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer select-none ${
+                  calcCompound
+                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    : "bg-white/5 hover:bg-white/10 text-white/70 border border-white/10"
                 }`}
               >
                 {calcCompound ? "⚡ Compuesto (Re-inversión)" : "Simple (Retiro Mensual)"}
@@ -159,12 +171,12 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
             {/* Slider 1: Capital Inicial */}
-            <div className="space-y-2 bg-[#001618]/90 p-4 rounded-2xl border border-white/10">
-              <div className="flex justify-between text-xs sm:text-sm font-extrabold">
-                <span className="text-slate-200">1. Capital Inicial:</span>
-                <span className="font-mono text-emerald-300 text-base">${calcAmount.toLocaleString()} USD</span>
+            <div className="space-y-2 bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-xl border border-white/10 transition-all shadow-sm">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-white/60">1. Capital Inicial:</span>
+                <span className="font-bold text-white text-sm">${calcAmount.toLocaleString()} USD</span>
               </div>
               <input
                 type="range"
@@ -173,16 +185,16 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                 step="10000"
                 value={calcAmount}
                 onChange={(e) => setCalcAmount(Number(e.target.value))}
-                className="w-full accent-[#F08D17] cursor-pointer h-2.5"
+                className="w-full accent-[#F08D17] cursor-pointer h-2 bg-white/10 rounded-lg"
               />
-              <span className="text-[10px] text-slate-400 font-mono block">$10k a $1,000,000 USD</span>
+              <span className="text-[10px] text-white/40 font-mono block">$10k a $1,000,000 USD</span>
             </div>
 
             {/* Slider 2: Tasa Anual Retorno */}
-            <div className="space-y-2 bg-[#001618]/90 p-4 rounded-2xl border border-white/10">
-              <div className="flex justify-between text-xs sm:text-sm font-extrabold">
-                <span className="text-slate-200">2. Tasa Anual:</span>
-                <span className="font-mono text-[#F08D17] text-base">{customRatePercent.toFixed(1)}% p.a.</span>
+            <div className="space-y-2 bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-xl border border-white/10 transition-all shadow-sm">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-white/60">2. Tasa Anual:</span>
+                <span className="font-bold text-[#F08D17] text-sm">{customRatePercent.toFixed(1)}% p.a.</span>
               </div>
               <input
                 type="range"
@@ -191,16 +203,16 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                 step="0.5"
                 value={customRatePercent}
                 onChange={(e) => setCustomRatePercent(Number(e.target.value))}
-                className="w-full accent-[#F08D17] cursor-pointer h-2.5"
+                className="w-full accent-[#F08D17] cursor-pointer h-2 bg-white/10 rounded-lg"
               />
-              <span className="text-[10px] text-slate-400 font-mono block">Rango: 7.5% a 16.0% p.a.</span>
+              <span className="text-[10px] text-white/40 font-mono block">Rango: 7.5% a 16.0% p.a.</span>
             </div>
 
             {/* Slider 3: Asignación Mutuos */}
-            <div className="space-y-2 bg-[#001618]/90 p-4 rounded-2xl border border-white/10">
-              <div className="flex justify-between text-xs sm:text-sm font-extrabold">
-                <span className="text-slate-200">3. % Mutuos:</span>
-                <span className="font-mono text-[#F08D17] text-base">{mutuoWeightPercent}%</span>
+            <div className="space-y-2 bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-xl border border-white/10 transition-all shadow-sm">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-white/60">3. % Mutuos:</span>
+                <span className="font-bold text-[#F08D17] text-sm">{mutuoWeightPercent}%</span>
               </div>
               <input
                 type="range"
@@ -209,24 +221,26 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                 step="5"
                 value={mutuoWeightPercent}
                 onChange={(e) => setMutuoWeightPercent(Number(e.target.value))}
-                className="w-full accent-[#F08D17] cursor-pointer h-2.5"
+                className="w-full accent-[#F08D17] cursor-pointer h-2 bg-white/10 rounded-lg"
               />
-              <span className="text-[10px] text-emerald-300 font-mono font-bold block">¡Mueve el Gráfico Pastel!</span>
+              <span className="text-[10px] text-emerald-400 font-mono font-medium block">¡Mueve el Gráfico Pastel!</span>
             </div>
 
             {/* Slider 4: Plazo en Días */}
-            <div className="space-y-2 bg-[#001618]/90 p-4 rounded-2xl border border-white/10">
-              <div className="flex justify-between text-xs sm:text-sm font-extrabold">
-                <span className="text-slate-200">4. Plazo Duración:</span>
-                <span className="font-mono text-emerald-300 text-base">{calcTermDays} Días</span>
+            <div className="space-y-2 bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-xl border border-white/10 transition-all shadow-sm">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="text-white/60">4. Plazo Duración:</span>
+                <span className="font-bold text-white text-sm">{calcTermDays} Días</span>
               </div>
-              <div className="grid grid-cols-4 gap-1 pt-1">
+              <div className="grid grid-cols-4 gap-1.5 pt-0.5">
                 {[90, 180, 360, 720].map((d) => (
                   <button
                     key={d}
                     onClick={() => setCalcTermDays(d)}
-                    className={`py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all ${
-                      calcTermDays === d ? "bg-[#F08D17] text-white shadow-md" : "bg-white/10 text-white border border-white/20"
+                    className={`py-1.5 rounded-lg text-xs font-mono font-medium cursor-pointer transition-all ${
+                      calcTermDays === d
+                        ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                        : "bg-white/5 hover:bg-white/10 text-white/70 border border-white/10"
                     }`}
                   >
                     {d === 720 ? "2 Años" : `${d}d`}
@@ -238,12 +252,18 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
         </div>
 
         {/* DUAL INTERACTIVE PANEL */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-5 p-8 rounded-3xl bg-[#002224]/95 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-center text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-3 text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* LEFT: Donut Chart Card */}
+          <div className="lg:col-span-5 p-6 sm:p-7 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl space-y-6 text-center text-white relative overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3.5 text-left">
               <div>
-                <h3 className="font-extrabold text-base text-white">Distribución Portafolio</h3>
-                <span className="text-xs text-slate-300 font-mono">Gráfico Pastel Animado</span>
+                <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-0.5 flex items-center gap-1.5 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>COMPOSICIÓN ACTIVA</span>
+                </span>
+                <h3 className="font-bold text-base sm:text-lg text-white font-display tracking-tight">
+                  Distribución Portafolio<span className="text-emerald-400">.</span>
+                </h3>
               </div>
               <PieChart className="w-5 h-5 text-[#F08D17]" />
             </div>
@@ -251,32 +271,35 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
             <DynamicDonutChart allocations={pieAllocations} totalUsd={calcAmount} totalYield={calculatedYield} />
           </div>
 
-          <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-[#002224]/95 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-4">
+          {/* RIGHT: Excel Spreadsheet Simulator Card */}
+          <div className="lg:col-span-7 p-6 sm:p-7 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl space-y-5 text-white relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#F08D17] text-white flex items-center justify-center font-mono font-bold text-xs shadow-md">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 flex items-center justify-center font-mono font-bold text-xs shadow-sm">
                   XLS
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-base text-white font-mono">Simulación_Inversión_Excel.xlsx</h3>
-                  <span className="text-xs text-slate-300">Hoja de Cálculo Viva con Fórmulas</span>
+                  <h3 className="font-bold text-sm sm:text-base text-white font-display tracking-tight">
+                    Simulación_Inversión_Excel.xlsx
+                  </h3>
+                  <span className="text-xs text-white/50 font-mono">Hoja de Cálculo Viva con Fórmulas</span>
                 </div>
               </div>
 
               <button
                 onClick={exportExcelCsv}
-                className="px-4 py-2 bg-[#F08D17] hover:bg-[#d87c0f] text-white text-xs font-bold font-mono rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                className="px-3.5 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white text-xs font-mono font-medium rounded-lg shadow-sm transition-all flex items-center gap-2 cursor-pointer active:scale-95"
               >
-                <Download className="w-4 h-4 text-white" />
+                <Download className="w-3.5 h-3.5 text-[#F08D17]" />
                 <span>Exportar Excel (.CSV)</span>
               </button>
             </div>
 
-            <div className="overflow-x-auto border border-white/15 rounded-xl font-mono text-xs shadow-sm">
+            <div className="overflow-x-auto border border-white/10 rounded-xl font-mono text-xs shadow-sm">
               <table className="w-full text-left divide-y divide-white/10">
-                <thead className="bg-[#001416] text-slate-200 font-bold border-b border-white/15">
+                <thead className="bg-white/[0.04] text-white/60 font-medium border-b border-white/10">
                   <tr>
-                    <th className="p-2.5 border-r border-white/10 text-center w-8 text-slate-400">#</th>
+                    <th className="p-2.5 border-r border-white/10 text-center w-8 text-white/40">#</th>
                     <th className="p-2.5 border-r border-white/10">A · PRODUCTO</th>
                     <th className="p-2.5 border-r border-white/10 text-right">B · ASIGNACIÓN</th>
                     <th className="p-2.5 border-r border-white/10 text-right">C · TASA</th>
@@ -284,9 +307,9 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                     <th className="p-2.5 text-right">E · MONTO FINAL</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/10 bg-[#001718]/90 text-white">
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="p-2.5 border-r border-white/10 text-center bg-[#001214] font-bold text-slate-400">1</td>
+                <tbody className="divide-y divide-white/5 bg-white/[0.01] text-white/90">
+                  <tr className="hover:bg-white/[0.03] transition-colors">
+                    <td className="p-2.5 border-r border-white/10 text-center bg-white/[0.02] font-medium text-white/40">1</td>
                     <td className="p-2.5 border-r border-white/10 font-bold text-white">Mutuo Estructurado Excel</td>
                     <td className="p-2.5 border-r border-white/10 text-right text-[#F08D17] font-bold">
                       {mutuoPct}% (${Math.round(calcAmount * (mutuoPct / 100)).toLocaleString()})
@@ -301,8 +324,8 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                       ${(calcAmount * (mutuoPct / 100) + calculatedYield * (mutuoPct / 100)).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="p-2.5 border-r border-white/10 text-center bg-[#001214] font-bold text-slate-400">2</td>
+                  <tr className="hover:bg-white/[0.03] transition-colors">
+                    <td className="p-2.5 border-r border-white/10 text-center bg-white/[0.02] font-medium text-white/40">2</td>
                     <td className="p-2.5 border-r border-white/10 font-bold text-white">Fondo Inmobiliario Excel II</td>
                     <td className="p-2.5 border-r border-white/10 text-right text-[#38BDF8] font-bold">
                       {inmoPct}% (${Math.round(calcAmount * (inmoPct / 100)).toLocaleString()})
@@ -315,8 +338,8 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                       ${(calcAmount * (inmoPct / 100) + calculatedYield * (inmoPct / 100)).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="p-2.5 border-r border-white/10 text-center bg-[#001214] font-bold text-slate-400">3</td>
+                  <tr className="hover:bg-white/[0.03] transition-colors">
+                    <td className="p-2.5 border-r border-white/10 text-center bg-white/[0.02] font-medium text-white/40">3</td>
                     <td className="p-2.5 border-r border-white/10 font-bold text-white">Fondo Abierto Liquidez ESAFI</td>
                     <td className="p-2.5 border-r border-white/10 text-right text-[#34D399] font-bold">
                       {esafiPct}% (${Math.round(calcAmount * (esafiPct / 100)).toLocaleString()})
@@ -329,8 +352,8 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                       ${(calcAmount * (esafiPct / 100) + calculatedYield * (esafiPct / 100)).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="p-2.5 border-r border-white/10 text-center bg-[#001214] font-bold text-slate-400">4</td>
+                  <tr className="hover:bg-white/[0.03] transition-colors">
+                    <td className="p-2.5 border-r border-white/10 text-center bg-white/[0.02] font-medium text-white/40">4</td>
                     <td className="p-2.5 border-r border-white/10 font-bold text-white">Renta Fija & Sell-Backs</td>
                     <td className="p-2.5 border-r border-white/10 text-right text-[#F59E0B] font-bold">
                       {rfPct}% (${Math.round(calcAmount * (rfPct / 100)).toLocaleString()})
@@ -343,7 +366,7 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
                       ${(calcAmount * (rfPct / 100) + calculatedYield * (rfPct / 100)).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                     </td>
                   </tr>
-                  <tr className="bg-[#001214] font-bold border-t-2 border-[#F08D17]">
+                  <tr className="bg-white/[0.06] font-bold border-t-2 border-[#F08D17]">
                     <td className="p-2.5 border-r border-white/10 text-center bg-[#F08D17] text-white font-black">∑</td>
                     <td className="p-2.5 border-r border-white/10 text-[#F08D17] uppercase">TOTALES CONSOLIDADOS</td>
                     <td className="p-2.5 border-r border-white/10 text-right text-white font-mono">
@@ -363,14 +386,14 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
               </table>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#001618] border border-[#F08D17]/40 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-[#F08D17] shrink-0" />
-                <span className="text-xs sm:text-sm text-slate-100 font-bold">
+            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/10 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <Clock className="w-4 h-4 text-[#F08D17] shrink-0" />
+                <span className="text-xs text-white/90 font-medium">
                   Alerta Vencimiento 15 Días: Notificación automática con opción de re-pago a Tasa del {(currentRate * 100).toFixed(1)}%.
                 </span>
               </div>
-              <span className="text-xs font-mono font-bold text-white bg-[#F08D17] px-2.5 py-1 rounded-lg shrink-0 shadow-md">
+              <span className="text-xs font-mono font-medium text-[#F08D17] bg-[#F08D17]/10 border border-[#F08D17]/30 px-2.5 py-1 rounded-md shrink-0">
                 ACTIVO 24/7
               </span>
             </div>
