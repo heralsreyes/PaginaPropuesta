@@ -107,22 +107,22 @@ export const TeamRoadmapSection: React.FC<TeamRoadmapSectionProps> = ({ secId, p
                 onDelete={teamMembers.length > 1 ? () => handleDeleteMember(i) : undefined}
                 className="h-full"
               >
-                <div className="p-6 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-4 text-white h-full flex flex-col justify-between hover:border-[#F08D17]/50 transition-all">
+                <div className="p-6 theme-card-glass backdrop-blur-xl border shadow-2xl space-y-4 text-white h-full flex flex-col justify-between hover:border-[var(--secondary-accent)]/50 transition-all">
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-[#F08D17] shrink-0 font-bold">
-                        <UserCheck className="w-6 h-6 text-[#F08D17]" />
+                      <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center theme-accent-color shrink-0 font-bold">
+                        <UserCheck className="w-6 h-6 theme-accent-color" />
                       </div>
                       <div>
-                        <h4 className="font-extrabold text-base sm:text-lg text-white">
+                        <h4 className="font-extrabold text-base sm:text-lg text-white theme-h1-color">
                           <EditableField id={`sec8_member_${i}_role`} defaultText={member.role} />
                         </h4>
-                        <span className="text-xs text-emerald-300 font-mono font-bold">
+                        <span className="text-xs theme-h2-color font-mono font-bold">
                           <EditableField id={`sec8_member_${i}_meta`} defaultText={`${member.category} • ${member.dedicationPercent}% Dedicación`} />
                         </span>
                       </div>
                     </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-200 pl-2">
+                    <ul className="space-y-2 text-xs sm:text-sm theme-text-color pl-2">
                       {member.responsibilities.map((resp, rIdx) => (
                         <li key={rIdx}>
                           • <EditableField id={`sec8_member_${i}_resp_${rIdx}`} defaultText={resp} />
@@ -140,18 +140,18 @@ export const TeamRoadmapSection: React.FC<TeamRoadmapSectionProps> = ({ secId, p
         <div className="space-y-6 pt-4 border-t border-white/10">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-extrabold text-lg sm:text-xl text-white flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-[#F08D17]" />
+              <h3 className="font-extrabold text-lg sm:text-xl text-white flex items-center gap-2 theme-h1-color">
+                <Calendar className="w-5 h-5 theme-accent-color" />
                 <span>Cronograma de Ejecución & Hitos Clave</span>
               </h3>
-              <p className="text-xs text-slate-300 font-mono mt-0.5">
+              <p className="text-xs theme-text-color font-mono mt-0.5">
                 Estimación de entrega modular continua • {durationEst}
               </p>
             </div>
             {isDesignMode && (
               <button
                 onClick={() => addRoadmapPhase({ title: "Nueva Fase EDT", duration: "Semanas 9-10" })}
-                className="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#F08D17] font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+                className="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 theme-accent-color font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Añadir Fase</span>
@@ -168,35 +168,35 @@ export const TeamRoadmapSection: React.FC<TeamRoadmapSectionProps> = ({ secId, p
                 onDelete={roadmapPhases.length > 1 ? () => removeRoadmapPhase(pIdx) : undefined}
                 className="h-full"
               >
-                <div className="p-6 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-4 text-white h-full flex flex-col justify-between relative overflow-hidden">
+                <div className="p-6 theme-card-glass backdrop-blur-xl border shadow-2xl space-y-4 text-white h-full flex flex-col justify-between relative overflow-hidden">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#F08D17]/20 text-[#F08D17] border border-[#F08D17]/40">
+                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-white/10 theme-accent-color border theme-accent-border">
                         {phase.phase || `Fase ${pIdx + 1}`}
                       </span>
-                      <span className="text-xs font-mono text-emerald-300 flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
+                      <span className="text-xs font-mono theme-h2-color flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
                         <Clock className="w-3 h-3" />
                         {phase.duration}
                       </span>
                     </div>
 
-                    <h4 className="font-extrabold text-base sm:text-lg text-white">
+                    <h4 className="font-extrabold text-base sm:text-lg text-white theme-h1-color">
                       <EditableField id={`sec8_phase_${pIdx}_title`} defaultText={phase.title} />
                     </h4>
 
-                    <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                    <p className="text-xs theme-text-color leading-relaxed font-medium">
                       <EditableField id={`sec8_phase_${pIdx}_desc`} defaultText={phase.description} />
                     </p>
 
                     {phase.milestones && phase.milestones.length > 0 && (
                       <div className="pt-2 border-t border-white/10 space-y-1.5">
-                        <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">
+                        <span className="text-[10px] font-mono uppercase theme-text-color font-bold block">
                           Entregables / Hitos:
                         </span>
-                        <ul className="space-y-1 text-xs text-slate-200">
+                        <ul className="space-y-1 text-xs theme-text-color">
                           {phase.milestones.map((m, mIdx) => (
                             <li key={mIdx} className="flex items-start gap-2">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                              <CheckCircle2 className="w-3.5 h-3.5 theme-accent-color shrink-0 mt-0.5" />
                               <EditableField id={`sec8_phase_${pIdx}_ms_${mIdx}`} defaultText={m} />
                             </li>
                           ))}

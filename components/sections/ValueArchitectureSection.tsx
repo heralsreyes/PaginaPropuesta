@@ -170,25 +170,25 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
                 onDelete={pillars.length > 1 ? () => handleDeletePillar(pillar.id) : undefined}
                 className="h-full"
               >
-                <div className="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-2xl border border-white/10 text-white space-y-6 h-full flex flex-col justify-between">
+                <div className="p-8 theme-card-glass backdrop-blur-xl shadow-2xl border text-white space-y-6 h-full flex flex-col justify-between">
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#F08D17] shrink-0">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center theme-accent-color shrink-0">
                         {pillar.icon === "users" ? <Users className="w-6 h-6" /> : <Zap className="w-6 h-6" />}
                       </div>
                       <div>
-                        <h3 className="font-extrabold text-xl sm:text-2xl text-[#F08D17] font-display">
+                        <h3 className="font-extrabold text-xl sm:text-2xl theme-h2-color font-display">
                           <EditableField id={`sec2_${pillar.id}_title`} defaultText={pillar.title} />
                         </h3>
-                        <span className="text-sm text-white/60 font-medium font-mono">
+                        <span className="text-sm theme-h1-color text-white/80 font-medium font-mono">
                           <EditableField id={`sec2_${pillar.id}_sub`} defaultText={pillar.sub} />
                         </span>
                       </div>
                     </div>
-                    <ul className="space-y-4 text-sm sm:text-base text-white/80">
+                    <ul className="space-y-4 text-sm sm:text-base theme-h1-color text-white">
                       {pillar.bullets.map((b, bIdx) => (
-                        <li key={bIdx} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                        <li key={bIdx} className="flex items-start gap-3 font-medium">
+                          <CheckCircle2 className="w-5 h-5 theme-accent-color shrink-0 mt-0.5" />
                           <EditableField id={`sec2_${pillar.id}_b${bIdx}`} defaultText={b} />
                         </li>
                       ))}
@@ -203,7 +203,7 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
             <div className="flex justify-center pt-2">
               <button
                 onClick={handleAddPillar}
-                className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#F08D17] font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+                className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 theme-accent-color font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Añadir Pilar de Valor</span>
@@ -213,10 +213,10 @@ export const ValueArchitectureSection: React.FC<ValueArchitectureSectionProps> =
         </motion.div>
 
         {/* ROI Comparison Table */}
-        <motion.div variants={sectionItemVariants} className="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl shadow-2xl border border-white/10 text-white overflow-x-auto space-y-4">
+        <motion.div variants={sectionItemVariants} className="p-8 theme-card-glass backdrop-blur-xl shadow-2xl border text-white overflow-x-auto space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-extrabold text-base sm:text-lg uppercase font-mono text-[#F08D17] flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-[#F08D17]" />
+            <h3 className="font-extrabold text-base sm:text-lg uppercase font-mono theme-h2-color flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 theme-accent-color" />
               <span>Impacto Operativo: Modelo Tradicional vs Solución Digital ENFOCO</span>
             </h3>
             {isDesignMode && (

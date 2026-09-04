@@ -160,6 +160,7 @@ export interface CanvasElement {
   // Color Overrides
   customBg?: string;
   customBorder?: string;
+  customRadius?: string;
   customText?: string;
   customAccent?: string;
 

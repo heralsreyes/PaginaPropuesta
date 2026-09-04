@@ -126,10 +126,10 @@ interface UIComponentCanvasElementProps {
 export const UIComponentCanvasElement: React.FC<UIComponentCanvasElementProps> = ({ element }) => {
   const title = (element.title || "").toLowerCase();
   const shapeType = element.shapeType;
-  const fillColor = element.customBg || "#F08D17";
-  const strokeColor = element.customBorder || "#FFFFFF";
-  const textColor = element.customText || "#FFFFFF";
-  const accentColor = element.customAccent || "#F08D17";
+  const fillColor = element.customBg || "var(--secondary-accent, #F08D17)";
+  const strokeColor = element.customBorder || "var(--card-border, #FFFFFF)";
+  const textColor = element.customText || "var(--theme-h1, #FFFFFF)";
+  const accentColor = element.customAccent || "var(--secondary-accent, #F08D17)";
 
   // ==========================================
   // 1. RENDERIZADO DE ICONOS (TIPO ICON) - PURO SIN FONDOS NI BORDES
@@ -143,7 +143,7 @@ export const UIComponentCanvasElement: React.FC<UIComponentCanvasElementProps> =
       element.customBg ||
       element.customBorder ||
       element.customAccent ||
-      "#F08D17";
+      "var(--secondary-accent, #F08D17)";
 
     return (
       <div

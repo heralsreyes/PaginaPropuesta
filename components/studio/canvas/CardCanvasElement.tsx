@@ -173,20 +173,21 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "rgba(255, 255, 255, 0.08)",
-          borderColor: element.customBorder || "rgba(255, 255, 255, 0.25)",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #002224)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
         className="w-full h-full p-5 sm:p-6 rounded-3xl border backdrop-blur-xl shadow-2xl flex flex-col justify-between relative overflow-hidden group"
       >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[#F08D17]/10 blur-2xl rounded-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#F08D17]/10 theme-accent-bg blur-2xl rounded-full pointer-events-none" />
         
         {/* Header with badge / Icon */}
         <div className="flex items-center justify-between mb-2 relative z-10">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-[#F08D17] font-bold px-2 py-0.5 rounded-full bg-[#F08D17]/15 border border-[#F08D17]/30">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-[#F08D17] theme-h2-color font-bold px-2 py-0.5 rounded-full bg-[#F08D17]/15 border border-[#F08D17]/30">
             {element.badgeText || "GLASS PRO"}
           </span>
-          <Sparkles className="w-4 h-4 text-[#F08D17]" />
+          <Sparkles className="w-4 h-4 text-[#F08D17] theme-h2-color" />
         </div>
 
         {renderTabHeader()}
@@ -200,20 +201,21 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#002224",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #002224)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full p-5 sm:p-6 rounded-2xl border-2 border-dashed shadow-xl flex flex-col justify-between relative overflow-hidden"
+        className="w-full h-full p-5 sm:p-6 border-2 border-dashed shadow-xl flex flex-col justify-between relative overflow-hidden"
       >
         {/* Corner Crosshairs */}
-        <span className="absolute top-1 left-1 text-[10px] font-mono text-[#F08D17] font-black">+</span>
-        <span className="absolute top-1 right-1 text-[10px] font-mono text-[#F08D17] font-black">+</span>
-        <span className="absolute bottom-1 left-1 text-[10px] font-mono text-[#F08D17] font-black">+</span>
-        <span className="absolute bottom-1 right-1 text-[10px] font-mono text-[#F08D17] font-black">+</span>
+        <span className="absolute top-1 left-1 text-[10px] font-mono text-[#F08D17] theme-h2-color font-black">+</span>
+        <span className="absolute top-1 right-1 text-[10px] font-mono text-[#F08D17] theme-h2-color font-black">+</span>
+        <span className="absolute bottom-1 left-1 text-[10px] font-mono text-[#F08D17] theme-h2-color font-black">+</span>
+        <span className="absolute bottom-1 right-1 text-[10px] font-mono text-[#F08D17] theme-h2-color font-black">+</span>
 
         <div className="flex items-center justify-between border-b border-dashed border-white/20 pb-2 mb-2">
-          <span className="text-[9px] font-mono text-[#F08D17] font-bold uppercase tracking-wider">
+          <span className="text-[9px] font-mono text-[#F08D17] theme-h2-color font-bold uppercase tracking-wider">
             [SPEC // TÉCNICA]
           </span>
           <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
@@ -230,9 +232,9 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#003B3F",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #003B3F)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
           clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
         }}
         className="w-full h-full p-5 sm:p-6 border-2 shadow-2xl flex flex-col justify-between relative"
@@ -255,15 +257,16 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#001B1E",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #001B1E)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full p-5 sm:p-6 rounded-3xl border-2 shadow-[0_0_25px_rgba(240,141,23,0.35)] flex flex-col justify-between relative overflow-hidden"
+        className="w-full h-full p-5 sm:p-6 border-2 shadow-[0_0_25px_rgba(240,141,23,0.35)] flex flex-col justify-between relative overflow-hidden"
       >
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold text-[#F08D17] flex items-center gap-1.5">
-            <Zap className="w-4 h-4 text-[#F08D17]" />
+          <span className="text-xs font-bold text-[#F08D17] theme-h2-color flex items-center gap-1.5">
+            <Zap className="w-4 h-4 text-[#F08D17] theme-h2-color" />
             HIGH PERFORMANCE
           </span>
         </div>
@@ -279,13 +282,14 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#002B2E",
+          backgroundColor: element.customBg || "var(--card-bg, #002B2E)",
           borderColor: element.customBorder || "rgba(255,255,255,0.15)",
-          color: element.customText || "#FFFFFF",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full rounded-3xl border shadow-xl flex overflow-hidden"
+        className="w-full h-full border shadow-xl flex overflow-hidden"
       >
-        <div className="w-1/3 bg-[#F08D17] flex flex-col items-center justify-center p-4 text-white text-center">
+        <div className="w-1/3 bg-[#F08D17] theme-accent-bg flex flex-col items-center justify-center p-4 text-white text-center">
           <ShieldCheck className="w-8 h-8 mb-1" />
           <span className="text-[10px] font-mono font-bold uppercase">100% SEGURO</span>
         </div>
@@ -302,9 +306,9 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#BFDAD1",
-          borderColor: element.customBorder || "#A6C5BB",
-          color: element.customText || "#135A34",
+          backgroundColor: element.customBg || "var(--about-card-bg, #BFDAD1)",
+          borderColor: element.customBorder || "var(--about-border, #A6C5BB)",
+          color: element.customText || "var(--about-text, #135A34)",
         }}
         className="w-full h-full p-6 rounded-[36px] border-2 shadow-lg flex flex-col justify-between"
       >
@@ -322,14 +326,15 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#003B3F",
-          borderColor: element.customBorder || "rgba(255,255,255,0.2)",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #003B3F)",
+          borderColor: element.customBorder || "var(--card-border, rgba(255,255,255,0.2))",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full p-5 sm:p-6 rounded-3xl border shadow-xl flex flex-col justify-between space-y-3"
+        className="w-full h-full p-5 sm:p-6 border shadow-xl flex flex-col justify-between space-y-3"
       >
         <div className="flex items-center justify-between">
-          <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-[#F08D17]">
+          <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-[#F08D17] theme-h2-color">
             <TrendingUp className="w-5 h-5" />
           </div>
           <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/20 px-2.5 py-0.5 rounded-full border border-emerald-400/40">
@@ -339,7 +344,7 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
         {renderTabHeader()}
         {renderCardBody()}
         <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-          <div className="bg-[#F08D17] h-full rounded-full w-4/5" />
+          <div className="bg-[#F08D17] theme-accent-bg h-full rounded-full w-4/5" />
         </div>
       </div>
     );
@@ -350,16 +355,17 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#002224",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #002224)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full p-5 sm:p-6 rounded-3xl border shadow-2xl flex flex-col justify-between relative overflow-hidden"
+        className="w-full h-full p-5 sm:p-6 border shadow-2xl flex flex-col justify-between relative overflow-hidden"
       >
-        <Quote className="w-12 h-12 text-[#F08D17]/15 absolute top-2 right-2 pointer-events-none" />
+        <Quote className="w-12 h-12 text-[#F08D17]/15 theme-h2-color opacity-20 absolute top-2 right-2 pointer-events-none" />
         {renderTabHeader()}
         <div className="space-y-3 relative z-10">
-          <p className="text-xs sm:text-sm italic text-slate-200 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm italic text-slate-200 theme-text-color leading-relaxed font-medium">
             <EditableText
               value={element.subtitle || '"La plataforma ha transformado la agilidad operativa y la satisfacción de nuestros inversionistas de forma contundente."'}
               onChange={(val) => updateCanvasElement(element.id, { subtitle: val })}
@@ -367,17 +373,17 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
             />
           </p>
           <div className="flex items-center gap-3 pt-2 border-t border-white/15">
-            <div className="w-9 h-9 rounded-full bg-[#F08D17] text-white font-bold text-xs flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-[#F08D17] theme-accent-bg text-white font-bold text-xs flex items-center justify-center">
               EP
             </div>
             <div>
-              <span className="font-bold text-xs text-white block">
+              <span className="font-bold text-xs text-white theme-h1-color block">
                 <EditableText
                   value={element.title || "Director de Operaciones"}
                   onChange={(val) => updateCanvasElement(element.id, { title: val })}
                 />
               </span>
-              <span className="text-[10px] text-[#F08D17] font-mono">Excel Puesto de Bolsa</span>
+              <span className="text-[10px] text-[#F08D17] theme-h2-color font-mono">Excel Puesto de Bolsa</span>
             </div>
           </div>
         </div>
@@ -390,13 +396,14 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#003B3F",
-          borderColor: element.customBorder || "rgba(255,255,255,0.2)",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #003B3F)",
+          borderColor: element.customBorder || "var(--card-border, rgba(255,255,255,0.2))",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full p-5 sm:p-6 rounded-3xl border shadow-xl flex flex-col justify-between space-y-3"
+        className="w-full h-full p-5 sm:p-6 border shadow-xl flex flex-col justify-between space-y-3"
       >
-        <div className="w-9 h-9 rounded-xl bg-[#F08D17]/20 border border-[#F08D17]/40 text-[#F08D17] flex items-center justify-center">
+        <div className="w-9 h-9 rounded-xl bg-[#F08D17]/20 border border-[#F08D17]/40 text-[#F08D17] theme-h2-color flex items-center justify-center">
           <Award className="w-5 h-5" />
         </div>
         {renderTabHeader()}
@@ -410,14 +417,15 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
     return (
       <div
         style={{
-          backgroundColor: element.customBg || "#002B2E",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #002B2E)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          borderRadius: element.customRadius || "var(--card-radius, 24px)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full p-5 sm:p-6 rounded-3xl border-2 shadow-2xl flex flex-col justify-between space-y-3 relative"
+        className="w-full h-full p-5 sm:p-6 border-2 shadow-2xl flex flex-col justify-between space-y-3 relative"
       >
         <div className="flex items-center justify-between border-b border-white/15 pb-2">
-          <span className="text-[9px] font-mono font-bold bg-[#F08D17] text-white px-2 py-0.5 rounded-full">
+          <span className="text-[9px] font-mono font-bold bg-[#F08D17] theme-accent-bg text-white px-2 py-0.5 rounded-full">
             RECOMENDADO
           </span>
         </div>
@@ -425,7 +433,7 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
         {renderCardBody()}
         <button
           type="button"
-          className="w-full py-2 rounded-xl bg-[#F08D17] hover:bg-[#d87c0f] text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+          className="w-full py-2 rounded-xl bg-[#F08D17] theme-accent-bg hover:opacity-90 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
         >
           <span>Seleccionar Plan</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -438,11 +446,12 @@ export const CardCanvasElement: React.FC<CardCanvasElementProps> = ({ element })
   return (
     <div
       style={{
-        backgroundColor: element.customBg || "#FFFFFF",
-        borderColor: element.customBorder || "#E4E4E7",
-        color: element.customText || "#18181B",
+        backgroundColor: element.customBg || "var(--card-bg, #002224)",
+        borderColor: element.customBorder || "var(--card-border, #F08D17)",
+        borderRadius: element.customRadius || "var(--card-radius, 24px)",
+        color: element.customText || "var(--theme-h1, #FFFFFF)",
       }}
-      className="w-full h-full p-5 rounded-2xl border shadow-md flex flex-col justify-between overflow-hidden"
+      className="w-full h-full p-5 border shadow-md flex flex-col justify-between overflow-hidden"
     >
       {renderTabHeader()}
       {renderCardBody()}

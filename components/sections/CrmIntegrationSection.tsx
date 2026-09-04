@@ -137,17 +137,17 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
         </div>
 
         {/* Interactive Step-by-Step Diagram Card */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-8 text-white">
+        <div className="p-8 sm:p-10 theme-card-glass backdrop-blur-xl border shadow-2xl space-y-8 text-white">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div className="flex items-center gap-4">
-              <Database className="w-7 h-7 text-[#F08D17]" />
+              <Database className="w-7 h-7 theme-accent-color" />
               <div>
-                <h3 className="font-extrabold text-xl sm:text-2xl text-white">
+                <h3 className="font-extrabold text-xl sm:text-2xl text-white theme-h1-color">
                   {activeFlowTab === "epb"
                     ? "Flujo Operaciones Excel Puesto de Bolsa (EPB)"
                     : "Flujo Operaciones Excel SAFI (Fondos Abiertos ESAFI)"}
                 </h3>
-                <span className="text-xs text-white/60 font-mono">Arquitectura con Conector Bidireccional RESTful</span>
+                <span className="text-xs theme-text-color font-mono">Arquitectura con Conector Bidireccional RESTful</span>
               </div>
             </div>
 
@@ -165,23 +165,23 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
               onClick={() => setSelectedFlowStep(1)}
               className={`p-6 rounded-2xl border transition-all cursor-pointer space-y-3 relative ${
                 selectedFlowStep === 1
-                  ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-xl ring-2 ring-[#F08D17]/30 scale-102"
-                  : "bg-[#002D30]/80 border-white/10 hover:border-white/30"
+                  ? "bg-white/10 border-2 border-[var(--secondary-accent)] shadow-xl ring-2 ring-[var(--secondary-accent)]/30 scale-102"
+                  : "bg-white/5 border-white/10 hover:border-white/30"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-extrabold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+                <span className="text-xs font-mono font-extrabold theme-accent-color bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
                   <EditableField id="sec6_step1_badge" defaultText="PASO 01" />
                 </span>
-                <Smartphone className="w-6 h-6 text-[#F08D17]" />
+                <Smartphone className="w-6 h-6 theme-accent-color" />
               </div>
-              <h4 className="font-extrabold text-base text-white">
+              <h4 className="font-extrabold text-base text-white theme-h1-color">
                 <EditableField
                   id="sec6_step1_title"
                   defaultText={activeFlowTab === "epb" ? "Solicitud del Inversionista" : "Solicitud de Aporte / Rescate"}
                 />
               </h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs theme-text-color leading-relaxed">
                 <EditableField
                   id="sec6_step1_desc"
                   defaultText={
@@ -197,23 +197,23 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
               onClick={() => setSelectedFlowStep(2)}
               className={`p-6 rounded-2xl border transition-all cursor-pointer space-y-3 relative ${
                 selectedFlowStep === 2
-                  ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-xl ring-2 ring-[#F08D17]/30 scale-102"
-                  : "bg-[#002D30]/80 border-white/10 hover:border-white/30"
+                  ? "bg-white/10 border-2 border-[var(--secondary-accent)] shadow-xl ring-2 ring-[var(--secondary-accent)]/30 scale-102"
+                  : "bg-white/5 border-white/10 hover:border-white/30"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-extrabold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+                <span className="text-xs font-mono font-extrabold theme-accent-color bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
                   <EditableField id="sec6_step2_badge" defaultText="PASO 02" />
                 </span>
-                <Zap className="w-6 h-6 text-[#F08D17]" />
+                <Zap className="w-6 h-6 theme-accent-color" />
               </div>
-              <h4 className="font-extrabold text-base text-white">
+              <h4 className="font-extrabold text-base text-white theme-h1-color">
                 <EditableField
                   id="sec6_step2_title"
                   defaultText={activeFlowTab === "epb" ? "Conector CRM & Expediente IA" : "Notificación & Carga SIFI"}
                 />
               </h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs theme-text-color leading-relaxed">
                 <EditableField
                   id="sec6_step2_desc"
                   defaultText={
@@ -229,23 +229,23 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
               onClick={() => setSelectedFlowStep(3)}
               className={`p-6 rounded-2xl border transition-all cursor-pointer space-y-3 relative ${
                 selectedFlowStep === 3
-                  ? "bg-[#002B2E] border-2 border-[#F08D17] shadow-xl ring-2 ring-[#F08D17]/30 scale-102"
-                  : "bg-[#002D30]/80 border-white/10 hover:border-white/30"
+                  ? "bg-white/10 border-2 border-[var(--secondary-accent)] shadow-xl ring-2 ring-[var(--secondary-accent)]/30 scale-102"
+                  : "bg-white/5 border-white/10 hover:border-white/30"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-extrabold text-[#F08D17] bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+                <span className="text-xs font-mono font-extrabold theme-accent-color bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
                   <EditableField id="sec6_step3_badge" defaultText="PASO 03" />
                 </span>
                 <CheckCircle2 className="w-6 h-6 text-emerald-400" />
               </div>
-              <h4 className="font-extrabold text-base text-white">
+              <h4 className="font-extrabold text-base text-white theme-h1-color">
                 <EditableField
                   id="sec6_step3_title"
                   defaultText={activeFlowTab === "epb" ? "Cierre Comercial & Registro" : "Confirmación Inmediata"}
                 />
               </h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs theme-text-color leading-relaxed">
                 <EditableField
                   id="sec6_step3_desc"
                   defaultText={
@@ -278,19 +278,19 @@ export const CrmIntegrationSection: React.FC<CrmIntegrationSectionProps> = ({ se
             </motion.div>
           )}
 
-          <div className="p-6 sm:p-8 rounded-3xl bg-[#002D30]/90 border border-white/20 shadow-2xl space-y-6 text-white">
+          <div className="p-6 sm:p-8 theme-card-glass border shadow-2xl space-y-6 text-white">
             <div className="flex flex-wrap items-center justify-between border-b border-white/15 pb-4 gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#F08D17] text-white flex items-center justify-center font-bold shadow-md">
+                <div className="w-10 h-10 rounded-2xl bg-[var(--secondary-accent)] text-white flex items-center justify-center font-bold shadow-md">
                   {activeFlowTab === "epb" ? <Bot className="w-5 h-5 text-white" /> : <Zap className="w-5 h-5 text-white" />}
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-base sm:text-lg text-white">
+                  <h4 className="font-extrabold text-base sm:text-lg text-white theme-h1-color">
                     {activeFlowTab === "epb"
                       ? "Ficha Ejecutiva — Expediente Comercial IA Dynamics 365"
                       : "Ficha Ejecutiva — Registro Operativo SIFI Fondos"}
                   </h4>
-                  <span className="text-xs text-slate-300 font-mono">
+                  <span className="text-xs theme-text-color font-mono">
                     {activeFlowTab === "epb"
                       ? "Resumen de datos procesados para Dynamics 365 CRM"
                       : "Resumen de datos integrados en el Core SIFI"}

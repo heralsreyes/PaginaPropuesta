@@ -39,11 +39,11 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
         style={{
           backgroundColor: element.customBg || "rgba(255, 255, 255, 0.12)",
           borderColor: element.customBorder || "rgba(255, 255, 255, 0.3)",
-          color: element.customText || "#FFFFFF",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
         className="w-full h-full rounded-2xl border backdrop-blur-xl shadow-lg flex items-center justify-center gap-2.5 font-bold text-xs hover:bg-white/20 active:scale-95 transition-all cursor-pointer px-4"
       >
-        <Sparkles className="w-4 h-4 text-[#F08D17]" />
+        <Sparkles className="w-4 h-4 text-[#F08D17] theme-h2-color" />
         <span>{element.title || "Botón Translúcido Glass"}</span>
       </button>
     );
@@ -55,13 +55,13 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
       <button
         onClick={handleClick}
         style={{
-          backgroundColor: element.customBg || "#002224",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#F08D17",
+          backgroundColor: element.customBg || "var(--card-bg, #002224)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          color: element.customText || "var(--secondary-accent, #F08D17)",
         }}
-        className="w-full h-full rounded-xl border-2 border-dashed shadow-md flex items-center justify-center gap-2 font-mono font-bold text-xs hover:bg-[#F08D17]/10 active:scale-95 transition-all cursor-pointer px-4"
+        className="w-full h-full rounded-xl border-2 border-dashed shadow-md flex items-center justify-center gap-2 font-mono font-bold text-xs hover:opacity-90 active:scale-95 transition-all cursor-pointer px-4"
       >
-        <span className="text-[#F08D17] font-black">[+]</span>
+        <span className="text-[#F08D17] theme-h2-color font-black">[+]</span>
         <span>{element.title || "Botón Dotted Blueprint"}</span>
       </button>
     );
@@ -73,12 +73,12 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
       <button
         onClick={handleClick}
         style={{
-          backgroundColor: element.customBg || "#003B3F",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--card-bg, #003B3F)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
           clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
         }}
-        className="w-full h-full border-2 shadow-xl flex items-center justify-center gap-2 font-mono font-black text-xs hover:bg-[#004F54] active:scale-95 transition-all cursor-pointer px-4"
+        className="w-full h-full border-2 shadow-xl flex items-center justify-center gap-2 font-mono font-black text-xs hover:opacity-90 active:scale-95 transition-all cursor-pointer px-4"
       >
         <span>{element.title || "CYBER BUTTON ➔"}</span>
       </button>
@@ -91,17 +91,17 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
       <button
         onClick={handleClick}
         style={{
-          backgroundColor: element.customBg || "#004F54",
-          borderColor: element.customBorder || "#F08D17",
-          color: element.customText || "#FFFFFF",
+          backgroundColor: element.customBg || "var(--bg-main, #004F54)",
+          borderColor: element.customBorder || "var(--card-border, #F08D17)",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
         className="w-full h-full rounded-full border p-1 pr-4 shadow-xl flex items-center justify-between gap-3 font-bold text-xs hover:shadow-2xl active:scale-95 transition-all cursor-pointer"
       >
-        <div className="w-8 h-8 rounded-full bg-[#F08D17] text-white flex items-center justify-center shrink-0 shadow-md">
+        <div className="w-8 h-8 rounded-full bg-[#F08D17] theme-accent-bg text-white flex items-center justify-center shrink-0 shadow-md">
           <Zap className="w-4 h-4" />
         </div>
         <span className="font-extrabold truncate">{element.title || "Explorar Entregables"}</span>
-        <ArrowRight className="w-3.5 h-3.5 text-[#F08D17]" />
+        <ArrowRight className="w-3.5 h-3.5 text-[#F08D17] theme-h2-color" />
       </button>
     );
   }
@@ -112,21 +112,21 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
       <button
         onClick={handleClick}
         style={{
-          backgroundColor: element.customBg || "#002B2E",
+          backgroundColor: element.customBg || "var(--card-bg, #002B2E)",
           borderColor: element.customBorder || "rgba(255, 255, 255, 0.2)",
-          color: element.customText || "#FFFFFF",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
         className="w-full h-full rounded-2xl border p-2.5 px-4 shadow-xl flex items-center justify-between text-left hover:border-[#F08D17] active:scale-95 transition-all cursor-pointer"
       >
         <div>
-          <span className="text-[9px] font-mono text-[#F08D17] font-extrabold uppercase block tracking-wider">
+          <span className="text-[9px] font-mono text-[#F08D17] theme-h2-color font-extrabold uppercase block tracking-wider">
             DESCARGA OFICIAL
           </span>
-          <span className="font-extrabold text-xs text-white block">
+          <span className="font-extrabold text-xs text-white theme-h1-color block">
             {element.title || "Ficha Técnica SIMV"}
           </span>
         </div>
-        <div className="w-7 h-7 rounded-xl bg-white/10 flex items-center justify-center text-[#F08D17] shrink-0">
+        <div className="w-7 h-7 rounded-xl bg-white/10 flex items-center justify-center text-[#F08D17] theme-h2-color shrink-0">
           <Download className="w-4 h-4" />
         </div>
       </button>
@@ -139,11 +139,11 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
       <button
         onClick={handleClick}
         style={{
-          backgroundColor: element.customBg || "rgba(0, 34, 36, 0.9)",
+          backgroundColor: element.customBg || "var(--card-bg, rgba(0, 34, 36, 0.9))",
           borderColor: element.customBorder || "#059669",
-          color: element.customText || "#FFFFFF",
+          color: element.customText || "var(--theme-h1, #FFFFFF)",
         }}
-        className="w-full h-full rounded-full border px-4 shadow-lg flex items-center justify-center gap-2 text-xs font-mono font-bold hover:bg-[#003B3F] active:scale-95 transition-all cursor-pointer"
+        className="w-full h-full rounded-full border px-4 shadow-lg flex items-center justify-center gap-2 text-xs font-mono font-bold hover:opacity-90 active:scale-95 transition-all cursor-pointer"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
         <span>{element.title || "● SISTEMA ONLINE 99.9%"}</span>
@@ -157,7 +157,7 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
       <button
         onClick={handleClick}
         style={{
-          backgroundColor: element.customBg || "#F08D17",
+          backgroundColor: element.customBg || "var(--secondary-accent, #F08D17)",
           borderColor: element.customBorder || "#FFFFFF",
           color: element.customText || "#FFFFFF",
         }}
@@ -174,11 +174,11 @@ export const ButtonCanvasElement: React.FC<ButtonCanvasElementProps> = ({
     <button
       onClick={handleClick}
       style={{
-        backgroundColor: element.customBg || "#F08D17",
+        backgroundColor: element.customBg || "var(--secondary-accent, #F08D17)",
         borderColor: element.customBorder || "transparent",
         color: element.customText || "#FFFFFF",
       }}
-      className="w-full h-full rounded-2xl shadow-[0_0_20px_rgba(240,141,23,0.4)] flex items-center justify-center gap-2 font-black text-xs hover:bg-[#d87c0f] active:scale-95 transition-all cursor-pointer px-4"
+      className="w-full h-full rounded-2xl shadow-[0_0_20px_rgba(240,141,23,0.4)] flex items-center justify-center gap-2 font-black text-xs hover:opacity-90 active:scale-95 transition-all cursor-pointer px-4"
     >
       <span>{element.title || "Aceptar & Firmar Propuesta"}</span>
       <ArrowRight className="w-4 h-4" />

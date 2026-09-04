@@ -76,20 +76,20 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Bloque 1: Inversión Única */}
           <EditableBlockWrapper id="sec9_card_single" label="Inversión Única" className="h-full">
-            <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white h-full flex flex-col justify-between">
+            <div className="p-8 theme-card-glass backdrop-blur-xl border shadow-2xl space-y-6 text-white h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-white/15 pb-4">
                   <div>
-                    <h3 className="font-extrabold text-xl sm:text-2xl text-white">
+                    <h3 className="font-extrabold text-xl sm:text-2xl text-white theme-h1-color">
                       <EditableField id="sec9_c1_title" defaultText="Inversión Única de Implementación" />
                     </h3>
-                    <span className="text-sm text-[#F08D17] font-mono font-bold">
+                    <span className="text-sm theme-h2-color font-mono font-bold">
                       <EditableField id="sec9_c1_sub" defaultText="Desarrollo Web, App & Integración Dynamics/SIFI" />
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-3xl sm:text-4xl font-black text-white font-mono">{currSymbol} {baseSubtotal.toLocaleString()}</span>
-                    <span className="text-xs text-slate-300 font-mono block font-bold">
+                    <span className="text-3xl sm:text-4xl font-black text-white theme-h1-color font-mono">{currSymbol} {baseSubtotal.toLocaleString()}</span>
+                    <span className="text-xs theme-text-color font-mono block font-bold">
                       {hasTax ? `+ ${taxPercent}% ITBIS (${currSymbol} ${Math.round(taxAmount).toLocaleString()})` : "Exento de ITBIS"}
                     </span>
                     {hasDiscount && (
@@ -100,17 +100,17 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-sm sm:text-base text-slate-200 font-medium pt-4">
+                <ul className="space-y-3 text-sm sm:text-base theme-text-color font-medium pt-4">
                   <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 theme-accent-color shrink-0 mt-0.5" />
                     <EditableField id="sec9_c1_b1" defaultText="Desarrollo completo del portal web Next.js y app móvil multiplataforma." />
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 theme-accent-color shrink-0 mt-0.5" />
                     <EditableField id="sec9_c1_b2" defaultText="Integración de conectores bidireccionales con Microsoft Dynamics CRM & SIFI." />
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#F08D17] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 theme-accent-color shrink-0 mt-0.5" />
                     <EditableField id="sec9_c1_b3" defaultText="Desarrollo de las 7 Épicas funcionales, Trade Ticket digital y expedientes IA." />
                   </li>
                 </ul>
@@ -120,22 +120,22 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
 
           {/* Bloque 2: Recurrente Mensual */}
           <EditableBlockWrapper id="sec9_card_recurring" label="Recurrente Mensual" className="h-full">
-            <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl space-y-6 text-white h-full flex flex-col justify-between">
+            <div className="p-8 theme-card-glass backdrop-blur-xl border shadow-2xl space-y-6 text-white h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-white/15 pb-4">
                   <div>
-                    <h3 className="font-extrabold text-xl sm:text-2xl text-white">
+                    <h3 className="font-extrabold text-xl sm:text-2xl text-white theme-h1-color">
                       <EditableField id="sec9_c2_title" defaultText="Recurrente Mensual" />
                     </h3>
-                    <span className="text-sm text-emerald-300 font-mono font-bold">
+                    <span className="text-sm theme-h2-color font-mono font-bold">
                       <EditableField id="sec9_c2_sub" defaultText="Operación, Mantenimiento & Soporte SLA" />
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-3xl sm:text-4xl font-black text-[#F08D17] font-mono">
+                    <span className="text-3xl sm:text-4xl font-black theme-accent-color font-mono">
                       <EditableField id="sec9_c2_price" defaultText={`${currSymbol} 1,195 / mo`} />
                     </span>
-                    <span className="text-xs text-slate-300 font-mono block font-bold">
+                    <span className="text-xs theme-text-color font-mono block font-bold">
                       <EditableField id="sec9_c2_lic" defaultText="Licencias + Soporte SIMV" />
                     </span>
                   </div>
@@ -161,19 +161,19 @@ export const EconomicProposalSection: React.FC<EconomicProposalSectionProps> = (
         </div>
 
         {/* Payment Terms */}
-        <div className="p-8 rounded-3xl bg-[#003B3F]/90 backdrop-blur-xl border border-white/15 shadow-2xl text-white space-y-4">
-          <h4 className="font-extrabold text-base text-[#F08D17] uppercase font-mono mb-4">
+        <div className="p-8 rounded-3xl theme-card-glass shadow-2xl text-white space-y-4">
+          <h4 className="font-extrabold text-base text-[#F08D17] theme-h2-color uppercase font-mono mb-4">
             CONDICIONES & HITOS DE PAGO (INVERSIÓN ÚNICA)
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm sm:text-base">
             {paymentTerms.map((term, idx) => {
               const termAmount = Math.round(term.amount || (grandTotal * (term.percentage || 33.33)) / 100);
               return (
-                <div key={idx} className="p-5 rounded-2xl bg-[#002D30] border border-white/10 space-y-1 shadow-sm">
-                  <span className="font-extrabold text-[#F08D17] font-mono block text-lg">
+                <div key={idx} className="p-5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-1 shadow-sm">
+                  <span className="font-extrabold text-[#F08D17] theme-accent-color font-mono block text-lg">
                     {term.percentage}% ({currSymbol} {termAmount.toLocaleString()})
                   </span>
-                  <span className="text-slate-200 font-medium">{term.description}</span>
+                  <span className="text-slate-200 theme-text-color font-medium">{term.description}</span>
                 </div>
               );
             })}

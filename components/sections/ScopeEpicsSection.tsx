@@ -614,7 +614,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
         </div>
 
         {/* Phase Filter Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-xl text-white">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl theme-card-glass shadow-xl text-white">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 flex items-center gap-1.5">
               <Filter className="w-3.5 h-3.5 text-[#F08D17]" />
@@ -748,12 +748,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
           </div>
 
           {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box (Hero-inspired glass card) */}
-          <div className="w-full lg:w-2/3 p-5 sm:p-7 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl space-y-5 relative overflow-hidden text-white">
+          <div className="w-full lg:w-2/3 p-5 sm:p-7 rounded-2xl theme-card-glass shadow-2xl space-y-5 relative overflow-hidden text-white">
             {/* Ambient subtle glow */}
             <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#F08D17]/5 blur-3xl rounded-full pointer-events-none" />
 
             {/* CO-BRANDING INSPIRED EPIC HERO BANNER */}
-            <div className="w-full bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all text-white">
+            <div className="w-full bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all text-white">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative z-10">
                 {/* Left side: Epic metadata & title */}
                 <div className="flex flex-col items-start text-left">

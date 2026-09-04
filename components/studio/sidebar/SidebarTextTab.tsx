@@ -60,9 +60,14 @@ export const SidebarTextTab: React.FC = () => {
       fontSize: opt.fontSize,
       sectionId: "hero",
       title: opt.text,
-      customBg: "rgba(0, 34, 36, 0.75)",
-      customBorder: "rgba(240, 141, 23, 0.4)",
-      customText: "#FFFFFF",
+      customBg: "transparent",
+      customBorder: "transparent",
+      customText:
+        opt.type === "h1"
+          ? "var(--theme-h1, #FFFFFF)"
+          : opt.type === "h2"
+          ? "var(--theme-h2, #F08D17)"
+          : "var(--theme-text, #D5E4E2)",
     });
 
     toast.info(

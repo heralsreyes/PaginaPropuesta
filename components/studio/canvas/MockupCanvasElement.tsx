@@ -57,11 +57,11 @@ export const MockupCanvasElement: React.FC<MockupCanvasElementProps> = ({ elemen
 
   if (element.mockupType === "financial_ticket" || (element.mockupType as string) === "ticket") {
     return (
-      <div className="w-full h-full bg-[#002224] rounded-3xl p-5 border border-[#F08D17]/40 shadow-2xl flex flex-col justify-between text-white relative">
+      <div className="w-full h-full bg-[var(--card-bg,#002224)] rounded-3xl p-5 border border-[var(--card-border,#F08D17)]/40 shadow-2xl flex flex-col justify-between text-white relative">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center space-x-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-mono text-xs font-bold text-[#F08D17]">TRADE TICKET DIGITAL</span>
+            <span className="font-mono text-xs font-bold text-[var(--secondary-accent,#F08D17)]">TRADE TICKET DIGITAL</span>
           </div>
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#7C9B8C]/25 text-emerald-300 border border-emerald-500/30 font-bold">
             VALIDADO OTP
@@ -83,7 +83,7 @@ export const MockupCanvasElement: React.FC<MockupCanvasElementProps> = ({ elemen
           </div>
         </div>
 
-        <button className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#F08D17] to-[#D97706] text-white font-bold text-xs shadow-md">
+        <button className="w-full py-2.5 rounded-xl bg-[var(--secondary-accent,#F08D17)] text-white font-bold text-xs shadow-md hover:opacity-90 transition-opacity">
           Aprobar & Firmar Operación ➔
         </button>
       </div>

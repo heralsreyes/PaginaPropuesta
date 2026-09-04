@@ -48,20 +48,20 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
 
         {/* CO-BRANDING HERO BANNER (REFACTORIZADO GLASS) */}
         <EditableBlockWrapper id="sec1_banner" label="Banner Co-Branding" className="w-full max-w-5xl mx-auto my-3">
-          <div className="w-full bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-2xl rounded-2xl p-6 relative overflow-hidden transition-all text-white">
+          <div className="w-full theme-card-glass backdrop-blur-md border shadow-2xl p-6 relative overflow-hidden transition-all text-white">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
               {/* Lado Izquierdo: EMPRESA */}
               <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-1.5">
+                <span className="text-[11px] font-medium tracking-widest uppercase theme-text-color mb-1 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <EditableField id="sec1_dev_label" defaultText="EMPRESA DESARROLLADORA" />
                 </span>
                 <div className="flex items-center gap-2.5 pt-0.5">
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-white tracking-tight">
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-white theme-h1-color tracking-tight">
                     <EditableField id="sec1_dev_name" defaultText={companyName} />
                     <span className="text-emerald-400">.</span>
                   </span>
-                  <span className="text-xs px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-white/70 inline-flex items-center font-mono font-medium">
+                  <span className="text-xs px-2 py-0.5 rounded-md bg-white/5 border border-white/10 theme-text-color inline-flex items-center font-mono font-medium">
                     <EditableField id="sec1_dev_type" defaultText="S.R.L." />
                   </span>
                 </div>
@@ -72,12 +72,12 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
 
               {/* Lado Derecho: CLIENTE */}
               <div className="flex flex-col items-center md:items-end text-center md:text-right">
-                <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1 flex items-center gap-1.5">
+                <span className="text-[11px] font-medium tracking-widest uppercase theme-text-color mb-1 flex items-center gap-1.5">
                   <EditableField id="sec1_client_label" defaultText="CLIENTE INSTITUCIONAL" />
-                  <Building2 className="w-3.5 h-3.5 text-white/50" />
+                  <Building2 className="w-3.5 h-3.5 theme-text-color" />
                 </span>
                 <div className="pt-0.5">
-                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-tight block leading-tight font-display">
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white theme-h1-color uppercase tracking-tight block leading-tight font-display">
                     <EditableField id="sec1_client_name" defaultText={clientName} />
                   </span>
                 </div>

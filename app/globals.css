@@ -39,9 +39,27 @@
   color: var(--theme-text, #D5E4E2) !important;
 }
 
+.theme-accent-color {
+  color: var(--secondary-accent, #F08D17) !important;
+}
+
+.theme-accent-bg {
+  background-color: var(--secondary-accent, #F08D17) !important;
+}
+
+.theme-accent-border {
+  border-color: var(--secondary-accent, #F08D17) !important;
+}
+
 .theme-card-style {
   background-color: var(--card-bg, #002224) !important;
   border-color: var(--card-border, #F08D17) !important;
+  border-radius: var(--card-radius, 24px) !important;
+}
+
+.theme-card-glass {
+  background-color: color-mix(in srgb, var(--card-bg, #002224) 88%, transparent) !important;
+  border-color: color-mix(in srgb, var(--card-border, #F08D17) 50%, transparent) !important;
   border-radius: var(--card-radius, 24px) !important;
 }
 
@@ -78,8 +96,8 @@ body {
 
 @media print {
   @page {
-    size: landscape;
-    margin: 8mm 10mm !important;
+    size: 297mm 210mm;
+    margin: 0 !important;
   }
 
   *, *::before, *::after {
@@ -90,22 +108,30 @@ body {
     -webkit-backdrop-filter: none !important;
     animation: none !important;
     transition: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
   }
 
   html, body {
     width: 100% !important;
     height: auto !important;
+    min-height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
-    background: #FAF9F6 !important;
-    color: #111111 !important;
+    background: var(--bg-main, #004F54) !important;
+    color: var(--text-primary, #FFFFFF) !important;
   }
 
-  main {
-    width: 100% !important;
-    height: auto !important;
+  /* Unconstrain containers so all sections flow across pages */
+  div, main, #studio-canvas, #studio-canvas > div {
     overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: static !important;
     display: block !important;
   }
 
@@ -124,10 +150,29 @@ body {
     display: block !important;
   }
 
-  section, footer {
-    break-after: page !important;
+  section {
+    page-break-before: always !important;
+    break-before: page !important;
     page-break-after: always !important;
-    min-h-screen: auto !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-height: 100vh !important;
     height: 100vh !important;
+    width: 100vw !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    padding: 2.5rem 3rem !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  section:first-of-type {
+    page-break-before: auto !important;
+    break-before: auto !important;
   }
 }
