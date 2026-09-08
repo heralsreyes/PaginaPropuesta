@@ -14,6 +14,14 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
   const { updateProject, updateClient } = useProposal();
+  const client = proposal?.client || { name: "Cliente Institucional", shortName: "Cliente" };
+  const project = proposal?.project || {
+    code: "ENF-2026",
+    version: "1.0",
+    date: "",
+    author: "ENFOCO",
+    heroSubtitle: "",
+  };
 
   return (
     <section id="hero" className="min-h-screen w-full flex flex-col justify-between items-center relative overflow-hidden bg-[var(--bg-main)] px-4 sm:px-6 lg:px-8 pt-20 pb-8 transition-colors duration-300">
@@ -47,7 +55,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
 
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)]">
             <EditableText
-              value={proposal.client.name}
+              value={client.name || "Cliente Institucional"}
               onChange={(val) => updateClient({ name: val })}
               tag="span"
             />
@@ -56,29 +64,29 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
 
         {/* Dynamic 2-Tone Headline with Accent */}
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-display text-[var(--text-primary)] text-center leading-[1.14] max-w-3xl mx-auto tracking-tight mb-4 transition-colors duration-300">
-          {proposal.project.heroTitleAccent ? (
+          {project.heroTitleAccent ? (
             <>
               <EditableText
-                value={proposal.project.heroTitlePrefix || ""}
+                value={project.heroTitlePrefix || ""}
                 onChange={(val) => updateProject({ heroTitlePrefix: val })}
                 tag="span"
               />{" "}
               <span className="text-[var(--accent-color)]">
                 <EditableText
-                  value={proposal.project.heroTitleAccent}
+                  value={project.heroTitleAccent}
                   onChange={(val) => updateProject({ heroTitleAccent: val })}
                   tag="span"
                 />
               </span>{" "}
               <EditableText
-                value={proposal.project.heroTitleSuffix || ""}
+                value={project.heroTitleSuffix || ""}
                 onChange={(val) => updateProject({ heroTitleSuffix: val })}
                 tag="span"
               />
             </>
           ) : (
             <EditableText
-              value={proposal.project.heroHeadline || "Una nueva era en la *automatización & gestión* operativa"}
+              value={project.heroHeadline || "Una nueva era en la *automatización & gestión* operativa"}
               onChange={(val) => updateProject({ heroHeadline: val })}
               tag="span"
             />
@@ -89,8 +97,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
         <div className="text-xs sm:text-sm md:text-base text-[var(--text-primary)]/80 text-center max-w-xl mx-auto mt-1 mb-5 font-normal leading-relaxed transition-colors duration-300">
           <EditableText
             value={
-              proposal.project.heroSubtitle ||
-              `Transformando la operativa de ${proposal.client.shortName} a través de una arquitectura web moderna, escalable y desarrollada a la medida.`
+              project.heroSubtitle ||
+              `Transformando la operativa de ${client.shortName || client.name || "la empresa"} a través de una arquitectura web moderna, escalable y desarrollada a la medida.`
             }
             onChange={(val) => updateProject({ heroSubtitle: val })}
             multiline
@@ -119,7 +127,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
               <EditableText
-                value={proposal.project.date}
+                value={project.date || "Agosto, 2026"}
                 onChange={(val) => updateProject({ date: val })}
                 tag="span"
               />
@@ -133,9 +141,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
               <span>Versión & Código</span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
-              v{proposal.project.version} (
+              v{project.version || "1.0"} (
               <EditableText
-                value={proposal.project.code}
+                value={project.code || "ENF-2026"}
                 onChange={(val) => updateProject({ code: val })}
                 tag="span"
               />
@@ -151,7 +159,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
               <EditableText
-                value={proposal.project.author}
+                value={project.author || "ENFOCO, S.R.L."}
                 onChange={(val) => updateProject({ author: val })}
                 tag="span"
               />
@@ -166,7 +174,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--accent-color)] leading-tight">
               <EditableText
-                value={proposal.project.guaranteePeriod || "60 Días Cobertura"}
+                value={project.guaranteePeriod || "60 Días Cobertura"}
                 onChange={(val) => updateProject({ guaranteePeriod: val })}
                 tag="span"
               />

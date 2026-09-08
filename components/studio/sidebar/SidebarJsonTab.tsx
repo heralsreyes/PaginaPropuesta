@@ -5,7 +5,7 @@ import { useProposal } from "@/context/ProposalContext";
 import { Download, Upload, RefreshCw } from "lucide-react";
 
 export const SidebarJsonTab: React.FC = () => {
-  const { exportJson, importJson, resetToDefault } = useProposal();
+  const { proposal, exportJson, importJson, loadProposalByName, resetToDefault } = useProposal();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +20,7 @@ export const SidebarJsonTab: React.FC = () => {
       }
     };
     reader.readAsText(file);
+    e.target.value = "";
   };
 
   return (
@@ -52,6 +53,62 @@ export const SidebarJsonTab: React.FC = () => {
             accept=".json"
             className="hidden"
           />
+        </div>
+      </div>
+
+      <div className="pt-4 border-t border-[#E4E4E7]">
+        <h4 className="font-extrabold text-[#111111] uppercase tracking-wider text-[11px] font-mono mb-2">
+          Carga Rápida de Propuestas
+        </h4>
+        <p className="text-zinc-500 text-[11px] mb-3">
+          Cambia al instante a otra propuesta institucional:
+        </p>
+
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => loadProposalByName("ars-primera")}
+            className={`p-2 rounded-xl border text-left font-medium transition-all cursor-pointer ${
+              (proposal?.client?.shortName || "") === "ARS Primera" || (proposal?.client?.name || "").includes("Primera")
+                ? "bg-emerald-50 border-emerald-500 text-emerald-900 font-bold shadow-xs"
+                : "bg-white border-zinc-200 hover:border-zinc-400 text-zinc-800"
+            }`}
+          >
+            🏥 ARS Primera
+          </button>
+          <button
+            onClick={() => loadProposalByName("excel-puesto-de-bolsa")}
+            className={`p-2 rounded-xl border text-left font-medium transition-all cursor-pointer ${
+              (proposal?.client?.shortName || "").toUpperCase() === "EXCEL" || (proposal?.client?.name || "").includes("Excel")
+                ? "bg-amber-50 border-amber-500 text-amber-900 font-bold shadow-xs"
+                : "bg-white border-zinc-200 hover:border-zinc-400 text-zinc-800"
+            }`}
+          >
+            📈 Excel
+          </button>
+          <button
+            onClick={() => loadProposalByName("bhd")}
+            className="p-2 rounded-xl border bg-white border-zinc-200 hover:border-zinc-400 text-zinc-800 text-left font-medium transition-all cursor-pointer"
+          >
+            🏦 Banco BHD
+          </button>
+          <button
+            onClick={() => loadProposalByName("cepm")}
+            className="p-2 rounded-xl border bg-white border-zinc-200 hover:border-zinc-400 text-zinc-800 text-left font-medium transition-all cursor-pointer"
+          >
+            ⚡ CEPM
+          </button>
+          <button
+            onClick={() => loadProposalByName("claro")}
+            className="p-2 rounded-xl border bg-white border-zinc-200 hover:border-zinc-400 text-zinc-800 text-left font-medium transition-all cursor-pointer"
+          >
+            📱 Claro
+          </button>
+          <button
+            onClick={() => loadProposalByName("grupo-ramos")}
+            className="p-2 rounded-xl border bg-white border-zinc-200 hover:border-zinc-400 text-zinc-800 text-left font-medium transition-all cursor-pointer"
+          >
+            🛒 Grupo Ramos
+          </button>
         </div>
       </div>
 

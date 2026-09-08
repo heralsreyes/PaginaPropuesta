@@ -92,9 +92,20 @@ function ProposalContent() {
   );
 }
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const proposalParam =
+    typeof searchParams?.proposal === "string"
+      ? searchParams.proposal
+      : typeof searchParams?.p === "string"
+      ? searchParams.p
+      : undefined;
+
   return (
-    <ProposalProvider>
+    <ProposalProvider initialProposalSlug={proposalParam}>
       <StudioLayout>
         <ProposalContent />
       </StudioLayout>

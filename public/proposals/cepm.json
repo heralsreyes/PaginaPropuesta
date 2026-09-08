@@ -156,5 +156,33 @@
         "description": "Despliegue final y soporte de 60 días."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#0F172A",
+    "accentColor": "#0284C7",
+    "secondaryAccent": "#38BDF8",
+    "cardBg": "#1E293B",
+    "cardBorder": "#0284C7",
+    "textPrimary": "#F8FAFC",
+    "textSecondary": "#94A3B8",
+    "navBg": "#0F172A",
+    "h1Color": "#F8FAFC",
+    "h2Color": "#38BDF8",
+    "textColor": "#94A3B8",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#E0F2FE",
+    "aboutCardBg": "#BAE6FD",
+    "aboutTextColor": "#0369A1",
+    "aboutCardBorder": "#38BDF8"
+  },
+  "colors": {
+    "primary": "#0284C7",
+    "secondary": "#38BDF8",
+    "accent": "#0284C7",
+    "background": "#0F172A",
+    "card": "#1E293B",
+    "border": "#0284C7",
+    "text": "#F8FAFC",
+    "textSecondary": "#94A3B8"
   }
 }

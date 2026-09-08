@@ -156,5 +156,33 @@
         "description": "Cierre e inicio de soporte."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#7F1D1D",
+    "accentColor": "#DC2626",
+    "secondaryAccent": "#F87171",
+    "cardBg": "#450A0A",
+    "cardBorder": "#EF4444",
+    "textPrimary": "#FEF2F2",
+    "textSecondary": "#FECACA",
+    "navBg": "#450A0A",
+    "h1Color": "#FEF2F2",
+    "h2Color": "#F87171",
+    "textColor": "#FECACA",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#FEE2E2",
+    "aboutCardBg": "#FECACA",
+    "aboutTextColor": "#991B1B",
+    "aboutCardBorder": "#F87171"
+  },
+  "colors": {
+    "primary": "#DC2626",
+    "secondary": "#F87171",
+    "accent": "#EF4444",
+    "background": "#7F1D1D",
+    "card": "#450A0A",
+    "border": "#EF4444",
+    "text": "#FEF2F2",
+    "textSecondary": "#FECACA"
   }
 }

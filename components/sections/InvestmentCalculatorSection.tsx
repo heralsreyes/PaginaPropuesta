@@ -268,7 +268,12 @@ export const InvestmentCalculatorSection: React.FC<InvestmentCalculatorSectionPr
               <PieChart className="w-5 h-5 theme-accent-color" />
             </div>
 
-            <DynamicDonutChart allocations={pieAllocations} totalUsd={calcAmount} totalYield={calculatedYield} />
+            <DynamicDonutChart
+              allocations={pieAllocations}
+              totalUsd={calcAmount}
+              annualRate={customRatePercent}
+              yieldAmountUsd={calculatedYield}
+            />
           </div>
 
           {/* RIGHT: Excel Spreadsheet Simulator Card */}

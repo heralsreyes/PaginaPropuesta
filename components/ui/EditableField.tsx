@@ -20,21 +20,25 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
   const [text, setText] = useState<string>(defaultText);
 
   useEffect(() => {
+    setText(defaultText);
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem(`editable_${id}`);
       if (saved !== null && saved !== "") {
         setText(saved);
       }
     }
-  }, [id]);
+  }, [id, defaultText]);
 
   useEffect(() => {
     const handleReset = () => {
       setText(defaultText);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(`editable_${id}`);
+      }
     };
     window.addEventListener("enfoco-reset-all", handleReset);
     return () => window.removeEventListener("enfoco-reset-all", handleReset);
-  }, [defaultText]);
+  }, [id, defaultText]);
 
   const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
     const newText = e.currentTarget.innerText;

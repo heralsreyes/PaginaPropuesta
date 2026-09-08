@@ -272,9 +272,9 @@
     "Ofrecer acompañamiento continuo y 60 días de garantía total posterior al pase a producción."
   ],
   "budget": {
-    "amountWithoutTax": 5000.0,
-    "taxAmount": 900.0,
-    "totalAmount": 5900.0,
+    "amountWithoutTax": 5000,
+    "taxAmount": 900,
+    "totalAmount": 5900,
     "currency": "USD",
     "hasTax": true,
     "taxPercent": 18,
@@ -298,5 +298,111 @@
         "description": "Despliegue final en tiendas y servidores de Excel, inicio de garantía de 60 días."
       }
     ]
-  }
+  },
+  "theme": {
+    "bgMain": "#004F54",
+    "accentColor": "#004F54",
+    "secondaryAccent": "#F08D17",
+    "cardBg": "#033b3f",
+    "cardBorder": "#032d30",
+    "textPrimary": "#FFFFFF",
+    "textSecondary": "#D5E4E2",
+    "navBg": "#002224",
+    "h1Color": "#FFFFFF",
+    "h2Color": "#F08D17",
+    "textColor": "#D5E4E2",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#044321",
+    "aboutCardBg": "#044321",
+    "aboutTextColor": "#BFDAD1",
+    "aboutCardBorder": "#023b1e"
+  },
+  "colors": {
+    "primary": "#004F54",
+    "secondary": "#F08D17",
+    "background": "#004F54",
+    "card": "#033b3f",
+    "border": "#032d30",
+    "text": "#FFFFFF",
+    "textSecondary": "#D5E4E2",
+    "nav": "#002224",
+    "h1": "#FFFFFF",
+    "h2": "#F08D17"
+  },
+  "sections": [
+    {
+      "id": "sec-portada-excel",
+      "label": "01. Presentación Ejecutiva",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-valor-propuesta",
+      "label": "02. Arquitectura de Valor & Ecosistema",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-7-epicas-alcance",
+      "label": "03. Alcance Funcional — 7 Épicas SIMV",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-simulador-interactivo-app",
+      "label": "04. Simulador App Móvil & Trade Ticket",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-calculadora-inversion",
+      "label": "05. Calculadora Rendimiento & Mutuos",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-integracion-crm-sifi",
+      "label": "06. Integración Dynamics CRM & SIFI Fondos",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-supervision-dashboards",
+      "label": "07. Dashboards Operativos & Métricas KPI",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-equipo-cronograma",
+      "label": "08. Equipo Especialista & Cronograma",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-propuesta-economica",
+      "label": "09. Propuesta Económica & Inversión",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-sobre-enfoco-certificaciones",
+      "label": "10. Sobre ENFOCO S.R.L. & Certificaciones",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-experiencia-proyectos",
+      "label": "11. Experiencia en Proyectos Similares",
+      "componentType": "custom",
+      "enabled": true
+    },
+    {
+      "id": "sec-cierre-acuerdo",
+      "label": "12. Cierre & Firma Digital",
+      "componentType": "custom",
+      "enabled": true
+    }
+  ],
+  "canvasElements": [],
+  "buttonActionsMap": {}
 }

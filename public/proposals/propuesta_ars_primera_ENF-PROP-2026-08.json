@@ -253,5 +253,33 @@
         "description": "Despliegue final e inicio de la garantía de 60 días."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#002B2E",
+    "accentColor": "#004F54",
+    "secondaryAccent": "#059669",
+    "cardBg": "#001E20",
+    "cardBorder": "#10B981",
+    "textPrimary": "#FFFFFF",
+    "textSecondary": "#D1FAE5",
+    "navBg": "#001E20",
+    "h1Color": "#FFFFFF",
+    "h2Color": "#34D399",
+    "textColor": "#D1FAE5",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#D6E5DE",
+    "aboutCardBg": "#BFDAD1",
+    "aboutTextColor": "#135A34",
+    "aboutCardBorder": "#A6C5BB"
+  },
+  "colors": {
+    "primary": "#004F54",
+    "secondary": "#059669",
+    "accent": "#34D399",
+    "background": "#002B2E",
+    "card": "#001E20",
+    "border": "#10B981",
+    "text": "#FFFFFF",
+    "textSecondary": "#D1FAE5"
   }
 }

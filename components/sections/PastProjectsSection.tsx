@@ -6,7 +6,7 @@ import { Smartphone, ShieldCheck, Users, FileText, Sparkles, Plus, Trash2 } from
 import { EditableField } from "@/components/ui/EditableField";
 import { EditableBlockWrapper } from "@/components/studio/EditableBlockWrapper";
 import { useStudioStore } from "@/store/useStudioStore";
-import { useThemeStore } from "@/store/useThemeStore";
+import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
 
 interface PastProjectsSectionProps {
   secId: string;
@@ -50,10 +50,11 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
   const { theme } = useThemeStore();
   const [projects, setProjects] = useState(DEFAULT_PROJECT_CARDS);
 
-  const aboutBg = theme.aboutBg || "#D6E5DE";
-  const aboutCardBg = theme.aboutCardBg || "#BFDAD1";
-  const aboutTextColor = theme.aboutTextColor || "#135A34";
-  const aboutCardBorder = theme.aboutCardBorder || "#A6C5BB";
+  const safeTheme = theme || PRESET_THEMES[0]?.theme || {};
+  const aboutBg = safeTheme.aboutBg || "#D6E5DE";
+  const aboutCardBg = safeTheme.aboutCardBg || "#BFDAD1";
+  const aboutTextColor = safeTheme.aboutTextColor || "#135A34";
+  const aboutCardBorder = safeTheme.aboutCardBorder || "#A6C5BB";
 
   const clientsList = [
     { name: "ARS Primera", sector: "Salud & Seguros", logo: "/logos/ars_primera.png", fallback: "/logos/ars_primera.jpg" },
@@ -86,11 +87,13 @@ export const PastProjectsSection: React.FC<PastProjectsSectionProps> = ({ secId 
     ]);
   };
 
+  const isGradient = typeof aboutBg === "string" && aboutBg.includes("gradient");
+
   return (
     <section
       id={secId}
       style={{
-        background: aboutBg.includes("gradient")
+        background: isGradient
           ? aboutBg
           : `linear-gradient(to bottom, ${aboutBg}, color-mix(in srgb, ${aboutBg} 92%, black), color-mix(in srgb, ${aboutBg} 84%, black))`,
       }}

@@ -298,5 +298,33 @@
         "description": "Despliegue final en tiendas y servidores de Excel, inicio de garantía de 60 días."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#004F54",
+    "accentColor": "#004F54",
+    "secondaryAccent": "#F08D17",
+    "cardBg": "#002224",
+    "cardBorder": "#F08D17",
+    "textPrimary": "#FFFFFF",
+    "textSecondary": "#D5E4E2",
+    "navBg": "#002224",
+    "h1Color": "#FFFFFF",
+    "h2Color": "#F08D17",
+    "textColor": "#D5E4E2",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#D6E5DE",
+    "aboutCardBg": "#BFDAD1",
+    "aboutTextColor": "#135A34",
+    "aboutCardBorder": "#A6C5BB"
+  },
+  "colors": {
+    "primary": "#004F54",
+    "secondary": "#F08D17",
+    "accent": "#F08D17",
+    "background": "#004F54",
+    "card": "#002224",
+    "border": "#F08D17",
+    "text": "#FFFFFF",
+    "textSecondary": "#D5E4E2"
   }
 }

@@ -93,6 +93,11 @@ export interface ProposalData {
     discountValue?: number;
     discountType?: "fixed" | "percent";
   };
+  sections?: any[];
+  canvasElements?: any[];
+  buttonActionsMap?: Record<string, any>;
+  theme?: import("@/store/useThemeStore").ThemeConfig;
+  colors?: Record<string, any>;
 }
 
 export const sampleProposal: ProposalData = {

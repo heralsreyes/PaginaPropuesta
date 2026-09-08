@@ -32,6 +32,12 @@ export const TeamRoadmapSection: React.FC<TeamRoadmapSectionProps> = ({ secId, p
   const { isDesignMode } = useStudioStore();
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(proposal.team || []);
 
+  React.useEffect(() => {
+    if (proposal.team && proposal.team.length > 0) {
+      setTeamMembers(proposal.team);
+    }
+  }, [proposal.team]);
+
   const roadmapPhases = proposal.roadmap || [];
 
   const handleDeleteMember = (index: number) => {

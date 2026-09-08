@@ -156,5 +156,33 @@
         "description": "Cierre de entrega."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#0B2545",
+    "accentColor": "#134074",
+    "secondaryAccent": "#EE6C4D",
+    "cardBg": "#1D2D44",
+    "cardBorder": "#EE6C4D",
+    "textPrimary": "#FFFFFF",
+    "textSecondary": "#8DA9C4",
+    "navBg": "#0B2545",
+    "h1Color": "#FFFFFF",
+    "h2Color": "#EE6C4D",
+    "textColor": "#8DA9C4",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#EDF2F7",
+    "aboutCardBg": "#E2E8F0",
+    "aboutTextColor": "#0B2545",
+    "aboutCardBorder": "#CBD5E0"
+  },
+  "colors": {
+    "primary": "#134074",
+    "secondary": "#EE6C4D",
+    "accent": "#EE6C4D",
+    "background": "#0B2545",
+    "card": "#1D2D44",
+    "border": "#EE6C4D",
+    "text": "#FFFFFF",
+    "textSecondary": "#8DA9C4"
   }
 }

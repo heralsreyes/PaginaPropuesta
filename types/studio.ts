@@ -19,6 +19,7 @@ export interface PageSection {
     | "inversion"
     | "empresa"
     | "contacto"
+    | "experiencia"
     | "custom";
   enabled: boolean;
   title?: string;

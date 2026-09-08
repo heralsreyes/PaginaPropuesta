@@ -17,7 +17,7 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
   const { updateCompany, updateClient } = useProposal();
 
   const companyName = proposal?.company?.name || "Enfoco";
-  const clientName = proposal?.client?.name || "Excel Puesto de bolsa";
+  const clientName = proposal?.client?.name || "Cliente Institucional";
 
   return (
     <div className="no-print fixed top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { ProposalData, sampleProposal, Requirement, PaymentTerm, RoadmapPhase, TeamMember } from "@/data/proposalData";
-import { useStudioStore, EXCEL_CUSTOM_SECTIONS, PageSection, CanvasElement, ButtonActionConfig } from "@/store/useStudioStore";
+import { useStudioStore, EXCEL_CUSTOM_SECTIONS, GENERIC_DEFAULT_SECTIONS, PageSection, CanvasElement, ButtonActionConfig } from "@/store/useStudioStore";
 import { useThemeStore, PRESET_THEMES, ThemeConfig, applyCssVars } from "@/store/useThemeStore";
 import { validateProposalData } from "@/lib/proposalValidation";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ export type ExtendedProposalPayload = Partial<ProposalData> & {
   canvasElements?: CanvasElement[];
   buttonActionsMap?: Record<string, ButtonActionConfig>;
   theme?: ThemeConfig;
+  colors?: Record<string, any>;
 };
 
 const LOCAL_STORAGE_KEY = "enfoco_proposal_data_v2";
@@ -45,13 +46,216 @@ interface ProposalContextType {
   updateClientResponsibilities: (items: string[]) => void;
   exportJson: () => void;
   importJson: (jsonString: string) => boolean;
+  loadProposalByName: (slug: string) => Promise<boolean>;
   resetToDefault: () => void;
+}
+
+const clearEditableCache = () => {
+  if (typeof window !== "undefined") {
+    try {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("editable_")) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach((k) => localStorage.removeItem(k));
+      window.dispatchEvent(new Event("enfoco-reset-all"));
+    } catch (e) {
+      console.error("Error clearing editable cache:", e);
+    }
+  }
+};
+
+import { getPresetProposal } from "@/data/presetProposals";
+
+/**
+ * Normalizes theme and color definitions from any JSON payload (theme, colors, palette, themeConfig)
+ * into a complete, valid ThemeConfig object. Falls back gracefully to known brand profiles or defaults.
+ */
+export function extractThemeFromPayload(data: ExtendedProposalPayload | any): ThemeConfig | null {
+  if (!data || typeof data !== "object") return null;
+
+  const defaultTheme = PRESET_THEMES[0].theme;
+
+  const rawTheme = data.theme || data.themeConfig;
+  const rawColors = data.colors || data.palette;
+
+  // If neither theme nor colors is supplied, check known client branding
+  if (!rawTheme && !rawColors) {
+    const clientName = (
+      data.client?.shortName ||
+      data.client?.name ||
+      data.project?.title ||
+      data.project?.code ||
+      ""
+    ).toLowerCase();
+
+    if (clientName.includes("ars") || clientName.includes("primera")) {
+      return {
+        bgMain: "#002B2E",
+        accentColor: "#004F54",
+        secondaryAccent: "#059669",
+        cardBg: "#001E20",
+        cardBorder: "#10B981",
+        textPrimary: "#FFFFFF",
+        textSecondary: "#D1FAE5",
+        navBg: "#001E20",
+        h1Color: "#FFFFFF",
+        h2Color: "#34D399",
+        textColor: "#D1FAE5",
+        cardBorderRadius: "24px",
+        aboutBg: "#D6E5DE",
+        aboutCardBg: "#BFDAD1",
+        aboutTextColor: "#135A34",
+        aboutCardBorder: "#A6C5BB",
+      };
+    }
+    if (clientName.includes("bhd")) {
+      return PRESET_THEMES.find((t) => t.id === "emerald-forest")?.theme || defaultTheme;
+    }
+    if (clientName.includes("claro")) {
+      return {
+        bgMain: "#7F1D1D",
+        accentColor: "#DC2626",
+        secondaryAccent: "#F87171",
+        cardBg: "#450A0A",
+        cardBorder: "#EF4444",
+        textPrimary: "#FEF2F2",
+        textSecondary: "#FECACA",
+        navBg: "#450A0A",
+        h1Color: "#FEF2F2",
+        h2Color: "#F87171",
+        textColor: "#FECACA",
+        cardBorderRadius: "24px",
+        aboutBg: "#FEE2E2",
+        aboutCardBg: "#FECACA",
+        aboutTextColor: "#991B1B",
+        aboutCardBorder: "#F87171",
+      };
+    }
+    if (clientName.includes("cepm")) {
+      return PRESET_THEMES.find((t) => t.id === "midnight-cyan")?.theme || defaultTheme;
+    }
+    if (clientName.includes("ramos")) {
+      return PRESET_THEMES.find((t) => t.id === "royal-indigo")?.theme || defaultTheme;
+    }
+    if (clientName.includes("puntacana")) {
+      return {
+        bgMain: "#0B2545",
+        accentColor: "#134074",
+        secondaryAccent: "#EE6C4D",
+        cardBg: "#1D2D44",
+        cardBorder: "#EE6C4D",
+        textPrimary: "#FFFFFF",
+        textSecondary: "#8DA9C4",
+        navBg: "#0B2545",
+        h1Color: "#FFFFFF",
+        h2Color: "#EE6C4D",
+        textColor: "#8DA9C4",
+        cardBorderRadius: "24px",
+        aboutBg: "#EDF2F7",
+        aboutCardBg: "#E2E8F0",
+        aboutTextColor: "#0B2545",
+        aboutCardBorder: "#CBD5E0",
+      };
+    }
+    if (clientName.includes("excel")) {
+      return PRESET_THEMES[0].theme;
+    }
+    return null;
+  }
+
+  // Combine rawColors and rawTheme with rawTheme taking priority
+  const source: Record<string, any> = {
+    ...(typeof rawColors === "object" ? rawColors : {}),
+    ...(typeof rawTheme === "object" ? rawTheme : {}),
+  };
+
+  const bgMain =
+    source.bgMain ||
+    source.background ||
+    source.bg ||
+    source.mainBg ||
+    defaultTheme.bgMain;
+
+  const accentColor =
+    source.accentColor ||
+    source.primary ||
+    source.accent ||
+    source.brand ||
+    defaultTheme.accentColor;
+
+  const secondaryAccent =
+    source.secondaryAccent ||
+    source.secondary ||
+    source.accent2 ||
+    source.gold ||
+    source.highlight ||
+    defaultTheme.secondaryAccent;
+
+  const cardBg =
+    source.cardBg ||
+    source.card ||
+    source.cardBackground ||
+    defaultTheme.cardBg;
+
+  const cardBorder =
+    source.cardBorder ||
+    source.border ||
+    source.cardBorderColor ||
+    secondaryAccent ||
+    defaultTheme.cardBorder;
+
+  const textPrimary =
+    source.textPrimary ||
+    source.text ||
+    source.primaryText ||
+    source.textColor ||
+    defaultTheme.textPrimary;
+
+  const textSecondary =
+    source.textSecondary ||
+    source.muted ||
+    source.secondaryText ||
+    defaultTheme.textSecondary;
+
+  const navBg =
+    source.navBg ||
+    source.nav ||
+    source.headerBg ||
+    cardBg ||
+    defaultTheme.navBg;
+
+  return {
+    bgMain,
+    accentColor,
+    secondaryAccent,
+    cardBg,
+    cardBorder,
+    textPrimary,
+    textSecondary,
+    navBg,
+    h1Color: source.h1Color || textPrimary,
+    h2Color: source.h2Color || secondaryAccent,
+    textColor: source.textColor || textSecondary,
+    cardBorderRadius: source.cardBorderRadius || "24px",
+    aboutBg: source.aboutBg || defaultTheme.aboutBg || "#D6E5DE",
+    aboutCardBg: source.aboutCardBg || defaultTheme.aboutCardBg || "#BFDAD1",
+    aboutTextColor: source.aboutTextColor || defaultTheme.aboutTextColor || "#135A34",
+    aboutCardBorder: source.aboutCardBorder || defaultTheme.aboutCardBorder || "#A6C5BB",
+  };
 }
 
 const ProposalContext = createContext<ProposalContextType | undefined>(undefined);
 
-export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [proposal, setProposal] = useState<ProposalData>(sampleProposal);
+export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProposalSlug?: string }> = ({
+  children,
+  initialProposalSlug,
+}) => {
+  const initialPreset = getPresetProposal(initialProposalSlug);
+  const [proposal, setProposal] = useState<ProposalData>(initialPreset || sampleProposal);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAdmin, setIsAdminState] = useState(false);
 
@@ -88,13 +292,32 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         // 2. Load proposal JSON dynamically if ?proposal=name parameter exists (Takes priority over LocalStorage)
         if (proposalParam) {
-          const cleanParam = proposalParam.trim().toLowerCase();
+          const cleanParam = decodeURIComponent(proposalParam).trim().toLowerCase();
+          const presetMatch = getPresetProposal(cleanParam);
+          if (presetMatch) {
+            clearEditableCache();
+            setProposal(presetMatch);
+            hydrateExtendedState(presetMatch);
+            toast.success(`Cargada propuesta de ${presetMatch.client.name}`);
+            setIsLoaded(true);
+            return;
+          }
+
+          const dashed = cleanParam.replace(/[\s_]+/g, "-");
+          const underscored = cleanParam.replace(/[\s-]+/g, "_");
           const candidates = [
             `/proposals/${cleanParam}.json`,
-            `/proposals/${cleanParam.replace(/_/g, "-")}.json`,
-            `/proposals/${cleanParam.replace(/-/g, "_")}.json`,
-            `/proposals/propuesta_${cleanParam.replace(/-/g, "_")}_ENF-PROP-2026-08.json`,
+            `/proposals/${dashed}.json`,
+            `/proposals/${underscored}.json`,
+            `/proposals/propuesta_${underscored}_ENF-PROP-2026-08.json`,
           ];
+
+          if (cleanParam.includes("ars") || cleanParam.includes("primera")) {
+            candidates.unshift("/proposals/ars-primera.json");
+          }
+          if (cleanParam.includes("excel")) {
+            candidates.unshift("/proposals/excel-puesto-de-bolsa.json");
+          }
 
           for (const candidatePath of candidates) {
             try {
@@ -103,6 +326,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 const remoteJson = await res.json();
                 const validation = validateProposalData(remoteJson);
                 if (validation.success && validation.data) {
+                  clearEditableCache();
                   setProposal(remoteJson);
                   hydrateExtendedState(remoteJson);
                   toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
@@ -479,25 +703,50 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Helper to hydrate Design Studio stores from imported JSON
   const hydrateExtendedState = (data: ExtendedProposalPayload) => {
+    if (!data || typeof data !== "object") return;
+
+    const clientName = (data.client?.name || "").toUpperCase();
+    const clientShortName = (data.client?.shortName || "").toUpperCase();
+    const projectCode = (data.project?.code || "").toUpperCase();
+    const projectTitle = (data.project?.title || "").toLowerCase();
+
     const isExcel =
-      data.client?.shortName?.toUpperCase() === "EXCEL" ||
-      data.project?.code?.includes("EXCEL") ||
-      data.project?.title?.toLowerCase().includes("excel");
+      clientShortName === "EXCEL" ||
+      clientName.includes("EXCEL") ||
+      projectCode.includes("EXCEL") ||
+      projectTitle.includes("excel");
 
     if (data.sections && Array.isArray(data.sections) && data.sections.length > 0) {
       useStudioStore.setState({ sections: data.sections });
     } else if (isExcel) {
       useStudioStore.setState({ sections: EXCEL_CUSTOM_SECTIONS });
+    } else {
+      useStudioStore.setState({ sections: GENERIC_DEFAULT_SECTIONS });
     }
 
     if (data.canvasElements && Array.isArray(data.canvasElements)) {
       useStudioStore.setState({ canvasElements: data.canvasElements });
+    } else {
+      useStudioStore.setState({ canvasElements: [] });
     }
     if (data.buttonActionsMap && typeof data.buttonActionsMap === "object") {
       useStudioStore.setState({ buttonActionsMap: data.buttonActionsMap });
+    } else {
+      useStudioStore.setState({ buttonActionsMap: {} });
     }
-    if (data.theme) {
-      useThemeStore.getState().applyPreset(data.theme);
+    // Theme & Colors extraction and application
+    const extractedTheme = extractThemeFromPayload(data);
+    if (extractedTheme) {
+      useThemeStore.getState().applyPreset(extractedTheme);
+      applyCssVars(extractedTheme);
+      try {
+        localStorage.setItem(
+          "enfoco-theme-storage",
+          JSON.stringify({ state: { theme: extractedTheme }, version: 0 })
+        );
+      } catch (err) {
+        console.warn("Could not save theme to localStorage:", err);
+      }
     }
   };
 
@@ -505,12 +754,26 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const exportJson = () => {
     const studioState = useStudioStore.getState();
     const themeState = useThemeStore.getState();
+    const currentTheme = themeState.theme;
+
     const fullProposalData = {
       ...proposal,
       sections: studioState.sections,
       canvasElements: studioState.canvasElements,
       buttonActionsMap: studioState.buttonActionsMap,
-      theme: themeState.theme,
+      theme: currentTheme,
+      colors: {
+        primary: currentTheme.accentColor,
+        secondary: currentTheme.secondaryAccent,
+        background: currentTheme.bgMain,
+        card: currentTheme.cardBg,
+        border: currentTheme.cardBorder,
+        text: currentTheme.textPrimary,
+        textSecondary: currentTheme.textSecondary,
+        nav: currentTheme.navBg,
+        h1: currentTheme.h1Color || currentTheme.textPrimary,
+        h2: currentTheme.h2Color || currentTheme.secondaryAccent,
+      },
     };
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullProposalData, null, 2));
     const downloadAnchor = document.createElement("a");
@@ -520,7 +783,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-    toast.success("Archivo JSON de la propuesta descargado.");
+    toast.success("Archivo JSON de la propuesta descargado con temas y colores.");
   };
 
   // Import JSON File
@@ -532,12 +795,80 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         toast.error(`Estructura JSON inválida: ${validation.error || "Campos requeridos faltantes"}`);
         return false;
       }
+      clearEditableCache();
       setProposal(parsed);
       hydrateExtendedState(parsed);
-      toast.success("Propuesta cargada exitosamente desde el archivo JSON.");
+      toast.success(`Propuesta de ${parsed.client?.name || "cliente"} cargada con éxito.`);
       return true;
     } catch (e) {
       toast.error("Error al procesar el archivo JSON. Formato no válido.");
+      return false;
+    }
+  };
+
+  // Quick Load Proposal by slug / client name
+  const loadProposalByName = async (slug: string): Promise<boolean> => {
+    try {
+      const cleanParam = decodeURIComponent(slug).trim().toLowerCase();
+      const dashed = cleanParam.replace(/[\s_]+/g, "-");
+
+      // Check preset proposals first (instant in-memory switch with brand colors)
+      const presetMatch = getPresetProposal(cleanParam);
+      if (presetMatch) {
+        clearEditableCache();
+        setProposal(presetMatch);
+        hydrateExtendedState(presetMatch);
+        if (typeof window !== "undefined") {
+          const newUrl = new URL(window.location.href);
+          newUrl.searchParams.set("proposal", dashed);
+          window.history.pushState({}, "", newUrl.toString());
+        }
+        toast.success(`Cargada propuesta de ${presetMatch.client.name}`);
+        return true;
+      }
+
+      const underscored = cleanParam.replace(/[\s-]+/g, "_");
+      const candidates = [
+        `/proposals/${cleanParam}.json`,
+        `/proposals/${dashed}.json`,
+        `/proposals/${underscored}.json`,
+        `/proposals/propuesta_${underscored}_ENF-PROP-2026-08.json`,
+      ];
+
+      if (cleanParam.includes("ars") || cleanParam.includes("primera")) {
+        candidates.unshift("/proposals/ars-primera.json");
+      }
+      if (cleanParam.includes("excel")) {
+        candidates.unshift("/proposals/excel-puesto-de-bolsa.json");
+      }
+
+      for (const candidatePath of candidates) {
+        try {
+          const res = await fetch(candidatePath);
+          if (res.ok) {
+            const remoteJson = await res.json();
+            const validation = validateProposalData(remoteJson);
+            if (validation.success && validation.data) {
+              clearEditableCache();
+              setProposal(remoteJson);
+              hydrateExtendedState(remoteJson);
+              if (typeof window !== "undefined") {
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set("proposal", dashed);
+                window.history.pushState({}, "", newUrl.toString());
+              }
+              toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
+              return true;
+            }
+          }
+        } catch (err) {
+          console.warn(`[ProposalContext] No se pudo cargar desde ${candidatePath}:`, err);
+        }
+      }
+      toast.error(`No se encontró la propuesta '${slug}'`);
+      return false;
+    } catch (e) {
+      console.error("Error cargando propuesta:", e);
       return false;
     }
   };
@@ -655,6 +986,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateClientResponsibilities,
         exportJson,
         importJson,
+        loadProposalByName,
         resetToDefault,
       }}
     >

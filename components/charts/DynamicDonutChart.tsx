@@ -16,18 +16,36 @@ interface DynamicDonutChartProps {
   formattedYield?: string;
   totalUsd?: number;
   totalYield?: number;
+  annualRate?: number;
+  yieldAmountUsd?: number;
 }
 
 const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
   allocations,
   formattedYield,
   totalYield,
+  annualRate,
+  yieldAmountUsd,
   totalUsd,
 }) => {
   const [hoveredIdx, setHoveredIdx] = React.useState<number | null>(null);
 
   let accumulatedPercent = 0;
-  const displayYield = formattedYield || (totalYield ? `${totalYield.toFixed(2)}%` : "10.15%");
+
+  // Safeguard: If totalYield > 100, it is a dollar interest amount, not a percentage rate
+  const effectiveYieldAmount =
+    yieldAmountUsd !== undefined
+      ? yieldAmountUsd
+      : totalYield !== undefined && totalYield > 100
+      ? totalYield
+      : undefined;
+
+  const effectiveRate =
+    annualRate !== undefined
+      ? `${annualRate.toFixed(2)}%`
+      : totalYield !== undefined && totalYield <= 100
+      ? `${totalYield.toFixed(2)}%`
+      : formattedYield || "9.50%";
 
   const activeHoverItem = hoveredIdx !== null ? allocations[hoveredIdx] : null;
 
@@ -91,10 +109,18 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
           ) : (
             <>
               <span className="text-[10px] sm:text-xs text-slate-300 font-mono uppercase tracking-wider font-bold">
-                RENDIMIENTO
+                TASA ESTIMADA
               </span>
-              <span className="text-xl sm:text-2xl font-black text-[#F08D17] font-mono">{displayYield}</span>
-              <span className="text-[9px] text-emerald-300 font-mono font-bold">ESTIMADO ANUAL</span>
+              <span className="text-xl sm:text-2xl font-black text-[#F08D17] font-mono">
+                {effectiveRate}
+              </span>
+              {effectiveYieldAmount !== undefined ? (
+                <span className="text-[9px] sm:text-[10px] text-emerald-300 font-mono font-bold block">
+                  +${Math.round(effectiveYieldAmount).toLocaleString()} USD INTERÉS
+                </span>
+              ) : (
+                <span className="text-[9px] text-emerald-300 font-mono font-bold">ANUAL ESTIMADO</span>
+              )}
             </>
           )}
         </div>

@@ -116,6 +116,8 @@ export const proposalSchema = z
     budget: budgetSchema,
     clientResponsibilities: z.array(z.string()).optional().default([]),
     enfocoResponsibilities: z.array(z.string()).optional().default([]),
+    theme: z.record(z.string(), z.any()).optional(),
+    colors: z.record(z.string(), z.any()).optional(),
   })
   .passthrough();
 

@@ -17,6 +17,18 @@ export type {
   CanvasElement,
 };
 
+export const GENERIC_DEFAULT_SECTIONS: PageSection[] = [
+  { id: "hero", label: "01. Presentación & Portada", componentType: "hero", enabled: true },
+  { id: "alcance", label: "02. Alcance & Módulos", componentType: "alcance", enabled: true },
+  { id: "cronograma", label: "03. Cronograma & Fases EDT", componentType: "cronograma", enabled: true },
+  { id: "equipo", label: "04. Equipo Especialista", componentType: "equipo", enabled: true },
+  { id: "responsabilidades", label: "05. Garantía & Responsabilidades", componentType: "responsabilidades", enabled: true },
+  { id: "inversion", label: "06. Propuesta Económica & Inversión", componentType: "inversion", enabled: true },
+  { id: "empresa", label: "07. Sobre ENFOCO S.R.L.", componentType: "empresa", enabled: true },
+  { id: "experiencia", label: "08. Casos de Éxito & Clientes", componentType: "experiencia", enabled: true },
+  { id: "contacto", label: "09. Cierre & Firma Digital", componentType: "contacto", enabled: true },
+];
+
 export const EXCEL_CUSTOM_SECTIONS: PageSection[] = [
   { id: "sec-portada-excel", label: "01. Presentación Ejecutiva", componentType: "custom", enabled: true },
   { id: "sec-valor-propuesta", label: "02. Arquitectura de Valor & Ecosistema", componentType: "custom", enabled: true },
@@ -32,7 +44,7 @@ export const EXCEL_CUSTOM_SECTIONS: PageSection[] = [
   { id: "sec-cierre-acuerdo", label: "12. Cierre & Firma Digital", componentType: "custom", enabled: true },
 ];
 
-export const DEFAULT_PAGE_SECTIONS: PageSection[] = EXCEL_CUSTOM_SECTIONS;
+export const DEFAULT_PAGE_SECTIONS: PageSection[] = GENERIC_DEFAULT_SECTIONS;
 
 interface StudioState {
   isDesignMode: boolean;

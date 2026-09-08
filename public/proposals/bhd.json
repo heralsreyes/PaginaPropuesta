@@ -180,5 +180,33 @@
         "description": "Puesta en marcha e inicio de garantía de 60 días."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#064E3B",
+    "accentColor": "#059669",
+    "secondaryAccent": "#34D399",
+    "cardBg": "#022C22",
+    "cardBorder": "#10B981",
+    "textPrimary": "#ECFDF5",
+    "textSecondary": "#A7F3D0",
+    "navBg": "#022C22",
+    "h1Color": "#ECFDF5",
+    "h2Color": "#34D399",
+    "textColor": "#A7F3D0",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#D1FAE5",
+    "aboutCardBg": "#A7F3D0",
+    "aboutTextColor": "#064E3B",
+    "aboutCardBorder": "#6EE7B7"
+  },
+  "colors": {
+    "primary": "#059669",
+    "secondary": "#34D399",
+    "accent": "#10B981",
+    "background": "#064E3B",
+    "card": "#022C22",
+    "border": "#10B981",
+    "text": "#ECFDF5",
+    "textSecondary": "#A7F3D0"
   }
 }

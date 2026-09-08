@@ -156,5 +156,33 @@
         "description": "Entrega final e inicio de garantía."
       }
     ]
+  },
+  "theme": {
+    "bgMain": "#1E1B4B",
+    "accentColor": "#4338CA",
+    "secondaryAccent": "#818CF8",
+    "cardBg": "#312E81",
+    "cardBorder": "#6366F1",
+    "textPrimary": "#EEF2FF",
+    "textSecondary": "#C7D2FE",
+    "navBg": "#1E1B4B",
+    "h1Color": "#EEF2FF",
+    "h2Color": "#818CF8",
+    "textColor": "#C7D2FE",
+    "cardBorderRadius": "24px",
+    "aboutBg": "#E0E7FF",
+    "aboutCardBg": "#C7D2FE",
+    "aboutTextColor": "#3730A3",
+    "aboutCardBorder": "#818CF8"
+  },
+  "colors": {
+    "primary": "#4338CA",
+    "secondary": "#818CF8",
+    "accent": "#6366F1",
+    "background": "#1E1B4B",
+    "card": "#312E81",
+    "border": "#6366F1",
+    "text": "#EEF2FF",
+    "textSecondary": "#C7D2FE"
   }
 }
