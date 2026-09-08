@@ -88,8 +88,8 @@ export const CanvaSidebar: React.FC = () => {
 
       {/* Expandable Secondary Panel */}
       <div
-        className={`bg-white border-r border-[#E4E4E7] flex flex-col justify-between shadow-xl transition-all duration-300 relative overflow-hidden z-10 ${
-          isPanelOpen ? "w-80 opacity-100" : "w-0 opacity-0 pointer-events-none"
+        className={`bg-[#FAF9F6] border-r border-[#E4E4E7] flex flex-col justify-between shadow-xl transition-all duration-300 relative overflow-hidden z-10 ${
+          isPanelOpen ? "w-72 opacity-100" : "w-0 opacity-0 pointer-events-none"
         }`}
       >
         <button
@@ -100,7 +100,7 @@ export const CanvaSidebar: React.FC = () => {
           <ChevronLeft className="w-4 h-4" />
         </button>
 
-        <div className="p-4 border-b border-[#E4E4E7] bg-[#FAF9F6] flex items-center justify-between shrink-0">
+        <div className="px-3.5 py-3 border-b border-[#E4E4E7] bg-[#FAF9F6] flex items-center justify-between shrink-0">
           <span className="text-xs font-extrabold uppercase tracking-wider text-[#111111] font-mono flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#2563EB]" />
             <span>
@@ -123,6 +123,15 @@ export const CanvaSidebar: React.FC = () => {
           {activeToolTab === "mockups" && <SidebarMockupsTab />}
           {activeToolTab === "presupuesto" && <SidebarBudgetTab />}
           {activeToolTab === "json" && <SidebarJsonTab />}
+        </div>
+
+        {/* Grounding Bottom Status Bar */}
+        <div className="px-3 py-2 border-t border-[#E4E4E7] bg-white shrink-0 text-[10px] font-medium text-zinc-400 flex items-center justify-between select-none">
+          <span className="flex items-center gap-1.5 text-zinc-500">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            Canva Studio
+          </span>
+          <span className="font-mono text-[9px] text-zinc-400">Ctrl+Shift+E</span>
         </div>
       </div>
     </aside>

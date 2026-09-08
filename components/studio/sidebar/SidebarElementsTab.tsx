@@ -538,9 +538,9 @@ export const SidebarElementsTab: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4 text-xs p-4">
+    <div className="space-y-3 text-xs p-3">
       {/* Main Subtabs Navigation */}
-      <div className="grid grid-cols-6 gap-1 p-1 bg-[#F4F4F5] rounded-xl border border-[#E4E4E7] text-[10px]">
+      <div className="grid grid-cols-6 gap-0.5 p-1 bg-zinc-200/60 rounded-xl border border-zinc-200/80 text-[9.5px]">
         {(
           [
             { id: "formas", label: "Formas" },
@@ -554,7 +554,7 @@ export const SidebarElementsTab: React.FC = () => {
           <button
             key={tab.id}
             onClick={() => setActiveSubCategory(tab.id)}
-            className={`py-1.5 rounded-lg font-bold text-center transition-all cursor-pointer truncate ${
+            className={`py-1.5 rounded-lg font-bold text-center transition-all cursor-pointer truncate px-0.5 ${
               activeSubCategory === tab.id
                 ? "bg-white text-[#2563EB] shadow-xs"
                 : "text-[#71717A] hover:text-zinc-900"
@@ -565,17 +565,17 @@ export const SidebarElementsTab: React.FC = () => {
         ))}
       </div>
 
-      <p className="text-[11px] text-zinc-500 italic">
-        💡 Arrastra cualquier elemento directamente al lienzo o haz clic para insertarlo.
+      <p className="text-[10.5px] text-zinc-500 italic">
+        💡 Arrastra cualquier elemento al lienzo o haz clic para insertarlo.
       </p>
 
       {/* ========================================== */}
       {/* 1. SECCIÓN FORMAS & RAYAS                  */}
       {/* ========================================== */}
       {activeSubCategory === "formas" && (
-        <div className="space-y-3.5">
+        <div className="space-y-2.5">
           {/* Categorías de formas */}
-          <div className="flex flex-wrap gap-1 p-1 bg-zinc-100 rounded-lg text-[10px] font-bold">
+          <div className="flex flex-wrap gap-1 p-1 bg-zinc-200/60 rounded-lg text-[9.5px] font-bold">
             {(
               [
                 { id: "todas", label: "Todas" },
@@ -601,7 +601,7 @@ export const SidebarElementsTab: React.FC = () => {
           </div>
 
           {/* Grid de Formas */}
-          <div className="grid grid-cols-2 gap-2.5 max-h-[480px] overflow-y-auto pr-1">
+          <div className="grid grid-cols-2 gap-2 pr-0.5">
             {filteredShapes.map((shape) => {
               const elementData: Parameters<typeof addCanvasElement>[0] = {
                 type: shape.cat === "lineas" ? "line" : "shape",
@@ -620,106 +620,199 @@ export const SidebarElementsTab: React.FC = () => {
                   draggable
                   onDragStart={(e) => handleDragStart(e, elementData)}
                   onClick={() => addCanvasElement(elementData)}
-                  className="p-3 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all flex flex-col items-center justify-between gap-2 shadow-xs group"
+                  className="p-2.5 rounded-xl border border-zinc-200/80 bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all flex flex-col items-center justify-between gap-1 shadow-2xs group text-center"
                 >
                   {/* Visual Preview */}
-                  <div className="w-16 h-14 flex items-center justify-center pointer-events-none group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-11 flex items-center justify-center pointer-events-none group-hover:scale-110 transition-transform">
                     {shape.shapeType === "circle" && (
-                      <div className="w-10 h-10 rounded-full bg-[#F08D17] border-2 border-white shadow-sm" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="44" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" />
+                      </svg>
                     )}
                     {shape.shapeType === "ellipse" && (
-                      <div className="w-12 h-7 rounded-full bg-[#004F54] border-2 border-[#F08D17] shadow-sm" />
+                      <svg className="w-11 h-7" viewBox="0 0 100 60">
+                        <ellipse cx="50" cy="30" rx="44" ry="24" fill="#004F54" stroke="#F08D17" strokeWidth="4" />
+                      </svg>
                     )}
                     {shape.shapeType === "square" && (
-                      <div className="w-9 h-9 bg-[#003B3F] border-2 border-[#F08D17] shadow-sm" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <rect x="8" y="8" width="84" height="84" fill="#003B3F" stroke="#F08D17" strokeWidth="6" />
+                      </svg>
                     )}
                     {shape.shapeType === "rounded_rect" && (
-                      <div className="w-12 h-8 rounded-xl bg-[#004F54] border-2 border-[#F08D17] shadow-sm" />
+                      <svg className="w-11 h-7" viewBox="0 0 100 65">
+                        <rect x="6" y="6" width="88" height="53" rx="14" fill="#004F54" stroke="#F08D17" strokeWidth="5" />
+                      </svg>
                     )}
                     {shape.shapeType === "triangle_up" && (
-                      <div className="w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] border-r-transparent border-b-[32px] border-b-[#F08D17]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="50,6 94,94 6,94" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "triangle_down" && (
-                      <div className="w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] border-r-transparent border-t-[32px] border-t-[#F08D17]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="6,6 94,6 50,94" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "triangle_right" && (
-                      <div className="w-0 h-0 border-t-[16px] border-t-transparent border-b-[16px] border-b-transparent border-l-[28px] border-l-[#004F54]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="6,6 94,50 6,94" fill="#004F54" stroke="#F08D17" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "triangle_left" && (
-                      <div className="w-0 h-0 border-t-[16px] border-t-transparent border-b-[16px] border-b-transparent border-r-[28px] border-r-[#004F54]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="94,6 6,50 94,94" fill="#004F54" stroke="#F08D17" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "diamond" && (
-                      <div className="w-8 h-8 rotate-45 bg-[#F08D17] border-2 border-white shadow-sm" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="50,4 96,50 50,96 4,50" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "pentagon" && (
-                      <Hexagon className="w-9 h-9 text-[#004F54] fill-[#004F54]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="50,4 96,38 78,94 22,94 4,38" fill="#004F54" stroke="#F08D17" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "hexagon" && (
-                      <Hexagon className="w-10 h-10 text-[#F08D17] fill-[#003B3F]" />
+                      <svg className="w-9 h-8" viewBox="0 0 100 100">
+                        <polygon points="25,6 75,6 96,50 75,94 25,94 4,50" fill="#003B3F" stroke="#F08D17" strokeWidth="5" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "octagon" && (
-                      <div className="w-9 h-9 rounded-lg rotate-12 bg-[#F08D17] border-2 border-white" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                    {shape.shapeType === "trapezoid" && (
+                      <svg className="w-10 h-7" viewBox="0 0 100 80">
+                        <polygon points="22,6 78,6 96,74 4,74" fill="#004F54" stroke="#F08D17" strokeWidth="5" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                    {shape.shapeType === "parallelogram" && (
+                      <svg className="w-11 h-7" viewBox="0 0 100 70">
+                        <polygon points="26,6 96,6 74,64 4,64" fill="#003B3F" stroke="#F08D17" strokeWidth="5" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "star_4" && (
-                      <Sparkles className="w-9 h-9 text-[#F08D17] fill-[#F08D17]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="50,4 62,38 96,50 62,62 50,96 38,62 4,50 38,38" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "star_5" && (
-                      <Star className="w-9 h-9 text-[#F08D17] fill-[#F08D17]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="50,4 63,35 97,37 70,58 80,92 50,72 20,92 30,58 3,37 37,35" fill="#F08D17" stroke="#FFFFFF" strokeWidth="3" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "star_6" && (
-                      <Award className="w-9 h-9 text-[#004F54] fill-[#F08D17]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="50,2 62,26 88,14 78,38 98,50 78,62 88,86 62,74 50,98 38,74 12,86 22,62 2,50 22,38 12,14 38,26" fill="#F08D17" stroke="#004F54" strokeWidth="3" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "cross" && (
-                      <Plus className="w-9 h-9 text-[#F08D17] stroke-[4]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <polygon points="36,4 64,4 64,36 96,36 96,64 64,64 64,96 36,96 36,64 4,64 4,36 36,36" fill="#F08D17" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_right" && (
-                      <ArrowRight className="w-10 h-7 text-[#F08D17] stroke-[3]" />
+                      <svg className="w-10 h-5" viewBox="0 0 100 40">
+                        <line x1="6" y1="20" x2="84" y2="20" stroke="#F08D17" strokeWidth="10" strokeLinecap="round" />
+                        <polygon points="76,6 98,20 76,34" fill="#F08D17" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_left" && (
-                      <ArrowLeft className="w-10 h-7 text-[#F08D17] stroke-[3]" />
+                      <svg className="w-10 h-5" viewBox="0 0 100 40">
+                        <line x1="94" y1="20" x2="16" y2="20" stroke="#F08D17" strokeWidth="10" strokeLinecap="round" />
+                        <polygon points="24,6 2,20 24,34" fill="#F08D17" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_up" && (
-                      <ArrowUp className="w-7 h-10 text-[#F08D17] stroke-[3]" />
+                      <svg className="w-5 h-8" viewBox="0 0 40 100">
+                        <line x1="20" y1="94" x2="20" y2="16" stroke="#F08D17" strokeWidth="10" strokeLinecap="round" />
+                        <polygon points="6,24 20,2 34,24" fill="#F08D17" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_down" && (
-                      <ArrowDown className="w-7 h-10 text-[#F08D17] stroke-[3]" />
+                      <svg className="w-5 h-8" viewBox="0 0 40 100">
+                        <line x1="20" y1="6" x2="20" y2="84" stroke="#F08D17" strokeWidth="10" strokeLinecap="round" />
+                        <polygon points="6,76 20,98 34,76" fill="#F08D17" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_block_right" && (
-                      <div className="flex items-center">
-                        <div className="w-6 h-3 bg-[#004F54]" />
-                        <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[12px] border-l-[#004F54]" />
-                      </div>
+                      <svg className="w-11 h-6" viewBox="0 0 100 60">
+                        <polygon points="4,20 58,20 58,6 96,30 58,54 58,40 4,40" fill="#004F54" stroke="#F08D17" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                    {shape.shapeType === "arrow_block_left" && (
+                      <svg className="w-11 h-6" viewBox="0 0 100 60">
+                        <polygon points="96,20 42,20 42,6 4,30 42,54 42,40 96,40" fill="#004F54" stroke="#F08D17" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_curved" && (
-                      <div className="text-[#F08D17] font-black text-2xl">⤷</div>
+                      <svg className="w-8 h-8" viewBox="0 0 100 100" fill="none">
+                        <path d="M14,24 C60,24 80,44 80,72" stroke="#F08D17" strokeWidth="10" strokeLinecap="round" />
+                        <polygon points="66,66 80,92 94,66" fill="#F08D17" />
+                      </svg>
                     )}
                     {shape.shapeType === "arrow_double_h" && (
-                      <div className="text-[#004F54] font-black text-xl">↔</div>
+                      <svg className="w-11 h-5" viewBox="0 0 100 40">
+                        <line x1="16" y1="20" x2="84" y2="20" stroke="#004F54" strokeWidth="8" strokeLinecap="round" />
+                        <polygon points="20,8 2,20 20,32" fill="#004F54" />
+                        <polygon points="80,8 98,20 80,32" fill="#004F54" />
+                      </svg>
                     )}
-                    {shape.shapeType === "line_solid" && (
-                      <div className="w-12 h-1 bg-[#F08D17] rounded-full" />
+                    {shape.shapeType === "arrow_double_v" && (
+                      <svg className="w-5 h-8" viewBox="0 0 40 100">
+                        <line x1="20" y1="16" x2="20" y2="84" stroke="#004F54" strokeWidth="8" strokeLinecap="round" />
+                        <polygon points="8,20 20,2 32,20" fill="#004F54" />
+                        <polygon points="8,80 20,98 32,80" fill="#004F54" />
+                      </svg>
+                    )}
+                    {shape.shapeType === "chevron_right" && (
+                      <svg className="w-6 h-8" viewBox="0 0 60 100">
+                        <polyline points="12,12 48,50 12,88" fill="none" stroke="#F08D17" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                    {shape.id === "sh-scroll-dots" && (
+                      <div className="flex flex-col items-center justify-center gap-1">
+                        <div className="w-2 h-2 rounded-full bg-[#F08D17]" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                      </div>
+                    )}
+                    {shape.id === "sh-sprint-bar" && (
+                      <div className="w-11 h-2.5 bg-[#002224] rounded-full overflow-hidden p-0.5 border border-emerald-500/50">
+                        <div className="w-2/3 h-full bg-emerald-400 rounded-full" />
+                      </div>
+                    )}
+                    {shape.shapeType === "line_solid" && shape.id !== "sh-scroll-dots" && shape.id !== "sh-sprint-bar" && (
+                      <div className="w-11 h-1.5 bg-[#F08D17] rounded-full shadow-xs" />
                     )}
                     {shape.shapeType === "line_dashed" && (
-                      <div className="w-12 border-b-2 border-dashed border-[#004F54]" />
+                      <div className="w-11 border-b-2 border-dashed border-[#004F54]" />
                     )}
                     {shape.shapeType === "line_neon" && (
-                      <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#F08D17] to-transparent relative flex items-center justify-center">
+                      <div className="w-11 h-0.5 bg-gradient-to-r from-transparent via-[#F08D17] to-transparent relative flex items-center justify-center">
                         <div className="w-2 h-2 rotate-45 bg-[#F08D17]" />
                       </div>
                     )}
                     {shape.shapeType === "line_vertical" && (
-                      <div className="w-1 h-10 bg-[#F08D17] rounded-full" />
+                      <div className="w-1.5 h-8 bg-[#F08D17] rounded-full shadow-xs" />
                     )}
                     {shape.shapeType === "pill_badge" && (
-                      <div className="px-2 py-0.5 rounded-full bg-[#F08D17] text-white text-[8px] font-bold">
+                      <div className="px-2.5 py-0.5 rounded-full bg-[#F08D17] text-white text-[8px] font-bold tracking-wider font-mono shadow-xs border border-white">
                         BADGE
                       </div>
                     )}
                     {shape.shapeType === "speech_bubble" && (
-                      <MessageSquare className="w-9 h-9 text-[#003B3F] fill-[#003B3F]" />
+                      <svg className="w-8 h-8" viewBox="0 0 100 100">
+                        <path d="M10,20 Q10,10 20,10 L80,10 Q90,10 90,20 L90,60 Q90,70 80,70 L30,70 L14,88 L18,70 L20,70 Q10,70 10,60 Z" fill="#003B3F" stroke="#F08D17" strokeWidth="4" strokeLinejoin="round" />
+                      </svg>
                     )}
                     {shape.shapeType === "glass_container" && (
-                      <div className="w-12 h-8 rounded-lg bg-zinc-400/30 border border-zinc-500/50 shadow-inner" />
+                      <div className="w-11 h-7 rounded-lg bg-zinc-300/40 border border-zinc-400/60 shadow-inner backdrop-blur-xs flex items-center justify-center">
+                        <span className="text-[7px] font-mono text-zinc-600 font-bold">GLASS</span>
+                      </div>
                     )}
                   </div>
 
@@ -735,6 +828,24 @@ export const SidebarElementsTab: React.FC = () => {
               );
             })}
           </div>
+
+          {/* Bottom Design Tip to eliminate dead empty whitespace */}
+          <div className="pt-2 space-y-2 select-none">
+            {shapeCategoryFilter !== "todas" && (
+              <button
+                onClick={() => setShapeCategoryFilter("todas")}
+                className="w-full py-1.5 text-center text-[10px] font-bold text-[#2563EB] hover:text-blue-800 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200/80 rounded-lg transition-colors cursor-pointer"
+              >
+                Mostrar todas las formas ({allShapes.length})
+              </button>
+            )}
+            <div className="p-2.5 rounded-xl bg-blue-50/50 border border-blue-100/80 text-[10px] text-zinc-600 flex items-start gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#2563EB] shrink-0 mt-0.5" />
+              <p className="leading-tight">
+                <strong className="text-zinc-800 font-bold">Arrastra</strong> al lienzo para colocar libremente o haz <strong className="text-zinc-800 font-bold">clic</strong> para insertar en el centro.
+              </p>
+            </div>
+          </div>
         </div>
       )}
 
@@ -742,21 +853,21 @@ export const SidebarElementsTab: React.FC = () => {
       {/* 2. SECCIÓN ICONOTECA / ICONS               */}
       {/* ========================================== */}
       {activeSubCategory === "iconos" && (
-        <div className="space-y-3.5">
+        <div className="space-y-2.5">
           {/* Buscador */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Buscar icono (ej: banco, seguridad, dolar, app)..."
+              placeholder="Buscar icono..."
               value={iconSearchQuery}
               onChange={(e) => setIconSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-zinc-300 bg-white text-xs outline-none focus:border-[#2563EB] shadow-2xs"
+              className="w-full pl-7 pr-3 py-1.5 rounded-xl border border-zinc-200/80 bg-white text-xs outline-none focus:border-[#2563EB] shadow-2xs"
             />
           </div>
 
           {/* Categorías de Iconos */}
-          <div className="flex flex-wrap gap-1 p-1 bg-zinc-100 rounded-lg text-[10px] font-bold">
+          <div className="flex flex-wrap gap-1 p-1 bg-zinc-200/60 rounded-lg text-[9.5px] font-bold">
             {(
               [
                 { id: "todos", label: "Todos" },
@@ -780,7 +891,7 @@ export const SidebarElementsTab: React.FC = () => {
           </div>
 
           {/* Grid de Iconos Puros Vectoriales */}
-          <div className="grid grid-cols-3 gap-2 max-h-[460px] overflow-y-auto pr-1">
+          <div className="grid grid-cols-3 gap-1.5 pr-0.5">
             {filteredIcons.map((ic) => {
               const IconComp = ICON_REGISTRY[ic.name] || Sparkles;
               const elementData: Parameters<typeof addCanvasElement>[0] = {
@@ -799,12 +910,12 @@ export const SidebarElementsTab: React.FC = () => {
                   draggable
                   onDragStart={(e) => handleDragStart(e, elementData)}
                   onClick={() => addCanvasElement(elementData)}
-                  className="p-3 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all flex flex-col items-center justify-center gap-2 shadow-xs group text-center"
+                  className="p-2 rounded-xl border border-zinc-200/80 bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all flex flex-col items-center justify-center gap-1.5 shadow-2xs group text-center"
                 >
-                  <div className="w-9 h-9 flex items-center justify-center text-[#F08D17] group-hover:scale-125 transition-transform">
-                    <IconComp className="w-7 h-7 stroke-[2.2]" />
+                  <div className="w-8 h-8 flex items-center justify-center text-[#F08D17] group-hover:scale-120 transition-transform">
+                    <IconComp className="w-6 h-6 stroke-[2.2]" />
                   </div>
-                  <span className="font-extrabold text-[#111111] text-[10px] truncate w-full block">
+                  <span className="font-extrabold text-[#111111] text-[9.5px] truncate w-full block">
                     {ic.label}
                   </span>
                 </div>
@@ -818,7 +929,7 @@ export const SidebarElementsTab: React.FC = () => {
       {/* 3. SECCIÓN TARJETAS (DISEÑOS DISTINTOS)    */}
       {/* ========================================== */}
       {activeSubCategory === "tarjetas" && (
-        <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+        <div className="space-y-2.5 pr-0.5">
           {distinctCards.map((c) => {
             const elementData: Parameters<typeof addCanvasElement>[0] = {
               type: "card",
@@ -841,7 +952,7 @@ export const SidebarElementsTab: React.FC = () => {
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
                 onClick={() => addCanvasElement(elementData)}
-                className="p-3.5 rounded-2xl border text-left transition-all cursor-grab active:cursor-grabbing space-y-2 bg-[#FAF9F6] border-[#E4E4E7] hover:bg-white hover:border-[#2563EB] shadow-xs group"
+                className="p-3 rounded-xl border text-left transition-all cursor-grab active:cursor-grabbing space-y-2 bg-white border-zinc-200/80 hover:border-[#2563EB] shadow-2xs group"
               >
                 {/* Visual Thumbnail Preview */}
                 <div className="w-full h-16 rounded-xl flex items-center justify-between p-3 relative overflow-hidden bg-[#002224] text-white">
@@ -953,7 +1064,7 @@ export const SidebarElementsTab: React.FC = () => {
       {/* 4. SECCIÓN BOTONES (DISEÑOS DISTINTOS)     */}
       {/* ========================================== */}
       {activeSubCategory === "botones" && (
-        <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+        <div className="space-y-2.5 pr-0.5">
           {distinctButtons.map((btn) => {
             const elementData: Parameters<typeof addCanvasElement>[0] = {
               type: "button",
@@ -970,7 +1081,7 @@ export const SidebarElementsTab: React.FC = () => {
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
                 onClick={() => addCanvasElement(elementData)}
-                className="p-3.5 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all space-y-2 shadow-xs group"
+                className="p-3 rounded-xl border border-zinc-200/80 bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all space-y-2 shadow-2xs group"
               >
                 {/* Visual Button Rendering */}
                 <div className="w-full flex items-center justify-center p-2 bg-[#002224] rounded-xl">
@@ -1050,7 +1161,7 @@ export const SidebarElementsTab: React.FC = () => {
       {/* 5. SECCIÓN MÓDULOS PRO                     */}
       {/* ========================================== */}
       {activeSubCategory === "modulos" && (
-        <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+        <div className="space-y-2.5 pr-0.5">
           {moduleTemplates.map((tmpl) => {
             const Icon = tmpl.icon;
             const elementData: Parameters<typeof addCanvasElement>[0] = {
@@ -1068,7 +1179,7 @@ export const SidebarElementsTab: React.FC = () => {
                 draggable
                 onDragStart={(e) => handleDragStart(e, elementData)}
                 onClick={() => addCanvasElement(elementData)}
-                className="p-3.5 rounded-2xl border border-[#E4E4E7] bg-[#FAF9F6] hover:bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all space-y-1.5 shadow-xs group"
+                className="p-3 rounded-xl border border-zinc-200/80 bg-white hover:border-[#2563EB] cursor-grab active:cursor-grabbing transition-all space-y-1.5 shadow-2xs group"
               >
                 <div className="flex items-center space-x-2">
                   <div className="w-7 h-7 rounded-lg bg-[#2563EB]/10 text-[#2563EB] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
