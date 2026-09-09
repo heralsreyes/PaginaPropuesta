@@ -55,6 +55,11 @@ interface ProposalContextType {
   importJson: (jsonString: string) => boolean;
   loadProposalByName: (slug: string) => Promise<boolean>;
   resetToDefault: () => void;
+  isSaving: boolean;
+  lastSavedTime: string | null;
+  currentSlug: string;
+  setCurrentSlug: (slug: string) => void;
+  saveProposalToServer: (targetSlug?: string) => Promise<{ success: boolean; message: string; filename?: string }>;
 }
 
 const clearEditableCache = () => {
@@ -265,6 +270,18 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   const [proposal, setProposal] = useState<ProposalData>(initialPreset || sampleProposal);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAdmin, setIsAdminState] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
+  const [currentSlug, setCurrentSlug] = useState<string>(() => {
+    if (initialProposalSlug) {
+      return initialProposalSlug
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9_-]+/g, "-");
+    }
+    return "excel-puesto-de-bolsa";
+  });
 
   // Undo / Redo History Stack (Up to 30 actions)
   const [history, setHistory] = useState<ProposalData[]>([]);
@@ -342,6 +359,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           const presetMatch = getPresetProposal(cleanParam);
           if (presetMatch) {
             clearEditableCache();
+            setCurrentSlug(cleanParam);
             setProposal(presetMatch);
             hydrateExtendedState(presetMatch);
             toast.success(`Cargada propuesta de ${presetMatch.client.name}`);
@@ -373,6 +391,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                 const validation = validateProposalData(remoteJson);
                 if (validation.success && validation.data) {
                   clearEditableCache();
+                  setCurrentSlug(dashed);
                   setProposal(remoteJson);
                   hydrateExtendedState(remoteJson);
                   toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
@@ -898,6 +917,105 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     toast.success("Archivo JSON de la propuesta descargado con temas y colores.");
   };
 
+  // Save Proposal Directly to Server / Vercel API without downloading
+  const saveProposalToServer = async (
+    targetSlug?: string
+  ): Promise<{ success: boolean; message: string; filename?: string }> => {
+    setIsSaving(true);
+    try {
+      const studioState = useStudioStore.getState();
+      const themeState = useThemeStore.getState();
+      const currentTheme = themeState.theme;
+
+      const rawSlug =
+        targetSlug ||
+        currentSlug ||
+        proposal.client?.shortName ||
+        proposal.client?.name ||
+        proposal.project?.code ||
+        "propuesta";
+
+      const slugToUse = rawSlug
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9_-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+      const fullProposalData = {
+        ...proposal,
+        sections: studioState.sections,
+        canvasElements: studioState.canvasElements,
+        buttonActionsMap: studioState.buttonActionsMap,
+        theme: currentTheme,
+        colors: {
+          primary: currentTheme.accentColor,
+          secondary: currentTheme.secondaryAccent,
+          background: currentTheme.bgMain,
+          card: currentTheme.cardBg,
+          border: currentTheme.cardBorder,
+          text: currentTheme.textPrimary,
+          textSecondary: currentTheme.textSecondary,
+          nav: currentTheme.navBg,
+          h1: currentTheme.h1Color || currentTheme.textPrimary,
+          h2: currentTheme.h2Color || currentTheme.secondaryAccent,
+        },
+      };
+
+      // 1. Guardar en localStorage inmediatamente para persistencia cliente
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(fullProposalData));
+          localStorage.setItem(`enfoco_proposal_${slugToUse}`, JSON.stringify(fullProposalData));
+        } catch (storageErr) {
+          console.warn("[ProposalContext] Advertencia de localStorage:", storageErr);
+        }
+      }
+
+      // 2. Enviar a endpoint de servidor /api/proposals
+      const res = await fetch("/api/proposals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: slugToUse,
+          proposal,
+          theme: currentTheme,
+          colors: fullProposalData.colors,
+          sections: studioState.sections,
+          canvasElements: studioState.canvasElements,
+          buttonActionsMap: studioState.buttonActionsMap,
+        }),
+      });
+
+      const resData = await res.json();
+      if (!res.ok || !resData.success) {
+        throw new Error(resData.error || "No se pudo guardar la propuesta en el servidor");
+      }
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      setLastSavedTime(timeStr);
+      setCurrentSlug(slugToUse);
+
+      // Actualizar URL sin recargar la página
+      if (typeof window !== "undefined") {
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set("proposal", slugToUse);
+        window.history.replaceState({}, "", newUrl.toString());
+      }
+
+      toast.success(`💾 Propuesta guardada con éxito en el servidor (${resData.filename || slugToUse + '.json'})`);
+      return { success: true, message: resData.message, filename: resData.filename };
+    } catch (err: any) {
+      console.error("Error guardando propuesta en servidor:", err);
+      toast.error(`Error al guardar en el servidor: ${err.message}`);
+      return { success: false, message: err.message };
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Import JSON File
   const importJson = (jsonString: string): boolean => {
     try {
@@ -928,6 +1046,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       const presetMatch = getPresetProposal(cleanParam);
       if (presetMatch) {
         clearEditableCache();
+        setCurrentSlug(dashed);
         setProposal(presetMatch);
         hydrateExtendedState(presetMatch);
         if (typeof window !== "undefined") {
@@ -962,6 +1081,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             const validation = validateProposalData(remoteJson);
             if (validation.success && validation.data) {
               clearEditableCache();
+              setCurrentSlug(dashed);
               setProposal(remoteJson);
               hydrateExtendedState(remoteJson);
               if (typeof window !== "undefined") {
@@ -1115,6 +1235,11 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         importJson,
         loadProposalByName,
         resetToDefault,
+        isSaving,
+        lastSavedTime,
+        currentSlug,
+        setCurrentSlug,
+        saveProposalToServer,
       }}
     >
       {children}

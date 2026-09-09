@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
 import { useProposal } from "@/context/ProposalContext";
 import {
@@ -12,11 +12,14 @@ import {
   Undo2,
   Redo2,
   CheckCircle2,
+  Save,
+  Loader2,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export const StudioToolbar: React.FC = () => {
-  const { undo, redo, canUndo, canRedo } = useProposal();
+  const { undo, redo, canUndo, canRedo, saveProposalToServer, isSaving, lastSavedTime } = useProposal();
   const {
     toggleDesignMode,
     isPanelOpen,
@@ -25,6 +28,17 @@ export const StudioToolbar: React.FC = () => {
     canvasMode,
     setCanvasMode,
   } = useStudioStore();
+
+  useEffect(() => {
+    const handleSaveKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        saveProposalToServer();
+      }
+    };
+    window.addEventListener("keydown", handleSaveKeyDown);
+    return () => window.removeEventListener("keydown", handleSaveKeyDown);
+  }, [saveProposalToServer]);
 
   return (
     <header className="no-print sticky top-0 z-40 w-full h-16 bg-[#18181B] border-b border-zinc-800 text-white shadow-md flex items-center justify-between px-4 sm:px-6 select-none font-sans shrink-0">
@@ -118,6 +132,26 @@ export const StudioToolbar: React.FC = () => {
 
       {/* Right Controls */}
       <div className="flex items-center space-x-2 sm:space-x-3">
+        {/* Direct Save to Server Button */}
+        <button
+          onClick={() => saveProposalToServer()}
+          disabled={isSaving}
+          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:bg-zinc-700 text-white font-bold rounded-xl text-xs shadow-md shadow-emerald-900/30 transition-all cursor-pointer transform hover:scale-105 active:scale-95"
+          title="Guardar propuesta en el servidor (Ctrl + S)"
+        >
+          {isSaving ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
+          ) : lastSavedTime ? (
+            <Check className="w-3.5 h-3.5 text-white" />
+          ) : (
+            <Save className="w-3.5 h-3.5 text-white" />
+          )}
+          <span>{isSaving ? "Guardando..." : "Guardar"}</span>
+          <span className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-mono ml-0.5 hidden sm:inline text-emerald-200">
+            Ctrl+S
+          </span>
+        </button>
+
         {/* Executive View Switch / Exit Studio */}
         <button
           onClick={toggleDesignMode}
