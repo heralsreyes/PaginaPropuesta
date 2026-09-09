@@ -111,7 +111,7 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
               <span className="text-[10px] sm:text-xs text-slate-300 font-mono uppercase tracking-wider font-bold">
                 TASA ESTIMADA
               </span>
-              <span className="text-xl sm:text-2xl font-black text-[#F08D17] font-mono">
+              <span className="text-xl sm:text-2xl font-black text-[var(--secondary-accent,#F08D17)] font-mono">
                 {effectiveRate}
               </span>
               {effectiveYieldAmount !== undefined ? (
@@ -130,8 +130,8 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
       <div className="w-full space-y-2 pt-3 border-t border-white/10">
         <div className="text-xs font-mono font-medium tracking-wider text-white/50 uppercase text-left px-1 mb-1 flex items-center justify-between">
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F08D17]" />
-            <span className="text-[#F08D17] font-bold">Desglose por Categoría:</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--secondary-accent,#F08D17)]" />
+            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Desglose por Categoría:</span>
           </span>
           <span className="text-[10px] text-white/40 font-normal">Pasa el cursor sobre el gráfico</span>
         </div>
@@ -148,7 +148,7 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
                 onMouseLeave={() => setHoveredIdx(null)}
                 className={`flex items-center justify-between p-2.5 rounded-xl border transition-all text-xs font-mono cursor-pointer select-none ${
                   isHovered
-                    ? "bg-white/[0.08] backdrop-blur-md border-[#F08D17]/50 shadow-lg scale-[1.02] ring-1 ring-[#F08D17]/25 text-white"
+                    ? "bg-white/[0.08] backdrop-blur-md border-[var(--secondary-accent,#F08D17)]/50 shadow-lg scale-[1.02] ring-1 ring-[var(--secondary-accent,#F08D17)]/25 text-white"
                     : "bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-white/20 text-white/80"
                 }`}
               >
@@ -162,7 +162,7 @@ const DynamicDonutChartBase: React.FC<DynamicDonutChartProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                  <span className="font-bold text-[#F08D17]">{item.percent}%</span>
+                  <span className="font-bold text-[var(--secondary-accent,#F08D17)]">{item.percent}%</span>
                   {dollarVal > 0 && (
                     <span className="text-white/40 text-[10px]">
                       (${Math.round(dollarVal).toLocaleString()})

@@ -182,8 +182,8 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Control Sidebar (Left) */}
           <div className="lg:col-span-5 space-y-4">
-            <h3 className="font-extrabold text-xs uppercase font-mono text-[#F08D17] tracking-wider mb-3 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#F08D17]" />
+            <h3 className="font-extrabold text-xs uppercase font-mono text-[var(--secondary-accent,#F08D17)] tracking-wider mb-3 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[var(--secondary-accent,#F08D17)]" />
               <span>SELECCIONA O TOCA DIRECTAMENTE EN EL TELÉFONO:</span>
             </h3>
 
@@ -191,14 +191,14 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
               onClick={() => setAppSimTab("portafolio")}
               className={`w-full p-5 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
                 appSimTab === "portafolio"
-                  ? "bg-white border-2 border-[#F08D17] shadow-2xl ring-4 ring-[#F08D17]/30 text-[#004F54] scale-[1.02]"
-                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[#F08D17]"
+                  ? "bg-white border-2 border-[var(--secondary-accent,#F08D17)] shadow-2xl ring-4 ring-[var(--secondary-accent,#F08D17)]/30 text-[#004F54] scale-[1.02]"
+                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[var(--secondary-accent,#F08D17)]"
               }`}
             >
               <div className="flex items-center gap-4">
                 <div
                   className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                    appSimTab === "portafolio" ? "bg-[#F08D17]/15 text-[#F08D17]" : "bg-[#004F54]/10 text-[#004F54]"
+                    appSimTab === "portafolio" ? "bg-[var(--secondary-accent,#F08D17)]/15 text-[var(--secondary-accent,#F08D17)]" : "bg-[#004F54]/10 text-[#004F54]"
                   }`}
                 >
                   <PieChart className="w-6 h-6" />
@@ -208,21 +208,21 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                   <span className="text-xs text-[#334155] font-medium">Saldos diarios en tiempo real</span>
                 </div>
               </div>
-              <ChevronRight className={`w-5 h-5 ${appSimTab === "portafolio" ? "text-[#F08D17]" : "text-[#004F54]"}`} />
+              <ChevronRight className={`w-5 h-5 ${appSimTab === "portafolio" ? "text-[var(--secondary-accent,#F08D17)]" : "text-[#004F54]"}`} />
             </button>
 
             <button
               onClick={() => setAppSimTab("ticket")}
               className={`w-full p-5 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
                 appSimTab === "ticket"
-                  ? "bg-white border-2 border-[#F08D17] shadow-2xl ring-4 ring-[#F08D17]/30 text-[#004F54] scale-[1.02]"
-                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[#F08D17]"
+                  ? "bg-white border-2 border-[var(--secondary-accent,#F08D17)] shadow-2xl ring-4 ring-[var(--secondary-accent,#F08D17)]/30 text-[#004F54] scale-[1.02]"
+                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[var(--secondary-accent,#F08D17)]"
               }`}
             >
               <div className="flex items-center gap-4">
                 <div
                   className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                    appSimTab === "ticket" ? "bg-[#F08D17]/15 text-[#F08D17]" : "bg-[#004F54]/10 text-[#004F54]"
+                    appSimTab === "ticket" ? "bg-[var(--secondary-accent,#F08D17)]/15 text-[var(--secondary-accent,#F08D17)]" : "bg-[#004F54]/10 text-[#004F54]"
                   }`}
                 >
                   <FileCode className="w-6 h-6" />
@@ -232,21 +232,21 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                   <span className="text-xs text-[#334155] font-medium">Firmar con biometría animada</span>
                 </div>
               </div>
-              <ChevronRight className={`w-5 h-5 ${appSimTab === "ticket" ? "text-[#F08D17]" : "text-[#004F54]"}`} />
+              <ChevronRight className={`w-5 h-5 ${appSimTab === "ticket" ? "text-[var(--secondary-accent,#F08D17)]" : "text-[#004F54]"}`} />
             </button>
 
             <button
               onClick={() => setAppSimTab("estados")}
               className={`w-full p-5 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
                 appSimTab === "estados"
-                  ? "bg-white border-2 border-[#F08D17] shadow-2xl ring-4 ring-[#F08D17]/30 text-[#004F54] scale-[1.02]"
-                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[#F08D17]"
+                  ? "bg-white border-2 border-[var(--secondary-accent,#F08D17)] shadow-2xl ring-4 ring-[var(--secondary-accent,#F08D17)]/30 text-[#004F54] scale-[1.02]"
+                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[var(--secondary-accent,#F08D17)]"
               }`}
             >
               <div className="flex items-center gap-4">
                 <div
                   className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                    appSimTab === "estados" ? "bg-[#F08D17]/15 text-[#F08D17]" : "bg-[#004F54]/10 text-[#004F54]"
+                    appSimTab === "estados" ? "bg-[var(--secondary-accent,#F08D17)]/15 text-[var(--secondary-accent,#F08D17)]" : "bg-[#004F54]/10 text-[#004F54]"
                   }`}
                 >
                   <Lock className="w-6 h-6" />
@@ -256,21 +256,21 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                   <span className="text-xs text-[#334155] font-medium">Desbloqueo por clave del titular</span>
                 </div>
               </div>
-              <ChevronRight className={`w-5 h-5 ${appSimTab === "estados" ? "text-[#F08D17]" : "text-[#004F54]"}`} />
+              <ChevronRight className={`w-5 h-5 ${appSimTab === "estados" ? "text-[var(--secondary-accent,#F08D17)]" : "text-[#004F54]"}`} />
             </button>
 
             <button
               onClick={() => setAppSimTab("asesor")}
               className={`w-full p-5 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
                 appSimTab === "asesor"
-                  ? "bg-white border-2 border-[#F08D17] shadow-2xl ring-4 ring-[#F08D17]/30 text-[#004F54] scale-[1.02]"
-                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[#F08D17]"
+                  ? "bg-white border-2 border-[var(--secondary-accent,#F08D17)] shadow-2xl ring-4 ring-[var(--secondary-accent,#F08D17)]/30 text-[#004F54] scale-[1.02]"
+                  : "bg-[#EAF5F2]/90 hover:bg-white border border-emerald-200/80 text-[#004F54] shadow-md hover:border-[var(--secondary-accent,#F08D17)]"
               }`}
             >
               <div className="flex items-center gap-4">
                 <div
                   className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                    appSimTab === "asesor" ? "bg-[#F08D17]/15 text-[#F08D17]" : "bg-[#004F54]/10 text-[#004F54]"
+                    appSimTab === "asesor" ? "bg-[var(--secondary-accent,#F08D17)]/15 text-[var(--secondary-accent,#F08D17)]" : "bg-[#004F54]/10 text-[#004F54]"
                   }`}
                 >
                   <MessageSquare className="w-6 h-6" />
@@ -280,19 +280,19 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                   <span className="text-xs text-[#334155] font-medium font-sans">Chat & Asesoría Ejecutiva</span>
                 </div>
               </div>
-              <ChevronRight className={`w-5 h-5 ${appSimTab === "asesor" ? "text-[#F08D17]" : "text-[#004F54]"}`} />
+              <ChevronRight className={`w-5 h-5 ${appSimTab === "asesor" ? "text-[var(--secondary-accent,#F08D17)]" : "text-[#004F54]"}`} />
             </button>
           </div>
 
           {/* iPhone 15 Pro Titanium Mockup Screen */}
           <div className="lg:col-span-7 flex justify-center">
             <div className="relative mx-auto select-none">
-              <div className="absolute -left-[4px] top-[95px] w-[4px] h-6 bg-[#C85A00] rounded-l-sm shadow-md z-10 border-y border-l border-[#EA580C]" />
-              <div className="absolute -left-[4px] top-[140px] w-[4px] h-12 bg-[#C85A00] rounded-l-sm shadow-md z-10 border-y border-l border-[#EA580C]" />
-              <div className="absolute -left-[4px] top-[200px] w-[4px] h-12 bg-[#C85A00] rounded-l-sm shadow-md z-10 border-y border-l border-[#EA580C]" />
-              <div className="absolute -right-[4px] top-[150px] w-[4px] h-16 bg-[#C85A00] rounded-r-sm shadow-md z-10 border-y border-r border-[#EA580C]" />
+              <div className="absolute -left-[4px] top-[95px] w-[4px] h-6 bg-slate-600 rounded-l-sm shadow-md z-10 border-y border-l border-slate-500" />
+              <div className="absolute -left-[4px] top-[140px] w-[4px] h-12 bg-slate-600 rounded-l-sm shadow-md z-10 border-y border-l border-slate-500" />
+              <div className="absolute -left-[4px] top-[200px] w-[4px] h-12 bg-slate-600 rounded-l-sm shadow-md z-10 border-y border-l border-slate-500" />
+              <div className="absolute -right-[4px] top-[150px] w-[4px] h-16 bg-slate-600 rounded-r-sm shadow-md z-10 border-y border-r border-slate-500" />
 
-              <div className="w-[355px] sm:w-[375px] h-[710px] p-[6px] rounded-[58px] bg-gradient-to-b from-[#E36414] via-[#D95F12] to-[#B34A00] shadow-[0_30px_90px_rgba(217,95,18,0.35),0_20px_60px_rgba(0,0,0,0.85)] border border-[#FF9E5E]/40 relative flex flex-col">
+              <div className="w-[355px] sm:w-[375px] h-[710px] p-[6px] rounded-[58px] bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 shadow-[0_30px_90px_rgba(0,0,0,0.7)] border-2 border-[var(--secondary-accent,#F08D17)]/40 relative flex flex-col">
                 <div className="w-full h-full bg-black rounded-[52px] p-2.5 flex flex-col justify-between relative overflow-hidden shadow-2xl border border-black">
                   <div className="w-20 h-[3px] bg-[#1F1F1F] rounded-full mx-auto -mt-0.5 mb-1.5 opacity-80 shrink-0 border border-zinc-900" />
 
@@ -313,7 +313,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                               faceIdStep === 3
                                 ? "border-emerald-400"
                                 : faceIdStep === 2
-                                ? "border-[#F08D17]"
+                                ? "border-[var(--secondary-accent,#F08D17)]"
                                 : "border-[#38BDF8]"
                             } border-t-transparent shadow-2xl`}
                           />
@@ -321,7 +321,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                             {faceIdStep === 3 ? (
                               <CheckCircle2 className="w-10 h-10 text-emerald-400 animate-bounce" />
                             ) : faceIdStep === 2 ? (
-                              <ShieldCheck className="w-10 h-10 text-[#F08D17] animate-pulse" />
+                              <ShieldCheck className="w-10 h-10 text-[var(--secondary-accent,#F08D17)] animate-pulse" />
                             ) : (
                               <UserCheck className="w-10 h-10 text-[#38BDF8] animate-pulse" />
                             )}
@@ -355,7 +355,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => setCurrencyMode(currencyMode === "USD" ? "DOP" : "USD")}
-                          className="px-1.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[#F08D17] text-[8px] font-mono font-extrabold cursor-pointer border border-[#F08D17]/40 shadow-sm transition-all"
+                          className="px-1.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[var(--secondary-accent,#F08D17)] text-[8px] font-mono font-extrabold cursor-pointer border border-[var(--secondary-accent,#F08D17)]/40 shadow-sm transition-all"
                         >
                           {currencyMode === "USD" ? "USD $" : "DOP $"}
                         </button>
@@ -373,10 +373,10 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                           setAppSimTab("ticket");
                           setShowPushAlert(false);
                         }}
-                        className="mx-3 mt-1.5 bg-[#112240]/95 border border-[#F08D17]/60 p-2.5 rounded-2xl shadow-2xl flex items-center justify-between text-white text-left cursor-pointer hover:border-[#F08D17] transition-all shrink-0 z-30 backdrop-blur-xl"
+                        className="mx-3 mt-1.5 bg-[#112240]/95 border border-[var(--secondary-accent,#F08D17)]/60 p-2.5 rounded-2xl shadow-2xl flex items-center justify-between text-white text-left cursor-pointer hover:border-[var(--secondary-accent,#F08D17)] transition-all shrink-0 z-30 backdrop-blur-xl"
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#F08D17] animate-ping shrink-0" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[var(--secondary-accent,#F08D17)] animate-ping shrink-0" />
                           <div>
                             <p className="text-[11px] font-extrabold text-white leading-tight">🔔 Excel Alerta Vencimiento (15 Días)</p>
                             <span className="text-[10px] text-slate-300">Mutuo USD $50k vence. Toca para renovar &rr;</span>
@@ -411,20 +411,20 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                                 VALOR TOTAL INVERSIONES ({currencyMode})
                               </span>
                               <p className="text-2xl font-black text-white font-mono">{formatCurr(calcAmount)}</p>
-                              <span className="text-[11px] text-[#F08D17] font-mono font-bold block">
+                              <span className="text-[11px] text-[var(--secondary-accent,#F08D17)] font-mono font-bold block">
                                 +{formatCurr(calculatedYield)} Ganancia Est.
                               </span>
                             </div>
 
                             <div className="space-y-2 text-xs">
-                              <div className="p-3 bg-[#112240]/90 rounded-2xl flex items-center justify-between border border-white/10 hover:border-[#F08D17] cursor-pointer transition-all shadow-md">
+                              <div className="p-3 bg-[#112240]/90 rounded-2xl flex items-center justify-between border border-white/10 hover:border-[var(--secondary-accent,#F08D17)] cursor-pointer transition-all shadow-md">
                                 <div>
                                   <p className="font-extrabold text-xs text-white">Mutuo Estructurado ({mutuoPct}%)</p>
-                                  <span className="text-[10px] text-[#F08D17] font-bold block mt-0.5">
+                                  <span className="text-[10px] text-[var(--secondary-accent,#F08D17)] font-bold block mt-0.5">
                                     Tasa: {customRatePercent.toFixed(1)}% • Vence 15d
                                   </span>
                                 </div>
-                                <span className="font-mono text-[#F08D17] font-extrabold text-xs">
+                                <span className="font-mono text-[var(--secondary-accent,#F08D17)] font-extrabold text-xs">
                                   {formatCurr(calcAmount * (mutuoPct / 100))}
                                 </span>
                               </div>
@@ -470,8 +470,8 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                               <span className="text-[10px] text-slate-400 font-mono">#TT-2026-8841</span>
                             </div>
 
-                            <div className="p-3.5 bg-[#112240]/90 border border-[#F08D17]/40 rounded-2xl space-y-1.5 shadow-lg">
-                              <span className="text-[10px] font-mono font-bold text-[#F08D17] block uppercase">
+                            <div className="p-3.5 bg-[#112240]/90 border border-[var(--secondary-accent,#F08D17)]/40 rounded-2xl space-y-1.5 shadow-lg">
+                              <span className="text-[10px] font-mono font-bold text-[var(--secondary-accent,#F08D17)] block uppercase">
                                 Aprobación Fehaciente Requerida
                               </span>
                               <p className="text-xs text-slate-200 leading-relaxed font-medium">
@@ -481,8 +481,8 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                             </div>
 
                             <div className="p-4 bg-[#112240]/90 rounded-2xl border border-white/10 space-y-3 text-center shadow-xl">
-                              <div className="w-12 h-12 rounded-2xl bg-white/10 text-[#F08D17] flex items-center justify-center mx-auto shadow-inner border border-white/15">
-                                <ShieldCheck className="w-6 h-6 text-[#F08D17]" />
+                              <div className="w-12 h-12 rounded-2xl bg-white/10 text-[var(--secondary-accent,#F08D17)] flex items-center justify-center mx-auto shadow-inner border border-white/15">
+                                <ShieldCheck className="w-6 h-6 text-[var(--secondary-accent,#F08D17)]" />
                               </div>
                               <span className="text-xs font-extrabold text-white block">
                                 {faceIdSigned ? "✅ Aprobado & Transmitido a CRM" : "Biometría FaceID Requerida"}
@@ -491,7 +491,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                                 onClick={triggerFaceIdScan}
                                 disabled={faceIdSigned}
                                 className={`w-full py-3 rounded-xl text-xs font-extrabold shadow-lg cursor-pointer transition-all ${
-                                  faceIdSigned ? "bg-emerald-600 text-white" : "bg-[#F08D17] hover:bg-[#d87c0f] text-white"
+                                  faceIdSigned ? "bg-emerald-600 text-white" : "bg-[var(--secondary-accent,#F08D17)] hover:opacity-90 text-white"
                                 }`}
                               >
                                 {faceIdSigned ? "✔ Orden Transmitida a Dynamics CRM" : "Touch / Escanear FaceID"}
@@ -518,7 +518,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
 
                             {!pdfUnlocked ? (
                               <div className="p-3 bg-white border border-[#E2E8F0] rounded-2xl space-y-3 text-center shadow-sm">
-                                <Lock className="w-6 h-6 text-[#F08D17] mx-auto" />
+                                <Lock className="w-6 h-6 text-[var(--secondary-accent,#F08D17)] mx-auto" />
                                 <div>
                                   <p className="text-xs font-extrabold text-[#0F172A]">PDF Cifrado por Seguridad</p>
                                   <span className="text-[10px] text-[#64748B]">Ingresa PIN del Titular (Ej: 1234)</span>
@@ -567,7 +567,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                                       <span>Total Portafolio:</span>
                                       <span>{formatCurr(calcAmount)}</span>
                                     </div>
-                                    <div className="flex justify-between text-[#F08D17]">
+                                    <div className="flex justify-between text-[var(--secondary-accent,#F08D17)]">
                                       <span>Rendimiento Est.:</span>
                                       <span>{formatCurr(calculatedYield)}</span>
                                     </div>
@@ -577,7 +577,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                                     onClick={() => alert("Descarga PDF iniciada")}
                                     className="w-full py-2 bg-[#004F54] hover:bg-[#006B70] text-white rounded-xl text-xs font-bold font-mono shadow-md cursor-pointer flex items-center justify-center gap-2"
                                   >
-                                    <Download className="w-4 h-4 text-[#F08D17]" />
+                                    <Download className="w-4 h-4 text-[var(--secondary-accent,#F08D17)]" />
                                     <span>Descargar PDF Cifrado SIMV</span>
                                   </button>
                                 </div>
@@ -723,7 +723,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                       <button
                         onClick={() => setAppSimTab("portafolio")}
                         className={`py-1 flex flex-col items-center gap-0.5 cursor-pointer transition-all ${
-                          appSimTab === "portafolio" ? "text-[#F08D17] font-black scale-105" : "hover:text-white"
+                          appSimTab === "portafolio" ? "text-[var(--secondary-accent,#F08D17)] font-black scale-105" : "hover:text-white"
                         }`}
                       >
                         <PieChart className="w-4 h-4" />
@@ -732,7 +732,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                       <button
                         onClick={() => setAppSimTab("ticket")}
                         className={`py-1 flex flex-col items-center gap-0.5 cursor-pointer transition-all ${
-                          appSimTab === "ticket" ? "text-[#F08D17] font-black scale-105" : "hover:text-white"
+                          appSimTab === "ticket" ? "text-[var(--secondary-accent,#F08D17)] font-black scale-105" : "hover:text-white"
                         }`}
                       >
                         <FileCode className="w-4 h-4" />
@@ -741,7 +741,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                       <button
                         onClick={() => setAppSimTab("estados")}
                         className={`py-1 flex flex-col items-center gap-0.5 cursor-pointer transition-all ${
-                          appSimTab === "estados" ? "text-[#F08D17] font-black scale-105" : "hover:text-white"
+                          appSimTab === "estados" ? "text-[var(--secondary-accent,#F08D17)] font-black scale-105" : "hover:text-white"
                         }`}
                       >
                         <Lock className="w-4 h-4" />
@@ -750,7 +750,7 @@ export const AppSimulatorSection: React.FC<AppSimulatorSectionProps> = ({
                       <button
                         onClick={() => setAppSimTab("asesor")}
                         className={`py-1 flex flex-col items-center gap-0.5 cursor-pointer transition-all ${
-                          appSimTab === "asesor" ? "text-[#F08D17] font-black scale-105" : "hover:text-white"
+                          appSimTab === "asesor" ? "text-[var(--secondary-accent,#F08D17)] font-black scale-105" : "hover:text-white"
                         }`}
                       >
                         <MessageSquare className="w-4 h-4" />

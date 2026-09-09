@@ -30,7 +30,7 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
   }, [activeSection]);
 
   return (
-    <div className="no-print fixed right-5 sm:right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-end space-y-2.5 pointer-events-auto select-none">
+    <div className="no-print fixed right-5 sm:right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-end space-y-2.5 pointer-events-none select-none">
       {slides.map((s, idx) => {
         const isActive = activeSection === s.id;
         const isBubbleAutoVisible = isActive && showActiveBubble;
@@ -40,18 +40,18 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
         const displayTitle = `${idx + 1}. ${cleanLabel}`;
 
         return (
-          <div key={s.id} className="group relative flex items-center">
+          <div key={s.id} className="group relative flex items-center pointer-events-none">
             {/* Tooltip Label Bubble */}
             <div
               className={`mr-3 px-3.5 py-1.5 rounded-2xl bg-[#002224]/95 backdrop-blur-xl text-white font-extrabold text-xs border transition-all duration-300 pointer-events-none whitespace-nowrap shadow-2xl flex items-center gap-2 ${
                 isActive
                   ? isBubbleAutoVisible
-                    ? "opacity-100 translate-x-0 scale-105 border-[#F08D17] ring-2 ring-[#F08D17]/40 text-white"
-                    : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0 group-hover:scale-100 border-[#F08D17]/80"
+                    ? "opacity-100 translate-x-0 scale-105 border-[var(--secondary-accent,#F08D17)] ring-2 ring-[var(--secondary-accent,#F08D17)]/40 text-white"
+                    : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0 group-hover:scale-100 border-[var(--secondary-accent,#F08D17)]/80"
                   : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0 group-hover:scale-100 border-white/20"
               }`}
             >
-              <span className="w-2 h-2 rounded-full bg-[#F08D17] shrink-0 shadow-sm" />
+              <span className="w-2 h-2 rounded-full bg-[var(--secondary-accent,#F08D17)] shrink-0 shadow-sm" />
               <span>{displayTitle}</span>
             </div>
 
@@ -59,9 +59,9 @@ export const NavDotIndicators: React.FC<NavDotIndicatorsProps> = ({
             <button
               type="button"
               onClick={() => onSelectSection(s.id)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer shadow-sm ${
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer shadow-sm pointer-events-auto ${
                 isActive
-                  ? "bg-[#F08D17] scale-125 ring-2 ring-[#F08D17]/40 shadow-md"
+                  ? "bg-[var(--secondary-accent,#F08D17)] scale-125 ring-2 ring-[var(--secondary-accent,#F08D17)]/40 shadow-md"
                   : "bg-slate-300/70 hover:bg-white hover:scale-125"
               }`}
               title={displayTitle}

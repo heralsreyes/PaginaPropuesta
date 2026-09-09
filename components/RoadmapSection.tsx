@@ -5,6 +5,7 @@ import { RoadmapPhase } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { DeletableItem } from "@/components/studio/DeletableItem";
 import { CheckCircle2, Circle, Plus } from "lucide-react";
 import { motion } from "framer-motion";
@@ -103,13 +104,13 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-5 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30">
-            CRONOGRAMA DE EJECUCIÓN • ESTIMACIÓN: {getComputedDuration()}
+            <EditableField id="roadmap_header_badge" defaultText={`CRONOGRAMA DE EJECUCIÓN • ESTIMACIÓN: ${getComputedDuration()}`} />
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-3 mb-2">
-            Plan de Trabajo & Fases EDT
+            <EditableField id="roadmap_header_h2" defaultText="Plan de Trabajo & Fases EDT" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
-            Estructura de Descomposición del Trabajo secuencial diseñada para asegurar entregas continuas de valor.
+            <EditableField id="roadmap_header_desc" defaultText="Estructura de Descomposición del Trabajo secuencial diseñada para asegurar entregas continuas de valor." />
           </p>
         </div>
 
@@ -200,7 +201,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                             const updatedM = [...(item.milestones || []), "Nuevo Hito"];
                             updateRoadmapPhase(idx, { milestones: updatedM });
                           }}
-                          className="text-[10px] font-bold text-[#2563EB] hover:underline flex items-center gap-0.5 cursor-pointer"
+                          className="text-[10px] font-bold text-[var(--accent-color)] hover:underline flex items-center gap-0.5 cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />
                           <span>Hito</span>

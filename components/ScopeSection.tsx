@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { Requirement } from "@/data/proposalData";
+import { Requirement, RequirementCategory } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { DeletableItem } from "@/components/studio/DeletableItem";
 import { Layers, CheckCircle2, Cpu, Shield, FileText, Database, BarChart3, Sparkles, ChevronRight, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,7 +21,9 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedRequirementId, setSelectedRequirementId] = useState<string>(requirements[0]?.id || "REQ-01");
 
-  const categories = ["Todos", "Core", "Automatización", "Integración", "Reportes", "Seguridad"];
+  // Dynamic categories extracted from current requirements
+  const existingCategories = Array.from(new Set(requirements.map((r) => r.category).filter(Boolean)));
+  const categories = ["Todos", ...existingCategories];
 
   const filtered = selectedCategory === "Todos"
     ? requirements
@@ -34,8 +37,8 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
     }
   };
 
-  const activeRequirement = requirements.find((r) => r.id === selectedRequirementId) || filtered[0] || requirements[0];
-  const activeReqIndex = requirements.findIndex((r) => r.id === activeRequirement?.id);
+  const activeRequirement = filtered.find((r) => r.id === selectedRequirementId) || (filtered.length > 0 ? filtered[0] : null);
+  const activeReqIndex = activeRequirement ? requirements.findIndex((r) => r.id === activeRequirement.id) : -1;
 
   const getCategoryIcon = (cat: string, dark = false) => {
     const iconClass = dark ? "w-4 h-4 text-white" : "w-4 h-4 text-[var(--accent-color)]";
@@ -69,13 +72,13 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
         <div className="text-center max-w-3xl mx-auto mb-4 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center space-x-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>ARQUITECTURA DE ALCANCE • INSPECTOR MAESTRO-DETALLE</span>
+            <span><EditableField id="scope_header_badge" defaultText="ARQUITECTURA DE ALCANCE • INSPECTOR MAESTRO-DETALLE" /></span>
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--text-primary)] mt-2 mb-1">
-            Alcance & Funcionalidades Requeridas
+            <EditableField id="scope_header_h2" defaultText="Alcance & Funcionalidades Requeridas" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
-            Seleccione un módulo a la izquierda para inspeccionar sus especificaciones técnicas y entregables en el panel derecho.
+            <EditableField id="scope_header_desc" defaultText="Seleccione un módulo a la izquierda para inspeccionar sus especificaciones técnicas y entregables en el panel derecho." />
           </p>
         </div>
 
@@ -108,7 +111,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
         {/* Master-Detail Architecture Inspector Split Layout (max-w-6xl) */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-stretch max-w-6xl mx-auto w-full">
           {/* Left Navigation Column */}
-          <div className="xl:col-span-4 flex flex-col justify-between space-y-2.5">
+          <div className="xl:col-span-4 flex flex-col justify-start space-y-2.5">
             <div className="flex items-center justify-between px-1 mb-1">
               <span className="text-xs font-bold text-[var(--text-primary)]/60 uppercase tracking-wider font-mono">
                 Módulos del Sistema ({filtered.length})
@@ -132,58 +135,94 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
             </div>
 
             <div className="space-y-2.5">
-              {filtered.map((req) => {
-                const isSelected = activeRequirement?.id === req.id;
-                const reqIdx = requirements.findIndex((r) => r.id === req.id);
-                return (
-                  <DeletableItem
-                    key={req.id}
-                    onDelete={() => removeRequirement(reqIdx)}
-                    itemTitle="módulo de alcance"
-                  >
-                    <div
-                      onClick={() => setSelectedRequirementId(req.id)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-xs ${
-                        isSelected
-                          ? "bg-[var(--text-primary)] text-[var(--bg-main)] border-[var(--text-primary)] shadow-md scale-[1.02]"
-                          : "bg-[var(--bg-main)] text-[var(--text-primary)] border-[var(--border-color)] hover:border-[var(--accent-color)]/40"
-                      }`}
+              {filtered.length === 0 ? (
+                <div className="p-6 text-center bg-[var(--bg-main)] border border-[var(--border-color)] rounded-2xl">
+                  <p className="text-xs font-bold text-[var(--text-primary)]">
+                    No hay módulos en la categoría "{selectedCategory}"
+                  </p>
+                  <p className="text-[11px] text-[var(--text-primary)]/60 mt-1">
+                    Selecciona otra categoría o añade uno nuevo.
+                  </p>
+                  {isDesignMode && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        addRequirement({
+                          category: (selectedCategory === "Todos" ? "Core" : selectedCategory) as RequirementCategory,
+                          title: "Nuevo Módulo",
+                          description: "Descripción editable del módulo.",
+                          deliverables: ["Entregable 1"],
+                        })
+                      }
+                      className="mt-3 px-3.5 py-1.5 rounded-xl bg-[var(--accent-color)] text-white text-xs font-bold shadow-md hover:scale-105 transition-all inline-flex items-center gap-1.5 cursor-pointer"
                     >
-                      <div className="flex items-center space-x-3">
-                        {isSelected ? (
-                          <span className="relative flex h-2 w-2 mr-1">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-color)] opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent-color)]" />
-                          </span>
-                        ) : (
-                          <div className="w-2 h-2 rounded-full bg-[var(--border-color)]" />
-                        )}
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Crear módulo</span>
+                    </button>
+                  )}
+                </div>
+              ) : (
+                filtered.map((req) => {
+                  const isSelected = activeRequirement?.id === req.id;
+                  const reqIdx = requirements.findIndex((r) => r.id === req.id);
+                  return (
+                    <DeletableItem
+                      key={req.id}
+                      onDelete={() => removeRequirement(reqIdx)}
+                      itemTitle="módulo de alcance"
+                    >
+                      <div
+                        onClick={() => setSelectedRequirementId(req.id)}
+                        className={`p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-xs ${
+                          isSelected
+                            ? "bg-[var(--text-primary)] text-[var(--bg-main)] border-[var(--text-primary)] shadow-md scale-[1.02]"
+                            : "bg-[var(--bg-main)] text-[var(--text-primary)] border-[var(--border-color)] hover:border-[var(--accent-color)]/40"
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          {isSelected ? (
+                            <span className="relative flex h-2 w-2 mr-1">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-color)] opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent-color)]" />
+                            </span>
+                          ) : (
+                            <div className="w-2 h-2 rounded-full bg-[var(--border-color)]" />
+                          )}
 
-                        <div>
-                          <span className={`text-[10px] font-mono font-bold block ${isSelected ? "opacity-70" : "text-[var(--text-primary)]/60"}`}>
-                            {req.id} • {req.category}
-                          </span>
-                          <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--bg-main)]" : "text-[var(--text-primary)]"}`}>
-                            <EditableText
-                              value={req.title}
-                              onChange={(val) => updateRequirement(reqIdx, { title: val })}
-                              tag="span"
-                            />
-                          </h4>
+                          <div>
+                            <span className={`text-[10px] font-mono font-bold block ${isSelected ? "opacity-70" : "text-[var(--text-primary)]/60"}`}>
+                              {req.id} • {req.category}
+                            </span>
+                            <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--bg-main)]" : "text-[var(--text-primary)]"}`}>
+                              <EditableText
+                                value={req.title}
+                                onChange={(val) => updateRequirement(reqIdx, { title: val })}
+                                tag="span"
+                              />
+                            </h4>
+                          </div>
                         </div>
-                      </div>
 
-                      <ChevronRight className={`w-4 h-4 transition-transform ${isSelected ? "text-[var(--accent-color)] translate-x-1" : "opacity-50"}`} />
-                    </div>
-                  </DeletableItem>
-                );
-              })}
+                        <ChevronRight className={`w-4 h-4 transition-transform ${isSelected ? "text-[var(--accent-color)] translate-x-1" : "opacity-50"}`} />
+                      </div>
+                    </DeletableItem>
+                  );
+                })
+              )}
             </div>
           </div>
 
           {/* Right Detail Panel */}
           <div className="xl:col-span-8">
-            {activeRequirement && (
+            {!activeRequirement ? (
+              <div className="bg-[var(--bg-main)] border border-[var(--border-color)] rounded-3xl p-8 shadow-md flex flex-col items-center justify-center min-h-[420px] w-full text-center">
+                <Layers className="w-12 h-12 text-[var(--text-primary)]/30 mb-3" />
+                <h3 className="text-lg font-bold text-[var(--text-primary)]">Sin módulos seleccionados</h3>
+                <p className="text-xs text-[var(--text-primary)]/60 max-w-sm mt-1">
+                  Selecciona una categoría con requerimientos activos o añade un nuevo módulo a la propuesta.
+                </p>
+              </div>
+            ) : (
               <div id="card-inspector-02" className="bg-[var(--bg-main)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 md:p-9 shadow-md flex flex-col justify-between min-h-[420px] w-full relative overflow-hidden transition-colors duration-300">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent-color)]/10 blur-3xl rounded-full pointer-events-none" />
 
@@ -203,13 +242,22 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                           <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center justify-center">
                             {getCategoryIcon(activeRequirement.category)}
                           </div>
-                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-                            Módulo de {activeRequirement.category}
+                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-1">
+                            <span>Módulo de</span>
+                            <EditableText
+                              value={activeRequirement.category}
+                              onChange={(val) => updateRequirement(activeReqIndex, { category: val as RequirementCategory })}
+                              tag="span"
+                            />
                           </span>
                         </div>
 
                         <span className="text-xs font-mono font-bold text-[var(--text-primary)]/70 px-3 py-1 rounded-md bg-[var(--bg-main)] border border-[var(--border-color)]">
-                          {activeRequirement.id}
+                          <EditableText
+                            value={activeRequirement.id}
+                            onChange={(val) => updateRequirement(activeReqIndex, { id: val })}
+                            tag="span"
+                          />
                         </span>
                       </div>
 
@@ -235,15 +283,18 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                     <div className="pt-5 border-t border-[var(--border-color)] mt-6">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider block font-mono">
-                          ENTREGABLES Y CAPACIDADES CLAVE:
+                          <EditableField id="scope_deliverables_label" defaultText="ENTREGABLES Y CAPACIDADES CLAVE:" />
                         </span>
                         {isDesignMode && (
                           <button
-                            onClick={() => {
-                              const updatedDeliverables = [...activeRequirement.deliverables, "Nuevo Entregable"];
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const currentDels = activeRequirement.deliverables || [];
+                              const updatedDeliverables = [...currentDels, `Entregable ${currentDels.length + 1}`];
                               updateRequirement(activeReqIndex, { deliverables: updatedDeliverables });
                             }}
-                            className="text-xs font-bold text-[#2563EB] hover:underline flex items-center gap-1 cursor-pointer"
+                            className="text-xs font-bold text-[var(--accent-color)] hover:underline flex items-center gap-1 cursor-pointer"
                           >
                             <Plus className="w-3.5 h-3.5" />
                             <span>Añadir Entregable</span>
@@ -251,35 +302,41 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {activeRequirement.deliverables.map((del, dIdx) => (
-                          <DeletableItem
-                            key={dIdx}
-                            onDelete={() => {
-                              const updatedDeliverables = activeRequirement.deliverables.filter((_, i) => i !== dIdx);
-                              updateRequirement(activeReqIndex, { deliverables: updatedDeliverables });
-                            }}
-                            itemTitle="entregable"
-                          >
-                            <div className="bg-[var(--accent-color)]/10 text-[var(--accent-color)] text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-[var(--accent-color)]/30 flex items-center gap-2.5 shadow-xs">
-                              <div className="w-5 h-5 rounded-full bg-[var(--accent-color)] text-white flex items-center justify-center shrink-0">
-                                <CheckCircle2 className="w-3.5 h-3.5" />
+                      {activeRequirement.deliverables.length === 0 ? (
+                        <div className="p-4 rounded-xl border border-dashed border-[var(--border-color)] text-center text-xs text-[var(--text-primary)]/50">
+                          Sin entregables registrados para este módulo. Pulsa "+ Añadir Entregable" para agregar uno.
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {activeRequirement.deliverables.map((del, dIdx) => (
+                            <DeletableItem
+                              key={dIdx}
+                              onDelete={() => {
+                                const updatedDeliverables = activeRequirement.deliverables.filter((_, i) => i !== dIdx);
+                                updateRequirement(activeReqIndex, { deliverables: updatedDeliverables });
+                              }}
+                              itemTitle="entregable"
+                            >
+                              <div className="bg-[var(--accent-color)]/10 text-[var(--accent-color)] text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-[var(--accent-color)]/30 flex items-center gap-2.5 shadow-xs">
+                                <div className="w-5 h-5 rounded-full bg-[var(--accent-color)] text-white flex items-center justify-center shrink-0">
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                </div>
+                                <span className="text-[var(--text-primary)] font-medium leading-snug">
+                                  <EditableText
+                                    value={del}
+                                    onChange={(newDelVal) => {
+                                      const updatedDeliverables = [...activeRequirement.deliverables];
+                                      updatedDeliverables[dIdx] = newDelVal;
+                                      updateRequirement(activeReqIndex, { deliverables: updatedDeliverables });
+                                    }}
+                                    tag="span"
+                                  />
+                                </span>
                               </div>
-                              <span className="text-[var(--text-primary)] font-medium leading-snug">
-                                <EditableText
-                                  value={del}
-                                  onChange={(newDelVal) => {
-                                    const updatedDeliverables = [...activeRequirement.deliverables];
-                                    updatedDeliverables[dIdx] = newDelVal;
-                                    updateRequirement(activeReqIndex, { deliverables: updatedDeliverables });
-                                  }}
-                                  tag="span"
-                                />
-                              </span>
-                            </div>
-                          </DeletableItem>
-                        ))}
-                      </div>
+                            </DeletableItem>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     {/* Footer Tag */}

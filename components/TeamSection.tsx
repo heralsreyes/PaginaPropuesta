@@ -5,6 +5,7 @@ import { TeamMember } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { DeletableItem } from "@/components/studio/DeletableItem";
 import { CheckCircle2, Users, ShieldCheck, Briefcase, Cpu, Code, Database, ChevronRight, Sparkles, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +15,7 @@ interface TeamSectionProps {
 }
 
 export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
-  const { addTeamMember, removeTeamMember } = useProposal();
+  const { addTeamMember, removeTeamMember, updateTeamMember } = useProposal();
   const { isDesignMode } = useStudioStore();
   const [selectedRoleIndex, setSelectedRoleIndex] = useState<number>(0);
   const selectedMember = team[selectedRoleIndex] || team[0];
@@ -50,13 +51,13 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-4 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-            MATRIZ DE RECURSOS • ESPECIFICACIÓN OFICIAL
+            <EditableField id="team_header_badge" defaultText="MATRIZ DE RECURSOS • ESPECIFICACIÓN OFICIAL" />
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-2 mb-1">
-            Recursos Necesarios & Roles del Proyecto
+            <EditableField id="team_header_h2" defaultText="Recursos Necesarios & Roles del Proyecto" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
-            Seleccione cualquier rol a la derecha para inspeccionar sus responsabilidades y alcance técnico en el panel izquierdo.
+            <EditableField id="team_header_desc" defaultText="Seleccione cualquier rol a la derecha para inspeccionar sus responsabilidades y alcance técnico en el panel izquierdo." />
           </p>
         </div>
 
@@ -81,26 +82,69 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       <div className="w-9 h-9 rounded-2xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center justify-center">
                         {getRoleIcon(selectedMember.iconName)}
                       </div>
-                      <span className="px-3 py-1 rounded-full bg-[var(--accent-color)] text-white text-[11px] font-bold shadow-xs">
-                        {selectedMember.dedicationPercent}% Dedicación
+                      <span className="px-3 py-1 rounded-full bg-[var(--accent-color)] text-white text-[11px] font-bold shadow-xs inline-flex items-center gap-0.5">
+                        <EditableText
+                          value={String(selectedMember.dedicationPercent)}
+                          onChange={(val) => {
+                            const num = parseInt(val.replace(/\D/g, ""), 10) || 0;
+                            updateTeamMember(selectedRoleIndex, { dedicationPercent: num });
+                          }}
+                          tag="span"
+                        />
+                        <span>% Dedicación</span>
                       </span>
                     </div>
 
                     <span className="text-[10px] font-mono font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block mb-1">
-                      {selectedMember.category} • Inspección Activa
+                      <EditableText
+                        value={selectedMember.category}
+                        onChange={(val) => updateTeamMember(selectedRoleIndex, { category: val })}
+                        tag="span"
+                      />{" "}
+                      • Inspección Activa
                     </span>
                     <h3 className="text-xl sm:text-2xl font-black font-display text-[var(--text-primary)] mb-3 leading-tight">
-                      {selectedMember.role}
+                      <EditableText
+                        value={selectedMember.role}
+                        onChange={(val) => updateTeamMember(selectedRoleIndex, { role: val })}
+                        tag="span"
+                      />
                     </h3>
 
                     <div className="space-y-2.5 pt-3 border-t border-[var(--border-color)] mb-4">
-                      <span className="text-[11px] font-bold text-[var(--accent-color)] uppercase tracking-wider block font-mono">
-                        Responsabilidades Principales:
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-[var(--accent-color)] uppercase tracking-wider block font-mono">
+                          Responsabilidades Principales:
+                        </span>
+                        {isDesignMode && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const updated = [...selectedMember.responsibilities, "Nueva responsabilidad"];
+                              updateTeamMember(selectedRoleIndex, { responsibilities: updated });
+                            }}
+                            className="text-[10px] font-bold text-[var(--accent-color)] hover:underline flex items-center gap-0.5 cursor-pointer"
+                          >
+                            <Plus className="w-3 h-3" />
+                            <span>Añadir</span>
+                          </button>
+                        )}
+                      </div>
                       {selectedMember.responsibilities.map((resp, rIdx) => (
                         <div key={rIdx} className="flex items-start space-x-2 text-xs text-[var(--text-primary)]/80">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0 mt-0.5" />
-                          <span className="leading-relaxed font-normal">{resp}</span>
+                          <span className="leading-relaxed font-normal flex-1">
+                            <EditableText
+                              value={resp}
+                              onChange={(newResp) => {
+                                const updated = [...selectedMember.responsibilities];
+                                updated[rIdx] = newResp;
+                                updateTeamMember(selectedRoleIndex, { responsibilities: updated });
+                              }}
+                              tag="span"
+                            />
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -174,17 +218,33 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                         </div>
                         <div>
                           <span className="text-[9px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider font-mono block">
-                            {member.category}
+                            <EditableText
+                              value={member.category}
+                              onChange={(val) => updateTeamMember(idx, { category: val })}
+                              tag="span"
+                            />
                           </span>
                           <h4 className={`text-xs sm:text-sm font-extrabold block ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--text-primary)]"}`}>
-                            {member.role}
+                            <EditableText
+                              value={member.role}
+                              onChange={(val) => updateTeamMember(idx, { role: val })}
+                              tag="span"
+                            />
                           </h4>
                         </div>
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        <span className="text-[11px] font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-0.5 rounded-full border border-[var(--accent-color)]/30">
-                          {member.dedicationPercent}%
+                        <span className="text-[11px] font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-0.5 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-0.5">
+                          <EditableText
+                            value={String(member.dedicationPercent)}
+                            onChange={(val) => {
+                              const num = parseInt(val.replace(/\D/g, ""), 10) || 0;
+                              updateTeamMember(idx, { dedicationPercent: num });
+                            }}
+                            tag="span"
+                          />
+                          <span>%</span>
                         </span>
                         <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? "text-[var(--accent-color)] translate-x-1" : "opacity-40"}`} />
                       </div>

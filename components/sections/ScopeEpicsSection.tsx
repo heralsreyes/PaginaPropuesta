@@ -599,7 +599,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
         className="max-w-6xl mx-auto w-full space-y-8"
       >
         <div className="text-center space-y-3">
-          <span className="text-xs sm:text-sm font-bold tracking-widest text-[#F08D17] theme-h2-color uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
+          <span className="text-xs sm:text-sm font-bold tracking-widest text-[var(--secondary-accent,#F08D17)] theme-h2-color uppercase font-mono px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block shadow-md">
             <EditableField id="sec3_badge" defaultText="03. ALCANCE FUNCIONAL COMPLETO & HISTORIAS ÁGILES" />
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white theme-h1-color">
@@ -617,7 +617,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
         <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl theme-card-glass shadow-xl text-white">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 flex items-center gap-1.5">
-              <Filter className="w-3.5 h-3.5 text-[#F08D17]" />
+              <Filter className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)]" />
               <span>Fase de Implementación:</span>
             </span>
             <div className="flex flex-wrap items-center gap-1.5 pl-1">
@@ -629,7 +629,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "todos"
-                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
                     : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
@@ -643,7 +643,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "fase1"
-                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
                     : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
@@ -657,7 +657,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
                   storyPhaseFilter === "fase2"
-                    ? "bg-[#F08D17] text-white shadow-md shadow-[#F08D17]/25 scale-105"
+                    ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
                     : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
@@ -678,10 +678,10 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
           <div className="w-full lg:w-1/3 space-y-3 shrink-0 z-10 relative">
             <div className="text-[11px] font-mono font-medium tracking-widest text-white/50 uppercase px-1 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F08D17]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--secondary-accent,#F08D17)]" />
                 ÉPICAS DE LA SOLUCIÓN
               </span>
-              <span className="text-[#F08D17]/70 font-bold">7 Épicas</span>
+              <span className="text-[var(--secondary-accent,#F08D17)]/70 font-bold">7 Épicas</span>
             </div>
 
             <div className="space-y-2">
@@ -704,7 +704,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                     }}
                     className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3.5 shadow-sm group relative overflow-hidden select-none z-10 ${
                       isSelected
-                        ? "bg-white/[0.08] backdrop-blur-md border-[#F08D17]/50 shadow-xl ring-1 ring-[#F08D17]/25 text-white scale-[1.01]"
+                        ? "bg-white/[0.08] backdrop-blur-md border-[var(--secondary-accent,#F08D17)]/50 shadow-xl ring-1 ring-[var(--secondary-accent,#F08D17)]/25 text-white scale-[1.01]"
                         : "bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-sm border-white/10 hover:border-white/20 text-white/80"
                     }`}
                   >
@@ -712,7 +712,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
                           isSelected
-                            ? "bg-[#F08D17]/15 border border-[#F08D17]/35 text-[#F08D17] shadow-sm"
+                            ? "bg-[var(--secondary-accent,#F08D17)]/15 border border-[var(--secondary-accent,#F08D17)]/35 text-[var(--secondary-accent,#F08D17)] shadow-sm"
                             : "bg-white/5 border border-white/10 text-white/70 group-hover:text-white"
                         }`}
                       >
@@ -728,7 +728,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                         </h3>
                         <p
                           className={`text-xs truncate font-mono ${
-                            isSelected ? "text-[#F08D17]/90 font-medium" : "text-white/40 group-hover:text-white/60"
+                            isSelected ? "text-[var(--secondary-accent,#F08D17)]/90 font-medium" : "text-white/40 group-hover:text-white/60"
                           }`}
                         >
                           {epic.deliverables ? epic.deliverables[0] : `${matchingStoriesCount} Historias Oficiales`}
@@ -738,7 +738,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
                     <ChevronRight
                       className={`w-4 h-4 shrink-0 transition-transform ${
-                        isSelected ? "text-[#F08D17] translate-x-0.5" : "text-white/30 group-hover:text-white/70"
+                        isSelected ? "text-[var(--secondary-accent,#F08D17)] translate-x-0.5" : "text-white/30 group-hover:text-white/70"
                       }`}
                     />
                   </button>
@@ -750,7 +750,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
           {/* RIGHT COLUMN CONTAINER: Enclosed Master-Detail User Stories Dropdown Box (Hero-inspired glass card) */}
           <div className="w-full lg:w-2/3 p-5 sm:p-7 rounded-2xl theme-card-glass shadow-2xl space-y-5 relative overflow-hidden text-white">
             {/* Ambient subtle glow */}
-            <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#F08D17]/5 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute -top-24 -right-24 w-72 h-72 bg-[var(--secondary-accent,#F08D17)]/5 blur-3xl rounded-full pointer-events-none" />
 
             {/* CO-BRANDING INSPIRED EPIC HERO BANNER */}
             <div className="w-full bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all text-white">
@@ -759,14 +759,14 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <div className="flex flex-col items-start text-left">
                   <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1.5 flex items-center gap-2 font-mono">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>ÉPICA 0{currentEpic.id} • <span className="text-[#F08D17] font-semibold">{currentEpic.badge}</span></span>
+                    <span>ÉPICA 0{currentEpic.id} • <span className="text-[var(--secondary-accent,#F08D17)] font-semibold">{currentEpic.badge}</span></span>
                   </span>
                   <div className="flex flex-wrap items-center gap-3 pt-0.5">
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-display text-white tracking-tight">
                       {currentEpic.title.replace(/^Épica \d+: /, "")}
                       <span className="text-emerald-400">.</span>
                     </h3>
-                    <span className="text-xs px-2.5 py-0.5 rounded-md bg-[#F08D17]/10 border border-[#F08D17]/30 text-[#F08D17] inline-flex items-center font-mono font-medium">
+                    <span className="text-xs px-2.5 py-0.5 rounded-md bg-[var(--secondary-accent,#F08D17)]/10 border border-[var(--secondary-accent,#F08D17)]/30 text-[var(--secondary-accent,#F08D17)] inline-flex items-center font-mono font-medium">
                       {currentEpic.coverage}
                     </span>
                   </div>
@@ -779,7 +779,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <div className="flex flex-wrap items-start md:items-end gap-2 md:flex-col shrink-0">
                   <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-0.5 hidden md:flex items-center gap-1.5">
                     <span>HISTORIAS ÁGILES</span>
-                    <Sparkles className="w-3.5 h-3.5 text-[#F08D17]" />
+                    <Sparkles className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)]" />
                   </span>
                   <div className="flex items-center gap-2">
                     <button
@@ -787,7 +787,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       onClick={toggleExpandAllStories}
                       className="px-3.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono font-medium text-white/80 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 select-none"
                     >
-                      <ChevronDown className={`w-3.5 h-3.5 text-[#F08D17] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
+                      <ChevronDown className={`w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)] transition-transform duration-200 ${activeStoryId !== null ? "rotate-180" : ""}`} />
                       <span>{activeStoryId !== null ? "Colapsar Todo" : "Expandir Primera"}</span>
                     </button>
                     <span className="text-xs font-mono font-medium px-3 py-1.5 rounded-lg bg-white/5 text-white/70 border border-white/10">
@@ -801,7 +801,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             {/* Key Deliverables Chips */}
             <div className="flex flex-wrap items-center gap-2 pt-0.5 border-b border-white/10 pb-4">
               <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mr-1 flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17]" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)]" />
                 <span>Entregables Clave:</span>
               </span>
               {currentEpic.deliverables.map((item, idx) => (
@@ -809,7 +809,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   key={idx}
                   className="text-xs bg-white/5 hover:bg-white/10 text-white/80 px-3 py-1 rounded-md border border-white/10 font-mono font-medium transition-all inline-flex items-center gap-1.5"
                 >
-                  <span className="text-[#F08D17]">✓</span> {item}
+                  <span className="text-[var(--secondary-accent,#F08D17)]">✓</span> {item}
                 </span>
               ))}
             </div>
@@ -886,14 +886,14 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       <div className="px-4 sm:px-5 pb-5 pt-3 border-t border-white/10 space-y-3.5 bg-black/20 text-slate-200 transition-all">
                         {/* Estructura Ágil Box */}
                         <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-1.5">
-                          <div className="text-[11px] font-medium font-mono tracking-widest uppercase text-[#F08D17] flex items-center gap-1.5">
-                            <UserCheck className="w-3.5 h-3.5 text-[#F08D17]" />
+                          <div className="text-[11px] font-medium font-mono tracking-widest uppercase text-[var(--secondary-accent,#F08D17)] flex items-center gap-1.5">
+                            <UserCheck className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)]" />
                             <span>Estructura Ágil (User Story)</span>
                           </div>
                           <div className="text-xs sm:text-sm font-normal leading-relaxed text-slate-200">
-                            <span className="text-[#F08D17] font-bold">Como:</span> {story.asA} |{" "}
-                            <span className="text-[#F08D17] font-bold">Quiero:</span> {story.iWant} |{" "}
-                            <span className="text-[#F08D17] font-bold">Para:</span> {story.soThat}
+                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Como:</span> {story.asA} |{" "}
+                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Quiero:</span> {story.iWant} |{" "}
+                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Para:</span> {story.soThat}
                           </div>
                         </div>
 
@@ -909,7 +909,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                                 key={idx}
                                 className="flex items-start gap-2.5 p-3 rounded-lg bg-white/[0.02] border border-white/10 font-normal text-slate-200"
                               >
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#F08D17] shrink-0 mt-0.5" />
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)] shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
                             ))}

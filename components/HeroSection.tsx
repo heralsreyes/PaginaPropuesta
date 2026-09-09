@@ -4,6 +4,7 @@ import React from "react";
 import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { ShieldCheck, Calendar, FileText, UserCheck, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -35,23 +36,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="max-w-5xl mx-auto text-center relative z-10 my-auto w-full flex flex-col items-center px-2"
       >
-        {/* Tracking Label */}
-        <span className="text-xs font-bold tracking-widest text-[#71717A] uppercase mb-3">
-          PRESENTACIÓN EJECUTIVA · PROPUESTA TÉCNICA
+        {/* Tracking Label (Now Editable with Inline Color Picker) */}
+        <span className="text-xs font-bold tracking-widest text-[var(--text-primary)] opacity-75 uppercase mb-3 inline-block">
+          <EditableField
+            id="hero_tracking_label"
+            defaultText="PRESENTACIÓN EJECUTIVA · PROPUESTA TÉCNICA"
+          />
         </span>
 
         {/* Co-Branding Header */}
         <div className="inline-flex items-center gap-3 py-2 px-5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm text-xs font-semibold uppercase tracking-wider mb-5 transition-colors duration-300">
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-black font-display text-[var(--text-primary)]">
-              ENFOCO<span className="text-[var(--accent-color)]">.</span>
+              <EditableField id="hero_brand_name" defaultText="ENFOCO" />
+              <span className="text-[var(--accent-color)]">.</span>
             </span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[var(--text-primary)] border border-[var(--border-color)] font-medium leading-none">
-              S.R.L.
+              <EditableField id="hero_brand_suffix" defaultText="S.R.L." />
             </span>
           </div>
 
-          <span className="text-[#D4D4D8] font-light text-xs">|</span>
+          <span className="text-[var(--text-primary)] opacity-40 font-light text-xs">|</span>
 
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)]">
             <EditableText

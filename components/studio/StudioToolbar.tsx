@@ -2,16 +2,21 @@
 
 import React from "react";
 import { useStudioStore } from "@/store/useStudioStore";
+import { useProposal } from "@/context/ProposalContext";
 import {
   Eye,
   PanelLeftClose,
   PanelLeftOpen,
   MousePointer,
   SquareDashed,
+  Undo2,
+  Redo2,
+  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export const StudioToolbar: React.FC = () => {
+  const { undo, redo, canUndo, canRedo } = useProposal();
   const {
     toggleDesignMode,
     isPanelOpen,
@@ -71,6 +76,43 @@ export const StudioToolbar: React.FC = () => {
             <SquareDashed className="w-4 h-4" />
             <span>Dibujar / Arrastrar</span>
           </button>
+        </div>
+      </div>
+
+      {/* Center: Undo / Redo & Autosave Indicator */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-xl p-1 gap-1 shadow-inner">
+          <button
+            onClick={undo}
+            disabled={!canUndo}
+            className={`px-2.5 py-1 rounded-lg flex items-center gap-1.5 text-xs font-semibold transition-all ${
+              canUndo
+                ? "text-zinc-200 hover:text-white hover:bg-zinc-800 cursor-pointer"
+                : "text-zinc-600 cursor-not-allowed opacity-50"
+            }`}
+            title="Deshacer última acción (Ctrl + Z)"
+          >
+            <Undo2 className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Deshacer</span>
+          </button>
+          <button
+            onClick={redo}
+            disabled={!canRedo}
+            className={`px-2.5 py-1 rounded-lg flex items-center gap-1.5 text-xs font-semibold transition-all ${
+              canRedo
+                ? "text-zinc-200 hover:text-white hover:bg-zinc-800 cursor-pointer"
+                : "text-zinc-600 cursor-not-allowed opacity-50"
+            }`}
+            title="Rehacer acción (Ctrl + Y / Ctrl + Shift + Z)"
+          >
+            <Redo2 className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Rehacer</span>
+          </button>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/40 px-2.5 py-1 rounded-lg">
+          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+          <span>Autoguardado</span>
         </div>
       </div>
 

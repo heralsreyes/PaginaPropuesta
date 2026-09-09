@@ -103,16 +103,20 @@ export const ExecutiveSummarySection: React.FC<ExecutiveSummarySectionProps> = (
         <div className="flex flex-wrap items-center justify-center gap-16 sm:gap-24 lg:gap-36 pt-6">
           <a
             href="#sec-7-epicas-alcance"
-            className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#F08D17] to-[#EA580C] hover:from-[#EA580C] hover:to-[#D97706] text-white font-black px-9 py-4 rounded-2xl shadow-xl shadow-[#F08D17]/30 transition-all transform hover:scale-105 active:scale-95 text-base"
+            style={{
+              background: "linear-gradient(to right, var(--secondary-accent, #F08D17), var(--accent-color, #EA580C))",
+              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)",
+            }}
+            className="inline-flex items-center space-x-3 hover:opacity-90 text-white font-black px-9 py-4 rounded-2xl shadow-xl transition-all transform hover:scale-105 active:scale-95 text-base cursor-pointer"
           >
             <EditableField id="sec1_btn1_text" defaultText="Explorar las 7 Épicas" />
             <ArrowRight className="w-5 h-5 text-white" />
           </a>
           <a
             href="#sec-simulador-interactivo-app"
-            className="inline-flex items-center space-x-2.5 bg-white/10 hover:bg-white/20 border border-white/30 backdrop-blur-md text-white font-bold px-7 py-4 rounded-2xl shadow-lg transition-all text-base"
+            className="inline-flex items-center space-x-2.5 bg-white/10 hover:bg-white/20 border border-white/30 backdrop-blur-md text-white font-bold px-7 py-4 rounded-2xl shadow-lg transition-all text-base cursor-pointer"
           >
-            <Smartphone className="w-5 h-5 text-[#F08D17]" />
+            <Smartphone className="w-5 h-5 text-[var(--secondary-accent)]" />
             <EditableField id="sec1_btn2_text" defaultText="Simulador App Móvil" />
           </a>
         </div>

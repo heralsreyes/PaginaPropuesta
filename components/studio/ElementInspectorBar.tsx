@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { useStudioStore, ButtonActionConfig } from "@/store/useStudioStore";
+import { useProposal } from "@/context/ProposalContext";
 import {
   Palette,
   Link,
@@ -24,12 +25,16 @@ import {
   AlignCenter,
   AlignRight,
   Type,
+  Undo2,
+  Redo2,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export const ElementInspectorBar: React.FC = () => {
+  const { undo, redo, canUndo, canRedo } = useProposal();
   const {
     isDesignMode,
+    isPanelOpen,
     selectedCanvasElementId,
     canvasElements,
     updateCanvasElement,
@@ -151,8 +156,39 @@ export const ElementInspectorBar: React.FC = () => {
       onClick={stopAll}
       onMouseDown={stopAll}
       onPointerDown={stopAll}
-      className="no-print fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#18181B] text-white p-2.5 px-4 rounded-2xl shadow-2xl border border-zinc-700 flex items-center space-x-3 text-xs font-sans select-none max-w-[95vw] overflow-visible"
+      style={{
+        left: isPanelOpen ? "calc(50% + 160px)" : "50%",
+      }}
+      className="no-print fixed top-16 -translate-x-1/2 z-50 bg-[#18181B] text-white p-2 px-3.5 rounded-2xl shadow-2xl border border-zinc-700 flex items-center space-x-2.5 text-xs font-sans select-none max-w-[calc(100vw-360px)] overflow-visible transition-all duration-200"
     >
+      {/* 0. Undo / Redo quick actions */}
+      <div className="flex items-center space-x-1 border-r border-zinc-700 pr-2 shrink-0">
+        <button
+          onClick={undo}
+          disabled={!canUndo}
+          className={`p-1.5 rounded-lg transition-colors ${
+            canUndo
+              ? "text-zinc-300 hover:text-white hover:bg-zinc-800 cursor-pointer"
+              : "text-zinc-600 opacity-40 cursor-not-allowed"
+          }`}
+          title="Deshacer (Ctrl + Z)"
+        >
+          <Undo2 className="w-3.5 h-3.5" />
+        </button>
+        <button
+          onClick={redo}
+          disabled={!canRedo}
+          className={`p-1.5 rounded-lg transition-colors ${
+            canRedo
+              ? "text-zinc-300 hover:text-white hover:bg-zinc-800 cursor-pointer"
+              : "text-zinc-600 opacity-40 cursor-not-allowed"
+          }`}
+          title="Rehacer (Ctrl + Y)"
+        >
+          <Redo2 className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
       {/* 1. Front Red Trash Button & ID Indicator */}
       <div className="flex items-center space-x-2 border-r border-zinc-700 pr-3 shrink-0">
         <button

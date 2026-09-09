@@ -42,6 +42,11 @@ interface ProposalContextType {
   updatePaymentTerm: (index: number, data: Partial<PaymentTerm>) => void;
   addTeamMember: (data?: Partial<TeamMember>) => void;
   removeTeamMember: (index: number) => void;
+  updateTeamMember: (index: number, data: Partial<TeamMember>) => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   updateEnfocoResponsibilities: (items: string[]) => void;
   updateClientResponsibilities: (items: string[]) => void;
   exportJson: () => void;
@@ -259,6 +264,60 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAdmin, setIsAdminState] = useState(false);
 
+  // Undo / Redo History Stack (Up to 30 actions)
+  const [history, setHistory] = useState<ProposalData[]>([]);
+  const [future, setFuture] = useState<ProposalData[]>([]);
+
+  const pushStateToHistory = (currentState: ProposalData) => {
+    try {
+      setHistory((prev) => [...prev.slice(-29), JSON.parse(JSON.stringify(currentState))]);
+      setFuture([]);
+    } catch (e) {
+      console.error("Error saving undo state:", e);
+    }
+  };
+
+  const commitProposalUpdate = (updater: (prev: ProposalData) => ProposalData) => {
+    setProposal((prev) => {
+      pushStateToHistory(prev);
+      return updater(prev);
+    });
+  };
+
+  const undo = () => {
+    setHistory((prevH) => {
+      if (prevH.length === 0) {
+        toast.info("No hay más acciones para deshacer.");
+        return prevH;
+      }
+      const previous = prevH[prevH.length - 1];
+      const newHistory = prevH.slice(0, -1);
+      setProposal((current) => {
+        setFuture((prevF) => [JSON.parse(JSON.stringify(current)), ...prevF.slice(0, 29)]);
+        return previous;
+      });
+      toast.success("↩️ Acción deshecha correctamente.");
+      return newHistory;
+    });
+  };
+
+  const redo = () => {
+    setFuture((prevF) => {
+      if (prevF.length === 0) {
+        toast.info("No hay más acciones para rehacer.");
+        return prevF;
+      }
+      const next = prevF[0];
+      const newFuture = prevF.slice(1);
+      setProposal((current) => {
+        setHistory((prevH) => [...prevH.slice(-29), JSON.parse(JSON.stringify(current))]);
+        return next;
+      });
+      toast.success("↪️ Acción rehecha correctamente.");
+      return newFuture;
+    });
+  };
+
   // Load from LocalStorage & URL Params on mount
   useEffect(() => {
     async function initProposalData() {
@@ -391,6 +450,26 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       }
 
       const key = e.key.toLowerCase();
+
+      // Undo: Ctrl+Z / Cmd+Z (without Shift)
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && key === "z") {
+        e.preventDefault();
+        e.stopPropagation();
+        undo();
+        return;
+      }
+
+      // Redo: Ctrl+Y / Cmd+Y or Ctrl+Shift+Z / Cmd+Shift+Z
+      if (
+        ((e.ctrlKey || e.metaKey) && key === "y") ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && key === "z")
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        redo();
+        return;
+      }
+
       const isEditShortcut =
         ((e.ctrlKey || e.metaKey) && e.shiftKey && key === "e") ||
         (e.altKey && (key === "e" || key === "d")) ||
@@ -437,7 +516,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Company
   const updateCompany = (data: Partial<ProposalData["company"]>) => {
-    setProposal((prev) => ({
+    commitProposalUpdate((prev) => ({
       ...prev,
       company: { ...prev.company, ...data },
     }));
@@ -445,7 +524,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Client
   const updateClient = (data: Partial<ProposalData["client"]>) => {
-    setProposal((prev) => ({
+    commitProposalUpdate((prev) => ({
       ...prev,
       client: { ...prev.client, ...data },
     }));
@@ -453,7 +532,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Project
   const updateProject = (data: Partial<ProposalData["project"]>) => {
-    setProposal((prev) => ({
+    commitProposalUpdate((prev) => ({
       ...prev,
       project: { ...prev.project, ...data },
     }));
@@ -461,7 +540,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Budget (Recalculate total if subtotal, discount, or tax changes)
   const updateBudget = (data: Partial<ProposalData["budget"]>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const newAmountWithoutTax = data.amountWithoutTax !== undefined ? data.amountWithoutTax : prev.budget.amountWithoutTax;
       const hasTax = data.hasTax !== undefined ? data.hasTax : (prev.budget.hasTax !== undefined ? prev.budget.hasTax : true);
       const taxPercent = data.taxPercent !== undefined ? data.taxPercent : (prev.budget.taxPercent !== undefined ? prev.budget.taxPercent : 18);
@@ -501,7 +580,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Add Requirement (Unlimited)
   const addRequirement = (data?: Partial<Requirement>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const nextNum = prev.requirements.length + 1;
       const id = data?.id || `REQ-${nextNum < 10 ? "0" + nextNum : nextNum}`;
       const newReq: Requirement = {
@@ -522,7 +601,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Remove Requirement
   const removeRequirement = (index: number) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       if (prev.requirements.length <= 1) {
         toast.error("Debe existir al menos 1 requerimiento.");
         return prev;
@@ -542,7 +621,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Requirement
   const updateRequirement = (index: number, data: Partial<Requirement>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.requirements];
       updated[index] = { ...updated[index], ...data };
       return { ...prev, requirements: updated };
@@ -552,7 +631,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   // Add Deliverable to a Requirement
   const addDeliverable = (reqIndex: number, deliverableText: string) => {
     if (!deliverableText.trim()) return;
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.requirements];
       const currentDels = updated[reqIndex].deliverables;
       updated[reqIndex] = {
@@ -565,7 +644,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Remove Deliverable from a Requirement
   const removeDeliverable = (reqIndex: number, delIndex: number) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.requirements];
       const currentDels = updated[reqIndex].deliverables;
       if (currentDels.length <= 1) {
@@ -582,7 +661,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Add Roadmap Phase
   const addRoadmapPhase = (data?: Partial<RoadmapPhase>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const nextNum = prev.roadmap.length + 1;
       const newPhase: RoadmapPhase = {
         phase: data?.phase || `Fase ${nextNum}`,
@@ -602,7 +681,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Remove Roadmap Phase
   const removeRoadmapPhase = (index: number) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       if (prev.roadmap.length <= 1) {
         toast.error("Debe existir al menos 1 fase en el cronograma.");
         return prev;
@@ -618,7 +697,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Roadmap Phase
   const updateRoadmapPhase = (index: number, data: Partial<RoadmapPhase>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.roadmap];
       updated[index] = { ...updated[index], ...data };
       return { ...prev, roadmap: updated };
@@ -628,7 +707,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   // Add Milestone to a Phase
   const addMilestone = (phaseIndex: number, milestoneText: string) => {
     if (!milestoneText.trim()) return;
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.roadmap];
       const currentMilestones = updated[phaseIndex].milestones;
       updated[phaseIndex] = {
@@ -641,7 +720,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Remove Milestone from a Phase
   const removeMilestone = (phaseIndex: number, milestoneIndex: number) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.roadmap];
       const currentMilestones = updated[phaseIndex].milestones;
       if (currentMilestones.length <= 1) {
@@ -658,7 +737,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Add Payment Term
   const addPaymentTerm = (data?: Partial<PaymentTerm>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const newTerm: PaymentTerm = {
         milestone: data?.milestone || "Nuevo Hito de Pago",
         percentage: data?.percentage || 10,
@@ -676,7 +755,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Remove Payment Term
   const removePaymentTerm = (index: number) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       if (prev.budget.paymentTerms.length <= 1) {
         toast.error("Debe existir al menos 1 hito de pago.");
         return prev;
@@ -691,13 +770,10 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Update Payment Term
   const updatePaymentTerm = (index: number, data: Partial<PaymentTerm>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const updated = [...prev.budget.paymentTerms];
       updated[index] = { ...updated[index], ...data };
-      return {
-        ...prev,
-        budget: { ...prev.budget, paymentTerms: updated },
-      };
+      return { ...prev, budget: { ...prev.budget, paymentTerms: updated } };
     });
   };
 
@@ -911,7 +987,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
   // Team Member Mutators
   const addTeamMember = (data?: Partial<TeamMember>) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       const newMember: TeamMember = {
         role: data?.role || "Especialista Adjunto",
         category: data?.category || "Construcción",
@@ -928,7 +1004,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   };
 
   const removeTeamMember = (index: number) => {
-    setProposal((prev) => {
+    commitProposalUpdate((prev) => {
       if (prev.team.length <= 1) {
         toast.error("Debe haber al menos 1 miembro del equipo.");
         return prev;
@@ -941,16 +1017,24 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     toast.info("Miembro eliminado del equipo.");
   };
 
+  const updateTeamMember = (index: number, data: Partial<TeamMember>) => {
+    commitProposalUpdate((prev) => {
+      const updated = [...prev.team];
+      updated[index] = { ...updated[index], ...data };
+      return { ...prev, team: updated };
+    });
+  };
+
   // Update Responsibilities
   const updateEnfocoResponsibilities = (items: string[]) => {
-    setProposal((prev) => ({
+    commitProposalUpdate((prev) => ({
       ...prev,
       enfocoResponsibilities: items,
     }));
   };
 
   const updateClientResponsibilities = (items: string[]) => {
-    setProposal((prev) => ({
+    commitProposalUpdate((prev) => ({
       ...prev,
       clientResponsibilities: items,
     }));
@@ -982,6 +1066,11 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         updatePaymentTerm,
         addTeamMember,
         removeTeamMember,
+        updateTeamMember,
+        undo,
+        redo,
+        canUndo: history.length > 0,
+        canRedo: future.length > 0,
         updateEnfocoResponsibilities,
         updateClientResponsibilities,
         exportJson,

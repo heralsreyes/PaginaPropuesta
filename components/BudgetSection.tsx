@@ -5,6 +5,7 @@ import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { DeletableItem } from "@/components/studio/DeletableItem";
 import { CheckCircle2, CreditCard, ShieldCheck, Tag, Plus } from "lucide-react";
 import { motion } from "framer-motion";
@@ -63,13 +64,13 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-            PROPUESTA ECONÓMICA • INVERSIÓN TRANSPARENTE
+            <EditableField id="budget_header_badge" defaultText="PROPUESTA ECONÓMICA • INVERSIÓN TRANSPARENTE" />
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold font-display text-[var(--text-primary)] mt-3 mb-2">
-            Presupuesto & Esquema de Inversión
+            <EditableField id="budget_header_h2" defaultText="Presupuesto & Esquema de Inversión" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
-            Monto total estimado para la ejecución del proyecto con desglose de impuestos y modalidades de pago por entregables.
+            <EditableField id="budget_header_desc" defaultText="Monto total estimado para la ejecución del proyecto con desglose de impuestos y modalidades de pago por entregables." />
           </p>
         </div>
 
@@ -170,7 +171,9 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
 
               <div className="text-[var(--text-primary)]/60 text-[11px] text-center mt-2.5 font-mono flex items-center justify-center space-x-1.5">
                 <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
-                <span>Incluye 60 Días de Garantía SLA Post-Pase</span>
+                <span>
+                  <EditableField id="budget_warranty_text" defaultText="Incluye 60 Días de Garantía SLA Post-Pase" />
+                </span>
               </div>
             </div>
           </div>
@@ -213,8 +216,18 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                     itemTitle="hito de pago"
                   >
                     <div className="p-4 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] flex items-start space-x-4 hover:border-[var(--accent-color)]/40 transition-all">
-                      <div className="w-11 h-11 rounded-2xl bg-[var(--accent-color)] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
-                        {term.percentage}%
+                      <div className="w-11 h-11 rounded-2xl bg-[var(--accent-color)] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs inline-flex items-center gap-0.5">
+                        <EditableText
+                          value={String(term.percentage)}
+                          onChange={(val) => {
+                            const num = parseInt(val.replace(/\D/g, ""), 10) || 0;
+                            const nextTerms = [...budget.paymentTerms];
+                            nextTerms[idx] = { ...nextTerms[idx], percentage: num };
+                            updateBudget({ paymentTerms: nextTerms });
+                          }}
+                          tag="span"
+                        />
+                        <span>%</span>
                       </div>
                       <div className="flex-1 min-w-0 pr-2">
                         <div className="flex items-center justify-between gap-2 mb-1">
@@ -253,8 +266,12 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
             </div>
 
             <div className="pt-4 mt-5 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-2 text-xs text-[var(--text-primary)]/60 font-mono">
-              <span>Modalidad: Transferencia Bancaria</span>
-              <span className="font-bold text-[var(--text-primary)]">Facturación con NCF Fiscal</span>
+              <span>
+                <EditableField id="budget_payment_mode" defaultText="Modalidad: Transferencia Bancaria" />
+              </span>
+              <span className="font-bold text-[var(--text-primary)]">
+                <EditableField id="budget_invoice_ncf" defaultText="Facturación con NCF Fiscal" />
+              </span>
             </div>
           </div>
         </div>
