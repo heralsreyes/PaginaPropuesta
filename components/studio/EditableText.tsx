@@ -86,8 +86,9 @@ export const EditableText: React.FC<EditableTextProps> = ({
         onBlur={handleSave}
         onKeyDown={handleKeyDown}
         onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         style={style}
-        className={`w-full bg-white text-[#111111] border-2 border-[#2563EB] rounded-lg px-2 py-1 outline-none shadow-lg font-sans z-30 ${className}`}
+        className={`bg-white text-zinc-950 font-medium border-2 border-[var(--accent-color)] rounded-lg px-2 py-0.5 outline-none shadow-lg font-sans text-xs z-30 min-w-[70px] ${className}`}
       />
     );
   }
@@ -100,7 +101,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         setIsEditing(true);
       }}
       style={style}
-      className={`cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-[#2563EB]/40 hover:bg-[#2563EB]/10 rounded px-1 -mx-1 relative ${className}`}
+      className={`cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-[var(--accent-color)]/40 hover:bg-[var(--accent-color)]/10 rounded px-1 -mx-1 relative ${className}`}
       title="Clic para editar este texto"
     >
       {value}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Requirement, RequirementCategory } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
@@ -15,11 +15,25 @@ interface ScopeSectionProps {
 }
 
 export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
-  const { updateRequirement, removeRequirement, addRequirement } = useProposal();
+  const {
+    updateRequirement,
+    removeRequirement,
+    addRequirement,
+    updateRequirementCategory,
+    removeRequirementCategory,
+  } = useProposal();
   const { isDesignMode } = useStudioStore();
 
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+  const [todosLabel, setTodosLabel] = useState<string>("Todos");
   const [selectedRequirementId, setSelectedRequirementId] = useState<string>(requirements[0]?.id || "REQ-01");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("scope_todos_label");
+      if (saved) setTodosLabel(saved);
+    }
+  }, []);
 
   // Dynamic categories extracted from current requirements
   const existingCategories = Array.from(new Set(requirements.map((r) => r.category).filter(Boolean)));
@@ -87,25 +101,99 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
           {categories.map((cat) => {
             const isActive = selectedCategory === cat;
             return (
-              <button
+              <div
                 key={cat}
+                role="button"
+                tabIndex={0}
                 onClick={() => handleCategorySelect(cat)}
-                className={`inline-flex items-center px-4 py-1.5 text-xs font-semibold rounded-full border transition-all duration-200 cursor-pointer ${
+                className={`inline-flex items-center px-4 py-1.5 text-xs font-semibold rounded-full border transition-all duration-200 cursor-pointer select-none ${
                   isActive
                     ? "bg-[var(--accent-color)] text-white border-[var(--accent-color)] shadow-md shadow-[var(--accent-color)]/20 scale-105"
                     : "bg-[var(--bg-main)] text-[var(--text-primary)]/80 border-[var(--border-color)] hover:border-[var(--accent-color)]/40 hover:text-[var(--text-primary)]"
                 }`}
               >
                 {isActive && (
-                  <span className="relative flex h-2 w-2 mr-2">
+                  <span className="relative flex h-2 w-2 mr-2 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
                   </span>
                 )}
-                <span>{cat}</span>
-              </button>
+
+                {cat === "Todos" ? (
+                  <EditableText
+                    value={todosLabel}
+                    onChange={(val) => {
+                      const trimmed = val.trim() || "Todos";
+                      setTodosLabel(trimmed);
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("scope_todos_label", trimmed);
+                      }
+                    }}
+                    tag="span"
+                    className="cursor-pointer"
+                  />
+                ) : (
+                  <div className="inline-flex items-center gap-1.5">
+                    <EditableText
+                      value={cat}
+                      onChange={(newVal) => {
+                        const trimmed = newVal.trim();
+                        if (trimmed && trimmed !== cat) {
+                          updateRequirementCategory(cat, trimmed);
+                          if (selectedCategory === cat) {
+                            setSelectedCategory(trimmed);
+                          }
+                        }
+                      }}
+                      tag="span"
+                      className="cursor-pointer"
+                    />
+                    {isDesignMode && existingCategories.length > 1 && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (window.confirm(`¿Deseas eliminar la categoría "${cat}" y todos sus módulos asociados?`)) {
+                            removeRequirementCategory(cat);
+                            setSelectedCategory("Todos");
+                          }
+                        }}
+                        className={`text-xs opacity-50 hover:opacity-100 hover:text-red-400 cursor-pointer p-0.5 rounded transition-opacity ${
+                          isActive ? "text-white" : "text-[var(--text-primary)]"
+                        }`}
+                        title={`Eliminar categoría "${cat}"`}
+                      >
+                        ×
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             );
           })}
+
+          {/* Quick Add Category in Design Mode */}
+          {isDesignMode && (
+            <button
+              type="button"
+              onClick={() => {
+                const newCatName = `Categoría ${existingCategories.length + 1}`;
+                addRequirement({
+                  category: newCatName as RequirementCategory,
+                  title: `Nuevo Módulo (${newCatName})`,
+                  description: "Descripción editable de este módulo.",
+                  deliverables: ["Entregable 1"],
+                });
+                setSelectedCategory(newCatName);
+              }}
+              className="inline-flex items-center px-3.5 py-1.5 text-xs font-bold rounded-full border border-dashed border-[var(--accent-color)]/70 text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10 transition-all cursor-pointer gap-1"
+              title="Añadir una nueva categoría de módulos"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Categoría</span>
+            </button>
+          )}
         </div>
 
         {/* Master-Detail Architecture Inspector Split Layout (max-w-6xl) */}

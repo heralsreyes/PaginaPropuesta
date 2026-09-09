@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { ProposalData, sampleProposal, Requirement, PaymentTerm, RoadmapPhase, TeamMember } from "@/data/proposalData";
+import { ProposalData, sampleProposal, Requirement, RequirementCategory, PaymentTerm, RoadmapPhase, TeamMember } from "@/data/proposalData";
 import { useStudioStore, EXCEL_CUSTOM_SECTIONS, GENERIC_DEFAULT_SECTIONS, PageSection, CanvasElement, ButtonActionConfig } from "@/store/useStudioStore";
 import { useThemeStore, PRESET_THEMES, ThemeConfig, applyCssVars } from "@/store/useThemeStore";
 import { validateProposalData } from "@/lib/proposalValidation";
@@ -30,6 +30,8 @@ interface ProposalContextType {
   addRequirement: (data?: Partial<Requirement>) => void;
   removeRequirement: (index: number) => void;
   updateRequirement: (index: number, data: Partial<Requirement>) => void;
+  updateRequirementCategory: (oldCategory: string, newCategory: string) => void;
+  removeRequirementCategory: (category: string) => void;
   addDeliverable: (reqIndex: number, deliverableText: string) => void;
   removeDeliverable: (reqIndex: number, delIndex: number) => void;
   addRoadmapPhase: (data?: Partial<RoadmapPhase>) => void;
@@ -628,6 +630,30 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     });
   };
 
+  // Update all requirements with an old category name to a new category name
+  const updateRequirementCategory = (oldCategory: string, newCategory: string) => {
+    const trimmed = newCategory.trim();
+    if (!trimmed || oldCategory === trimmed) return;
+    commitProposalUpdate((prev) => {
+      const updated = prev.requirements.map((r) =>
+        r.category === oldCategory ? { ...r, category: trimmed as RequirementCategory } : r
+      );
+      return { ...prev, requirements: updated };
+    });
+  };
+
+  // Remove all requirements of a category
+  const removeRequirementCategory = (catToRemove: string) => {
+    commitProposalUpdate((prev) => {
+      const updated = prev.requirements.filter((r) => r.category !== catToRemove);
+      if (updated.length === 0) {
+        toast.error("No se puede eliminar la última categoría con todos los módulos.");
+        return prev;
+      }
+      return { ...prev, requirements: updated };
+    });
+  };
+
   // Add Deliverable to a Requirement
   const addDeliverable = (reqIndex: number, deliverableText: string) => {
     if (!deliverableText.trim()) return;
@@ -1054,6 +1080,8 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         addRequirement,
         removeRequirement,
         updateRequirement,
+        updateRequirementCategory,
+        removeRequirementCategory,
         addDeliverable,
         removeDeliverable,
         addRoadmapPhase,

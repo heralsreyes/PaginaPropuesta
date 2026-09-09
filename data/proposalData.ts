@@ -6,7 +6,7 @@ export interface TeamMember {
   iconName?: string;
 }
 
-export type RequirementCategory = "Core" | "Automatización" | "Integración" | "Reportes" | "Seguridad";
+export type RequirementCategory = "Core" | "Automatización" | "Integración" | "Reportes" | "Seguridad" | string;
 
 export interface Requirement {
   id: string;
