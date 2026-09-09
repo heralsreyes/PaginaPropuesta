@@ -270,54 +270,39 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   const [history, setHistory] = useState<ProposalData[]>([]);
   const [future, setFuture] = useState<ProposalData[]>([]);
 
-  const pushStateToHistory = (currentState: ProposalData) => {
-    try {
-      setHistory((prev) => [...prev.slice(-29), JSON.parse(JSON.stringify(currentState))]);
-      setFuture([]);
-    } catch (e) {
-      console.error("Error saving undo state:", e);
-    }
-  };
-
   const commitProposalUpdate = (updater: (prev: ProposalData) => ProposalData) => {
     setProposal((prev) => {
-      pushStateToHistory(prev);
+      const clonedPrev = JSON.parse(JSON.stringify(prev));
+      setTimeout(() => {
+        setHistory((prevH) => [...prevH.slice(-29), clonedPrev]);
+        setFuture([]);
+      }, 0);
       return updater(prev);
     });
   };
 
   const undo = () => {
-    setHistory((prevH) => {
-      if (prevH.length === 0) {
-        toast.info("No hay más acciones para deshacer.");
-        return prevH;
-      }
-      const previous = prevH[prevH.length - 1];
-      const newHistory = prevH.slice(0, -1);
-      setProposal((current) => {
-        setFuture((prevF) => [JSON.parse(JSON.stringify(current)), ...prevF.slice(0, 29)]);
-        return previous;
-      });
-      toast.success("↩️ Acción deshecha correctamente.");
-      return newHistory;
-    });
+    if (history.length === 0) {
+      toast.info("No hay más acciones para deshacer.");
+      return;
+    }
+    const previous = history[history.length - 1];
+    setHistory((prevH) => prevH.slice(0, -1));
+    setFuture((prevF) => [JSON.parse(JSON.stringify(proposal)), ...prevF.slice(0, 29)]);
+    setProposal(previous);
+    toast.success("↩️ Acción deshecha correctamente.");
   };
 
   const redo = () => {
-    setFuture((prevF) => {
-      if (prevF.length === 0) {
-        toast.info("No hay más acciones para rehacer.");
-        return prevF;
-      }
-      const next = prevF[0];
-      const newFuture = prevF.slice(1);
-      setProposal((current) => {
-        setHistory((prevH) => [...prevH.slice(-29), JSON.parse(JSON.stringify(current))]);
-        return next;
-      });
-      toast.success("↪️ Acción rehecha correctamente.");
-      return newFuture;
-    });
+    if (future.length === 0) {
+      toast.info("No hay más acciones para rehacer.");
+      return;
+    }
+    const next = future[0];
+    setFuture((prevF) => prevF.slice(1));
+    setHistory((prevH) => [...prevH.slice(-29), JSON.parse(JSON.stringify(proposal))]);
+    setProposal(next);
+    toast.success("↪️ Acción rehecha correctamente.");
   };
 
   // Load from LocalStorage & URL Params on mount
@@ -498,6 +483,31 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       }
     }
   }, [proposal, isLoaded]);
+
+  // Auto-Repair: Detect if requirements contain duplicate corruptions (e.g. all modules sharing the same ID/title)
+  useEffect(() => {
+    if (!isLoaded || !proposal?.requirements || proposal.requirements.length <= 1) return;
+    const reqs = proposal.requirements;
+    const allSameId = reqs.every((r) => r.id === reqs[0].id);
+    const allSameTitle = reqs.every((r) => r.title === reqs[0].title);
+
+    if (allSameId || allSameTitle) {
+      console.warn("[ProposalContext] Módulos duplicados detectados, restaurando requerimientos originales...");
+      const clientStr = (proposal.client?.name || proposal.client?.shortName || proposal.project?.title || "").toLowerCase();
+      let fallbackReqs = sampleProposal.requirements;
+      const preset = getPresetProposal(clientStr);
+      if (preset?.requirements && preset.requirements.length > 0) {
+        fallbackReqs = preset.requirements;
+      }
+
+      const cloned = JSON.parse(JSON.stringify(fallbackReqs));
+      setProposal((prev) => ({
+        ...prev,
+        requirements: cloned,
+      }));
+      toast.info("Se han reparado y restaurado los módulos de alcance.");
+    }
+  }, [proposal?.requirements, isLoaded, proposal?.client?.name]);
 
   const setIsAdmin = (val: boolean) => {
     setIsAdminState(val);

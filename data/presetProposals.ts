@@ -28,17 +28,17 @@ export function getPresetProposal(slug?: string): ProposalData | null {
   const dashed = clean.replace(/[\s_]+/g, "-");
   const underscored = clean.replace(/[\s-]+/g, "_");
 
-  if (PRESET_PROPOSALS[clean]) return PRESET_PROPOSALS[clean];
-  if (PRESET_PROPOSALS[dashed]) return PRESET_PROPOSALS[dashed];
-  if (PRESET_PROPOSALS[underscored]) return PRESET_PROPOSALS[underscored];
+  let match: ProposalData | null = null;
+  if (PRESET_PROPOSALS[clean]) match = PRESET_PROPOSALS[clean];
+  else if (PRESET_PROPOSALS[dashed]) match = PRESET_PROPOSALS[dashed];
+  else if (PRESET_PROPOSALS[underscored]) match = PRESET_PROPOSALS[underscored];
+  else if (clean.includes("ars") || clean.includes("primera")) match = PRESET_PROPOSALS["ars-primera"];
+  else if (clean.includes("excel")) match = PRESET_PROPOSALS["excel-puesto-de-bolsa"];
+  else if (clean.includes("bhd")) match = PRESET_PROPOSALS["bhd"];
+  else if (clean.includes("cepm")) match = PRESET_PROPOSALS["cepm"];
+  else if (clean.includes("claro")) match = PRESET_PROPOSALS["claro"];
+  else if (clean.includes("ramos")) match = PRESET_PROPOSALS["grupo-ramos"];
+  else if (clean.includes("puntacana")) match = PRESET_PROPOSALS["grupo-puntacana"];
 
-  if (clean.includes("ars") || clean.includes("primera")) return PRESET_PROPOSALS["ars-primera"];
-  if (clean.includes("excel")) return PRESET_PROPOSALS["excel-puesto-de-bolsa"];
-  if (clean.includes("bhd")) return PRESET_PROPOSALS["bhd"];
-  if (clean.includes("cepm")) return PRESET_PROPOSALS["cepm"];
-  if (clean.includes("claro")) return PRESET_PROPOSALS["claro"];
-  if (clean.includes("ramos")) return PRESET_PROPOSALS["grupo-ramos"];
-  if (clean.includes("puntacana")) return PRESET_PROPOSALS["grupo-puntacana"];
-
-  return null;
+  return match ? JSON.parse(JSON.stringify(match)) : null;
 }

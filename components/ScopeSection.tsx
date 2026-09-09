@@ -37,22 +37,31 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
 
   // Dynamic categories extracted from current requirements
   const existingCategories = Array.from(new Set(requirements.map((r) => r.category).filter(Boolean)));
+  const knownDefaults = ["Core", "Automatización", "Integración", "Reportes", "Seguridad"];
+  const allSelectableCategories = Array.from(new Set([...existingCategories, ...knownDefaults]));
   const categories = ["Todos", ...existingCategories];
 
-  const filtered = selectedCategory === "Todos"
-    ? requirements
-    : requirements.filter((r) => r.category === selectedCategory);
+  const filteredWithIndices = requirements
+    .map((req, origIdx) => ({ req, origIdx }))
+    .filter(({ req }) => selectedCategory === "Todos" || req.category === selectedCategory);
+  const filtered = filteredWithIndices.map((f) => f.req);
 
   const handleCategorySelect = (cat: string) => {
     setSelectedCategory(cat);
-    const newFiltered = cat === "Todos" ? requirements : requirements.filter((r) => r.category === cat);
+    const newFiltered = requirements
+      .map((req, origIdx) => ({ req, origIdx }))
+      .filter(({ req }) => cat === "Todos" || req.category === cat);
     if (newFiltered.length > 0) {
-      setSelectedRequirementId(newFiltered[0].id);
+      setSelectedRequirementId(newFiltered[0].req.id || String(newFiltered[0].origIdx));
     }
   };
 
-  const activeRequirement = filtered.find((r) => r.id === selectedRequirementId) || (filtered.length > 0 ? filtered[0] : null);
-  const activeReqIndex = activeRequirement ? requirements.findIndex((r) => r.id === activeRequirement.id) : -1;
+  const activeItem = filteredWithIndices.find(({ req, origIdx }) =>
+    req.id === selectedRequirementId || String(origIdx) === selectedRequirementId
+  ) || (filteredWithIndices.length > 0 ? filteredWithIndices[0] : null);
+
+  const activeRequirement = activeItem?.req || null;
+  const activeReqIndex = activeItem?.origIdx ?? -1;
 
   const getCategoryIcon = (cat: string, dark = false) => {
     const iconClass = dark ? "w-4 h-4 text-white" : "w-4 h-4 text-[var(--accent-color)]";
@@ -202,7 +211,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
           <div className="xl:col-span-4 flex flex-col justify-start space-y-2.5">
             <div className="flex items-center justify-between px-1 mb-1">
               <span className="text-xs font-bold text-[var(--text-primary)]/60 uppercase tracking-wider font-mono">
-                Módulos del Sistema ({filtered.length})
+                Módulos del Sistema ({filteredWithIndices.length})
               </span>
               {isDesignMode && (
                 <button
@@ -223,7 +232,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
             </div>
 
             <div className="space-y-2.5">
-              {filtered.length === 0 ? (
+              {filteredWithIndices.length === 0 ? (
                 <div className="p-6 text-center bg-[var(--bg-main)] border border-[var(--border-color)] rounded-2xl">
                   <p className="text-xs font-bold text-[var(--text-primary)]">
                     No hay módulos en la categoría "{selectedCategory}"
@@ -234,14 +243,16 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                   {isDesignMode && (
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={() => {
+                        const nextNum = requirements.length + 1;
                         addRequirement({
+                          id: `REQ-${nextNum < 10 ? "0" + nextNum : nextNum}`,
                           category: (selectedCategory === "Todos" ? "Core" : selectedCategory) as RequirementCategory,
-                          title: "Nuevo Módulo",
+                          title: `Nuevo Módulo ${nextNum}`,
                           description: "Descripción editable del módulo.",
                           deliverables: ["Entregable 1"],
-                        })
-                      }
+                        });
+                      }}
                       className="mt-3 px-3.5 py-1.5 rounded-xl bg-[var(--accent-color)] text-white text-xs font-bold shadow-md hover:scale-105 transition-all inline-flex items-center gap-1.5 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
@@ -250,17 +261,16 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                   )}
                 </div>
               ) : (
-                filtered.map((req) => {
-                  const isSelected = activeRequirement?.id === req.id;
-                  const reqIdx = requirements.findIndex((r) => r.id === req.id);
+                filteredWithIndices.map(({ req, origIdx }) => {
+                  const isSelected = activeReqIndex === origIdx;
                   return (
                     <DeletableItem
-                      key={req.id}
-                      onDelete={() => removeRequirement(reqIdx)}
+                      key={`${req.id || 'req'}-${origIdx}`}
+                      onDelete={() => removeRequirement(origIdx)}
                       itemTitle="módulo de alcance"
                     >
                       <div
-                        onClick={() => setSelectedRequirementId(req.id)}
+                        onClick={() => setSelectedRequirementId(req.id || String(origIdx))}
                         className={`p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-xs ${
                           isSelected
                             ? "bg-[var(--text-primary)] text-[var(--bg-main)] border-[var(--text-primary)] shadow-md scale-[1.02]"
@@ -287,12 +297,12 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                                   onClick={(e) => e.stopPropagation()}
                                   onChange={(e) => {
                                     e.stopPropagation();
-                                    updateRequirement(reqIdx, { category: e.target.value as RequirementCategory });
+                                    updateRequirement(origIdx, { category: e.target.value as RequirementCategory });
                                   }}
                                   className="bg-black/10 dark:bg-white/10 text-inherit border border-current/20 rounded px-1 py-0.5 text-[10px] font-mono cursor-pointer outline-none hover:border-[var(--accent-color)]"
                                   title="Asignar a qué botón de categoría pertenece este módulo"
                                 >
-                                  {existingCategories.map((c) => (
+                                  {allSelectableCategories.map((c) => (
                                     <option key={c} value={c} className="bg-zinc-900 text-white font-sans">
                                       {c}
                                     </option>
@@ -305,7 +315,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                             <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--bg-main)]" : "text-[var(--text-primary)]"}`}>
                               <EditableText
                                 value={req.title}
-                                onChange={(val) => updateRequirement(reqIdx, { title: val })}
+                                onChange={(val) => updateRequirement(origIdx, { title: val })}
                                 tag="span"
                               />
                             </h4>
@@ -364,7 +374,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                                 className="bg-transparent font-bold text-[var(--accent-color)] cursor-pointer outline-none border-b border-dashed border-[var(--accent-color)]/50 hover:bg-[var(--accent-color)]/10 rounded px-1 py-0.5"
                                 title="Selecciona a qué botón de categoría responde este módulo"
                               >
-                                {existingCategories.map((c) => (
+                                {allSelectableCategories.map((c) => (
                                   <option key={c} value={c} className="bg-zinc-900 text-white font-sans">
                                     {c}
                                   </option>
@@ -379,7 +389,12 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                         <span className="text-xs font-mono font-bold text-[var(--text-primary)]/70 px-3 py-1 rounded-md bg-[var(--bg-main)] border border-[var(--border-color)]">
                           <EditableText
                             value={activeRequirement.id}
-                            onChange={(val) => updateRequirement(activeReqIndex, { id: val })}
+                            onChange={(val) => {
+                              const trimmed = val.trim();
+                              if (!trimmed) return;
+                              updateRequirement(activeReqIndex, { id: trimmed });
+                              setSelectedRequirementId(trimmed);
+                            }}
                             tag="span"
                           />
                         </span>
