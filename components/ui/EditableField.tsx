@@ -108,6 +108,7 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
         suppressContentEditableWarning
         suppressHydrationWarning
         onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         onBlur={handleBlur}
         style={computedStyle}
         className={`${className} outline-none cursor-text hover:ring-2 hover:ring-[var(--accent-color)]/60 hover:bg-[var(--accent-color)]/10 rounded px-1 -mx-1 relative transition-all`}
@@ -116,18 +117,26 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
       </Tag>
 
       {/* Mini Color Trigger Button on Hover */}
-      <button
-        type="button"
+      <span
+        role="button"
+        tabIndex={0}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
           setShowColorPicker(!showColorPicker);
         }}
-        className="no-print absolute -top-3 -right-2 opacity-0 group-hover/editable:opacity-100 transition-opacity bg-zinc-900 text-white p-0.5 rounded-full border border-zinc-600 shadow-md cursor-pointer hover:scale-110 z-30"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.stopPropagation();
+            e.preventDefault();
+            setShowColorPicker(!showColorPicker);
+          }
+        }}
+        className="no-print absolute -top-3 -right-2 opacity-0 group-hover/editable:opacity-100 transition-opacity bg-zinc-900 text-white p-0.5 rounded-full border border-zinc-600 shadow-md cursor-pointer hover:scale-110 z-30 inline-flex items-center justify-center select-none"
         title="Cambiar color de este texto"
       >
         <Palette className="w-2.5 h-2.5 text-amber-400" />
-      </button>
+      </span>
 
       {/* Color Picker Popover */}
       {showColorPicker && (
@@ -139,71 +148,95 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
         >
           <div className="flex items-center justify-between text-[11px] font-bold border-b border-zinc-800 pb-1 text-zinc-300">
             <span>Color del Texto</span>
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={() => setShowColorPicker(false)}
-              className="text-zinc-500 hover:text-white cursor-pointer"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") setShowColorPicker(false);
+              }}
+              className="text-zinc-500 hover:text-white cursor-pointer inline-flex items-center justify-center"
             >
               <X className="w-3 h-3" />
-            </button>
+            </span>
           </div>
 
           <div className="grid grid-cols-5 gap-1.5 pt-1">
             {/* Auto / Default */}
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={() => applyColor(null)}
-              className={`w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer transition-transform hover:scale-105 ${
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") applyColor(null);
+              }}
+              className={`w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer transition-transform hover:scale-105 select-none ${
                 !customColor ? "border-amber-400 ring-1 ring-amber-400" : "border-zinc-700 bg-zinc-800"
               }`}
               title="Color Automático / Heredar"
             >
               <span className="text-[9px] font-bold text-zinc-300">Auto</span>
-            </button>
+            </span>
 
             {/* White */}
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={() => applyColor("#FFFFFF")}
-              className={`w-7 h-7 rounded-lg border bg-white flex items-center justify-center cursor-pointer transition-transform hover:scale-105 ${
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") applyColor("#FFFFFF");
+              }}
+              className={`w-7 h-7 rounded-lg border bg-white flex items-center justify-center cursor-pointer transition-transform hover:scale-105 select-none ${
                 customColor === "#FFFFFF" ? "border-blue-500 ring-2 ring-blue-500" : "border-zinc-300"
               }`}
               title="Blanco"
             >
               {customColor === "#FFFFFF" && <Check className="w-3 h-3 text-blue-600" />}
-            </button>
+            </span>
 
             {/* Black */}
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={() => applyColor("#000000")}
-              className={`w-7 h-7 rounded-lg border bg-black flex items-center justify-center cursor-pointer transition-transform hover:scale-105 ${
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") applyColor("#000000");
+              }}
+              className={`w-7 h-7 rounded-lg border bg-black flex items-center justify-center cursor-pointer transition-transform hover:scale-105 select-none ${
                 customColor === "#000000" ? "border-blue-500 ring-2 ring-blue-500" : "border-zinc-700"
               }`}
               title="Negro"
             >
               {customColor === "#000000" && <Check className="w-3 h-3 text-white" />}
-            </button>
+            </span>
 
             {/* Theme Accent */}
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={() => applyColor("var(--accent-color)")}
-              className="w-7 h-7 rounded-lg border border-zinc-700 bg-[var(--accent-color)] flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") applyColor("var(--accent-color)");
+              }}
+              className="w-7 h-7 rounded-lg border border-zinc-700 bg-[var(--accent-color)] flex items-center justify-center cursor-pointer transition-transform hover:scale-105 select-none"
               title="Color de Acento del Tema"
             >
               {customColor === "var(--accent-color)" && <Check className="w-3 h-3 text-white" />}
-            </button>
+            </span>
 
             {/* Theme Secondary Accent */}
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={() => applyColor("var(--secondary-accent)")}
-              className="w-7 h-7 rounded-lg border border-zinc-700 bg-[var(--secondary-accent)] flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") applyColor("var(--secondary-accent)");
+              }}
+              className="w-7 h-7 rounded-lg border border-zinc-700 bg-[var(--secondary-accent)] flex items-center justify-center cursor-pointer transition-transform hover:scale-105 select-none"
               title="Acento Secundario del Tema"
             >
               {customColor === "var(--secondary-accent)" && <Check className="w-3 h-3 text-white" />}
-            </button>
+            </span>
           </div>
 
           <div className="flex items-center justify-between pt-1.5 border-t border-zinc-800 text-[10px]">
