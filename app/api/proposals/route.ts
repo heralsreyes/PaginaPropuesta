@@ -22,21 +22,26 @@ export async function GET(req: NextRequest) {
 
     if (slug) {
       const cleanSlug = sanitizeSlug(slug);
-      const filePath = path.join(proposalsDir, `${cleanSlug}.json`);
+      const candidates = [
+        path.join(proposalsDir, `${cleanSlug}.json`),
+        path.join(proposalsDir, `${slug.trim().toLowerCase()}.json`),
+        path.join(proposalsDir, `${slug.trim()}.json`),
+      ];
 
-      try {
-        const fileContent = await fs.readFile(filePath, "utf-8");
-        const parsed = JSON.parse(fileContent);
-        return NextResponse.json({ success: true, data: parsed, slug: cleanSlug });
-      } catch (err: any) {
-        if (err.code === "ENOENT") {
-          return NextResponse.json(
-            { success: false, error: `No se encontró la propuesta '${cleanSlug}'` },
-            { status: 404 }
-          );
+      for (const filePath of candidates) {
+        try {
+          const fileContent = await fs.readFile(filePath, "utf-8");
+          const parsed = JSON.parse(fileContent);
+          return NextResponse.json({ success: true, data: parsed, slug: cleanSlug });
+        } catch {
+          // Continuar con el siguiente candidato
         }
-        throw err;
       }
+
+      return NextResponse.json(
+        { success: false, error: `No se encontró la propuesta '${cleanSlug}'` },
+        { status: 404 }
+      );
     }
 
     // List all available proposals
@@ -89,7 +94,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { slug, proposal, theme, sections, canvasElements, buttonActionsMap, colors } = body;
+    const { slug, proposal, theme, sections, canvasElements, buttonActionsMap, colors, editableFields, editableColors } = body;
 
     if (!proposal) {
       return NextResponse.json(
@@ -125,6 +130,8 @@ export async function POST(req: NextRequest) {
       ...(sections ? { sections } : {}),
       ...(canvasElements ? { canvasElements } : {}),
       ...(buttonActionsMap ? { buttonActionsMap } : {}),
+      ...(editableFields ? { editableFields } : {}),
+      ...(editableColors ? { editableColors } : {}),
       _savedAt: new Date().toISOString(),
     };
 

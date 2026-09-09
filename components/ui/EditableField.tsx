@@ -48,8 +48,24 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
         localStorage.removeItem(`editable_color_${id}`);
       }
     };
+    const handleSync = () => {
+      if (typeof window !== "undefined") {
+        const savedText = localStorage.getItem(`editable_${id}`);
+        if (savedText !== null && savedText !== "") {
+          setText(savedText);
+        } else {
+          setText(defaultText);
+        }
+        const savedColor = localStorage.getItem(`editable_color_${id}`);
+        setCustomColor(savedColor || null);
+      }
+    };
     window.addEventListener("enfoco-reset-all", handleReset);
-    return () => window.removeEventListener("enfoco-reset-all", handleReset);
+    window.addEventListener("enfoco-sync-editables", handleSync);
+    return () => {
+      window.removeEventListener("enfoco-reset-all", handleReset);
+      window.removeEventListener("enfoco-sync-editables", handleSync);
+    };
   }, [id, defaultText]);
 
   // Click outside to close color popover

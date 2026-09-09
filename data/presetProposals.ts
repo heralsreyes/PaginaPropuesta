@@ -22,7 +22,10 @@ export const PRESET_PROPOSALS: Record<string, ProposalData> = {
   "empresa-x": empresaXJson as unknown as ProposalData,
 };
 
-export function getPresetProposal(slug?: string): ProposalData | null {
+export function getPresetProposal(
+  slug?: string,
+  options?: { allowFuzzy?: boolean }
+): ProposalData | null {
   if (!slug) return null;
   const clean = decodeURIComponent(slug).trim().toLowerCase();
   const dashed = clean.replace(/[\s_]+/g, "-");
@@ -32,13 +35,17 @@ export function getPresetProposal(slug?: string): ProposalData | null {
   if (PRESET_PROPOSALS[clean]) match = PRESET_PROPOSALS[clean];
   else if (PRESET_PROPOSALS[dashed]) match = PRESET_PROPOSALS[dashed];
   else if (PRESET_PROPOSALS[underscored]) match = PRESET_PROPOSALS[underscored];
-  else if (clean.includes("ars") || clean.includes("primera")) match = PRESET_PROPOSALS["ars-primera"];
-  else if (clean.includes("excel")) match = PRESET_PROPOSALS["excel-puesto-de-bolsa"];
-  else if (clean.includes("bhd")) match = PRESET_PROPOSALS["bhd"];
-  else if (clean.includes("cepm")) match = PRESET_PROPOSALS["cepm"];
-  else if (clean.includes("claro")) match = PRESET_PROPOSALS["claro"];
-  else if (clean.includes("ramos")) match = PRESET_PROPOSALS["grupo-ramos"];
-  else if (clean.includes("puntacana")) match = PRESET_PROPOSALS["grupo-puntacana"];
+
+  // Coincidencias difusas SOLO si se permite explícitamente y no es un slug compuesto/versión
+  if (!match && options?.allowFuzzy) {
+    if (clean === "ars" || clean === "primera" || clean === "ars-primera") match = PRESET_PROPOSALS["ars-primera"];
+    else if (clean === "excel" || clean === "excel-puesto-de-bolsa") match = PRESET_PROPOSALS["excel-puesto-de-bolsa"];
+    else if (clean === "bhd" || clean === "banco-bhd") match = PRESET_PROPOSALS["bhd"];
+    else if (clean === "cepm") match = PRESET_PROPOSALS["cepm"];
+    else if (clean === "claro") match = PRESET_PROPOSALS["claro"];
+    else if (clean === "ramos" || clean === "grupo-ramos") match = PRESET_PROPOSALS["grupo-ramos"];
+    else if (clean === "puntacana" || clean === "grupo-puntacana") match = PRESET_PROPOSALS["grupo-puntacana"];
+  }
 
   return match ? JSON.parse(JSON.stringify(match)) : null;
 }

@@ -13,6 +13,8 @@ export type ExtendedProposalPayload = Partial<ProposalData> & {
   buttonActionsMap?: Record<string, ButtonActionConfig>;
   theme?: ThemeConfig;
   colors?: Record<string, any>;
+  editableFields?: Record<string, string>;
+  editableColors?: Record<string, string>;
 };
 
 const LOCAL_STORAGE_KEY = "enfoco_proposal_data_v2";
@@ -353,35 +355,60 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           }
         }
 
-        // 2. Load proposal JSON dynamically if ?proposal=name parameter exists (Takes priority over LocalStorage)
+        // 2. Load proposal JSON dynamically if ?proposal=name parameter exists
         if (proposalParam) {
           const cleanParam = decodeURIComponent(proposalParam).trim().toLowerCase();
-          const presetMatch = getPresetProposal(cleanParam);
-          if (presetMatch) {
-            clearEditableCache();
-            setCurrentSlug(cleanParam);
-            setProposal(presetMatch);
-            hydrateExtendedState(presetMatch);
-            toast.success(`Cargada propuesta de ${presetMatch.client.name}`);
-            setIsLoaded(true);
-            return;
+          const dashed = cleanParam.replace(/[\s_]+/g, "-");
+
+          // 2.1 Primero, intentar cargar el archivo guardado real desde /api/proposals
+          try {
+            const apiRes = await fetch(`/api/proposals?slug=${encodeURIComponent(dashed)}`);
+            if (apiRes.ok) {
+              const apiData = await apiRes.json();
+              if (apiData.success && apiData.data) {
+                const validation = validateProposalData(apiData.data);
+                if (validation.success && validation.data) {
+                  setCurrentSlug(dashed);
+                  setProposal(apiData.data);
+                  hydrateExtendedState(apiData.data);
+                  toast.success(`Cargada propuesta guardada: ${apiData.data.client?.name || dashed}`);
+                  setIsLoaded(true);
+                  return;
+                }
+              }
+            }
+          } catch (apiErr) {
+            console.warn("[ProposalContext] Error consultando /api/proposals:", apiErr);
           }
 
-          const dashed = cleanParam.replace(/[\s_]+/g, "-");
+          // 2.2 Segundo, intentar cargar desde localStorage por slug
+          const savedCustom =
+            localStorage.getItem(`enfoco_proposal_${dashed}`) ||
+            localStorage.getItem(`enfoco_proposal_${cleanParam}`);
+          if (savedCustom) {
+            try {
+              const parsedCustom = JSON.parse(savedCustom);
+              const valCustom = validateProposalData(parsedCustom);
+              if (valCustom.success && valCustom.data) {
+                setCurrentSlug(dashed);
+                setProposal(parsedCustom);
+                hydrateExtendedState(parsedCustom);
+                toast.success(`Cargada propuesta de ${parsedCustom.client?.name || dashed}`);
+                setIsLoaded(true);
+                return;
+              }
+            } catch (err) {
+              console.warn("Error leyendo propuesta desde localStorage:", err);
+            }
+          }
+
+          // 2.3 Tercero, verificar rutas estáticas en /proposals/*.json
           const underscored = cleanParam.replace(/[\s-]+/g, "_");
           const candidates = [
             `/proposals/${cleanParam}.json`,
             `/proposals/${dashed}.json`,
             `/proposals/${underscored}.json`,
-            `/proposals/propuesta_${underscored}_ENF-PROP-2026-08.json`,
           ];
-
-          if (cleanParam.includes("ars") || cleanParam.includes("primera")) {
-            candidates.unshift("/proposals/ars-primera.json");
-          }
-          if (cleanParam.includes("excel")) {
-            candidates.unshift("/proposals/excel-puesto-de-bolsa.json");
-          }
 
           for (const candidatePath of candidates) {
             try {
@@ -390,20 +417,39 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                 const remoteJson = await res.json();
                 const validation = validateProposalData(remoteJson);
                 if (validation.success && validation.data) {
-                  clearEditableCache();
                   setCurrentSlug(dashed);
                   setProposal(remoteJson);
                   hydrateExtendedState(remoteJson);
-                  toast.success(`Cargada propuesta de ${remoteJson.client.name}`);
+                  toast.success(`Cargada propuesta de ${remoteJson.client.name || dashed}`);
                   setIsLoaded(true);
                   return;
-                } else {
-                  console.warn(`[ProposalContext] Formato JSON inválido en ${candidatePath}:`, validation.error);
                 }
               }
             } catch (err) {
               console.warn(`[ProposalContext] No se pudo cargar desde ${candidatePath}:`, err);
             }
+          }
+
+          // 2.4 Cuarto, coincidencia exacta con plantilla institucional
+          const presetExact = getPresetProposal(cleanParam, { allowFuzzy: false });
+          if (presetExact) {
+            setCurrentSlug(cleanParam);
+            setProposal(presetExact);
+            hydrateExtendedState(presetExact);
+            toast.success(`Cargada plantilla: ${presetExact.client.name}`);
+            setIsLoaded(true);
+            return;
+          }
+
+          // 2.5 Quinto, coincidencia aproximada de plantilla (solo si es alias simple como 'ramos' o 'claro')
+          const presetLoose = getPresetProposal(cleanParam, { allowFuzzy: true });
+          if (presetLoose) {
+            setCurrentSlug(cleanParam);
+            setProposal(presetLoose);
+            hydrateExtendedState(presetLoose);
+            toast.success(`Cargada plantilla: ${presetLoose.client.name}`);
+            setIsLoaded(true);
+            return;
           }
         }
 
@@ -879,6 +925,25 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         console.warn("Could not save theme to localStorage:", err);
       }
     }
+
+    // Sincronizar campos de texto y colores editables
+    if (typeof window !== "undefined") {
+      if (data.editableFields && typeof data.editableFields === "object") {
+        Object.entries(data.editableFields).forEach(([id, text]) => {
+          if (text !== undefined && text !== null) {
+            localStorage.setItem(`editable_${id}`, text as string);
+          }
+        });
+      }
+      if (data.editableColors && typeof data.editableColors === "object") {
+        Object.entries(data.editableColors).forEach(([id, color]) => {
+          if (color) {
+            localStorage.setItem(`editable_color_${id}`, color as string);
+          }
+        });
+      }
+      window.dispatchEvent(new Event("enfoco-sync-editables"));
+    }
   };
 
   // Export JSON File
@@ -943,6 +1008,24 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         .replace(/[^a-z0-9_-]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
+      // Recolectar textos y colores editados en vivo
+      const editableFields: Record<string, string> = {};
+      const editableColors: Record<string, string> = {};
+      if (typeof window !== "undefined") {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k?.startsWith("editable_color_")) {
+            const fieldId = k.replace("editable_color_", "");
+            const val = localStorage.getItem(k);
+            if (val) editableColors[fieldId] = val;
+          } else if (k?.startsWith("editable_")) {
+            const fieldId = k.replace("editable_", "");
+            const val = localStorage.getItem(k);
+            if (val !== null) editableFields[fieldId] = val;
+          }
+        }
+      }
+
       const fullProposalData = {
         ...proposal,
         sections: studioState.sections,
@@ -961,6 +1044,8 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           h1: currentTheme.h1Color || currentTheme.textPrimary,
           h2: currentTheme.h2Color || currentTheme.secondaryAccent,
         },
+        editableFields,
+        editableColors,
       };
 
       // 1. Guardar en localStorage inmediatamente para persistencia cliente
@@ -985,6 +1070,8 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           sections: studioState.sections,
           canvasElements: studioState.canvasElements,
           buttonActionsMap: studioState.buttonActionsMap,
+          editableFields,
+          editableColors,
         }),
       });
 
@@ -1042,36 +1129,78 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       const cleanParam = decodeURIComponent(slug).trim().toLowerCase();
       const dashed = cleanParam.replace(/[\s_]+/g, "-");
 
-      // Check preset proposals first (instant in-memory switch with brand colors)
-      const presetMatch = getPresetProposal(cleanParam);
-      if (presetMatch) {
-        clearEditableCache();
+      // 1. Primero intentar cargar el archivo guardado real desde /api/proposals
+      try {
+        const apiRes = await fetch(`/api/proposals?slug=${encodeURIComponent(dashed)}`);
+        if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          if (apiData.success && apiData.data) {
+            const validation = validateProposalData(apiData.data);
+            if (validation.success && validation.data) {
+              setCurrentSlug(dashed);
+              setProposal(apiData.data);
+              hydrateExtendedState(apiData.data);
+              if (typeof window !== "undefined") {
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set("proposal", dashed);
+                window.history.pushState({}, "", newUrl.toString());
+              }
+              toast.success(`Cargada propuesta guardada: ${apiData.data.client?.name || dashed}`);
+              return true;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("[ProposalContext] Error al consultar API en loadProposalByName:", err);
+      }
+
+      // 2. Segundo, intentar cargar desde localStorage por slug
+      const savedCustom =
+        localStorage.getItem(`enfoco_proposal_${dashed}`) ||
+        localStorage.getItem(`enfoco_proposal_${cleanParam}`);
+      if (savedCustom) {
+        try {
+          const parsedCustom = JSON.parse(savedCustom);
+          const valCustom = validateProposalData(parsedCustom);
+          if (valCustom.success && valCustom.data) {
+            setCurrentSlug(dashed);
+            setProposal(parsedCustom);
+            hydrateExtendedState(parsedCustom);
+            if (typeof window !== "undefined") {
+              const newUrl = new URL(window.location.href);
+              newUrl.searchParams.set("proposal", dashed);
+              window.history.pushState({}, "", newUrl.toString());
+            }
+            toast.success(`Cargada propuesta de ${parsedCustom.client?.name || dashed}`);
+            return true;
+          }
+        } catch (err) {
+          console.warn("Error leyendo propuesta desde localStorage:", err);
+        }
+      }
+
+      // 3. Tercero, coincidencia exacta con plantilla institucional
+      const presetExact = getPresetProposal(cleanParam, { allowFuzzy: false });
+      if (presetExact) {
         setCurrentSlug(dashed);
-        setProposal(presetMatch);
-        hydrateExtendedState(presetMatch);
+        setProposal(presetExact);
+        hydrateExtendedState(presetExact);
         if (typeof window !== "undefined") {
           const newUrl = new URL(window.location.href);
           newUrl.searchParams.set("proposal", dashed);
           window.history.pushState({}, "", newUrl.toString());
         }
-        toast.success(`Cargada propuesta de ${presetMatch.client.name}`);
+        toast.success(`Cargada plantilla: ${presetExact.client.name}`);
         return true;
       }
 
+      // 4. Cuarto, rutas estáticas en /proposals/*.json
       const underscored = cleanParam.replace(/[\s-]+/g, "_");
       const candidates = [
         `/proposals/${cleanParam}.json`,
         `/proposals/${dashed}.json`,
         `/proposals/${underscored}.json`,
-        `/proposals/propuesta_${underscored}_ENF-PROP-2026-08.json`,
       ];
-
-      if (cleanParam.includes("ars") || cleanParam.includes("primera")) {
-        candidates.unshift("/proposals/ars-primera.json");
-      }
-      if (cleanParam.includes("excel")) {
-        candidates.unshift("/proposals/excel-puesto-de-bolsa.json");
-      }
 
       for (const candidatePath of candidates) {
         try {
@@ -1080,7 +1209,6 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             const remoteJson = await res.json();
             const validation = validateProposalData(remoteJson);
             if (validation.success && validation.data) {
-              clearEditableCache();
               setCurrentSlug(dashed);
               setProposal(remoteJson);
               hydrateExtendedState(remoteJson);
@@ -1097,6 +1225,22 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           console.warn(`[ProposalContext] No se pudo cargar desde ${candidatePath}:`, err);
         }
       }
+
+      // 5. Quinto, fallback con coincidencia aproximada
+      const presetLoose = getPresetProposal(cleanParam, { allowFuzzy: true });
+      if (presetLoose) {
+        setCurrentSlug(dashed);
+        setProposal(presetLoose);
+        hydrateExtendedState(presetLoose);
+        if (typeof window !== "undefined") {
+          const newUrl = new URL(window.location.href);
+          newUrl.searchParams.set("proposal", dashed);
+          window.history.pushState({}, "", newUrl.toString());
+        }
+        toast.success(`Cargada plantilla: ${presetLoose.client.name}`);
+        return true;
+      }
+
       toast.error(`No se encontró la propuesta '${slug}'`);
       return false;
     } catch (e) {
