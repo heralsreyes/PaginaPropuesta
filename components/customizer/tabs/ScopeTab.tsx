@@ -17,7 +17,8 @@ export const ScopeTab: React.FC = () => {
     }
   };
 
-  const categoriesList = ["Core", "Automatización", "Integración", "Reportes", "Seguridad"] as const;
+  const existingCategories = Array.from(new Set(proposal.requirements.map((r) => r.category).filter(Boolean)));
+  const categoriesList = existingCategories.length > 0 ? existingCategories : ["Core", "Automatización", "Integración", "Reportes", "Seguridad"];
 
   return (
     <div className="space-y-6 text-xs">

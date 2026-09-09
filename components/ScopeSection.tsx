@@ -278,9 +278,30 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                           )}
 
                           <div>
-                            <span className={`text-[10px] font-mono font-bold block ${isSelected ? "opacity-70" : "text-[var(--text-primary)]/60"}`}>
-                              {req.id} • {req.category}
-                            </span>
+                            <div className={`text-[10px] font-mono font-bold flex items-center gap-1.5 mb-0.5 ${isSelected ? "opacity-70" : "text-[var(--text-primary)]/60"}`}>
+                              <span>{req.id}</span>
+                              <span>•</span>
+                              {isDesignMode ? (
+                                <select
+                                  value={req.category}
+                                  onClick={(e) => e.stopPropagation()}
+                                  onChange={(e) => {
+                                    e.stopPropagation();
+                                    updateRequirement(reqIdx, { category: e.target.value as RequirementCategory });
+                                  }}
+                                  className="bg-black/10 dark:bg-white/10 text-inherit border border-current/20 rounded px-1 py-0.5 text-[10px] font-mono cursor-pointer outline-none hover:border-[var(--accent-color)]"
+                                  title="Asignar a qué botón de categoría pertenece este módulo"
+                                >
+                                  {existingCategories.map((c) => (
+                                    <option key={c} value={c} className="bg-zinc-900 text-white font-sans">
+                                      {c}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <span>{req.category}</span>
+                              )}
+                            </div>
                             <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--bg-main)]" : "text-[var(--text-primary)]"}`}>
                               <EditableText
                                 value={req.title}
@@ -330,13 +351,28 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                           <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center justify-center">
                             {getCategoryIcon(activeRequirement.category)}
                           </div>
-                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-1">
+                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-1.5">
                             <span>Módulo de</span>
-                            <EditableText
-                              value={activeRequirement.category}
-                              onChange={(val) => updateRequirement(activeReqIndex, { category: val as RequirementCategory })}
-                              tag="span"
-                            />
+                            {isDesignMode ? (
+                              <select
+                                value={activeRequirement.category}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  updateRequirement(activeReqIndex, { category: e.target.value as RequirementCategory });
+                                }}
+                                className="bg-transparent font-bold text-[var(--accent-color)] cursor-pointer outline-none border-b border-dashed border-[var(--accent-color)]/50 hover:bg-[var(--accent-color)]/10 rounded px-1 py-0.5"
+                                title="Selecciona a qué botón de categoría responde este módulo"
+                              >
+                                {existingCategories.map((c) => (
+                                  <option key={c} value={c} className="bg-zinc-900 text-white font-sans">
+                                    {c}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <span>{activeRequirement.category}</span>
+                            )}
                           </span>
                         </div>
 
