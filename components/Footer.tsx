@@ -4,6 +4,7 @@ import React from "react";
 import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { MessageSquare, ArrowUp, UserCheck, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -38,13 +39,13 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
         <div className="text-center max-w-3xl mx-auto shrink-0 mb-4">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center space-x-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>CONTACTO & SIGUIENTES PASOS</span>
+            <EditableField id="footer_badge" defaultText="CONTACTO & SIGUIENTES PASOS" />
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--text-primary)] mt-2 mb-1">
-            Estamos Listos para Comenzar
+            <EditableField id="footer_h2" defaultText="Estamos Listos para Comenzar" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-xl mx-auto">
-            Póngase en contacto directo con nuestra gerencia estratégica o comuníquese vía WhatsApp.
+            <EditableField id="footer_desc" defaultText="Póngase en contacto directo con nuestra gerencia estratégica o comuníquese vía WhatsApp." />
           </p>
         </div>
 
@@ -62,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
                 </span>
               </div>
               <p className="text-[var(--text-primary)]/80 text-base leading-relaxed mt-4 font-medium">
-                Soluciones tecnológicas integrales a la medida con altos estándares de calidad CMMI, ISO 27002 y máxima seguridad operativa.
+                <EditableField id="footer_company_desc" defaultText="Soluciones tecnológicas integrales a la medida con altos estándares de calidad CMMI, ISO 27002 y máxima seguridad operativa." />
               </p>
             </div>
 
@@ -71,6 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
                 RNC:{" "}
                 <strong className="text-[var(--text-primary)] font-bold">
                   <EditableText
+                    id="footer_rnc"
                     value={proposal.company.rnc}
                     onChange={(val) => updateCompany({ rnc: val })}
                     tag="span"
@@ -78,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
                 </strong>
               </div>
               <div className="text-xs font-semibold text-[var(--text-primary)]/70 bg-[var(--bg-main)] px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
-                Santo Domingo, República Dominicana
+                <EditableField id="footer_location" defaultText="Santo Domingo, República Dominicana" />
               </div>
             </div>
           </div>
@@ -88,16 +90,24 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
             <div>
               <h4 className="text-xs font-bold text-[var(--text-primary)] mb-4 uppercase tracking-wider flex items-center space-x-2 font-mono">
                 <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
-                <span>Contactos Estratégicos</span>
+                <EditableField id="footer_strategic_contacts_title" defaultText="Contactos Estratégicos" />
               </h4>
               <div className="space-y-3.5">
                 {proposal.contacts.map((contact, idx) => (
                   <div key={idx} className="p-5 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] shadow-xs">
-                    <span className="text-lg font-bold text-[var(--text-primary)] block leading-tight">{contact.name}</span>
-                    <span className="text-sm font-semibold text-[var(--accent-color)] block mb-2">{contact.role}</span>
+                    <span className="text-lg font-bold text-[var(--text-primary)] block leading-tight">
+                      <EditableField id={`footer_contact_${idx}_name`} defaultText={contact.name} />
+                    </span>
+                    <span className="text-sm font-semibold text-[var(--accent-color)] block mb-2">
+                      <EditableField id={`footer_contact_${idx}_role`} defaultText={contact.role} />
+                    </span>
                     <div className="flex items-center justify-between text-sm font-mono font-medium text-[var(--text-primary)]/70 pt-2 border-t border-[var(--border-color)]">
-                      <span className="truncate pr-2 text-xs">{contact.email}</span>
-                      <span className="font-bold text-[var(--text-primary)] shrink-0">{contact.phone}</span>
+                      <span className="truncate pr-2 text-xs">
+                        <EditableField id={`footer_contact_${idx}_email`} defaultText={contact.email} />
+                      </span>
+                      <span className="font-bold text-[var(--text-primary)] shrink-0">
+                        <EditableField id={`footer_contact_${idx}_phone`} defaultText={contact.phone} />
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -113,19 +123,19 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-2xl font-extrabold text-[var(--text-primary)] flex items-center space-x-2">
                   <MessageSquare className="w-6 h-6 text-[var(--accent-color)]" />
-                  <span>Atención Directa</span>
+                  <EditableField id="footer_cta_title" defaultText="Atención Directa" />
                 </h4>
                 <span className="bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 text-xs px-3 py-1 rounded-full flex items-center gap-1.5 font-bold font-mono">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
                   </span>
-                  <span>En Línea</span>
+                  <EditableField id="footer_cta_online" defaultText="En Línea" />
                 </span>
               </div>
 
               <p className="text-[var(--text-primary)]/80 text-base leading-relaxed my-4 font-normal">
-                Comuníquese en tiempo real por WhatsApp con nuestro Gerente General para agendar una sesión de trabajo o resolver dudas técnicas.
+                <EditableField id="footer_cta_desc" defaultText="Comuníquese en tiempo real por WhatsApp con nuestro Gerente General para agendar una sesión de trabajo o resolver dudas técnicas." />
               </p>
             </div>
 
@@ -137,7 +147,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
                 className="bg-[var(--accent-color)] hover:opacity-90 text-white font-bold py-5 px-8 rounded-2xl text-lg shadow-xl shadow-[var(--accent-color)]/30 w-full transition-all duration-300 flex items-center justify-center gap-3 transform hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 <MessageSquare className="w-5 h-5" />
-                <span>Chatear con Jorge Martínez</span>
+                <EditableField id="footer_cta_btn" defaultText="Chatear con Jorge Martínez" />
               </a>
             </div>
           </div>
@@ -150,7 +160,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
             onClick={scrollToTop}
             className="text-sm font-bold px-5 py-2.5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:bg-[var(--bg-main)] text-[var(--text-primary)] cursor-pointer flex items-center space-x-2 transition-all"
           >
-            <span>Ir al Inicio</span>
+            <EditableField id="footer_back_to_top" defaultText="Ir al Inicio" />
             <ArrowUp className="w-4 h-4 text-[var(--accent-color)]" />
           </button>
         </div>

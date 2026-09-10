@@ -84,7 +84,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
               {/* Currency Selector Toggle Header */}
               <div className="flex items-center justify-between mb-5">
                 <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-primary)]/60 font-bold">
-                  Resumen Financiero
+                  <EditableField id="budget_summary_label" defaultText="Resumen Financiero" />
                 </span>
                 <div className="inline-flex p-1 rounded-xl bg-[var(--bg-main)] border border-[var(--border-color)]">
                   <button
@@ -110,7 +110,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
               <div className="space-y-2.5 mb-2 text-xs">
                 {/* Subtotal Base */}
                 <div className="flex items-center justify-between text-[var(--text-primary)]/70">
-                  <span>Monto Subtotal Base:</span>
+                  <span><EditableField id="budget_subtotal_label" defaultText="Monto Subtotal Base:" /></span>
                   <span className="font-mono font-bold text-[var(--text-primary)]">
                     {formatMoney(baseSubtotal, currentCurrency)}
                   </span>
@@ -151,7 +151,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
               {/* Main Total Display (BIG & PROMINENT) */}
               <div>
                 <span className="text-xs font-bold text-[var(--text-primary)]/60 tracking-wider uppercase block font-mono">
-                  TOTAL GENERAL AGREGADO {isTaxActive ? "(CON ITBIS)" : "(SIN IMPUESTOS)"}
+                  <EditableField id="budget_total_label" defaultText="TOTAL GENERAL AGREGADO" /> {isTaxActive ? "(CON ITBIS)" : "(SIN IMPUESTOS)"}
                 </span>
                 <div className="text-4xl sm:text-5xl md:text-6xl font-black font-display text-[var(--text-primary)] tracking-tight my-2 pr-2">
                   {formatMoney(totalFinal, currentCurrency)}
@@ -166,7 +166,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                 className="w-full inline-flex items-center justify-center space-x-2.5 bg-[var(--accent-color)] hover:opacity-90 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-[var(--accent-color)]/30 transition-all text-sm mt-3 transform hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 <CheckCircle2 className="w-5 h-5" />
-                <span>Aceptar Propuesta Formal</span>
+                <span><EditableField id="budget_cta_btn" defaultText="Aceptar Propuesta Formal" /></span>
               </button>
 
               <div className="text-[var(--text-primary)]/60 text-[11px] text-center mt-2.5 font-mono flex items-center justify-center space-x-1.5">
@@ -184,7 +184,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
               <div className="flex items-center justify-between mb-5">
                 <h3 className="text-base sm:text-lg font-extrabold text-[var(--text-primary)] flex items-center space-x-2.5">
                   <CreditCard className="w-5 h-5 text-[var(--accent-color)]" />
-                  <span>Esquema de Pagos por Entregables</span>
+                  <EditableField id="budget_terms_scheme_title" defaultText="Esquema de Pagos por Entregables" />
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
@@ -218,6 +218,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                     <div className="p-4 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] flex items-start space-x-4 hover:border-[var(--accent-color)]/40 transition-all">
                       <div className="w-11 h-11 rounded-2xl bg-[var(--accent-color)] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs inline-flex items-center gap-0.5">
                         <EditableText
+                          id={`budget_term_${idx}_percent`}
                           value={String(term.percentage)}
                           onChange={(val) => {
                             const num = parseInt(val.replace(/\D/g, ""), 10) || 0;
@@ -233,6 +234,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <h4 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] truncate">
                             <EditableText
+                              id={`budget_term_${idx}_milestone`}
                               value={term.milestone || `Hito ${idx + 1}`}
                               onChange={(val) => {
                                 const nextTerms = [...budget.paymentTerms];
@@ -248,6 +250,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
                         </div>
                         <div className="text-xs text-[var(--text-primary)]/70 leading-relaxed font-normal">
                           <EditableText
+                            id={`budget_term_${idx}_desc`}
                             value={term.description}
                             onChange={(val) => {
                               const nextTerms = [...budget.paymentTerms];

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { replaceAt } from "@/lib/arrayUtils";
 import { Target, Compass, Award, ShieldCheck, CheckCircle2, Monitor, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -58,13 +59,13 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
         {/* Standard Executive Header Block */}
         <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">
           <span className="px-3.5 py-1 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[var(--accent-color)]/30 mb-2 inline-block">
-            RESPALDO CORPORATIVO • EXPERIENCIA & CALIDAD
+            <EditableField id="company_badge" defaultText="RESPALDO CORPORATIVO • EXPERIENCIA & CALIDAD" />
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--text-primary)] tracking-tight text-center mt-1 mb-2">
-            Sobre ENFOCO, S.R.L.
+            <EditableField id="company_h2" defaultText="Sobre ENFOCO, S.R.L." />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm max-w-2xl mx-auto text-center mb-2">
-            Conozca nuestro propósito, estándares metodológicos y el compromiso técnico que respalda cada una de nuestras soluciones.
+            <EditableField id="company_desc" defaultText="Conozca nuestro propósito, estándares metodológicos y el compromiso técnico que respalda cada una de nuestras soluciones." />
           </p>
         </div>
 
@@ -75,7 +76,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
             <div>
               <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center space-x-2">
                 <span className="w-2 h-2 rounded-full bg-[var(--accent-color)]"></span>
-                <span>Seleccione una opción para explorar:</span>
+                <EditableField id="company_select_prompt" defaultText="Seleccione una opción para explorar:" />
               </h3>
 
               {/* Option Grid */}
@@ -117,12 +118,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
               <div className="space-y-2.5">
                 <div className="p-3.5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)]/80 leading-relaxed">
                   <span className="text-[var(--accent-color)] font-bold mr-1.5">•</span>
-                  <strong className="text-[var(--text-primary)] font-semibold">ENFOCO, S.R.L.:</strong> Soluciones tecnológicas integrales especializadas en Desarrollo de Software a la medida, automatización y optimización operativa.
+                  <strong className="text-[var(--text-primary)] font-semibold">ENFOCO, S.R.L.:</strong>{" "}
+                  <EditableField id="company_bullet_1" defaultText="Soluciones tecnológicas integrales especializadas en Desarrollo de Software a la medida, automatización y optimización operativa." />
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)]/80 leading-relaxed">
                   <span className="text-[var(--accent-color)] font-bold mr-1.5">•</span>
-                  <strong className="text-[var(--text-primary)] font-semibold">Respaldo Internacional:</strong> Equipo multidisciplinario con certificaciones CMMI, ISO 27002 y metodologías ágiles Scrum/PMP.
+                  <strong className="text-[var(--text-primary)] font-semibold">Respaldo Internacional:</strong>{" "}
+                  <EditableField id="company_bullet_2" defaultText="Equipo multidisciplinario con certificaciones CMMI, ISO 27002 y metodologías ágiles Scrum/PMP." />
                 </div>
               </div>
             </div>
@@ -165,10 +168,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                             <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <Target className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">Nuestra Misión Corporativa</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                              <EditableField id="company_mission_title" defaultText="Nuestra Misión Corporativa" />
+                            </h4>
                           </div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-                            Objetivo Principal
+                            <EditableField id="company_mission_badge" defaultText="Objetivo Principal" />
                           </span>
                         </div>
 
@@ -176,6 +181,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed italic font-normal">
                             "
                             <EditableText
+                              id="company_mission_text"
                               value={company.mission}
                               onChange={(val) => updateCompany({ mission: val })}
                               multiline
@@ -187,12 +193,20 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-left">
-                            <span className="text-[10px] text-[var(--text-primary)]/60 block font-semibold">Garantía</span>
-                            <span className="text-xs font-bold text-[var(--text-primary)]">100% a la Medida</span>
+                            <span className="text-[10px] text-[var(--text-primary)]/60 block font-semibold">
+                              <EditableField id="company_warranty_label" defaultText="Garantía" />
+                            </span>
+                            <span className="text-xs font-bold text-[var(--text-primary)]">
+                              <EditableField id="company_warranty_value" defaultText="100% a la Medida" />
+                            </span>
                           </div>
                           <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-left">
-                            <span className="text-[10px] text-[var(--text-primary)]/60 block font-semibold">Soporte SLA</span>
-                            <span className="text-xs font-bold text-[var(--accent-color)]">60 Días Cobertura</span>
+                            <span className="text-[10px] text-[var(--text-primary)]/60 block font-semibold">
+                              <EditableField id="company_sla_label" defaultText="Soporte SLA" />
+                            </span>
+                            <span className="text-xs font-bold text-[var(--accent-color)]">
+                              <EditableField id="company_sla_value" defaultText="60 Días Cobertura" />
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -205,10 +219,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                             <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <Compass className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">Nuestra Visión de Futuro</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                              <EditableField id="company_vision_title" defaultText="Nuestra Visión de Futuro" />
+                            </h4>
                           </div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-                            Liderazgo
+                            <EditableField id="company_vision_badge" defaultText="Liderazgo" />
                           </span>
                         </div>
 
@@ -216,6 +232,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           <p className="text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed italic font-normal">
                             "
                             <EditableText
+                              id="company_vision_text"
                               value={company.vision}
                               onChange={(val) => updateCompany({ vision: val })}
                               multiline
@@ -227,7 +244,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
 
                         <div className="p-3.5 rounded-xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center space-x-3 text-xs text-[var(--accent-color)] font-semibold">
                           <Cpu className="w-4 h-4 shrink-0" />
-                          <span>Arquitectura limpia y moderna basada en Next.js, React y Cloud Services.</span>
+                          <EditableField id="company_vision_tech_desc" defaultText="Arquitectura limpia y moderna basada en Next.js, React y Cloud Services." />
                         </div>
                       </div>
                     )}
@@ -239,10 +256,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                             <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <Award className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">Valores Fundamentales</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                              <EditableField id="company_values_title" defaultText="Valores Fundamentales" />
+                            </h4>
                           </div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-                            Principios
+                            <EditableField id="company_values_badge" defaultText="Principios" />
                           </span>
                         </div>
 
@@ -255,6 +274,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                               <CheckCircle2 className="w-4 h-4 text-[var(--accent-color)] shrink-0" />
                               <span>
                                 <EditableText
+                                  id={`company_value_${idx}_text`}
                                   value={val}
                                   onChange={(newVal) => {
                                     updateCompany({ values: replaceAt(company.values, idx, newVal) });
@@ -275,10 +295,12 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                             <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
                               <ShieldCheck className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">Estándares & Normativas</h4>
+                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                              <EditableField id="company_standards_title" defaultText="Estándares & Normativas" />
+                            </h4>
                           </div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-                            Certificado
+                            <EditableField id="company_standards_badge" defaultText="Certificado" />
                           </span>
                         </div>
 
@@ -290,6 +312,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                             >
                               <span className="font-bold text-[var(--text-primary)]">
                                 <EditableText
+                                  id={`company_cert_${idx}_text`}
                                   value={cert}
                                   onChange={(newCert) => {
                                     updateCompany({ certifications: replaceAt(company.certifications, idx, newCert) });
@@ -313,12 +336,15 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                 <span>
                   ENFOCO S.R.L. • RNC{" "}
                   <EditableText
+                    id="company_rnc"
                     value={company.rnc}
                     onChange={(val) => updateCompany({ rnc: val })}
                     tag="span"
                   />
                 </span>
-                <span className="text-[var(--accent-color)] font-bold">100% Calidad Garantizada</span>
+                <span className="text-[var(--accent-color)] font-bold">
+                  <EditableField id="company_quality_guarantee" defaultText="100% Calidad Garantizada" />
+                </span>
               </div>
             </div>
           </div>

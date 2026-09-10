@@ -84,6 +84,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       </div>
                       <span className="px-3 py-1 rounded-full bg-[var(--accent-color)] text-white text-[11px] font-bold shadow-xs inline-flex items-center gap-0.5">
                         <EditableText
+                          id={`team_sel_${selectedRoleIndex}_percent`}
                           value={String(selectedMember.dedicationPercent)}
                           onChange={(val) => {
                             const num = parseInt(val.replace(/\D/g, ""), 10) || 0;
@@ -97,6 +98,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
 
                     <span className="text-[10px] font-mono font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block mb-1">
                       <EditableText
+                        id={`team_sel_${selectedRoleIndex}_cat`}
                         value={selectedMember.category}
                         onChange={(val) => updateTeamMember(selectedRoleIndex, { category: val })}
                         tag="span"
@@ -105,6 +107,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                     </span>
                     <h3 className="text-xl sm:text-2xl font-black font-display text-[var(--text-primary)] mb-3 leading-tight">
                       <EditableText
+                        id={`team_sel_${selectedRoleIndex}_role`}
                         value={selectedMember.role}
                         onChange={(val) => updateTeamMember(selectedRoleIndex, { role: val })}
                         tag="span"
@@ -114,7 +117,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                     <div className="space-y-2.5 pt-3 border-t border-[var(--border-color)] mb-4">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold text-[var(--accent-color)] uppercase tracking-wider block font-mono">
-                          Responsabilidades Principales:
+                          <EditableField id="team_responsibilities_label" defaultText="Responsabilidades Principales:" />
                         </span>
                         {isDesignMode && (
                           <button
@@ -136,6 +139,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                           <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0 mt-0.5" />
                           <span className="leading-relaxed font-normal flex-1">
                             <EditableText
+                              id={`team_sel_${selectedRoleIndex}_resp_${rIdx}`}
                               value={resp}
                               onChange={(newResp) => {
                                 const updated = [...selectedMember.responsibilities];
@@ -219,6 +223,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                         <div>
                           <span className="text-[9px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider font-mono block">
                             <EditableText
+                              id={`team_member_${idx}_cat`}
                               value={member.category}
                               onChange={(val) => updateTeamMember(idx, { category: val })}
                               tag="span"
@@ -226,6 +231,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                           </span>
                           <h4 className={`text-xs sm:text-sm font-extrabold block ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--text-primary)]"}`}>
                             <EditableText
+                              id={`team_member_${idx}_role`}
                               value={member.role}
                               onChange={(val) => updateTeamMember(idx, { role: val })}
                               tag="span"
@@ -237,6 +243,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       <div className="flex items-center space-x-2">
                         <span className="text-[11px] font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-0.5 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-0.5">
                           <EditableText
+                            id={`team_member_${idx}_percent`}
                             value={String(member.dedicationPercent)}
                             onChange={(val) => {
                               const num = parseInt(val.replace(/\D/g, ""), 10) || 0;

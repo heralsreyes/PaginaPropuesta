@@ -118,7 +118,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
         <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-5 sm:p-7 shadow-sm max-w-6xl mx-auto w-full relative transition-colors duration-300">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-mono font-bold text-[var(--text-primary)]/60">
-              FASES DEL PROYECTO ({roadmap.length})
+              <EditableField id="roadmap_phases_label" defaultText="FASES DEL PROYECTO" /> ({roadmap.length})
             </span>
             {isDesignMode && (
               <button
@@ -161,12 +161,14 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                     {/* Phase Info */}
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]/60 font-mono block mb-0.5">
                       <EditableText
+                        id={`roadmap_phase_${idx}_phase`}
                         value={item.phase}
                         onChange={(val) => updateRoadmapPhase(idx, { phase: val })}
                         tag="span"
                       />{" "}
                       •{" "}
                       <EditableText
+                        id={`roadmap_phase_${idx}_duration`}
                         value={item.duration}
                         onChange={(val) => updateRoadmapPhase(idx, { duration: val })}
                         tag="span"
@@ -174,6 +176,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                     </span>
                     <h3 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] mb-1.5 leading-snug">
                       <EditableText
+                        id={`roadmap_phase_${idx}_title`}
                         value={item.title}
                         onChange={(val) => updateRoadmapPhase(idx, { title: val })}
                         tag="span"
@@ -181,6 +184,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                     </h3>
                     <div className="text-[11px] text-[var(--text-primary)]/70 leading-relaxed mb-3 font-normal">
                       <EditableText
+                        id={`roadmap_phase_${idx}_desc`}
                         value={item.description}
                         onChange={(val) => updateRoadmapPhase(idx, { description: val })}
                         multiline
@@ -193,7 +197,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                   <div className="w-full pt-2.5 border-t border-[var(--border-color)] space-y-1 text-left">
                     <div className="flex items-center justify-between">
                       <span className="text-[9px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block font-mono">
-                        Hitos Clave:
+                        <EditableField id="roadmap_milestones_label" defaultText="Hitos Clave:" />
                       </span>
                       {isDesignMode && (
                         <button
@@ -203,7 +207,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                           }}
                           className="text-[10px] font-bold text-[var(--accent-color)] hover:underline flex items-center gap-0.5 cursor-pointer"
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus className="w-3.5 h-3.5" />
                           <span>Hito</span>
                         </button>
                       )}
@@ -223,6 +227,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                             <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0" />
                             <span className="font-medium text-[var(--text-primary)] leading-tight">
                               <EditableText
+                                id={`roadmap_phase_${idx}_m_${mIdx}`}
                                 value={m}
                                 onChange={(newM) => {
                                   const updatedM = [...item.milestones];

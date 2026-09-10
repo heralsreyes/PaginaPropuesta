@@ -211,7 +211,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
           <div className="xl:col-span-4 flex flex-col justify-start space-y-2.5">
             <div className="flex items-center justify-between px-1 mb-1">
               <span className="text-xs font-bold text-[var(--text-primary)]/60 uppercase tracking-wider font-mono">
-                Módulos del Sistema ({filteredWithIndices.length})
+                <EditableField id="scope_modules_label" defaultText="Módulos del Sistema" /> ({filteredWithIndices.length})
               </span>
               {isDesignMode && (
                 <button
@@ -314,6 +314,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                             </div>
                             <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--bg-main)]" : "text-[var(--text-primary)]"}`}>
                               <EditableText
+                                id={`scope_req_${req.id || origIdx}_title`}
                                 value={req.title}
                                 onChange={(val) => updateRequirement(origIdx, { title: val })}
                                 tag="span"
@@ -362,7 +363,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                             {getCategoryIcon(activeRequirement.category)}
                           </div>
                           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-1.5">
-                            <span>Módulo de</span>
+                            <span><EditableField id="scope_module_type_prefix" defaultText="Módulo de" /></span>
                             {isDesignMode ? (
                               <select
                                 value={activeRequirement.category}
@@ -388,6 +389,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
 
                         <span className="text-xs font-mono font-bold text-[var(--text-primary)]/70 px-3 py-1 rounded-md bg-[var(--bg-main)] border border-[var(--border-color)]">
                           <EditableText
+                            id={`scope_detail_${activeRequirement.id}_id`}
                             value={activeRequirement.id}
                             onChange={(val) => {
                               const trimmed = val.trim();
@@ -403,6 +405,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                       {/* Title & Description */}
                       <h3 className="text-2xl md:text-3xl font-extrabold font-display text-[var(--text-primary)] mb-3 leading-tight">
                         <EditableText
+                          id={`scope_detail_${activeRequirement.id}_title`}
                           value={activeRequirement.title}
                           onChange={(val) => updateRequirement(activeReqIndex, { title: val })}
                           tag="span"
@@ -410,6 +413,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                       </h3>
                       <div className="text-[var(--text-primary)]/80 text-sm md:text-base leading-relaxed font-normal max-w-2xl">
                         <EditableText
+                          id={`scope_detail_${activeRequirement.id}_desc`}
                           value={activeRequirement.description}
                           onChange={(val) => updateRequirement(activeReqIndex, { description: val })}
                           multiline
@@ -462,6 +466,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                                 </div>
                                 <span className="text-[var(--text-primary)] font-medium leading-snug">
                                   <EditableText
+                                    id={`scope_detail_${activeRequirement.id}_del_${dIdx}`}
                                     value={del}
                                     onChange={(newDelVal) => {
                                       const updatedDeliverables = [...activeRequirement.deliverables];

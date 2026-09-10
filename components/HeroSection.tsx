@@ -60,6 +60,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
 
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)]">
             <EditableText
+              id="hero_client_name"
               value={client.name || "Cliente Institucional"}
               onChange={(val) => updateClient({ name: val })}
               tag="span"
@@ -72,18 +73,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           {project.heroTitleAccent ? (
             <>
               <EditableText
+                id="hero_title_prefix"
                 value={project.heroTitlePrefix || ""}
                 onChange={(val) => updateProject({ heroTitlePrefix: val })}
                 tag="span"
               />{" "}
               <span className="text-[var(--accent-color)]">
                 <EditableText
+                  id="hero_title_accent"
                   value={project.heroTitleAccent}
                   onChange={(val) => updateProject({ heroTitleAccent: val })}
                   tag="span"
                 />
               </span>{" "}
               <EditableText
+                id="hero_title_suffix"
                 value={project.heroTitleSuffix || ""}
                 onChange={(val) => updateProject({ heroTitleSuffix: val })}
                 tag="span"
@@ -91,6 +95,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
             </>
           ) : (
             <EditableText
+              id="hero_headline"
               value={project.heroHeadline || "Una nueva era en la *automatización & gestión* operativa"}
               onChange={(val) => updateProject({ heroHeadline: val })}
               tag="span"
@@ -101,6 +106,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
         {/* Dynamic Subtitle */}
         <div className="text-xs sm:text-sm md:text-base text-[var(--text-primary)]/80 text-center max-w-xl mx-auto mt-1 mb-5 font-normal leading-relaxed transition-colors duration-300">
           <EditableText
+            id="hero_subtitle"
             value={
               project.heroSubtitle ||
               `Transformando la operativa de ${client.shortName || client.name || "la empresa"} a través de una arquitectura web moderna, escalable y desarrollada a la medida.`
@@ -117,7 +123,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
             href="#alcance"
             className="inline-flex items-center space-x-2.5 bg-[var(--accent-color)] hover:opacity-90 text-white font-bold px-7 py-3 rounded-full shadow-lg shadow-[var(--accent-color)]/25 transition-all transform hover:scale-105 active:scale-95 cursor-pointer text-sm"
           >
-            <span>Comenzar Experiencia</span>
+            <span><EditableField id="hero_cta_btn" defaultText="Comenzar Experiencia" /></span>
             <ArrowRight className="w-4 h-4" />
           </a>
         </div>
@@ -128,10 +134,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           <div className="px-3 py-1 flex flex-col justify-center">
             <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <Calendar className="w-4 h-4 text-[var(--accent-color)]" />
-              <span>Fecha de Emisión</span>
+              <span><EditableField id="hero_label_date" defaultText="Fecha de Emisión" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
               <EditableText
+                id="hero_date"
                 value={project.date || "Agosto, 2026"}
                 onChange={(val) => updateProject({ date: val })}
                 tag="span"
@@ -143,11 +150,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
             <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <FileText className="w-4 h-4 text-[var(--accent-color)]" />
-              <span>Versión & Código</span>
+              <span><EditableField id="hero_label_version" defaultText="Versión & Código" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
               v{project.version || "1.0"} (
               <EditableText
+                id="hero_code"
                 value={project.code || "ENF-2026"}
                 onChange={(val) => updateProject({ code: val })}
                 tag="span"
@@ -160,10 +168,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
             <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
-              <span>Preparado Por</span>
+              <span><EditableField id="hero_label_author" defaultText="Preparado Por" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
               <EditableText
+                id="hero_author"
                 value={project.author || "ENFOCO, S.R.L."}
                 onChange={(val) => updateProject({ author: val })}
                 tag="span"
@@ -175,10 +184,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
             <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
-              <span>Garantía Incluida</span>
+              <span><EditableField id="hero_label_guarantee" defaultText="Garantía Incluida" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--accent-color)] leading-tight">
               <EditableText
+                id="hero_guarantee"
                 value={project.guaranteePeriod || "60 Días Cobertura"}
                 onChange={(val) => updateProject({ guaranteePeriod: val })}
                 tag="span"

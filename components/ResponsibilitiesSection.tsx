@@ -4,6 +4,7 @@ import React from "react";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { EditableText } from "@/components/studio/EditableText";
+import { EditableField } from "@/components/ui/EditableField";
 import { DeletableItem } from "@/components/studio/DeletableItem";
 import { Check, ShieldCheck, Award, Building2, Server, Plus } from "lucide-react";
 import { motion } from "framer-motion";
@@ -34,13 +35,13 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-5 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
-            ACUERDO DE SERVICIO & GARANTÍA
+            <EditableField id="resp_header_badge" defaultText="ACUERDO DE SERVICIO & GARANTÍA" />
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-2.5 mb-1.5">
-            Matriz de Responsabilidades & Garantía
+            <EditableField id="resp_header_h2" defaultText="Matriz de Responsabilidades & Garantía" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
-            Delimitación clara de compromisos recíprocos para asegurar la entrega en tiempos y estándares acordados.
+            <EditableField id="resp_header_desc" defaultText="Delimitación clara de compromisos recíprocos para asegurar la entrega en tiempos y estándares acordados." />
           </p>
         </div>
 
@@ -57,8 +58,12 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                     <Server className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)]">Compromisos de ENFOCO, S.R.L.</h3>
-                    <span className="text-[11px] font-semibold text-[var(--accent-color)]">Proveedor Tecnológico</span>
+                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)]">
+                      <EditableField id="resp_enfoco_card_title" defaultText="Compromisos de ENFOCO, S.R.L." />
+                    </h3>
+                    <span className="text-[11px] font-semibold text-[var(--accent-color)]">
+                      <EditableField id="resp_enfoco_card_subtitle" defaultText="Proveedor Tecnológico" />
+                    </span>
                   </div>
                 </div>
 
@@ -91,6 +96,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                       </div>
                       <span className="leading-relaxed font-normal">
                         <EditableText
+                          id={`resp_enfoco_item_${idx}`}
                           value={resp}
                           onChange={(newRespVal) => {
                             const nextResps = [...enfocoResponsibilities];
@@ -108,8 +114,8 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
             </div>
 
             <div className="pt-3 mt-4 border-t border-[var(--border-color)] text-[11px] font-bold text-[var(--accent-color)] flex items-center justify-between font-mono">
-              <span>SLA Calidad & Entrega</span>
-              <span>100% Cobertura</span>
+              <span><EditableField id="resp_sla_title" defaultText="SLA Calidad & Entrega" /></span>
+              <span><EditableField id="resp_sla_value" defaultText="100% Cobertura" /></span>
             </div>
           </div>
 
@@ -122,8 +128,12 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                     <Building2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)]">Compromisos de la Empresa Cliente</h3>
-                    <span className="text-[11px] font-semibold text-[var(--text-primary)]/60">Contraparte Operativa</span>
+                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)]">
+                      <EditableField id="resp_client_card_title" defaultText="Compromisos de la Empresa Cliente" />
+                    </h3>
+                    <span className="text-[11px] font-semibold text-[var(--text-primary)]/60">
+                      <EditableField id="resp_client_card_subtitle" defaultText="Contraparte Operativa" />
+                    </span>
                   </div>
                 </div>
 
@@ -156,6 +166,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                       </div>
                       <span className="leading-relaxed font-normal text-[var(--text-primary)]">
                         <EditableText
+                          id={`resp_client_item_${idx}`}
                           value={resp}
                           onChange={(newRespVal) => {
                             const nextResps = [...clientResponsibilities];
@@ -173,8 +184,8 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
             </div>
 
             <div className="pt-3 mt-4 border-t border-[var(--border-color)] text-[11px] font-semibold text-[var(--text-primary)]/60 flex items-center justify-between font-mono">
-              <span>Gestión de Aprobaciones</span>
-              <span>Cronograma Conjunto</span>
+              <span><EditableField id="resp_client_meta_left" defaultText="Gestión de Aprobaciones" /></span>
+              <span><EditableField id="resp_client_meta_right" defaultText="Cronograma Conjunto" /></span>
             </div>
           </div>
         </div>
@@ -187,20 +198,23 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
             </div>
             <div>
               <strong className="text-xs sm:text-sm font-bold text-[var(--text-primary)] block">
-                Garantía Total de la Solución:{" "}
+                <EditableField id="resp_guarantee_label" defaultText="Garantía Total de la Solución:" />{" "}
                 <EditableText
+                  id="resp_guarantee_period"
                   value={guaranteePeriod}
                   onChange={(val) => updateProject({ guaranteePeriod: val })}
                   tag="span"
                 />
               </strong>
-              <span className="text-[11px] text-[var(--text-primary)]/60">Acompañamiento continuo post-pase a producción para certificar el correcto funcionamiento.</span>
+              <span className="text-[11px] text-[var(--text-primary)]/60">
+                <EditableField id="resp_guarantee_sub" defaultText="Acompañamiento continuo post-pase a producción para certificar el correcto funcionamiento." />
+              </span>
             </div>
           </div>
 
           <div className="shrink-0 inline-flex items-center space-x-1.5 bg-[var(--accent-color)]/10 px-3.5 py-1.5 rounded-xl border border-[var(--accent-color)]/30 text-[var(--accent-color)] font-bold text-xs">
             <Award className="w-3.5 h-3.5" />
-            <span>Respaldo 100% Incluido</span>
+            <span><EditableField id="resp_guarantee_badge" defaultText="Respaldo 100% Incluido" /></span>
           </div>
         </div>
       </motion.div>
