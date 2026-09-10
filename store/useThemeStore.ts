@@ -154,6 +154,7 @@ export const applyCssVarDirect = (key: keyof ThemeConfig, value: string) => {
       break;
     case "secondaryAccent":
       s.setProperty("--secondary-accent", value);
+      s.setProperty("--theme-h2", value);
       break;
     case "cardBg":
       s.setProperty("--card-bg", value);
@@ -164,21 +165,26 @@ export const applyCssVarDirect = (key: keyof ThemeConfig, value: string) => {
       break;
     case "textPrimary":
       s.setProperty("--text-primary", value);
+      s.setProperty("--theme-h1", value);
       break;
     case "textSecondary":
       s.setProperty("--text-secondary", value);
+      s.setProperty("--theme-text", value);
       break;
     case "navBg":
       s.setProperty("--nav-bg", value);
       break;
     case "h1Color":
       s.setProperty("--theme-h1", value);
+      s.setProperty("--text-primary", value);
       break;
     case "h2Color":
       s.setProperty("--theme-h2", value);
+      s.setProperty("--secondary-accent", value);
       break;
     case "textColor":
       s.setProperty("--theme-text", value);
+      s.setProperty("--text-secondary", value);
       break;
     case "cardBorderRadius":
       s.setProperty("--card-radius", value);
@@ -201,18 +207,23 @@ export const applyCssVarDirect = (key: keyof ThemeConfig, value: string) => {
 export const applyCssVars = (theme: ThemeConfig) => {
   if (typeof document !== "undefined") {
     const s = document.documentElement.style;
+    const h1 = theme.h1Color || theme.textPrimary || "#FFFFFF";
+    const h2 = theme.h2Color || theme.secondaryAccent || "#F08D17";
+    const txt = theme.textColor || theme.textSecondary || "#D5E4E2";
+    const border = theme.cardBorder || theme.secondaryAccent || "#F08D17";
+
     s.setProperty("--bg-main", theme.bgMain);
     s.setProperty("--accent-color", theme.accentColor);
-    s.setProperty("--secondary-accent", theme.secondaryAccent || "#F08D17");
+    s.setProperty("--secondary-accent", h2);
     s.setProperty("--card-bg", theme.cardBg);
-    s.setProperty("--card-border", theme.cardBorder || theme.secondaryAccent || "#F08D17");
-    s.setProperty("--text-primary", theme.textPrimary);
-    s.setProperty("--text-secondary", theme.textSecondary || "#D5E4E2");
-    s.setProperty("--nav-bg", theme.navBg || "#002224");
-    s.setProperty("--border-color", theme.cardBorder || theme.secondaryAccent || "#F08D17");
-    s.setProperty("--theme-h1", theme.h1Color || theme.textPrimary);
-    s.setProperty("--theme-h2", theme.h2Color || theme.secondaryAccent || theme.accentColor);
-    s.setProperty("--theme-text", theme.textColor || theme.textSecondary || "#D5E4E2");
+    s.setProperty("--card-border", border);
+    s.setProperty("--text-primary", h1);
+    s.setProperty("--text-secondary", txt);
+    s.setProperty("--nav-bg", theme.navBg || theme.cardBg);
+    s.setProperty("--border-color", border);
+    s.setProperty("--theme-h1", h1);
+    s.setProperty("--theme-h2", h2);
+    s.setProperty("--theme-text", txt);
     s.setProperty("--card-radius", theme.cardBorderRadius || "24px");
     s.setProperty("--about-bg", theme.aboutBg || "#D6E5DE");
     s.setProperty("--about-card-bg", theme.aboutCardBg || "#BFDAD1");
@@ -236,6 +247,12 @@ export const useThemeStore = create<ThemeState>()(
       setTheme: (updates) => {
         set((state) => {
           const next = { ...state.theme, ...updates };
+          if (updates.h1Color) next.textPrimary = updates.h1Color;
+          if (updates.textPrimary) next.h1Color = updates.textPrimary;
+          if (updates.h2Color) next.secondaryAccent = updates.h2Color;
+          if (updates.secondaryAccent) next.h2Color = updates.secondaryAccent;
+          if (updates.textColor) next.textSecondary = updates.textColor;
+          if (updates.textSecondary) next.textColor = updates.textSecondary;
           applyCssVars(next);
           return { theme: next };
         });

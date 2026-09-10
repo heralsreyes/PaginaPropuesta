@@ -178,7 +178,7 @@ export function extractThemeFromPayload(data: ExtendedProposalPayload | any): Th
     if (clientName.includes("excel")) {
       return PRESET_THEMES[0].theme;
     }
-    return null;
+    return defaultTheme;
   }
 
   // Combine rawColors and rawTheme with rawTheme taking priority
@@ -928,6 +928,16 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
 
     // Sincronizar campos de texto y colores editables
     if (typeof window !== "undefined") {
+      // Clear previous proposal's cached editable texts and colors to prevent cross-proposal bleeding
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith("editable_") || k.startsWith("scope_todos_label"))) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach((k) => localStorage.removeItem(k));
+
       if (data.editableFields && typeof data.editableFields === "object") {
         Object.entries(data.editableFields).forEach(([id, text]) => {
           if (text !== undefined && text !== null) {

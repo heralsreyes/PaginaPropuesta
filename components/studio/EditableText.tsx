@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
@@ -30,13 +30,13 @@ export const EditableText: React.FC<EditableTextProps> = ({
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   // Stable identifier for localStorage color persistence
-  const elementId = useRef(
-    id ||
-      "etxt_" +
-        Math.abs(
-          (value || "").split("").reduce((acc, char) => (acc << 5) - acc + char.charCodeAt(0), 0)
-        ).toString(36)
+  const fallbackHash = useRef(
+    "etxt_" +
+      Math.abs(
+        (value || "").split("").reduce((acc, char) => (acc << 5) - acc + char.charCodeAt(0), 0)
+      ).toString(36)
   ).current;
+  const elementId = id || fallbackHash;
 
   const [customColor, setCustomColor] = useState<string | null>(null);
   const [pendingColor, setPendingColor] = useState<string | null>(null);

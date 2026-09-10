@@ -28,27 +28,27 @@
 }
 
 .theme-h1-color {
-  color: var(--theme-h1, #FFFFFF) !important;
+  color: var(--theme-h1, var(--text-primary, #FFFFFF));
 }
 
 .theme-h2-color {
-  color: var(--theme-h2, #F08D17) !important;
+  color: var(--theme-h2, var(--secondary-accent, #F08D17));
 }
 
 .theme-text-color {
-  color: var(--theme-text, #D5E4E2) !important;
+  color: var(--theme-text, var(--text-secondary, #D5E4E2));
 }
 
 .theme-accent-color {
-  color: var(--secondary-accent, #F08D17) !important;
+  color: var(--secondary-accent, #F08D17);
 }
 
 .theme-accent-bg {
-  background-color: var(--secondary-accent, #F08D17) !important;
+  background-color: var(--secondary-accent, #F08D17);
 }
 
 .theme-accent-border {
-  border-color: var(--secondary-accent, #F08D17) !important;
+  border-color: var(--secondary-accent, #F08D17);
 }
 
 .theme-card-style {

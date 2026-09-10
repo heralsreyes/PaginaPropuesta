@@ -130,6 +130,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
 
                 {cat === "Todos" ? (
                   <EditableText
+                    id="scope_cat_todos_label"
                     value={todosLabel}
                     onChange={(val) => {
                       const trimmed = val.trim() || "Todos";
@@ -144,6 +145,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                 ) : (
                   <div className="inline-flex items-center gap-1.5">
                     <EditableText
+                      id={`scope_cat_item_${cat.toLowerCase().replace(/\s+/g, '_')}`}
                       value={cat}
                       onChange={(newVal) => {
                         const trimmed = newVal.trim();
@@ -485,8 +487,12 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
 
                     {/* Footer Tag */}
                     <div className="pt-4 border-t border-[var(--border-color)] mt-4 flex items-center justify-between text-xs text-[var(--text-primary)]/60 font-mono">
-                      <span>ENFOCO S.R.L. • Arquitectura Verificada</span>
-                      <span className="text-[var(--accent-color)] font-bold">100% Garantizado</span>
+                      <span>
+                        <EditableField id="scope_verified_arch" defaultText="ENFOCO S.R.L. • Arquitectura Verificada" />
+                      </span>
+                      <span className="text-[var(--accent-color)] font-bold">
+                        <EditableField id="scope_guaranteed_tag" defaultText="100% Garantizado" />
+                      </span>
                     </div>
                   </motion.div>
                 </AnimatePresence>
