@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Check, X } from "lucide-react";
 
 export const COLOR_PRESETS: { label: string; value: string | null; bgClass?: string; isSpecial?: boolean }[] = [
@@ -18,6 +19,7 @@ export const COLOR_PRESETS: { label: string; value: string | null; bgClass?: str
 
 interface TextColorPopoverProps {
   popoverRef: React.Ref<HTMLDivElement>;
+  anchorEl?: HTMLElement | null;
   pendingColor: string | null;
   setPendingColor: (color: string | null) => void;
   onConfirm: (e?: React.MouseEvent) => void;
@@ -26,17 +28,83 @@ interface TextColorPopoverProps {
 
 export const TextColorPopover: React.FC<TextColorPopoverProps> = ({
   popoverRef,
+  anchorEl,
   pendingColor,
   setPendingColor,
   onConfirm,
   onCancel,
 }) => {
-  return (
+  const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const localRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const updatePosition = () => {
+      if (!anchorEl) return;
+      const rect = anchorEl.getBoundingClientRect();
+      const popoverWidth = 230;
+      const popoverHeight = 220;
+
+      // Vertical positioning: Flip up if insufficient room below, with viewport clamping
+      let top = rect.bottom + 6;
+      if (rect.bottom + popoverHeight > window.innerHeight - 12) {
+        if (rect.top > popoverHeight + 12) {
+          top = rect.top - popoverHeight - 6;
+        } else {
+          // Clamp within viewport
+          top = Math.max(12, window.innerHeight - popoverHeight - 12);
+        }
+      }
+
+      // Horizontal positioning: Clamp to stay fully visible inside screen
+      let left = rect.left;
+      const maxLeft = window.innerWidth - popoverWidth - 12;
+      left = Math.max(12, Math.min(left, maxLeft));
+
+      setCoords({ top, left });
+    };
+
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [mounted, anchorEl]);
+
+  if (!mounted || typeof document === "undefined") {
+    return null;
+  }
+
+  const content = (
     <div
-      ref={popoverRef}
+      ref={(node) => {
+        localRef.current = node;
+        if (typeof popoverRef === "function") {
+          popoverRef(node);
+        } else if (popoverRef && "current" in popoverRef) {
+          (popoverRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+      }}
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
-      className="no-print absolute top-full left-0 mt-1 z-50 bg-[#18181B] border border-zinc-700 p-3 rounded-2xl shadow-2xl space-y-2.5 text-white text-xs w-56 font-sans font-normal"
+      style={{
+        position: "fixed",
+        top: `${coords.top}px`,
+        left: `${coords.left}px`,
+        maxHeight: "calc(100vh - 24px)",
+        overflowY: "auto",
+        zIndex: 999999,
+      }}
+      className="no-print bg-[#18181B] border border-zinc-700 p-3 rounded-2xl shadow-2xl space-y-2.5 text-white text-xs w-56 font-sans font-normal animate-in fade-in zoom-in-95 duration-100"
     >
       {/* Header with Title and Cancel 'X' */}
       <div className="flex items-center justify-between text-[11px] font-bold border-b border-zinc-800 pb-1.5 text-zinc-300">
@@ -152,4 +220,6 @@ export const TextColorPopover: React.FC<TextColorPopoverProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(content, document.body);
 };

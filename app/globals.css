@@ -18,6 +18,7 @@
   --border-color: #F08D17;
   --theme-h1: #FFFFFF;
   --theme-h2: #F08D17;
+  --h2-color: #F08D17;
   --theme-text: #D5E4E2;
   --card-radius: 24px;
 }
@@ -55,12 +56,14 @@
   background-color: var(--card-bg, #002224) !important;
   border-color: var(--card-border, #F08D17) !important;
   border-radius: var(--card-radius, 24px) !important;
+  color: var(--theme-text, var(--text-secondary, #D5E4E2));
 }
 
 .theme-card-glass {
   background-color: color-mix(in srgb, var(--card-bg, #002224) 88%, transparent) !important;
   border-color: color-mix(in srgb, var(--card-border, #F08D17) 50%, transparent) !important;
   border-radius: var(--card-radius, 24px) !important;
+  color: var(--theme-text, var(--text-secondary, #D5E4E2));
 }
 
 body {

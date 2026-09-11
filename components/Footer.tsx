@@ -41,7 +41,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
             <Sparkles className="w-3.5 h-3.5" />
             <EditableField id="footer_badge" defaultText="CONTACTO & SIGUIENTES PASOS" />
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--text-primary)] mt-2 mb-1">
+          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--h2-color)] mt-2 mb-1">
             <EditableField id="footer_h2" defaultText="Estamos Listos para Comenzar" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-xl mx-auto">
@@ -55,22 +55,22 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
           <div className="xl:col-span-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 md:p-8 shadow-lg flex flex-col justify-between min-h-[360px] transition-colors duration-300">
             <div>
               <div className="flex items-center space-x-3 mb-2">
-                <span className="text-3xl font-black font-display text-[var(--text-primary)] tracking-tight">
+                <span className="text-3xl font-black font-display text-[var(--theme-text)] tracking-tight">
                   ENFOCO<span className="text-[var(--accent-color)]">.</span>
                 </span>
-                <span className="text-xs px-3 py-1 rounded-lg bg-[var(--bg-main)] text-[var(--text-primary)] border border-[var(--border-color)] font-bold">
+                <span className="text-xs px-3 py-1 rounded-lg bg-[var(--card-bg)] text-[var(--theme-text)] border border-[var(--border-color)] font-bold">
                   S.R.L.
                 </span>
               </div>
-              <p className="text-[var(--text-primary)]/80 text-base leading-relaxed mt-4 font-medium">
+              <p className="text-[var(--theme-text)] text-base leading-relaxed mt-4 font-normal">
                 <EditableField id="footer_company_desc" defaultText="Soluciones tecnológicas integrales a la medida con altos estándares de calidad CMMI, ISO 27002 y máxima seguridad operativa." />
               </p>
             </div>
 
             <div className="pt-5 border-t border-[var(--border-color)] space-y-2">
-              <div className="text-sm font-semibold bg-[var(--bg-main)] text-[var(--text-primary)]/80 px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
+              <div className="text-sm font-semibold bg-[var(--card-bg)] text-[var(--theme-text)]/80 px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
                 RNC:{" "}
-                <strong className="text-[var(--text-primary)] font-bold">
+                <strong className="text-[var(--theme-text)] font-bold">
                   <EditableText
                     id="footer_rnc"
                     value={proposal.company.rnc}
@@ -79,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
                   />
                 </strong>
               </div>
-              <div className="text-xs font-semibold text-[var(--text-primary)]/70 bg-[var(--bg-main)] px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
+              <div className="text-xs font-semibold text-[var(--theme-text)]/70 bg-[var(--card-bg)] px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
                 <EditableField id="footer_location" defaultText="Santo Domingo, República Dominicana" />
               </div>
             </div>
@@ -88,24 +88,24 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
           {/* Card 2: Executive Contacts (xl:col-span-4) */}
           <div className="xl:col-span-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 md:p-8 shadow-lg flex flex-col justify-between min-h-[360px] transition-colors duration-300">
             <div>
-              <h4 className="text-xs font-bold text-[var(--text-primary)] mb-4 uppercase tracking-wider flex items-center space-x-2 font-mono">
+              <h4 className="text-xs font-bold text-[var(--theme-text)] mb-4 uppercase tracking-wider flex items-center space-x-2 font-mono">
                 <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
                 <EditableField id="footer_strategic_contacts_title" defaultText="Contactos Estratégicos" />
               </h4>
               <div className="space-y-3.5">
                 {proposal.contacts.map((contact, idx) => (
-                  <div key={idx} className="p-5 rounded-2xl bg-[var(--bg-main)] border border-[var(--border-color)] shadow-xs">
-                    <span className="text-lg font-bold text-[var(--text-primary)] block leading-tight">
+                  <div key={idx} className="p-5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-xs">
+                    <span className="text-lg font-bold text-[var(--theme-text)] block leading-tight">
                       <EditableField id={`footer_contact_${idx}_name`} defaultText={contact.name} />
                     </span>
                     <span className="text-sm font-semibold text-[var(--accent-color)] block mb-2">
                       <EditableField id={`footer_contact_${idx}_role`} defaultText={contact.role} />
                     </span>
-                    <div className="flex items-center justify-between text-sm font-mono font-medium text-[var(--text-primary)]/70 pt-2 border-t border-[var(--border-color)]">
+                    <div className="flex items-center justify-between text-sm font-mono font-medium text-[var(--theme-text)]/70 pt-2 border-t border-[var(--border-color)]">
                       <span className="truncate pr-2 text-xs">
                         <EditableField id={`footer_contact_${idx}_email`} defaultText={contact.email} />
                       </span>
-                      <span className="font-bold text-[var(--text-primary)] shrink-0">
+                      <span className="font-bold text-[var(--theme-text)] shrink-0">
                         <EditableField id={`footer_contact_${idx}_phone`} defaultText={contact.phone} />
                       </span>
                     </div>
@@ -116,12 +116,12 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
           </div>
 
           {/* Card 3: Direct Action & WhatsApp CTA (xl:col-span-4) */}
-          <div className="xl:col-span-4 bg-[var(--card-bg)] text-[var(--text-primary)] rounded-3xl p-6 md:p-8 shadow-2xl border border-[var(--border-color)] flex flex-col justify-between min-h-[360px] relative overflow-hidden transition-colors duration-300">
+          <div className="xl:col-span-4 bg-[var(--card-bg)] text-[var(--theme-text)] rounded-3xl p-6 md:p-8 shadow-2xl border border-[var(--border-color)] flex flex-col justify-between min-h-[360px] relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent-color)]/20 blur-3xl rounded-full pointer-events-none" />
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-2xl font-extrabold text-[var(--text-primary)] flex items-center space-x-2">
+                <h4 className="text-2xl font-extrabold text-[var(--theme-text)] flex items-center space-x-2">
                   <MessageSquare className="w-6 h-6 text-[var(--accent-color)]" />
                   <EditableField id="footer_cta_title" defaultText="Atención Directa" />
                 </h4>
@@ -134,7 +134,7 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
                 </span>
               </div>
 
-              <p className="text-[var(--text-primary)]/80 text-base leading-relaxed my-4 font-normal">
+              <p className="text-[var(--theme-text)]/90 text-base leading-relaxed my-4 font-normal">
                 <EditableField id="footer_cta_desc" defaultText="Comuníquese en tiempo real por WhatsApp con nuestro Gerente General para agendar una sesión de trabajo o resolver dudas técnicas." />
               </p>
             </div>

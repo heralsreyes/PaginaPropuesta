@@ -1,27 +1,26 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useRef, memo } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
 import { Palette } from "lucide-react";
 import { TextColorPopover } from "@/components/ui/TextColorPopover";
 
-interface EditableFieldProps {
+interface ColorableTextProps {
   id: string;
-  defaultText: string;
+  text: string;
   className?: string;
-  tag?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+  tag?: "span" | "div" | "h1" | "h2" | "h3" | "h4" | "p";
   style?: React.CSSProperties;
 }
 
-const EditableFieldBase: React.FC<EditableFieldProps> = ({
+const ColorableTextBase: React.FC<ColorableTextProps> = ({
   id,
-  defaultText,
+  text,
   className = "",
   tag = "span",
   style,
 }) => {
   const { isDesignMode } = useStudioStore();
-  const [text, setText] = useState<string>(defaultText);
   const [customColor, setCustomColor] = useState<string | null>(null);
   const [pendingColor, setPendingColor] = useState<string | null>(null);
   const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
@@ -29,37 +28,24 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
   const triggerRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    setText(defaultText);
     if (typeof window !== "undefined") {
-      const savedText = localStorage.getItem(`editable_${id}`);
-      if (savedText !== null && savedText !== "") {
-        setText(savedText);
-      }
       const savedColor = localStorage.getItem(`editable_color_${id}`);
       if (savedColor) {
         setCustomColor(savedColor);
       }
     }
-  }, [id, defaultText]);
+  }, [id]);
 
   useEffect(() => {
     const handleReset = () => {
-      setText(defaultText);
       setCustomColor(null);
       setPendingColor(null);
       if (typeof window !== "undefined") {
-        localStorage.removeItem(`editable_${id}`);
         localStorage.removeItem(`editable_color_${id}`);
       }
     };
     const handleSync = () => {
       if (typeof window !== "undefined") {
-        const savedText = localStorage.getItem(`editable_${id}`);
-        if (savedText !== null && savedText !== "") {
-          setText(savedText);
-        } else {
-          setText(defaultText);
-        }
         const savedColor = localStorage.getItem(`editable_color_${id}`);
         setCustomColor(savedColor || null);
       }
@@ -70,9 +56,8 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
       window.removeEventListener("enfoco-reset-all", handleReset);
       window.removeEventListener("enfoco-sync-editables", handleSync);
     };
-  }, [id, defaultText]);
+  }, [id]);
 
-  // Click outside to close color popover (cancels pending changes)
   useEffect(() => {
     if (!showColorPicker) return;
     const handleClickOutside = (e: MouseEvent) => {
@@ -85,26 +70,11 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showColorPicker, customColor]);
 
-  const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
-    const newText = e.currentTarget.innerText;
-    if (newText !== undefined) {
-      setText(newText);
-      if (typeof window !== "undefined") {
-        localStorage.setItem(`editable_${id}`, newText);
-      }
-    }
-  };
-
   const handleOpenPicker = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!showColorPicker) {
-      setPendingColor(customColor);
-      setShowColorPicker(true);
-    } else {
-      setPendingColor(customColor);
-      setShowColorPicker(false);
-    }
+    setPendingColor(customColor);
+    setShowColorPicker((prev) => !prev);
   };
 
   const handleConfirmColor = (e?: React.MouseEvent) => {
@@ -126,9 +96,7 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
     setShowColorPicker(false);
   };
 
-  // Preview color while picker is open, or confirmed color when closed
   const activeColor = showColorPicker ? pendingColor : customColor;
-
   const computedStyle: React.CSSProperties = {
     ...style,
     ...(activeColor ? { color: activeColor } : {}),
@@ -145,21 +113,16 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
   }
 
   return (
-    <span className="relative inline-block group/editable">
+    <span className={`relative group/editable ${tag === "div" ? "block" : "inline-block"}`}>
       <Tag
-        contentEditable
-        suppressContentEditableWarning
         suppressHydrationWarning
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-        onBlur={handleBlur}
         style={computedStyle}
-        className={`${className} outline-none cursor-text hover:ring-2 hover:ring-[var(--accent-color)]/60 hover:bg-[var(--accent-color)]/10 rounded px-1 -mx-1 relative transition-all`}
+        className={`${className} transition-colors`}
       >
         {text}
       </Tag>
 
-      {/* Mini Color Trigger Button on Hover (placed on top-left to avoid colliding with delete buttons on right) */}
+      {/* Mini Color Trigger Button on Hover */}
       <span
         ref={triggerRef}
         role="button"
@@ -169,12 +132,12 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
           if (e.key === "Enter" || e.key === " ") handleOpenPicker(e);
         }}
         className="no-print absolute -top-2.5 -left-2.5 opacity-0 group-hover/editable:opacity-100 transition-opacity bg-zinc-900 text-white p-0.5 rounded-full border border-zinc-600 shadow-md cursor-pointer hover:scale-110 z-30 inline-flex items-center justify-center select-none"
-        title="Cambiar color de este texto"
+        title="Cambiar color de este monto"
       >
         <Palette className="w-2.5 h-2.5 text-amber-400" />
       </span>
 
-      {/* Color Picker Popover with Required "Aceptar" Confirmation */}
+      {/* Color Picker Popover */}
       {showColorPicker && (
         <TextColorPopover
           popoverRef={popoverRef}
@@ -189,4 +152,4 @@ const EditableFieldBase: React.FC<EditableFieldProps> = ({
   );
 };
 
-export const EditableField = memo(EditableFieldBase);
+export const ColorableText = memo(ColorableTextBase);

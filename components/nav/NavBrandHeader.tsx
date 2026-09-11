@@ -28,12 +28,12 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
           id="nav_brand_company"
           value={companyName}
           onChange={(val) => updateCompany({ name: val })}
-          className="font-extrabold text-sm text-[var(--text-primary)] tracking-wide"
+          className="font-extrabold text-sm text-[var(--theme-text)] tracking-wide"
           tag="span"
         />
 
         {/* Divider */}
-        <span className="text-[var(--text-primary)]/40 font-mono text-sm mx-2.5 select-none">|</span>
+        <span className="text-[var(--theme-text)]/40 font-mono text-sm mx-2.5 select-none">|</span>
 
         {/* Client Brand */}
         <EditableText

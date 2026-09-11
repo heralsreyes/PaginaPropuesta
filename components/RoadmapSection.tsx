@@ -106,7 +106,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30">
             <EditableField id="roadmap_header_badge" defaultText={`CRONOGRAMA DE EJECUCIÓN • ESTIMACIÓN: ${getComputedDuration()}`} />
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-3 mb-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--h2-color)] mt-3 mb-2">
             <EditableField id="roadmap_header_h2" defaultText="Plan de Trabajo & Fases EDT" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
@@ -115,9 +115,9 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
         </div>
 
         {/* Unified Stepper Container */}
-        <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-5 sm:p-7 shadow-sm max-w-6xl mx-auto w-full relative transition-colors duration-300">
+        <div className="bg-[var(--card-bg)] text-[var(--theme-text)] border border-[var(--border-color)] rounded-3xl p-5 sm:p-7 shadow-sm max-w-6xl mx-auto w-full relative transition-colors duration-300">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-mono font-bold text-[var(--text-primary)]/60">
+            <span className="text-xs font-mono font-bold text-[var(--theme-text)]/70">
               <EditableField id="roadmap_phases_label" defaultText="FASES DEL PROYECTO" /> ({roadmap.length})
             </span>
             {isDesignMode && (
@@ -148,7 +148,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                 onDelete={() => removeRoadmapPhase(idx)}
                 itemTitle="fase EDT"
               >
-                <div className="min-h-[210px] p-5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:-translate-y-1 hover:border-[var(--accent-color)]/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full">
+                <div className="min-h-[210px] p-5 rounded-2xl bg-[var(--card-bg)] text-[var(--theme-text)] border border-[var(--border-color)] shadow-sm hover:-translate-y-1 hover:border-[var(--accent-color)]/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full">
                   <div>
                     {/* Large Node Badge & Status Badge */}
                     <div className="flex items-center justify-between w-full mb-2.5">
@@ -159,7 +159,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                     </div>
 
                     {/* Phase Info */}
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]/60 font-mono block mb-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-text)]/70 font-mono block mb-0.5">
                       <EditableText
                         id={`roadmap_phase_${idx}_phase`}
                         value={item.phase}
@@ -174,7 +174,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                         tag="span"
                       />
                     </span>
-                    <h3 className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] mb-1.5 leading-snug">
+                    <h3 className="text-xs sm:text-sm font-extrabold text-[var(--accent-color)] mb-1.5 leading-snug">
                       <EditableText
                         id={`roadmap_phase_${idx}_title`}
                         value={item.title}
@@ -182,7 +182,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                         tag="span"
                       />
                     </h3>
-                    <div className="text-[11px] text-[var(--text-primary)]/70 leading-relaxed mb-3 font-normal">
+                    <div className="text-[11px] text-[var(--theme-text)] leading-relaxed mb-3 font-normal">
                       <EditableText
                         id={`roadmap_phase_${idx}_desc`}
                         value={item.description}
@@ -196,7 +196,7 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                   {/* Milestones Bullet List */}
                   <div className="w-full pt-2.5 border-t border-[var(--border-color)] space-y-1 text-left">
                     <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block font-mono">
+                      <span className="text-[9px] font-bold text-[var(--accent-color)] uppercase tracking-wider block font-mono">
                         <EditableField id="roadmap_milestones_label" defaultText="Hitos Clave:" />
                       </span>
                       {isDesignMode && (
@@ -223,9 +223,9 @@ export const RoadmapSection: React.FC<RoadmapSectionProps> = ({ roadmap, estimat
                           }}
                           itemTitle="hito"
                         >
-                          <div className="flex items-center space-x-1.5 text-[10px] sm:text-[11px] text-[var(--text-primary)]/80">
+                          <div className="flex items-center space-x-1.5 text-[10px] sm:text-[11px] text-[var(--theme-text)]">
                             <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0" />
-                            <span className="font-medium text-[var(--text-primary)] leading-tight">
+                            <span className="font-medium text-[var(--theme-text)] leading-tight">
                               <EditableText
                                 id={`roadmap_phase_${idx}_m_${mIdx}`}
                                 value={m}

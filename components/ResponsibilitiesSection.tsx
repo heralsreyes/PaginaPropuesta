@@ -37,7 +37,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
             <EditableField id="resp_header_badge" defaultText="ACUERDO DE SERVICIO & GARANTÍA" />
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-2.5 mb-1.5">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--h2-color)] mt-2.5 mb-1.5">
             <EditableField id="resp_header_h2" defaultText="Matriz de Responsabilidades & Garantía" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
@@ -48,7 +48,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
         {/* Dual-Panel Highlight Aesthetic (Max-w-5xl/6xl) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-6xl mx-auto w-full mb-5">
           {/* Left Panel (Provider - ENFOCO Commitments): Card */}
-          <div className="bg-[var(--card-bg)] text-[var(--text-primary)] rounded-3xl p-6 sm:p-7 shadow-xl border border-[var(--border-color)] flex flex-col justify-between relative overflow-hidden transition-colors duration-300">
+          <div className="bg-[var(--card-bg)] text-[var(--theme-text)] rounded-3xl p-6 sm:p-7 shadow-xl border border-[var(--border-color)] flex flex-col justify-between relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-36 h-36 bg-[var(--accent-color)]/10 blur-2xl rounded-full pointer-events-none" />
 
             <div>
@@ -58,7 +58,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                     <Server className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)]">
+                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--theme-text)]">
                       <EditableField id="resp_enfoco_card_title" defaultText="Compromisos de ENFOCO, S.R.L." />
                     </h3>
                     <span className="text-[11px] font-semibold text-[var(--accent-color)]">
@@ -90,7 +90,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                     }}
                     itemTitle="compromiso ENFOCO"
                   >
-                    <div className="flex items-start space-x-2.5 text-xs text-[var(--text-primary)]/80">
+                    <div className="flex items-start space-x-2.5 text-xs text-[var(--theme-text)]">
                       <div className="w-4 h-4 rounded-full bg-[var(--accent-color)] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </div>
@@ -120,18 +120,18 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
           </div>
 
           {/* Right Panel (Client Commitments): Card */}
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-3xl p-6 sm:p-7 shadow-sm flex flex-col justify-between transition-colors duration-300">
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--theme-text)] rounded-3xl p-6 sm:p-7 shadow-sm flex flex-col justify-between transition-colors duration-300">
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-9 h-9 rounded-xl bg-[var(--bg-main)] border border-[var(--border-color)] text-[var(--text-primary)]/70 flex items-center justify-center shadow-xs">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--bg-main)] border border-[var(--border-color)] text-[var(--accent-color)] flex items-center justify-center shadow-xs">
                     <Building2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)]">
+                    <h3 className="text-sm sm:text-base font-extrabold text-[var(--theme-text)]">
                       <EditableField id="resp_client_card_title" defaultText="Compromisos de la Empresa Cliente" />
                     </h3>
-                    <span className="text-[11px] font-semibold text-[var(--text-primary)]/60">
+                    <span className="text-[11px] font-semibold text-[var(--theme-text)]/70">
                       <EditableField id="resp_client_card_subtitle" defaultText="Contraparte Operativa" />
                     </span>
                   </div>
@@ -160,11 +160,11 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                     }}
                     itemTitle="compromiso del cliente"
                   >
-                    <div className="flex items-start space-x-2.5 text-xs text-[var(--text-primary)]/80">
-                      <div className="w-4 h-4 rounded-full bg-[var(--bg-main)] text-[var(--text-primary)] border border-[var(--border-color)] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                    <div className="flex items-start space-x-2.5 text-xs text-[var(--theme-text)]">
+                      <div className="w-4 h-4 rounded-full bg-[var(--bg-main)] text-[var(--accent-color)] border border-[var(--border-color)] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                         <Check className="w-3 h-3 stroke-[2.5]" />
                       </div>
-                      <span className="leading-relaxed font-normal text-[var(--text-primary)]">
+                      <span className="leading-relaxed font-normal text-[var(--theme-text)]">
                         <EditableText
                           id={`resp_client_item_${idx}`}
                           value={resp}
@@ -183,7 +183,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
               </div>
             </div>
 
-            <div className="pt-3 mt-4 border-t border-[var(--border-color)] text-[11px] font-semibold text-[var(--text-primary)]/60 flex items-center justify-between font-mono">
+            <div className="pt-3 mt-4 border-t border-[var(--border-color)] text-[11px] font-semibold text-[var(--theme-text)]/70 flex items-center justify-between font-mono">
               <span><EditableField id="resp_client_meta_left" defaultText="Gestión de Aprobaciones" /></span>
               <span><EditableField id="resp_client_meta_right" defaultText="Cronograma Conjunto" /></span>
             </div>
@@ -192,12 +192,12 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
 
         {/* Bottom Full-Width Highlighted Guarantee Banner */}
         <div className="max-w-6xl mx-auto w-full bg-[var(--card-bg)] border-2 border-[var(--accent-color)]/30 rounded-2xl p-4.5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 transition-colors duration-300">
-          <div className="flex items-center space-x-3 text-[var(--text-primary)]/80">
+          <div className="flex items-center space-x-3 text-[var(--theme-text)]">
             <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center justify-center text-[var(--accent-color)] shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <strong className="text-xs sm:text-sm font-bold text-[var(--text-primary)] block">
+              <strong className="text-xs sm:text-sm font-bold text-[var(--theme-text)] block">
                 <EditableField id="resp_guarantee_label" defaultText="Garantía Total de la Solución:" />{" "}
                 <EditableText
                   id="resp_guarantee_period"
@@ -206,7 +206,7 @@ export const ResponsibilitiesSection: React.FC<ResponsibilitiesSectionProps> = (
                   tag="span"
                 />
               </strong>
-              <span className="text-[11px] text-[var(--text-primary)]/60">
+              <span className="text-[11px] text-[var(--theme-text)]/70">
                 <EditableField id="resp_guarantee_sub" defaultText="Acompañamiento continuo post-pase a producción para certificar el correcto funcionamiento." />
               </span>
             </div>

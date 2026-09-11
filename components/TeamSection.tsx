@@ -53,7 +53,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-3.5 py-1 rounded-full border border-[var(--accent-color)]/30">
             <EditableField id="team_header_badge" defaultText="MATRIZ DE RECURSOS • ESPECIFICACIÓN OFICIAL" />
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] mt-2 mb-1">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display text-[var(--h2-color)] mt-2 mb-1">
             <EditableField id="team_header_h2" defaultText="Recursos Necesarios & Roles del Proyecto" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
@@ -64,7 +64,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
         {/* Master-Detail Interactive Split Layout (Responsive xl grid) */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:gap-6 items-stretch max-w-6xl mx-auto w-full">
           {/* Left Column (xl:col-span-5) - Dynamic Master Inspector Card */}
-          <div className="xl:col-span-5 bg-[var(--card-bg)] text-[var(--text-primary)] rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between border border-[var(--border-color)] relative overflow-hidden transition-colors duration-300">
+          <div className="xl:col-span-5 bg-[var(--card-bg)] text-[var(--theme-text)] rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between border border-[var(--border-color)] relative overflow-hidden transition-colors duration-300">
             <div className="absolute top-0 right-0 w-44 h-44 bg-[var(--accent-color)]/10 blur-3xl rounded-full pointer-events-none" />
 
             {selectedMember && (
@@ -96,7 +96,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       </span>
                     </div>
 
-                    <span className="text-[10px] font-mono font-bold text-[var(--text-primary)]/60 uppercase tracking-wider block mb-1">
+                    <span className="text-[10px] font-mono font-bold text-[var(--theme-text)]/70 uppercase tracking-wider block mb-1">
                       <EditableText
                         id={`team_sel_${selectedRoleIndex}_cat`}
                         value={selectedMember.category}
@@ -105,7 +105,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       />{" "}
                       • Inspección Activa
                     </span>
-                    <h3 className="text-xl sm:text-2xl font-black font-display text-[var(--text-primary)] mb-3 leading-tight">
+                    <h3 className="text-xl sm:text-2xl font-black font-display text-[var(--theme-text)] mb-3 leading-tight">
                       <EditableText
                         id={`team_sel_${selectedRoleIndex}_role`}
                         value={selectedMember.role}
@@ -135,7 +135,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                         )}
                       </div>
                       {selectedMember.responsibilities.map((resp, rIdx) => (
-                        <div key={rIdx} className="flex items-start space-x-2 text-xs text-[var(--text-primary)]/80">
+                        <div key={rIdx} className="flex items-start space-x-2 text-xs text-[var(--theme-text)]">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0 mt-0.5" />
                           <span className="leading-relaxed font-normal flex-1">
                             <EditableText
@@ -155,11 +155,11 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                   </div>
 
                   <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
-                    <div className="flex items-center space-x-2 text-[var(--text-primary)]/80">
+                    <div className="flex items-center space-x-2 text-[var(--theme-text)]/80">
                       <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
                       <span className="font-semibold text-[11px]">Estándar CMMI / ISO 27002</span>
                     </div>
-                    <span className="font-mono text-[var(--text-primary)]/60 text-[10px]">ENFOCO S.R.L.</span>
+                    <span className="font-mono text-[var(--theme-text)]/60 text-[10px]">ENFOCO S.R.L.</span>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -221,7 +221,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                           {getRoleIcon(member.iconName)}
                         </div>
                         <div>
-                          <span className="text-[9px] font-bold text-[var(--text-primary)]/60 uppercase tracking-wider font-mono block">
+                          <span className="text-[9px] font-bold text-[var(--theme-text)]/70 uppercase tracking-wider font-mono block">
                             <EditableText
                               id={`team_member_${idx}_cat`}
                               value={member.category}
@@ -229,7 +229,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                               tag="span"
                             />
                           </span>
-                          <h4 className={`text-xs sm:text-sm font-extrabold block ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--text-primary)]"}`}>
+                          <h4 className={`text-xs sm:text-sm font-extrabold block ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--theme-text)]"}`}>
                             <EditableText
                               id={`team_member_${idx}_role`}
                               value={member.role}
@@ -253,7 +253,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                           />
                           <span>%</span>
                         </span>
-                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? "text-[var(--accent-color)] translate-x-1" : "opacity-40"}`} />
+                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? "text-[var(--accent-color)] translate-x-1" : "text-[var(--theme-text)]/50"}`} />
                       </div>
                     </div>
                   </DeletableItem>

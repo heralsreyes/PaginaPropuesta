@@ -132,11 +132,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
         <div className="max-w-4xl w-full mx-auto p-4 sm:p-5 rounded-3xl bg-[var(--card-bg)]/90 backdrop-blur-md border border-[var(--border-color)] shadow-lg shadow-zinc-900/5 mt-2 text-left grid grid-cols-2 xl:grid-cols-4 gap-4 items-center divide-y xl:divide-y-0 xl:divide-x divide-[var(--border-color)] transition-colors duration-300">
           {/* Column 1: Fecha de Emisión */}
           <div className="px-3 py-1 flex flex-col justify-center">
-            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+            <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <Calendar className="w-4 h-4 text-[var(--accent-color)]" />
               <span><EditableField id="hero_label_date" defaultText="Fecha de Emisión" /></span>
             </div>
-            <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--theme-text)] leading-tight">
               <EditableText
                 id="hero_date"
                 value={project.date || "Agosto, 2026"}
@@ -148,11 +148,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
 
           {/* Column 2: Versión & Código */}
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
-            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+            <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <FileText className="w-4 h-4 text-[var(--accent-color)]" />
               <span><EditableField id="hero_label_version" defaultText="Versión & Código" /></span>
             </div>
-            <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--theme-text)] leading-tight">
               v{project.version || "1.0"} (
               <EditableText
                 id="hero_code"
@@ -166,11 +166,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
 
           {/* Column 3: Preparado Por */}
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
-            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+            <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
               <span><EditableField id="hero_label_author" defaultText="Preparado Por" /></span>
             </div>
-            <p className="text-xs sm:text-sm font-extrabold text-[var(--text-primary)] leading-tight">
+            <p className="text-xs sm:text-sm font-extrabold text-[var(--theme-text)] leading-tight">
               <EditableText
                 id="hero_author"
                 value={project.author || "ENFOCO, S.R.L."}
@@ -182,7 +182,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
 
           {/* Column 4: Garantía Incluida */}
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
-            <div className="text-[11px] font-semibold text-[var(--text-primary)]/60 uppercase tracking-wider gap-1.5 flex items-center mb-1">
+            <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
               <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
               <span><EditableField id="hero_label_guarantee" defaultText="Garantía Incluida" /></span>
             </div>

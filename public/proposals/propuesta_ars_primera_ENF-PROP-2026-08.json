@@ -255,17 +255,17 @@
     ]
   },
   "theme": {
-    "bgMain": "#002B2E",
-    "accentColor": "#004F54",
-    "secondaryAccent": "#059669",
-    "cardBg": "#001E20",
-    "cardBorder": "#10B981",
+    "bgMain": "#004988",
+    "accentColor": "#003057",
+    "secondaryAccent": "#FFB600",
+    "cardBg": "#FFFFFF",
+    "cardBorder": "#6ECEB2",
     "textPrimary": "#FFFFFF",
-    "textSecondary": "#D1FAE5",
-    "navBg": "#001E20",
+    "textSecondary": "#333333",
+    "navBg": "#003057",
     "h1Color": "#FFFFFF",
-    "h2Color": "#34D399",
-    "textColor": "#D1FAE5",
+    "h2Color": "#00B189",
+    "textColor": "#333333",
     "cardBorderRadius": "24px",
     "aboutBg": "#D6E5DE",
     "aboutCardBg": "#BFDAD1",
@@ -273,13 +273,13 @@
     "aboutCardBorder": "#A6C5BB"
   },
   "colors": {
-    "primary": "#004F54",
-    "secondary": "#059669",
-    "accent": "#34D399",
-    "background": "#002B2E",
-    "card": "#001E20",
-    "border": "#10B981",
+    "primary": "#003057",
+    "secondary": "#00B189",
+    "accent": "#FFB600",
+    "background": "#004988",
+    "card": "#FFFFFF",
+    "border": "#6ECEB2",
     "text": "#FFFFFF",
-    "textSecondary": "#D1FAE5"
+    "textSecondary": "#333333"
   }
 }
