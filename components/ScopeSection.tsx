@@ -97,7 +97,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
             <Sparkles className="w-3.5 h-3.5" />
             <span><EditableField id="scope_header_badge" defaultText="ARQUITECTURA DE ALCANCE • INSPECTOR MAESTRO-DETALLE" /></span>
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--text-primary)] mt-2 mb-1">
+          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--h2-color)] mt-2 mb-1">
             <EditableField id="scope_header_h2" defaultText="Alcance & Funcionalidades Requeridas" />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
@@ -118,7 +118,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                 className={`inline-flex items-center px-4 py-1.5 text-xs font-semibold rounded-full border transition-all duration-200 cursor-pointer select-none ${
                   isActive
                     ? "bg-[var(--accent-color)] text-white border-[var(--accent-color)] shadow-md shadow-[var(--accent-color)]/20 scale-105"
-                    : "bg-[var(--bg-main)] text-[var(--text-primary)]/80 border-[var(--border-color)] hover:border-[var(--accent-color)]/40 hover:text-[var(--text-primary)]"
+                    : "bg-[var(--card-bg)] text-[var(--theme-text)] border-[var(--border-color)] hover:border-[var(--accent-color)]/40 hover:text-[var(--accent-color)]"
                 }`}
               >
                 {isActive && (
@@ -275,8 +275,8 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                         onClick={() => setSelectedRequirementId(req.id || String(origIdx))}
                         className={`p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-xs ${
                           isSelected
-                            ? "bg-[var(--text-primary)] text-[var(--bg-main)] border-[var(--text-primary)] shadow-md scale-[1.02]"
-                            : "bg-[var(--bg-main)] text-[var(--text-primary)] border-[var(--border-color)] hover:border-[var(--accent-color)]/40"
+                            ? "bg-[var(--card-bg)] text-[var(--accent-color)] border-2 border-[var(--accent-color)] shadow-md scale-[1.02]"
+                            : "bg-[var(--card-bg)] text-[var(--theme-text)] border border-[var(--border-color)] hover:border-[var(--accent-color)]/50"
                         }`}
                       >
                         <div className="flex items-center space-x-3">
@@ -290,7 +290,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                           )}
 
                           <div>
-                            <div className={`text-[10px] font-mono font-bold flex items-center gap-1.5 mb-0.5 ${isSelected ? "opacity-70" : "text-[var(--text-primary)]/60"}`}>
+                            <div className={`text-[10px] font-mono font-bold flex items-center gap-1.5 mb-0.5 ${isSelected ? "text-[var(--accent-color)] font-extrabold" : "text-[var(--theme-text)]/70"}`}>
                               <span>{req.id}</span>
                               <span>•</span>
                               {isDesignMode ? (
@@ -314,7 +314,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                                 <span>{req.category}</span>
                               )}
                             </div>
-                            <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--bg-main)]" : "text-[var(--text-primary)]"}`}>
+                            <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--theme-text)]"}`}>
                               <EditableText
                                 id={`scope_req_${req.id || origIdx}_title`}
                                 value={req.title}
@@ -337,15 +337,15 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
           {/* Right Detail Panel */}
           <div className="xl:col-span-8">
             {!activeRequirement ? (
-              <div className="bg-[var(--bg-main)] border border-[var(--border-color)] rounded-3xl p-8 shadow-md flex flex-col items-center justify-center min-h-[420px] w-full text-center">
-                <Layers className="w-12 h-12 text-[var(--text-primary)]/30 mb-3" />
-                <h3 className="text-lg font-bold text-[var(--text-primary)]">Sin módulos seleccionados</h3>
-                <p className="text-xs text-[var(--text-primary)]/60 max-w-sm mt-1">
+              <div className="bg-[var(--card-bg)] text-[var(--theme-text)] border border-[var(--border-color)] rounded-3xl p-8 shadow-md flex flex-col items-center justify-center min-h-[420px] w-full text-center">
+                <Layers className="w-12 h-12 text-[var(--accent-color)]/30 mb-3" />
+                <h3 className="text-lg font-bold text-[var(--accent-color)]">Sin módulos seleccionados</h3>
+                <p className="text-xs text-[var(--theme-text)]/70 max-w-sm mt-1">
                   Selecciona una categoría con requerimientos activos o añade un nuevo módulo a la propuesta.
                 </p>
               </div>
             ) : (
-              <div id="card-inspector-02" className="bg-[var(--bg-main)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 md:p-9 shadow-md flex flex-col justify-between min-h-[420px] w-full relative overflow-hidden transition-colors duration-300">
+              <div id="card-inspector-02" className="bg-[var(--card-bg)] text-[var(--theme-text)] border border-[var(--border-color)] rounded-3xl p-6 sm:p-8 md:p-9 shadow-md flex flex-col justify-between min-h-[420px] w-full relative overflow-hidden transition-colors duration-300">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--accent-color)]/10 blur-3xl rounded-full pointer-events-none" />
 
                 <AnimatePresence mode="wait">
@@ -389,7 +389,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                           </span>
                         </div>
 
-                        <span className="text-xs font-mono font-bold text-[var(--text-primary)]/70 px-3 py-1 rounded-md bg-[var(--bg-main)] border border-[var(--border-color)]">
+                        <span className="text-xs font-mono font-bold text-[var(--accent-color)] px-3 py-1 rounded-md bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30">
                           <EditableText
                             id={`scope_detail_${activeRequirement.id}_id`}
                             value={activeRequirement.id}
@@ -405,7 +405,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                       </div>
 
                       {/* Title & Description */}
-                      <h3 className="text-2xl md:text-3xl font-extrabold font-display text-[var(--text-primary)] mb-3 leading-tight">
+                      <h3 className="text-2xl md:text-3xl font-extrabold font-display text-[var(--accent-color)] mb-3 leading-tight">
                         <EditableText
                           id={`scope_detail_${activeRequirement.id}_title`}
                           value={activeRequirement.title}
@@ -413,7 +413,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                           tag="span"
                         />
                       </h3>
-                      <div className="text-[var(--text-primary)]/80 text-sm md:text-base leading-relaxed font-normal max-w-2xl">
+                      <div className="text-[var(--theme-text)] text-sm md:text-base leading-relaxed font-normal max-w-2xl">
                         <EditableText
                           id={`scope_detail_${activeRequirement.id}_desc`}
                           value={activeRequirement.description}
@@ -427,7 +427,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                     {/* Deliverables Grid Zone */}
                     <div className="pt-5 border-t border-[var(--border-color)] mt-6">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider block font-mono">
+                        <span className="text-xs font-bold text-[var(--accent-color)] uppercase tracking-wider block font-mono">
                           <EditableField id="scope_deliverables_label" defaultText="ENTREGABLES Y CAPACIDADES CLAVE:" />
                         </span>
                         {isDesignMode && (
@@ -448,7 +448,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                       </div>
 
                       {activeRequirement.deliverables.length === 0 ? (
-                        <div className="p-4 rounded-xl border border-dashed border-[var(--border-color)] text-center text-xs text-[var(--text-primary)]/50">
+                        <div className="p-4 rounded-xl border border-dashed border-[var(--border-color)] text-center text-xs text-[var(--theme-text)]/50">
                           Sin entregables registrados para este módulo. Pulsa "+ Añadir Entregable" para agregar uno.
                         </div>
                       ) : (
@@ -466,7 +466,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                                 <div className="w-5 h-5 rounded-full bg-[var(--accent-color)] text-white flex items-center justify-center shrink-0">
                                   <CheckCircle2 className="w-3.5 h-3.5" />
                                 </div>
-                                <span className="text-[var(--text-primary)] font-medium leading-snug">
+                                <span className="text-[var(--theme-text)] font-medium leading-snug">
                                   <EditableText
                                     id={`scope_detail_${activeRequirement.id}_del_${dIdx}`}
                                     value={del}

@@ -154,7 +154,6 @@ export const applyCssVarDirect = (key: keyof ThemeConfig, value: string) => {
       break;
     case "secondaryAccent":
       s.setProperty("--secondary-accent", value);
-      s.setProperty("--theme-h2", value);
       break;
     case "cardBg":
       s.setProperty("--card-bg", value);
@@ -180,7 +179,7 @@ export const applyCssVarDirect = (key: keyof ThemeConfig, value: string) => {
       break;
     case "h2Color":
       s.setProperty("--theme-h2", value);
-      s.setProperty("--secondary-accent", value);
+      s.setProperty("--h2-color", value);
       break;
     case "textColor":
       s.setProperty("--theme-text", value);
@@ -208,13 +207,14 @@ export const applyCssVars = (theme: ThemeConfig) => {
   if (typeof document !== "undefined") {
     const s = document.documentElement.style;
     const h1 = theme.h1Color || theme.textPrimary || "#FFFFFF";
-    const h2 = theme.h2Color || theme.secondaryAccent || "#F08D17";
+    const h2 = theme.h2Color || "#F08D17";
+    const secAccent = theme.secondaryAccent || "#F08D17";
     const txt = theme.textColor || theme.textSecondary || "#D5E4E2";
-    const border = theme.cardBorder || theme.secondaryAccent || "#F08D17";
+    const border = theme.cardBorder || secAccent || "#F08D17";
 
     s.setProperty("--bg-main", theme.bgMain);
     s.setProperty("--accent-color", theme.accentColor);
-    s.setProperty("--secondary-accent", h2);
+    s.setProperty("--secondary-accent", secAccent);
     s.setProperty("--card-bg", theme.cardBg);
     s.setProperty("--card-border", border);
     s.setProperty("--text-primary", h1);
@@ -223,6 +223,7 @@ export const applyCssVars = (theme: ThemeConfig) => {
     s.setProperty("--border-color", border);
     s.setProperty("--theme-h1", h1);
     s.setProperty("--theme-h2", h2);
+    s.setProperty("--h2-color", h2);
     s.setProperty("--theme-text", txt);
     s.setProperty("--card-radius", theme.cardBorderRadius || "24px");
     s.setProperty("--about-bg", theme.aboutBg || "#D6E5DE");
@@ -249,8 +250,6 @@ export const useThemeStore = create<ThemeState>()(
           const next = { ...state.theme, ...updates };
           if (updates.h1Color) next.textPrimary = updates.h1Color;
           if (updates.textPrimary) next.h1Color = updates.textPrimary;
-          if (updates.h2Color) next.secondaryAccent = updates.h2Color;
-          if (updates.secondaryAccent) next.h2Color = updates.secondaryAccent;
           if (updates.textColor) next.textSecondary = updates.textColor;
           if (updates.textSecondary) next.textColor = updates.textSecondary;
           applyCssVars(next);

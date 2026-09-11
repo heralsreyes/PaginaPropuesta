@@ -33,7 +33,7 @@ export const DeletableItem: React.FC<DeletableItemProps> = ({
           e.stopPropagation();
           onDelete();
         }}
-        className="opacity-0 group-hover/deletable:opacity-100 absolute -top-2 -right-2 z-30 p-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-lg transition-all cursor-pointer transform hover:scale-110"
+        className="opacity-0 group-hover/deletable:opacity-100 absolute -top-2.5 -right-3 z-30 p-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-lg transition-all cursor-pointer transform hover:scale-110"
         title={`Eliminar este ${itemTitle}`}
       >
         <Trash2 className="w-3.5 h-3.5" />

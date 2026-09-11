@@ -42,6 +42,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
   const [pendingColor, setPendingColor] = useState<string | null>(null);
   const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLSpanElement | null>(null);
 
   // Sync value prop
   useEffect(() => {
@@ -219,15 +220,16 @@ export const EditableText: React.FC<EditableTextProps> = ({
         {value}
       </Tag>
 
-      {/* Mini Color Trigger Button on Hover */}
+      {/* Mini Color Trigger Button on Hover (placed on top-left to avoid colliding with delete trash buttons on the right) */}
       <span
+        ref={triggerRef}
         role="button"
         tabIndex={0}
         onClick={handleOpenPicker}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") handleOpenPicker(e);
         }}
-        className="no-print absolute -top-3 -right-2 opacity-0 group-hover/editable:opacity-100 transition-opacity bg-zinc-900 text-white p-0.5 rounded-full border border-zinc-600 shadow-md cursor-pointer hover:scale-110 z-30 inline-flex items-center justify-center select-none"
+        className="no-print absolute -top-2.5 -left-2.5 opacity-0 group-hover/editable:opacity-100 transition-opacity bg-zinc-900 text-white p-0.5 rounded-full border border-zinc-600 shadow-md cursor-pointer hover:scale-110 z-30 inline-flex items-center justify-center select-none"
         title="Cambiar color de este texto"
       >
         <Palette className="w-2.5 h-2.5 text-amber-400" />
@@ -237,6 +239,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
       {showColorPicker && (
         <TextColorPopover
           popoverRef={popoverRef}
+          anchorEl={triggerRef.current}
           pendingColor={pendingColor}
           setPendingColor={setPendingColor}
           onConfirm={handleConfirmColor}
