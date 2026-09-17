@@ -38,6 +38,7 @@ Thumbs.db
 # Media & Temp Docs
 *.mp4
 *.docx
+!Informe_de_Cambios_y_Manual_de_Uso.docx
 *.mp3
 *.msi
 *.exe
