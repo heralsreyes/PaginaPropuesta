@@ -18,27 +18,27 @@ const {
 const fs = require("fs");
 const path = require("path");
 
-// Colors
+// Corporate Palette
 const COLOR_PRIMARY = "004F54";      // Deep Teal Enfoco
-const COLOR_SECONDARY = "F08D17";    // Gold / Amber Accent
-const COLOR_DARK = "0F172A";         // Slate 900
-const COLOR_MUTED = "475569";        // Slate 600
-const COLOR_BG_LIGHT = "F8FAFC";     // Slate 50
-const COLOR_CARD_BG = "F1F5F9";      // Slate 100
-const COLOR_BORDER = "CBD5E1";       // Slate 300
+const COLOR_SECONDARY = "F08D17";    // Gold / Amber
+const COLOR_DARK = "0F172A";         // Dark Slate
+const COLOR_MUTED = "475569";        // Soft Slate
+const COLOR_CARD_BG = "F8FAFC";      // Very light gray
+const COLOR_BORDER = "E2E8F0";       // Border gray
 const COLOR_WHITE = "FFFFFF";
-const COLOR_EMERALD = "059669";
+const COLOR_EMERALD = "059669";      // Green highlight
+const COLOR_AMBER = "D97706";
 
 function createHeaderPara(text, level = HeadingLevel.HEADING_1) {
   return new Paragraph({
     heading: level,
-    spacing: { before: 280, after: 140 },
+    spacing: { before: 280, after: 120 },
     children: [
       new TextRun({
         text,
         bold: true,
         font: "Segoe UI",
-        size: level === HeadingLevel.HEADING_1 ? 32 : level === HeadingLevel.HEADING_2 ? 26 : 22,
+        size: level === HeadingLevel.HEADING_1 ? 30 : 24,
         color: COLOR_PRIMARY,
       }),
     ],
@@ -48,13 +48,13 @@ function createHeaderPara(text, level = HeadingLevel.HEADING_1) {
 function createSubheaderPara(text) {
   return new Paragraph({
     heading: HeadingLevel.HEADING_2,
-    spacing: { before: 220, after: 100 },
+    spacing: { before: 200, after: 80 },
     children: [
       new TextRun({
         text,
         bold: true,
         font: "Segoe UI",
-        size: 24,
+        size: 22,
         color: COLOR_SECONDARY,
       }),
     ],
@@ -85,24 +85,24 @@ function createBodyPara(text, boldPrefix = "", isBullet = false) {
 
   return new Paragraph({
     bullet: isBullet ? { level: 0 } : undefined,
-    spacing: { before: 60, after: 80, line: 276 },
+    spacing: { before: 60, after: 80, line: 280 },
     children,
   });
 }
 
-function createCalloutBox(title, text) {
+function createCalloutBox(title, text, color = COLOR_EMERALD, bg = "F0FDF4") {
   return new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
     rows: [
       new TableRow({
         children: [
           new TableCell({
-            shading: { fill: "F0FDF4", type: ShadingType.CLEAR },
+            shading: { fill: bg, type: ShadingType.CLEAR },
             borders: {
               top: { style: BorderStyle.NONE },
               bottom: { style: BorderStyle.NONE },
               right: { style: BorderStyle.NONE },
-              left: { style: BorderStyle.SINGLE, size: 24, color: COLOR_EMERALD },
+              left: { style: BorderStyle.SINGLE, size: 24, color: color },
             },
             margins: { top: 120, bottom: 120, left: 160, right: 160 },
             children: [
@@ -110,11 +110,11 @@ function createCalloutBox(title, text) {
                 spacing: { after: 60 },
                 children: [
                   new TextRun({
-                    text: "💡 " + title,
+                    text: title,
                     bold: true,
                     font: "Segoe UI",
                     size: 22,
-                    color: COLOR_EMERALD,
+                    color: color,
                   }),
                 ],
               }),
@@ -180,7 +180,7 @@ async function generate() {
       {
         properties: {
           page: {
-            margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 }, // 1 inch
+            margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 },
           },
         },
         headers: {
@@ -190,7 +190,7 @@ async function generate() {
                 alignment: AlignmentType.RIGHT,
                 children: [
                   new TextRun({
-                    text: "ENFOCO, S.R.L. · Informe Técnico de Mejoras y Manual de Uso",
+                    text: "ENFOCO · Guía Clara de Cambios y Uso",
                     font: "Segoe UI",
                     size: 16,
                     color: COLOR_MUTED,
@@ -237,10 +237,10 @@ async function generate() {
           }),
         },
         children: [
-          // PORTADA / TÍTULO PRINCIPAL
+          // TÍTULO DE PORTADA
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 200, after: 80 },
+            spacing: { before: 200, after: 60 },
             children: [
               new TextRun({
                 text: "ENFOCO, S.R.L.",
@@ -253,25 +253,25 @@ async function generate() {
           }),
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { after: 120 },
+            spacing: { after: 80 },
             children: [
               new TextRun({
-                text: "INFORME TÉCNICO DE MEJORAS & MANUAL DE USO",
+                text: "EXPLICACIÓN SENCILLA: QUÉ TENÍA, QUÉ SE HIZO Y CÓMO USARLO",
                 bold: true,
                 font: "Segoe UI",
-                size: 36,
+                size: 32,
                 color: COLOR_PRIMARY,
               }),
             ],
           }),
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { after: 240 },
+            spacing: { after: 200 },
             children: [
               new TextRun({
-                text: "Plataforma Web de Propuestas Comerciales y Presentaciones Ejecutivas",
+                text: "Guía práctica en palabras llanas para entender y manejar la plataforma de propuestas web",
                 font: "Segoe UI",
-                size: 22,
+                size: 21,
                 color: COLOR_MUTED,
                 italics: true,
               }),
@@ -285,274 +285,243 @@ async function generate() {
               new TableRow({
                 children: [
                   createTableCell("Fecha: 17 de Septiembre, 2026", false, true),
-                  createTableCell("Versión: 2.5 (Producción & Vercel)", false, true),
+                  createTableCell("Versión: Actualizada en Producción (GitHub y Vercel)", false, true),
                 ],
               }),
               new TableRow({
                 children: [
-                  createTableCell("Repositorio: heralsreyes/PaginaPropuesta", false, false),
-                  createTableCell("Estado: Aprobado, Compilado y Desplegado", false, false),
+                  createTableCell("Objetivo: Explicación sin tecnicismos", false, false),
+                  createTableCell("Estado: Todo funcionando y probado", false, false),
                 ],
               }),
             ],
           }),
 
-          new Paragraph({ spacing: { before: 240 } }),
+          new Paragraph({ spacing: { before: 200 } }),
 
-          // SECCIÓN 1: RESUMEN EJECUTIVO
-          createHeaderPara("1. Resumen Ejecutivo y Alcance del Trabajo"),
+          // PARTE 1: QUÉ TENÍA
+          createHeaderPara("1. ¿Qué problemas tenía la página? (Qué tenía)"),
           createBodyPara(
-            "El presente documento detalla la resolución de todos los requerimientos especificados para la plataforma web de propuestas comerciales de ENFOCO, con especial énfasis en la ergonomía de edición visual, la presentación ejecutiva impecable para clientes y la compatibilidad universal entre diferentes propuestas institucionales."
-          ),
-          createBodyPara(
-            "Superposición de textos en la cabecera / badge superior resuelto, estiramiento 2D interactivo (horizontal y vertical) en las píldoras de entregables, control granular para remover o restaurar íconos de cotejo, ocultamiento estricto de controles en Vista Ejecutiva y persistencia independiente por propuesta.",
-            "Aspectos Clave Atendidos:"
+            "Antes de los cambios, al usar la página para preparar o presentar una propuesta a un cliente, se presentaban 5 problemas incómodos:"
           ),
 
-          new Paragraph({ spacing: { before: 120 } }),
-          createCalloutBox(
-            "Objetivo Logrado",
-            "La plataforma ahora ofrece una experiencia de edición rica e intuitiva en Modo Diseño (Design Studio) y, al mismo tiempo, una visualización ejecutiva 100% limpia para clientes institucionales (ARS Primera, Excel, Banco BHD, CEPM, Claro, Grupo Ramos, etc.), conservando siempre las proporciones personalizadas y la paleta corporativa correspondiente."
-          ),
-
-          // SECCIÓN 2: DETALLE DE SOLUCIONES IMPLEMENTADAS
-          createHeaderPara("2. Detalle de Soluciones Técnicas Implementadas"),
-
-          createSubheaderPara("2.1 Corrección de Superposición en Cabecera e Integración con la Paleta"),
           createBodyPara(
-            "El componente NavBrandHeader (badge superior izquierdo) colisionaba con los paneles de herramientas o se superponía con textos largos en ciertas resoluciones de pantalla.",
-            "Problema previo:"
-          ),
-          createBodyPara(
-            "Se implementó un posicionamiento inteligente reactivo: en Modo Diseño se ubica respetando la barra superior y el panel lateral izquierdo (left: 396px con panel abierto, 88px con panel cerrado); en Modo Vista Ejecutiva se posiciona flotante centrado de forma sutil.",
-            "Solución técnica:"
-          ),
-          createBodyPara(
-            "Tanto el badge como el botón 'Aceptar Propuesta' leen directamente las variables CSS de la paleta corporativa activa (--nav-bg, --secondary-accent, --card-border, --theme-h1). En Modo Diseño cuentan con selectores de color rápidos para ajustes inmediatos a 120 fps.",
-            "Reactividad de color:"
-          ),
-
-          createSubheaderPara("2.2 Píldoras de Entregables con Redimensionamiento 2D Interactivo"),
-          createBodyPara(
-            "Se solicitaba que las tarjetas de entregables individuales dentro del módulo de alcance (ScopeSection) pudieran estirarse tanto a lo ancho como a lo alto mediante arrastre con el ratón o tacto, sin que los botones de eliminar o estirar obstruyeran la interacción.",
-            "Requerimiento:"
-          ),
-          createBodyPara(
-            "Borde derecho (cursor-ew-resize) para ensanchar de 160px a 1400px.",
-            "1. Tirador Horizontal:",
-            true
-          ),
-          createBodyPara(
-            "Borde inferior (cursor-ns-resize) para estirar la altura de 42px a 600px.",
-            "2. Tirador Vertical:",
-            true
-          ),
-          createBodyPara(
-            "Círculo en esquina inferior derecha (cursor-se-resize) para estirar alto y ancho simultáneamente.",
-            "3. Tirador Bidimensional (Esquina SE):",
-            true
-          ),
-          createBodyPara(
-            "Doble clic sobre la píldora restablece inmediatamente el tamaño predeterminado.",
-            "4. Atajo de Restauración:",
-            true
-          ),
-          createBodyPara(
-            "Los botones de acción (paleta cromática, maximizar y eliminar) se movieron a un contenedor seguro en el extremo derecho, evitando cualquier conflicto con los tiradores de arrastre.",
-            "5. Reubicación de Botones:",
+            "En la parte superior izquierda había una cajita con el nombre de ENFOCO y el cliente que se quedaba tapada cuando abrías el menú de edición, o se montaba encima de otros textos. Además, sus colores eran fijos y no combinaban cuando cambiabas los colores de la empresa.",
+            "1. El texto de arriba a la izquierda se tapaba o se montaba encima:",
             true
           ),
 
-          createSubheaderPara("2.3 Íconos de Cotejo (Checkmarks) Removibles"),
           createBodyPara(
-            "Se habilitó la capacidad de retirar o restaurar individualmente el ícono de cotejo en cada píldora de entregable y en las historias de usuario. En Modo Diseño, un clic sobre el ícono lo oculta y muestra un indicador sutil para restaurarlo. En Vista Ejecutiva solo se muestran los cotejos activos de manera nítida.",
-            "Funcionalidad:"
+            "Las cajitas o 'píldoras' de los entregables tenían un tamaño duro. Si querías hacer una cajita más ancha, tenías que darle a un botón que la estiraba de golpe ocupando toda la pantalla sin dejarte elegir el ancho exacto. Y lo peor: no había forma de hacerla más alta si el texto era largo.",
+            "2. Las tarjetas de entregables no se podían estirar a tu gusto:",
+            true
           ),
 
-          createSubheaderPara("2.4 Modo Vista Ejecutiva 100% Limpio"),
           createBodyPara(
-            "Todos los controles de edición —barras de arrastre, etiquetas de medidas numéricas (ej. 380w × 55h), botones de eliminar recuadro, botones de paleta y controles de estirar— están estrictamente condicionados a {isDesignMode && ...}. En Vista Ejecutiva el cliente visualiza un documento pulcro con estándares de diseño editorial.",
-            "Garantía de Calidad:"
+            "Cuando intentabas agarrar el borde de la tarjeta para estirarla, el botón rojo de borrar estaba puesto justo encima. Al hacer clic para estirar, terminabas borrando la tarjeta por error.",
+            "3. El botón de borrar estaba montado sobre el borde:",
+            true
           ),
 
-          createSubheaderPara("2.5 Persistencia Universal y Aislamiento por Propuesta"),
           createBodyPara(
-            "Se aisló todo el almacenamiento bajo el slug de la propuesta activa (currentSlug). Propuestas como ARS Primera, Banco BHD o Excel conservan sus propios tamaños de píldoras y configuraciones sin interferir entre sí. Además, al guardar en el servidor (/api/proposals) o exportar en JSON, la configuración scopePillsConfig se almacena dentro del archivo.",
-            "Arquitectura Multi-Propuesta:"
+            "Todos los entregables tenían obligatoriamente un circulito verde con un cotejo (check). Si un punto no necesitaba cotejo, no había ninguna forma de quitárselo.",
+            "4. Los cotejos (checks) estaban fijos y no se podían quitar:",
+            true
+          ),
+
+          createBodyPara(
+            "Al mostrarle la propuesta al cliente, en la pantalla se veían los botones de borrar, los bordes de arrastrar y unos cartelitos con números de medidas (como '380w × 55h'). Eso hacía que la propuesta pareciera un borrador sin terminar y no una presentación formal.",
+            "5. Se veían botones y números feos frente al cliente:",
+            true
+          ),
+
+          createBodyPara(
+            "Si ajustabas el tamaño de las tarjetas en la propuesta de ARS Primera y luego abrías la de Banco BHD o Claro, los tamaños se cruzaban o se borraban.",
+            "6. Los cambios de un cliente se mezclaban con los de otro:",
+            true
+          ),
+
+          new Paragraph({ spacing: { before: 180 } }),
+
+          // PARTE 2: QUÉ SE HIZO
+          createHeaderPara("2. ¿Qué se hizo para resolverlo? (Solución en palabras llanas)"),
+          createBodyPara(
+            "Se rediseñó la interacción para que sea súper fácil de usar y se vea profesional en todo momento:"
+          ),
+
+          createSubheaderPara("A. El texto de arriba ya nunca se monta y cambia de color solo"),
+          createBodyPara(
+            "Ahora la cajita superior se mueve automáticamente para no chocar con ningún menú. Si estás editando se acomoda sola a la derecha del menú, y si estás en modo cliente se queda centrada. Además, toma de forma automática el nombre del cliente y los colores oficiales de su marca."
+          ),
+
+          createSubheaderPara("B. Ahora puedes estirar las tarjetas libremente como una ventana"),
+          createBodyPara(
+            "A cada tarjeta le pusimos 3 zonas de agarre con el ratón:",
+            "Libertad total de tamaño:"
+          ),
+          createBodyPara("· Borde derecho: La agarras y la estiras a lo ancho (hacia la derecha o izquierda).", "", true),
+          createBodyPara("· Borde de abajo: La agarras y la estiras hacia abajo para hacerla más alta.", "", true),
+          createBodyPara("· Puntito de la esquina: La agarras y cambias ancho y alto a la misma vez.", "", true),
+          createBodyPara("· Si te pasas o quieres que vuelva a su tamaño original: Le das dos clics rápidos (doble clic) y se reinicia sola.", "", true),
+          createBodyPara("· Se alejó el botón de borrar: Ahora los botones de borrar y de color están guardados a la derecha del texto, para que nunca los toques sin querer mientras estiras.", "", true),
+
+          createSubheaderPara("C. Los cotejos ahora se pueden quitar con un solo clic"),
+          createBodyPara(
+            "Si un entregable no lleva cotejo, simplemente le haces un clic al circulito verde y desaparece. Si luego quieres volver a ponerlo, te aparecerá un botón con un signo '+' para restaurarlo al instante."
+          ),
+
+          createSubheaderPara("D. Se creó un Modo 'Vista del Cliente' 100% limpio"),
+          createBodyPara(
+            "Separamos la pantalla en dos modos muy claros:",
+            "Dos modos de pantalla:"
+          ),
+          createBodyPara("· Modo Edición (para ti): Tienes a la vista los bordes para estirar, los botones de borrar, la paleta de colores y las medidas.", "", true),
+          createBodyPara("· Modo Vista Ejecutiva (para el cliente): Al presionar una sola tecla (Ctrl + E), se esconden por arte de magia todos los botones de borrar, los bordes de arrastre y los números. El cliente solo ve el documento impecable, elegante y con el tamaño exacto que tú le diste a las tarjetas.", "", true),
+
+          createSubheaderPara("E. Cada propuesta ahora tiene su propia memoria independiente"),
+          createBodyPara(
+            "Si trabajas en ARS Primera, sus tarjetas y tamaños se quedan guardados para ARS Primera. Si abres Claro, Banco BHD o Excel, cada una carga sus propios textos, colores y medidas sin mezclarse jamás. Además, al guardar en el servidor o descargar el archivo JSON, las medidas de las tarjetas se van dentro del archivo para que nunca se pierdan."
+          ),
+
+          new Paragraph({ spacing: { before: 180 } }),
+
+          // PARTE 3: CÓMO FUNCIONA / CÓMO USARLO
+          createHeaderPara("3. ¿Cómo funciona en el día a día? (Guía de uso paso a paso)"),
+          createBodyPara(
+            "Aquí tienes el manual rápido para usar todas las novedades sin enredos:"
+          ),
+
+          createSubheaderPara("Paso 1: Cambiar entre modo edición y modo para mostrar al cliente"),
+          createBodyPara(
+            "Presiona en tu teclado las teclas Ctrl + E (debes tener la tecla Ctrl pisada y darle a la letra E). También puedes usar el botoncito de ojo / pincel arriba a la derecha.",
+            "Cómo cambiar de modo:",
+            true
+          ),
+          createBodyPara(
+            "Usa el modo edición mientras estés escribiendo o estirando tarjetas. Antes de llamar al cliente, proyectar la pantalla o imprimir en PDF, presiona Ctrl + E para que quede todo limpio.",
+            "Cuándo usar cada uno:",
+            true
+          ),
+
+          createSubheaderPara("Paso 2: Estirar o achicar una tarjeta de entregable"),
+          createBodyPara("1. Asegúrate de estar en Modo Edición (si no lo estás, pulsa Ctrl + E).", "", true),
+          createBodyPara("2. Baja a la sección de 'Alcance & Funcionalidades Requeridas' y toca cualquier módulo a la izquierda.", "", true),
+          createBodyPara("3. En las cajitas de entregables de la derecha:", "", true),
+          createBodyPara("   - Para hacerla más ancha: Pon el ratón sobre el borde derecho (la flechita se pondrá doble ↔) y arrastra.", "", true),
+          createBodyPara("   - Para hacerla más alta: Pon el ratón sobre el borde inferior (flechita ↕) y arrastra hacia abajo.", "", true),
+          createBodyPara("   - Para agrandar todo junto: Arrastra el circulito de la esquina inferior derecha.", "", true),
+          createBodyPara("4. Para devolverla a su tamaño original: Dale doble clic encima a la tarjeta.", "", true),
+
+          createSubheaderPara("Paso 3: Quitar o poner un cotejo (check)"),
+          createBodyPara("1. Pon el ratón sobre el circulito del cotejo en la tarjeta (verás que sale un ojo tachado).", "", true),
+          createBodyPara("2. Hazle un clic y listo, el cotejo se quita de inmediato.", "", true),
+          createBodyPara("3. Si quieres volver a ponerlo, haz clic sobre el circulito punteado con el '+'.", "", true),
+
+          createSubheaderPara("Paso 4: Cambiar el estilo de color de una tarjeta"),
+          createBodyPara(
+            "En la parte derecha de cada tarjeta verás un ícono de una paletita de pintar. Cada vez que le haces clic va cambiando entre 3 estilos: color corporativo llamativo, color dorado secundario, o fondo suave de tarjeta.",
+            "Color individual:"
+          ),
+
+          createSubheaderPara("Paso 5: Cambiar los colores de la propuesta"),
+          createBodyPara(
+            "· Para cambiar el color de la cajita de arriba: Haz clic en la paletita que está en la esquina superior izquierda junto al nombre del cliente.",
+            "",
+            true
+          ),
+          createBodyPara(
+            "· Para cambiar el color del botón 'Aceptar Propuesta': Haz clic en la paletita que está al lado de ese botón arriba a la derecha.",
+            "",
+            true
+          ),
+          createBodyPara(
+            "· Para cambiar todos los colores generales: Abre el menú de la izquierda, entra a 'Plantillas / Tema' y podrás cambiar el fondo, textos y bordes viendo los cambios en vivo.",
+            "",
+            true
+          ),
+
+          createSubheaderPara("Paso 6: Cambiar de propuesta o cliente"),
+          createBodyPara(
+            "Abre el menú de la izquierda, entra en 'Archivo / JSON' y dale clic a cualquiera de las empresas (ARS Primera, Excel, Banco BHD, CEPM, Claro, Grupo Ramos). La página cargará al instante los textos, entregables y colores oficiales de esa empresa.",
+            "Desde el menú:"
+          ),
+          createBodyPara(
+            "También puedes escribir en la dirección del navegador ?p=ars-primera o ?p=bhd o ?p=claro.",
+            "Desde el link:"
+          ),
+
+          createSubheaderPara("Paso 7: Guardar los cambios"),
+          createBodyPara(
+            "En la pestaña 'Archivo / JSON', dale al botón azul '💾 Guardar Propuesta en Servidor'. Esto guarda todo en la nube incluyendo los tamaños personalizados que le diste a las tarjetas. También puedes darle a 'Descargar .json' para tener un respaldo en tu computadora.",
+            "Guardar:"
           ),
 
           new Paragraph({ spacing: { before: 200 } }),
 
-          // SECCIÓN 3: MANUAL DE USO PASO A PASO
-          createHeaderPara("3. Manual de Uso Paso a Paso"),
-
-          createSubheaderPara("3.1 Alternar entre Modo Diseño y Modo Vista Ejecutiva"),
-          createBodyPara(
-            "Presione en el teclado Ctrl + E (o Ctrl + Shift + E / Alt + E) para alternar al instante entre el modo de edición y la vista ejecutiva del cliente.",
-            "Atajo Rápido:",
-            true
-          ),
-          createBodyPara(
-            "Haga clic en el botón con el ícono de ojo / pincel ubicado en la esquina superior derecha de la pantalla.",
-            "Botón en Pantalla:",
-            true
-          ),
-
-          createSubheaderPara("3.2 Cómo Estirar y Redimensionar las Píldoras de Entregables"),
-          createBodyPara("1. Ingrese en Modo Diseño (Ctrl + E).", "", true),
-          createBodyPara("2. Desplácese a la sección 'Alcance & Funcionalidades Requeridas' (#alcance).", "", true),
-          createBodyPara("3. Seleccione un módulo de la lista izquierda para inspeccionarlo.", "", true),
-          createBodyPara("4. En el panel de entregables a la derecha:", "", true),
-          createBodyPara(
-            "Pase el ratón sobre el borde derecho de la píldora (aparece una barra iluminada con cursor ↔) y arrastre hacia la derecha o izquierda.",
-            "· Para estirar horizontalmente:",
-            true
-          ),
-          createBodyPara(
-            "Pase el ratón sobre el borde inferior (cursor ↕) y arrastre hacia abajo.",
-            "· Para estirar verticalmente:",
-            true
-          ),
-          createBodyPara(
-            "Arrastre el círculo ubicado en la esquina inferior derecha (cursor ⤡).",
-            "· Para estirar ambas dimensiones a la vez:",
-            true
-          ),
-          createBodyPara("5. Para restablecer las medidas originales: Haga doble clic sobre la píldora.", "", true),
-
-          createSubheaderPara("3.3 Cómo Ocultar o Restaurar los Íconos de Cotejo"),
-          createBodyPara("1. En Modo Diseño, pase el ratón sobre el ícono de cotejo (verá que cambia a un ícono de ojo tachado).", "", true),
-          createBodyPara("2. Haga clic sobre él para retirarlo.", "", true),
-          createBodyPara("3. Para volver a colocarlo, haga clic en el botón circular punteado '+'.", "", true),
-
-          createSubheaderPara("3.4 Cómo Cambiar el Estilo Cromático de una Píldora"),
-          createBodyPara(
-            "En Modo Diseño, haga clic en el botón con el ícono de Paleta ubicado en el extremo derecho de la píldora para rotar entre los 3 estilos disponibles: Primaria (acento corporativo), Secundaria (acento secundario/dorado) o Sutil (fondo neutro de tarjeta).",
-            "Instrucción:"
-          ),
-
-          createSubheaderPara("3.5 Cómo Ajustar la Paleta de Colores Institucional"),
-          createBodyPara(
-            "Haga clic en el ícono de paleta junto al nombre del cliente para cambiar el color de fondo del badge (navBg). Junto a 'Aceptar Propuesta', haga clic en el ícono de paleta para cambiar el color del botón (secondaryAccent).",
-            "· Desde la Cabecera:",
-            true
-          ),
-          createBodyPara(
-            "En la pestaña 'Plantillas / Identidad y Tema', modifique en vivo el fondo principal, titulares H1/H2, colores de acento, bordes y fondo de cabecera.",
-            "· Desde el Panel Lateral:",
-            true
-          ),
-
-          createSubheaderPara("3.6 Cómo Cambiar de Propuesta"),
-          createBodyPara(
-            "En la barra lateral, abra la pestaña 'Archivo / JSON' y seleccione cualquiera de las plantillas institucionales (ARS Primera, Excel, Banco BHD, CEPM, Claro, Grupo Ramos).",
-            "· Desde el Estudio:",
-            true
-          ),
-          createBodyPara(
-            "Agregue ?p=nombre-propuesta en la URL del navegador (ej. ?p=ars-primera, ?p=bhd, ?p=claro).",
-            "· Mediante URL:",
-            true
-          ),
-
-          createSubheaderPara("3.7 Cómo Guardar y Exportar la Propuesta"),
-          createBodyPara(
-            "En la pestaña 'Archivo / JSON', escriba el nombre y pulse '💾 Guardar Propuesta en Servidor'. Todas las medidas 2D y cambios se guardan directamente en el servidor.",
-            "· Guardar en Servidor / Vercel:",
-            true
-          ),
-          createBodyPara(
-            "Pulse 'Descargar .json' para guardar un archivo de respaldo completo en su computador.",
-            "· Descargar Archivo JSON:",
-            true
-          ),
-          createBodyPara(
-            "Pulse 'Imprimir o Guardar como PDF Oficial' para generar el documento final listo para enviar o imprimir.",
-            "· Exportar a PDF:",
-            true
-          ),
-
-          new Paragraph({ spacing: { before: 200 } }),
-
-          // SECCIÓN 4: TABLA COMPARATIVA
-          createHeaderPara("4. Tabla Comparativa: Antes vs. Después"),
+          // PARTE 4: TABLA COMPARATIVA
+          createHeaderPara("4. Resumen: Cómo estaba antes vs. Cómo quedó ahora"),
 
           new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
                 children: [
-                  createTableCell("Característica / Funcionalidad", true),
-                  createTableCell("Comportamiento Anterior", true),
-                  createTableCell("Comportamiento Actual (Optimizado)", true),
+                  createTableCell("¿Qué parte?", true),
+                  createTableCell("Antes (El problema)", true),
+                  createTableCell("Ahora (La solución)", true),
                 ],
               }),
               new TableRow({
                 children: [
-                  createTableCell("Cabecera Superior Izquierda", false, false),
-                  createTableCell("Texto montado sobre barra lateral; colores fijos sin conexión a paleta.", false, false),
-                  createTableCell("Posicionamiento dinámico responsivo; reacciona a variables CSS corporativas y muestra marcas reales.", false, false),
+                  createTableCell("Texto arriba a la izquierda", false, false),
+                  createTableCell("Se tapaba con el menú y no combinaba con los colores.", false, false),
+                  createTableCell("Se acomoda solo en un lugar visible y toma los colores del cliente automáticamente.", false, false),
                 ],
               }),
               new TableRow({
                 children: [
-                  createTableCell("Tamaño de Entregables (Píldoras)", false, true),
-                  createTableCell("Solo ancho fijo de 1 columna o 2 columnas; botón de borrar colisionaba con botón de estirar.", false, true),
-                  createTableCell("Estiramiento 2D continuo (horizontal, vertical y esquina); botones reubicados; doble clic para restaurar.", false, true),
+                  createTableCell("Tamaño de las tarjetas", false, true),
+                  createTableCell("Eran fijas o se estiraban de golpe ocupando toda la pantalla. No se podía cambiar la altura.", false, true),
+                  createTableCell("Las puedes estirar con el ratón a lo ancho, a lo alto o por la esquina con total libertad.", false, true),
                 ],
               }),
               new TableRow({
                 children: [
-                  createTableCell("Íconos de Cotejo (Checkmarks)", false, false),
-                  createTableCell("Fijos y obligatorios en todos los entregables.", false, false),
-                  createTableCell("Removibles individualmente en Modo Diseño con 1 clic; restaurables mediante botón punteado '+'.", false, false),
+                  createTableCell("Botón de borrar tarjeta", false, false),
+                  createTableCell("Estaba pegado al borde y lo tocabas sin querer al querer estirar.", false, false),
+                  createTableCell("Se movió a un lado seguro para que nunca lo presiones por error.", false, false),
                 ],
               }),
               new TableRow({
                 children: [
-                  createTableCell("Modo Vista Ejecutiva", false, true),
-                  createTableCell("Se mostraban botones de edición, etiquetas numéricas y tiradores molestos.", false, true),
-                  createTableCell("100% limpio sin tiradores, etiquetas ni botones de edición; presentación directiva perfecta.", false, true),
+                  createTableCell("Cotejos (checks)", false, true),
+                  createTableCell("Venían obligatorios y no se podían quitar.", false, true),
+                  createTableCell("Con 1 clic se quitan y con 1 clic se vuelven a poner si los necesitas.", false, true),
                 ],
               }),
               new TableRow({
                 children: [
-                  createTableCell("Persistencia Multi-Propuesta", false, false),
-                  createTableCell("Claves globales que cruzaban medidas entre propuestas distintas; no se guardaban en JSON.", false, false),
-                  createTableCell("Aislamiento completo por slug; guardado nativo en servidor /api/proposals y en archivo .json.", false, false),
+                  createTableCell("Vista para el cliente", false, false),
+                  createTableCell("Se veían botones de borrar y números de medidas que daban mala impresión.", false, false),
+                  createTableCell("Pulsas Ctrl + E y se limpia todo al 100%, mostrando un documento pulcro y elegante.", false, false),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  createTableCell("Cambiar entre clientes", false, true),
+                  createTableCell("Los tamaños se mezclaban o se perdían al abrir otra propuesta.", false, true),
+                  createTableCell("Cada cliente guarda sus propios tamaños, textos y colores de forma independiente.", false, true),
                 ],
               }),
             ],
           }),
 
-          new Paragraph({ spacing: { before: 240 } }),
-
-          // SECCIÓN 5: DESPLIEGUE EN VERCEL
-          createHeaderPara("5. Despliegue y Sincronización"),
-          createBodyPara(
-            "El repositorio se encuentra alojado en GitHub en la rama principal (main). Cada actualización enviada a este repositorio activa automáticamente el pipeline de compilación e integración continua (CI/CD) de Vercel.",
-            "Pipeline Automatizado:"
-          ),
-          createBodyPara(
-            "https://github.com/heralsreyes/PaginaPropuesta.git",
-            "· Repositorio GitHub:",
-            true
-          ),
-          createBodyPara(
-            "0d74908 (Sincronizado y verificado)",
-            "· Commit de Producción:",
-            true
-          ),
-          createBodyPara(
-            "Compilación Next.js validada con npx tsc --noEmit (0 errores de tipos).",
-            "· Verificación de Tipos:",
-            true
-          ),
-
-          new Paragraph({ spacing: { before: 180 } }),
+          new Paragraph({ spacing: { before: 200 } }),
           createCalloutBox(
-            "Documentación y Soporte",
-            "Para cualquier consulta sobre el código fuente, la arquitectura modular o la integración con nuevas plantillas institucionales, consulte el repositorio oficial en GitHub o los archivos de configuración en /context/ProposalContext.tsx y /components/ScopeSection.tsx."
+            "Conclusión",
+            "La plataforma ahora te da todo el poder para armar la propuesta a tu medida en Modo Edición, y te permite presentarla al cliente de forma impecable y sin distracciones con solo presionar Ctrl + E.",
+            COLOR_PRIMARY,
+            "F0FDF4"
           ),
         ],
       },
@@ -562,7 +531,7 @@ async function generate() {
   const buffer = await Packer.toBuffer(doc);
   const outPath = path.join(__dirname, "..", "Informe_de_Cambios_y_Manual_de_Uso.docx");
   fs.writeFileSync(outPath, buffer);
-  console.log("Document successfully created at:", outPath, "Size:", buffer.length, "bytes");
+  console.log("Document successfully updated at:", outPath, "Size:", buffer.length, "bytes");
 }
 
 generate().catch(console.error);
