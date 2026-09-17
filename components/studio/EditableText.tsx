@@ -156,8 +156,8 @@ export const EditableText: React.FC<EditableTextProps> = ({
   const activeColor = showColorPicker ? pendingColor : customColor;
 
   const computedStyle: React.CSSProperties = {
-    ...style,
     ...(activeColor ? { color: activeColor } : {}),
+    ...style,
   };
 
   const Tag = tag;

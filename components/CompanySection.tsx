@@ -5,6 +5,8 @@ import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { EditableText } from "@/components/studio/EditableText";
 import { EditableField } from "@/components/ui/EditableField";
+import { DeletableItem } from "@/components/studio/DeletableItem";
+import { useThemeStore, PRESET_THEMES } from "@/store/useThemeStore";
 import { replaceAt } from "@/lib/arrayUtils";
 import { Target, Compass, Award, ShieldCheck, CheckCircle2, Monitor, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,7 +19,14 @@ type OptionType = "mision" | "vision" | "valores" | "estandares";
 
 export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
   const { updateCompany } = useProposal();
+  const { theme } = useThemeStore();
   const [activeOption, setActiveOption] = useState<OptionType>("mision");
+
+  const safeTheme = theme || PRESET_THEMES[0]?.theme || {};
+  const aboutBg = safeTheme.aboutBg || "var(--about-bg, var(--bg-main))";
+  const aboutTextColor = safeTheme.aboutTextColor || "var(--about-text, var(--h2-color))";
+  const aboutCardBg = safeTheme.aboutCardBg || "var(--about-card-bg, var(--card-bg))";
+  const aboutCardBorder = safeTheme.aboutCardBorder || "var(--about-border, var(--border-color))";
 
   const options = [
     {
@@ -46,25 +55,90 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
     },
   ];
 
+  const [hiddenOptions, setHiddenOptions] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("company_hidden_options");
+        return saved ? JSON.parse(saved) : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+
+  const [hiddenBullets, setHiddenBullets] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("company_hidden_bullets");
+        return saved ? JSON.parse(saved) : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+
+  const handleDeleteOption = (id: string) => {
+    setHiddenOptions((prev) => {
+      const next = [...prev, id];
+      try {
+        localStorage.setItem("company_hidden_options", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    const remaining = options.filter((o) => o.id !== id && !hiddenOptions.includes(o.id));
+    if (remaining.length > 0 && activeOption === id) {
+      setActiveOption(remaining[0].id);
+    }
+  };
+
+  const handleDeleteBullet = (id: string) => {
+    setHiddenBullets((prev) => {
+      const next = [...prev, id];
+      try {
+        localStorage.setItem("company_hidden_bullets", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
   return (
-    <section id="empresa" className="min-h-screen w-full flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <section
+      id="empresa"
+      style={{ backgroundColor: aboutBg }}
+      className="min-h-screen w-full flex flex-col justify-start items-center relative overflow-hidden border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 transition-colors duration-300"
+    >
       {/* 💻 Screen Interactive View */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="screen-only max-w-6xl mx-auto w-full my-auto flex flex-col justify-center"
+        className="screen-only max-w-6xl mx-auto w-full flex flex-col justify-start py-2"
       >
         {/* Standard Executive Header Block */}
         <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">
-          <span className="px-3.5 py-1 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[var(--accent-color)]/30 mb-2 inline-block">
+          <span
+            className="px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-2 inline-block border"
+            style={{
+              backgroundColor: `${aboutTextColor}15`,
+              color: aboutTextColor,
+              borderColor: `${aboutTextColor}40`,
+            }}
+          >
             <EditableField id="company_badge" defaultText="RESPALDO CORPORATIVO • EXPERIENCIA & CALIDAD" />
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--h2-color)] tracking-tight text-center mt-1 mb-2">
+          <h2
+            className="text-3xl md:text-4xl font-extrabold font-display tracking-tight text-center mt-1 mb-2"
+            style={{ color: aboutTextColor }}
+          >
             <EditableField id="company_h2" defaultText="Sobre ENFOCO, S.R.L." />
           </h2>
-          <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm max-w-2xl mx-auto text-center mb-2">
+          <p
+            className="text-xs sm:text-sm max-w-2xl mx-auto text-center mb-2 opacity-80"
+            style={{ color: aboutTextColor }}
+          >
             <EditableField id="company_desc" defaultText="Conozca nuestro propósito, estándares metodológicos y el compromiso técnico que respalda cada una de nuestras soluciones." />
           </p>
         </div>
@@ -74,68 +148,148 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
           {/* LEFT COLUMN: Interactive Controls & Details (6 Cols) */}
           <div className="xl:col-span-6 flex flex-col justify-between">
             <div>
-              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] mb-3 flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-[var(--accent-color)]"></span>
+              <h3
+                className="text-xs sm:text-sm font-bold mb-3 flex items-center space-x-2"
+                style={{ color: aboutTextColor }}
+              >
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: aboutTextColor }}></span>
                 <EditableField id="company_select_prompt" defaultText="Seleccione una opción para explorar:" />
               </h3>
 
               {/* Option Grid */}
               <div className="grid grid-cols-2 gap-3 mb-4">
-                {options.map((opt) => {
+                {options.filter((opt) => !hiddenOptions.includes(opt.id)).map((opt) => {
                   const isActive = activeOption === opt.id;
                   const IconComponent = opt.icon;
 
                   return (
-                    <button
+                    <DeletableItem
                       key={opt.id}
-                      onClick={() => setActiveOption(opt.id)}
-                      className={`p-4 rounded-2xl border text-center transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
-                        isActive
-                          ? "bg-[var(--accent-color)] text-white border-[var(--accent-color)] shadow-lg shadow-[var(--accent-color)]/25 scale-[1.02]"
-                          : "bg-[var(--card-bg)] text-[var(--theme-text)] border-[var(--border-color)] hover:border-[var(--accent-color)]/40 hover:text-[var(--accent-color)]"
-                      }`}
+                      onDelete={() => handleDeleteOption(opt.id)}
+                      itemTitle="opción"
                     >
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 transition-colors ${
+                      <button
+                        onClick={() => setActiveOption(opt.id)}
+                        style={
                           isActive
-                            ? "bg-white/20 text-white"
-                            : "bg-[var(--accent-color)]/10 text-[var(--accent-color)]"
+                            ? {
+                                backgroundColor: aboutTextColor,
+                                color: "#ffffff",
+                                borderColor: aboutTextColor,
+                              }
+                            : {
+                                backgroundColor: aboutCardBg,
+                                borderColor: aboutCardBorder,
+                                color: aboutTextColor,
+                              }
+                        }
+                        className={`w-full p-4 rounded-2xl border text-center transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
+                          isActive
+                            ? "shadow-lg scale-[1.02]"
+                            : "hover:opacity-90"
                         }`}
                       >
-                        <IconComponent className="w-5 h-5" />
-                      </div>
-                      <span className={`text-xs sm:text-sm font-bold block ${isActive ? "text-white" : "text-[var(--theme-text)]"}`}>
-                        {opt.title}
-                      </span>
-                      <span className={`text-[11px] font-normal block ${isActive ? "text-white/80" : "text-[var(--theme-text)]/75"}`}>
-                        {opt.subtitle}
-                      </span>
-                    </button>
+                        <div
+                          style={
+                            isActive
+                              ? { backgroundColor: "rgba(255,255,255,0.2)", color: "#ffffff" }
+                              : { backgroundColor: `${aboutTextColor}15`, color: aboutTextColor }
+                          }
+                          className="w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 transition-colors"
+                        >
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <span className="text-xs sm:text-sm font-bold block" style={{ color: isActive ? "#ffffff" : aboutTextColor }}>
+                          {opt.title}
+                        </span>
+                        <span className="text-[11px] font-normal block opacity-80" style={{ color: isActive ? "#ffffff" : aboutTextColor }}>
+                          {opt.subtitle}
+                        </span>
+                      </button>
+                    </DeletableItem>
                   );
                 })}
               </div>
 
               <div className="space-y-2.5">
-                <div className="p-3.5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--theme-text)] leading-relaxed">
-                  <span className="text-[var(--accent-color)] font-bold mr-1.5">•</span>
-                  <strong className="text-[var(--theme-text)] font-semibold">ENFOCO, S.R.L.:</strong>{" "}
-                  <EditableField id="company_bullet_1" defaultText="Soluciones tecnológicas integrales especializadas en Desarrollo de Software a la medida, automatización y optimización operativa." />
-                </div>
+                {!hiddenBullets.includes("company_bullet_1") && (
+                  <DeletableItem
+                    onDelete={() => handleDeleteBullet("company_bullet_1")}
+                    itemTitle="viñeta"
+                  >
+                    <div
+                      className="p-3.5 rounded-2xl border text-xs leading-relaxed"
+                      style={{
+                        backgroundColor: aboutCardBg,
+                        borderColor: aboutCardBorder,
+                        color: aboutTextColor,
+                      }}
+                    >
+                      <span className="font-bold mr-1.5" style={{ color: aboutTextColor }}>•</span>
+                      <strong className="font-semibold" style={{ color: aboutTextColor }}>ENFOCO, S.R.L.:</strong>{" "}
+                      <EditableField id="company_bullet_1" defaultText="Soluciones tecnológicas integrales especializadas en Desarrollo de Software a la medida, automatización y optimización operativa." />
+                    </div>
+                  </DeletableItem>
+                )}
 
-                <div className="p-3.5 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--theme-text)] leading-relaxed">
-                  <span className="text-[var(--accent-color)] font-bold mr-1.5">•</span>
-                  <strong className="text-[var(--theme-text)] font-semibold">Respaldo Internacional:</strong>{" "}
-                  <EditableField id="company_bullet_2" defaultText="Equipo multidisciplinario con certificaciones CMMI, ISO 27002 y metodologías ágiles Scrum/PMP." />
-                </div>
+                {!hiddenBullets.includes("company_bullet_2") && (
+                  <DeletableItem
+                    onDelete={() => handleDeleteBullet("company_bullet_2")}
+                    itemTitle="viñeta"
+                  >
+                    <div
+                      className="p-3.5 rounded-2xl border text-xs leading-relaxed"
+                      style={{
+                        backgroundColor: aboutCardBg,
+                        borderColor: aboutCardBorder,
+                        color: aboutTextColor,
+                      }}
+                    >
+                      <span className="font-bold mr-1.5" style={{ color: aboutTextColor }}>•</span>
+                      <strong className="font-semibold" style={{ color: aboutTextColor }}>Respaldo Internacional:</strong>{" "}
+                      <EditableField id="company_bullet_2" defaultText="Equipo multidisciplinario con certificaciones CMMI, ISO 27002 y metodologías ágiles Scrum/PMP." />
+                    </div>
+                  </DeletableItem>
+                )}
+
+                {(hiddenOptions.length > 0 || hiddenBullets.length > 0) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHiddenOptions([]);
+                      setHiddenBullets([]);
+                      try {
+                        localStorage.removeItem("company_hidden_options");
+                        localStorage.removeItem("company_hidden_bullets");
+                      } catch {}
+                    }}
+                    className="text-[11px] font-semibold text-amber-500 hover:text-amber-600 hover:underline cursor-pointer block mt-1"
+                  >
+                    ↺ Restaurar tarjetas y opciones eliminadas
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
           {/* RIGHT COLUMN: Visual Computer Screen Mockup Showcase (6 Cols) */}
           <div className="xl:col-span-6 flex flex-col justify-center">
-            <div className="bg-[var(--card-bg)] rounded-3xl border border-[var(--border-color)] shadow-2xl overflow-hidden min-h-[380px] w-full flex flex-col justify-between relative transition-colors duration-300">
+            <div
+              className="rounded-3xl border shadow-2xl overflow-hidden min-h-[380px] w-full flex flex-col justify-between relative transition-colors duration-300"
+              style={{
+                backgroundColor: aboutCardBg,
+                borderColor: aboutCardBorder,
+              }}
+            >
               {/* macOS Window Controls Top Bar */}
-              <div className="bg-[var(--card-bg)] text-[var(--theme-text)] border-b border-[var(--border-color)] px-4 py-2.5 flex items-center justify-between shrink-0 font-mono">
+              <div
+                className="border-b px-4 py-2.5 flex items-center justify-between shrink-0 font-mono"
+                style={{
+                  backgroundColor: aboutCardBg,
+                  borderColor: aboutCardBorder,
+                  color: aboutTextColor,
+                }}
+              >
                 <div className="flex items-center space-x-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -151,7 +305,10 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
               </div>
 
               {/* Inner Screen Content */}
-              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-center bg-[var(--bg-main)] relative overflow-hidden transition-colors duration-300">
+              <div
+                className="p-6 sm:p-7 flex-1 flex flex-col justify-center relative overflow-hidden transition-colors duration-300"
+                style={{ backgroundColor: aboutBg }}
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeOption}
@@ -165,20 +322,36 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
+                            <div
+                              className="w-9 h-9 rounded-xl flex items-center justify-center"
+                              style={{ backgroundColor: `${aboutTextColor}15`, color: aboutTextColor }}
+                            >
                               <Target className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                            <h4 className="text-base font-bold" style={{ color: aboutTextColor }}>
                               <EditableField id="company_mission_title" defaultText="Nuestra Misión Corporativa" />
                             </h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
+                          <span
+                            className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
+                            style={{
+                              backgroundColor: `${aboutTextColor}15`,
+                              color: aboutTextColor,
+                              borderColor: `${aboutTextColor}40`,
+                            }}
+                          >
                             <EditableField id="company_mission_badge" defaultText="Objetivo Principal" />
                           </span>
                         </div>
 
-                        <div className="p-4 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm">
-                          <p className="text-xs sm:text-sm text-[var(--theme-text)] leading-relaxed italic font-normal">
+                        <div
+                          className="p-4 rounded-2xl border shadow-sm"
+                          style={{
+                            backgroundColor: aboutCardBg,
+                            borderColor: aboutCardBorder,
+                          }}
+                        >
+                          <p className="text-xs sm:text-sm leading-relaxed italic font-normal" style={{ color: aboutTextColor }}>
                             "
                             <EditableText
                               id="company_mission_text"
@@ -192,19 +365,31 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-left">
-                            <span className="text-[10px] text-[var(--theme-text)]/70 block font-semibold">
+                          <div
+                            className="p-3.5 rounded-xl border text-left"
+                            style={{
+                              backgroundColor: aboutCardBg,
+                              borderColor: aboutCardBorder,
+                            }}
+                          >
+                            <span className="text-[10px] block font-semibold opacity-70" style={{ color: aboutTextColor }}>
                               <EditableField id="company_warranty_label" defaultText="Garantía" />
                             </span>
-                            <span className="text-xs font-bold text-[var(--theme-text)]">
+                            <span className="text-xs font-bold" style={{ color: aboutTextColor }}>
                               <EditableField id="company_warranty_value" defaultText="100% a la Medida" />
                             </span>
                           </div>
-                          <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-left">
-                            <span className="text-[10px] text-[var(--theme-text)]/70 block font-semibold">
+                          <div
+                            className="p-3.5 rounded-xl border text-left"
+                            style={{
+                              backgroundColor: aboutCardBg,
+                              borderColor: aboutCardBorder,
+                            }}
+                          >
+                            <span className="text-[10px] block font-semibold opacity-70" style={{ color: aboutTextColor }}>
                               <EditableField id="company_sla_label" defaultText="Soporte SLA" />
                             </span>
-                            <span className="text-xs font-bold text-[var(--accent-color)]">
+                            <span className="text-xs font-bold" style={{ color: aboutTextColor }}>
                               <EditableField id="company_sla_value" defaultText="60 Días Cobertura" />
                             </span>
                           </div>
@@ -216,20 +401,36 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
+                            <div
+                              className="w-9 h-9 rounded-xl flex items-center justify-center"
+                              style={{ backgroundColor: `${aboutTextColor}15`, color: aboutTextColor }}
+                            >
                               <Compass className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                            <h4 className="text-base font-bold" style={{ color: aboutTextColor }}>
                               <EditableField id="company_vision_title" defaultText="Nuestra Visión de Futuro" />
                             </h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
+                          <span
+                            className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
+                            style={{
+                              backgroundColor: `${aboutTextColor}15`,
+                              color: aboutTextColor,
+                              borderColor: `${aboutTextColor}40`,
+                            }}
+                          >
                             <EditableField id="company_vision_badge" defaultText="Liderazgo" />
                           </span>
                         </div>
 
-                        <div className="p-4 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm">
-                          <p className="text-xs sm:text-sm text-[var(--theme-text)] leading-relaxed italic font-normal">
+                        <div
+                          className="p-4 rounded-2xl border shadow-sm"
+                          style={{
+                            backgroundColor: aboutCardBg,
+                            borderColor: aboutCardBorder,
+                          }}
+                        >
+                          <p className="text-xs sm:text-sm leading-relaxed italic font-normal" style={{ color: aboutTextColor }}>
                             "
                             <EditableText
                               id="company_vision_text"
@@ -242,8 +443,15 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           </p>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/30 flex items-center space-x-3 text-xs text-[var(--accent-color)] font-semibold">
-                          <Cpu className="w-4 h-4 shrink-0" />
+                        <div
+                          className="p-3.5 rounded-xl border flex items-center space-x-3 text-xs font-semibold"
+                          style={{
+                            backgroundColor: `${aboutTextColor}15`,
+                            borderColor: `${aboutTextColor}30`,
+                            color: aboutTextColor,
+                          }}
+                        >
+                          <Cpu className="w-4 h-4 shrink-0" style={{ color: aboutTextColor }} />
                           <EditableField id="company_vision_tech_desc" defaultText="Arquitectura limpia y moderna basada en Next.js, React y Cloud Services." />
                         </div>
                       </div>
@@ -253,14 +461,24 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
+                            <div
+                              className="w-9 h-9 rounded-xl flex items-center justify-center"
+                              style={{ backgroundColor: `${aboutTextColor}15`, color: aboutTextColor }}
+                            >
                               <Award className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                            <h4 className="text-base font-bold" style={{ color: aboutTextColor }}>
                               <EditableField id="company_values_title" defaultText="Valores Fundamentales" />
                             </h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
+                          <span
+                            className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
+                            style={{
+                              backgroundColor: `${aboutTextColor}15`,
+                              color: aboutTextColor,
+                              borderColor: `${aboutTextColor}40`,
+                            }}
+                          >
                             <EditableField id="company_values_badge" defaultText="Principios" />
                           </span>
                         </div>
@@ -269,9 +487,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           {company.values.map((val, idx) => (
                             <div
                               key={idx}
-                              className="p-3 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] flex items-center space-x-2 text-xs text-[var(--theme-text)] font-bold shadow-xs"
+                              className="p-3 rounded-xl border flex items-center space-x-2 text-xs font-bold shadow-xs"
+                              style={{
+                                backgroundColor: aboutCardBg,
+                                borderColor: aboutCardBorder,
+                                color: aboutTextColor,
+                              }}
                             >
-                              <CheckCircle2 className="w-4 h-4 text-[var(--accent-color)] shrink-0" />
+                              <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: aboutTextColor }} />
                               <span>
                                 <EditableText
                                   id={`company_value_${idx}_text`}
@@ -292,14 +515,24 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-color)]/10 text-[var(--accent-color)] flex items-center justify-center">
+                            <div
+                              className="w-9 h-9 rounded-xl flex items-center justify-center"
+                              style={{ backgroundColor: `${aboutTextColor}15`, color: aboutTextColor }}
+                            >
                               <ShieldCheck className="w-5 h-5" />
                             </div>
-                            <h4 className="text-base font-bold text-[var(--text-primary)]">
+                            <h4 className="text-base font-bold" style={{ color: aboutTextColor }}>
                               <EditableField id="company_standards_title" defaultText="Estándares & Normativas" />
                             </h4>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2.5 py-1 rounded-full border border-[var(--accent-color)]/30">
+                          <span
+                            className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
+                            style={{
+                              backgroundColor: `${aboutTextColor}15`,
+                              color: aboutTextColor,
+                              borderColor: `${aboutTextColor}40`,
+                            }}
+                          >
                             <EditableField id="company_standards_badge" defaultText="Certificado" />
                           </span>
                         </div>
@@ -308,9 +541,13 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                           {company.certifications.map((cert, idx) => (
                             <div
                               key={idx}
-                              className="p-3 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] flex items-center justify-between text-xs"
+                              className="p-3 rounded-xl border flex items-center justify-between text-xs"
+                              style={{
+                                backgroundColor: aboutCardBg,
+                                borderColor: aboutCardBorder,
+                              }}
                             >
-                              <span className="font-bold text-[var(--theme-text)]">
+                              <span className="font-bold" style={{ color: aboutTextColor }}>
                                 <EditableText
                                   id={`company_cert_${idx}_text`}
                                   value={cert}
@@ -320,7 +557,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                                   tag="span"
                                 />
                               </span>
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] border border-[var(--accent-color)]/30 font-bold">
+                              <span
+                                className="text-[10px] px-2 py-0.5 rounded-full border font-bold"
+                                style={{
+                                  backgroundColor: `${aboutTextColor}15`,
+                                  color: aboutTextColor,
+                                  borderColor: `${aboutTextColor}30`,
+                                }}
+                              >
                                 Certificado
                               </span>
                             </div>
@@ -332,7 +576,14 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                 </AnimatePresence>
               </div>
 
-              <div className="bg-[var(--card-bg)] text-[var(--theme-text)] border-t border-[var(--border-color)] px-4 py-2 text-[11px] flex items-center justify-between shrink-0 font-mono">
+              <div
+                className="border-t px-4 py-2 text-[11px] flex items-center justify-between shrink-0 font-mono"
+                style={{
+                  backgroundColor: aboutCardBg,
+                  borderColor: aboutCardBorder,
+                  color: aboutTextColor,
+                }}
+              >
                 <span>
                   ENFOCO S.R.L. • RNC{" "}
                   <EditableText
@@ -342,7 +593,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
                     tag="span"
                   />
                 </span>
-                <span className="text-[var(--accent-color)] font-bold">
+                <span className="font-bold" style={{ color: aboutTextColor }}>
                   <EditableField id="company_quality_guarantee" defaultText="100% Calidad Garantizada" />
                 </span>
               </div>
@@ -354,32 +605,51 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ company }) => {
       {/* 🖨️ Print-Only Full Unwrapped View */}
       <div className="print-only max-w-6xl mx-auto w-full my-auto">
         <div className="text-center mb-4">
-          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30">
+          <span
+            className="text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full border"
+            style={{
+              backgroundColor: `${aboutTextColor}15`,
+              color: aboutTextColor,
+              borderColor: `${aboutTextColor}40`,
+            }}
+          >
             RESPALDO CORPORATIVO • EXPERIENCIA & CALIDAD
           </span>
-          <h2 className="text-2xl font-extrabold text-[var(--text-primary)] mt-2 mb-1">
+          <h2 className="text-2xl font-extrabold mt-2 mb-1" style={{ color: aboutTextColor }}>
             Sobre ENFOCO, S.R.L.
           </h2>
-          <p className="text-[var(--text-primary)]/70 text-xs max-w-2xl mx-auto text-center mb-4">
+          <p className="text-xs max-w-2xl mx-auto text-center mb-4 opacity-80" style={{ color: aboutTextColor }}>
             Conozca nuestro propósito, estándares metodológicos y el compromiso técnico que respalda cada una de nuestras soluciones.
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
+          <div
+            className="border rounded-2xl p-5 shadow-xs"
+            style={{
+              backgroundColor: aboutCardBg,
+              borderColor: aboutCardBorder,
+            }}
+          >
             <div className="flex items-center space-x-2 mb-2">
-              <Target className="w-4 h-4 text-[var(--accent-color)]" />
-              <h3 className="text-sm font-bold text-[var(--accent-color)]">Nuestra Misión</h3>
+              <Target className="w-4 h-4" style={{ color: aboutTextColor }} />
+              <h3 className="text-sm font-bold" style={{ color: aboutTextColor }}>Nuestra Misión</h3>
             </div>
-            <p className="text-xs text-[var(--theme-text)] leading-relaxed italic">"{company.mission}"</p>
+            <p className="text-xs leading-relaxed italic" style={{ color: aboutTextColor }}>"{company.mission}"</p>
           </div>
 
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-5 shadow-xs">
+          <div
+            className="border rounded-2xl p-5 shadow-xs"
+            style={{
+              backgroundColor: aboutCardBg,
+              borderColor: aboutCardBorder,
+            }}
+          >
             <div className="flex items-center space-x-2 mb-2">
-              <Compass className="w-4 h-4 text-[var(--accent-color)]" />
-              <h3 className="text-sm font-bold text-[var(--accent-color)]">Nuestra Visión</h3>
+              <Compass className="w-4 h-4" style={{ color: aboutTextColor }} />
+              <h3 className="text-sm font-bold" style={{ color: aboutTextColor }}>Nuestra Visión</h3>
             </div>
-            <p className="text-xs text-[var(--theme-text)] leading-relaxed italic">"{company.vision}"</p>
+            <p className="text-xs leading-relaxed italic" style={{ color: aboutTextColor }}>"{company.vision}"</p>
           </div>
         </div>
       </div>

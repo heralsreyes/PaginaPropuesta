@@ -20,8 +20,8 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
   const [selectedRoleIndex, setSelectedRoleIndex] = useState<number>(0);
   const selectedMember = team[selectedRoleIndex] || team[0];
 
-  const getRoleIcon = (iconName?: string) => {
-    const iconClass = "w-5 h-5 text-[var(--accent-color)]";
+  const getRoleIcon = (iconName?: string, isWhite?: boolean) => {
+    const iconClass = isWhite ? "w-5 h-5 text-white" : "w-5 h-5 text-[var(--accent-color)]";
     switch (iconName) {
       case "Briefcase":
         return <Briefcase className={iconClass} />;
@@ -39,14 +39,17 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
   };
 
   return (
-    <section id="equipo" className="min-h-screen w-full flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <section
+      id="equipo"
+      className="min-h-screen w-full flex flex-col justify-start items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 transition-colors duration-300"
+    >
       {/* 💻 Screen Interactive Inspector View */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="screen-only max-w-5xl xl:max-w-6xl mx-auto w-full my-auto flex flex-col justify-center"
+        className="screen-only max-w-5xl xl:max-w-6xl mx-auto w-full flex flex-col justify-start py-2"
       >
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-4 shrink-0">
@@ -208,32 +211,38 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       onClick={() => setSelectedRoleIndex(idx)}
                       className={`p-3 sm:p-3.5 rounded-2xl border-2 cursor-pointer transition-all duration-200 flex items-center justify-between shadow-xs ${
                         isSelected
-                          ? "border-[var(--accent-color)] bg-[var(--accent-color)]/10 shadow-sm translate-x-1"
-                          : "border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent-color)]/40"
+                          ? "border-[var(--accent-color)] bg-[var(--accent-color)] text-white shadow-lg shadow-[var(--accent-color)]/25 translate-x-1"
+                          : "border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--theme-text)] hover:border-[var(--accent-color)]/40"
                       }`}
                     >
                       <div className="flex items-center space-x-3">
                         <div
                           className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
-                            isSelected ? "bg-[var(--accent-color)] text-white" : "bg-[var(--accent-color)]/10 text-[var(--accent-color)]"
+                            isSelected ? "bg-white/20 text-white" : "bg-[var(--accent-color)]/10 text-[var(--accent-color)]"
                           }`}
                         >
-                          {getRoleIcon(member.iconName)}
+                          {getRoleIcon(member.iconName, isSelected)}
                         </div>
                         <div>
-                          <span className="text-[9px] font-bold text-[var(--theme-text)]/70 uppercase tracking-wider font-mono block">
+                          <span className={`text-[9px] font-bold uppercase tracking-wider font-mono block ${
+                            isSelected ? "text-white/80" : "text-[var(--theme-text)]/70"
+                          }`}>
                             <EditableText
                               id={`team_member_${idx}_cat`}
                               value={member.category}
                               onChange={(val) => updateTeamMember(idx, { category: val })}
+                              style={isSelected ? { color: "#ffffff" } : undefined}
                               tag="span"
                             />
                           </span>
-                          <h4 className={`text-xs sm:text-sm font-extrabold block ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--theme-text)]"}`}>
+                          <h4 className={`text-xs sm:text-sm font-extrabold block ${
+                            isSelected ? "text-white" : "text-[var(--theme-text)]"
+                          }`}>
                             <EditableText
                               id={`team_member_${idx}_role`}
                               value={member.role}
                               onChange={(val) => updateTeamMember(idx, { role: val })}
+                              style={isSelected ? { color: "#ffffff" } : undefined}
                               tag="span"
                             />
                           </h4>
@@ -241,7 +250,11 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        <span className="text-[11px] font-bold text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-0.5 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center gap-0.5">
+                        <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border inline-flex items-center gap-0.5 ${
+                          isSelected
+                            ? "bg-white/20 text-white border-white/30"
+                            : "text-[var(--accent-color)] bg-[var(--accent-color)]/10 border-[var(--accent-color)]/30"
+                        }`}>
                           <EditableText
                             id={`team_member_${idx}_percent`}
                             value={String(member.dedicationPercent)}
@@ -249,11 +262,14 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team }) => {
                               const num = parseInt(val.replace(/\D/g, ""), 10) || 0;
                               updateTeamMember(idx, { dedicationPercent: num });
                             }}
+                            style={isSelected ? { color: "#ffffff" } : undefined}
                             tag="span"
                           />
                           <span>%</span>
                         </span>
-                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? "text-[var(--accent-color)] translate-x-1" : "text-[var(--theme-text)]/50"}`} />
+                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${
+                          isSelected ? "text-white translate-x-1" : "text-[var(--theme-text)]/50"
+                        }`} />
                       </div>
                     </div>
                   </DeletableItem>

@@ -102,12 +102,12 @@ export const ColorsTab: React.FC = () => {
   const globalColorFields = [
     { key: "bgMain" as keyof ThemeConfig, label: "Fondo Principal de Página", defaultVal: "#004F54" },
     { key: "accentColor" as keyof ThemeConfig, label: "Acento Primario", defaultVal: "#004F54" },
-    { key: "secondaryAccent" as keyof ThemeConfig, label: "Acento Secundario (Oro / Destacados)", defaultVal: "#F08D17" },
+    { key: "secondaryAccent" as keyof ThemeConfig, label: "Acento Secundario & Botón Aceptar Propuesta", defaultVal: "#F08D17" },
+    { key: "navBg" as keyof ThemeConfig, label: "Fondo Header & Badge Superior Izquierdo", defaultVal: "#002224" },
     { key: "cardBg" as keyof ThemeConfig, label: "Fondo de Tarjetas & Contenedores", defaultVal: "#002224" },
     { key: "cardBorder" as keyof ThemeConfig, label: "Bordes & Resplandores", defaultVal: "#F08D17" },
     { key: "textPrimary" as keyof ThemeConfig, label: "Texto Principal (Títulos & Encabezados)", defaultVal: "#FFFFFF" },
     { key: "textSecondary" as keyof ThemeConfig, label: "Texto Secundario (Descripciones)", defaultVal: "#D5E4E2" },
-    { key: "navBg" as keyof ThemeConfig, label: "Fondo de Navegación & Header", defaultVal: "#002224" },
   ];
 
   const aboutColorFields = [

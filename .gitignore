@@ -44,6 +44,7 @@ Thumbs.db
 *.zip
 scratch/
 scratch_*
+docx_extracted/
 
 # TypeScript
 *.tsbuildinfo

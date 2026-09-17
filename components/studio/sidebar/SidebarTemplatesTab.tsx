@@ -183,6 +183,13 @@ export const SidebarTemplatesTab: React.FC = () => {
             onChange={(val) => setTheme({ cardBorder: val })}
           />
 
+          <ColorFieldRow
+            label="Fondo de Cabecera / Badge (Header)"
+            fieldKey="navBg"
+            value={theme.navBg || theme.cardBg || "#002224"}
+            onChange={(val) => setTheme({ navBg: val })}
+          />
+
           {/* Radio de Redondeo */}
           <div>
             <label className="block text-zinc-600 font-semibold mb-1">Redondeo de Tarjeta</label>

@@ -155,7 +155,12 @@ export const Footer: React.FC<FooterProps> = ({ proposal }) => {
 
         {/* Footer Bar */}
         <div className="pt-5 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between gap-4 text-sm font-medium text-[var(--text-primary)]/70 max-w-7xl mx-auto w-full">
-          <p>© 2026 ENFOCO, S.R.L. Todos los derechos reservados. Documento confidencial para {proposal.client.name}.</p>
+          <p className="text-sm">
+            <EditableField
+              id="footer_legal_copy"
+              defaultText={`© 2026 ENFOCO, S.R.L. Todos los derechos reservados. Documento confidencial para ${proposal.client.name}.`}
+            />
+          </p>
           <button
             onClick={scrollToTop}
             className="text-sm font-bold px-5 py-2.5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:bg-[var(--bg-main)] text-[var(--text-primary)] cursor-pointer flex items-center space-x-2 transition-all"

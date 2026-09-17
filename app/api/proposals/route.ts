@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { slug, proposal, theme, sections, canvasElements, buttonActionsMap, colors, editableFields, editableColors } = body;
+    const { slug, proposal, theme, sections, canvasElements, buttonActionsMap, colors, editableFields, editableColors, scopePillsConfig } = body;
 
     if (!proposal) {
       return NextResponse.json(
@@ -132,6 +132,7 @@ export async function POST(req: NextRequest) {
       ...(buttonActionsMap ? { buttonActionsMap } : {}),
       ...(editableFields ? { editableFields } : {}),
       ...(editableColors ? { editableColors } : {}),
+      ...(scopePillsConfig ? { scopePillsConfig } : {}),
       _savedAt: new Date().toISOString(),
     };
 

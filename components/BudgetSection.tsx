@@ -54,13 +54,13 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onOpenAcce
   const totalFinal = subtotalNeto + taxAmount;
 
   return (
-    <section id="inversion" className="min-h-screen w-full flex flex-col justify-center items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <section id="inversion" className="min-h-screen w-full flex flex-col justify-start items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="max-w-7xl mx-auto w-full my-auto flex flex-col justify-center"
+        className="max-w-7xl mx-auto w-full flex flex-col justify-start py-2"
       >
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 shrink-0">

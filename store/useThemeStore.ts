@@ -33,7 +33,7 @@ export const PRESET_THEMES: PresetTheme[] = [
     name: "Excel Oficial (#004F54 & #F08D17)",
     theme: {
       bgMain: "#004F54",
-      accentColor: "#004F54",
+      accentColor: "#F08D17",
       secondaryAccent: "#F08D17",
       cardBg: "#002224",
       cardBorder: "#F08D17",

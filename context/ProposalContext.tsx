@@ -7,6 +7,15 @@ import { useThemeStore, PRESET_THEMES, ThemeConfig, applyCssVars } from "@/store
 import { validateProposalData } from "@/lib/proposalValidation";
 import { toast } from "sonner";
 
+export interface ScopePillsConfig {
+  pillCustomSizes?: Record<string, { width?: number; height?: number }>;
+  stretchedDeliverables?: Record<string, boolean>;
+  hiddenDelIcons?: Record<string, boolean>;
+  delPillVariants?: Record<string, "primary" | "secondary" | "subtle">;
+  hiddenDeliverablesMap?: Record<string, boolean>;
+  todosLabel?: string;
+}
+
 export type ExtendedProposalPayload = Partial<ProposalData> & {
   sections?: PageSection[];
   canvasElements?: CanvasElement[];
@@ -15,6 +24,7 @@ export type ExtendedProposalPayload = Partial<ProposalData> & {
   colors?: Record<string, any>;
   editableFields?: Record<string, string>;
   editableColors?: Record<string, string>;
+  scopePillsConfig?: ScopePillsConfig;
 };
 
 const LOCAL_STORAGE_KEY = "enfoco_proposal_data_v2";
@@ -370,7 +380,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                 if (validation.success && validation.data) {
                   setCurrentSlug(dashed);
                   setProposal(apiData.data);
-                  hydrateExtendedState(apiData.data);
+                  hydrateExtendedState(apiData.data, dashed);
                   toast.success(`Cargada propuesta guardada: ${apiData.data.client?.name || dashed}`);
                   setIsLoaded(true);
                   return;
@@ -392,7 +402,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
               if (valCustom.success && valCustom.data) {
                 setCurrentSlug(dashed);
                 setProposal(parsedCustom);
-                hydrateExtendedState(parsedCustom);
+                hydrateExtendedState(parsedCustom, dashed);
                 toast.success(`Cargada propuesta de ${parsedCustom.client?.name || dashed}`);
                 setIsLoaded(true);
                 return;
@@ -419,7 +429,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                 if (validation.success && validation.data) {
                   setCurrentSlug(dashed);
                   setProposal(remoteJson);
-                  hydrateExtendedState(remoteJson);
+                  hydrateExtendedState(remoteJson, dashed);
                   toast.success(`Cargada propuesta de ${remoteJson.client.name || dashed}`);
                   setIsLoaded(true);
                   return;
@@ -435,7 +445,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           if (presetExact) {
             setCurrentSlug(cleanParam);
             setProposal(presetExact);
-            hydrateExtendedState(presetExact);
+            hydrateExtendedState(presetExact, cleanParam);
             toast.success(`Cargada plantilla: ${presetExact.client.name}`);
             setIsLoaded(true);
             return;
@@ -446,7 +456,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           if (presetLoose) {
             setCurrentSlug(cleanParam);
             setProposal(presetLoose);
-            hydrateExtendedState(presetLoose);
+            hydrateExtendedState(presetLoose, cleanParam);
             toast.success(`Cargada plantilla: ${presetLoose.client.name}`);
             setIsLoaded(true);
             return;
@@ -461,20 +471,20 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             const validation = validateProposalData(parsed);
             if (validation.success && validation.data) {
               setProposal(parsed);
-              hydrateExtendedState(parsed);
+              hydrateExtendedState(parsed, currentSlug);
             } else {
               console.warn("[ProposalContext] LocalStorage con esquema inválido, usando sampleProposal:", validation.error);
               setProposal(sampleProposal);
-              hydrateExtendedState(sampleProposal);
+              hydrateExtendedState(sampleProposal, "excel-puesto-de-bolsa");
             }
           } catch (err) {
             console.error("Error reading saved proposal:", err);
             setProposal(sampleProposal);
-            hydrateExtendedState(sampleProposal);
+            hydrateExtendedState(sampleProposal, "excel-puesto-de-bolsa");
           }
         } else {
           setProposal(sampleProposal);
-          hydrateExtendedState(sampleProposal);
+          hydrateExtendedState(sampleProposal, "excel-puesto-de-bolsa");
         }
       } catch (e) {
         console.error("Error loading proposal data:", e);
@@ -878,9 +888,61 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     });
   };
 
-  // Helper to hydrate Design Studio stores from imported JSON
-  const hydrateExtendedState = (data: ExtendedProposalPayload) => {
+  const getScopePillsConfigForSlug = (slug: string): ScopePillsConfig => {
+    if (typeof window === "undefined") return {};
+    try {
+      const pillSizes =
+        localStorage.getItem(`scope_pill_custom_sizes_${slug}`) ||
+        localStorage.getItem("scope_pill_custom_sizes");
+      const stretched =
+        localStorage.getItem(`scope_stretched_deliverables_${slug}`) ||
+        localStorage.getItem("scope_stretched_deliverables_map");
+      const hiddenIcons =
+        localStorage.getItem(`scope_hidden_del_icons_${slug}`) ||
+        localStorage.getItem("scope_hidden_del_icons");
+      const variants =
+        localStorage.getItem(`scope_del_variants_${slug}`) ||
+        localStorage.getItem("scope_del_variants");
+      const hiddenDeliverables =
+        localStorage.getItem(`scope_hidden_deliverables_map_${slug}`) ||
+        localStorage.getItem("scope_hidden_deliverables_map");
+      const todosLabel =
+        localStorage.getItem(`scope_todos_label_${slug}`) ||
+        localStorage.getItem("scope_todos_label") ||
+        "Todos";
+
+      return {
+        pillCustomSizes: pillSizes ? JSON.parse(pillSizes) : {},
+        stretchedDeliverables: stretched ? JSON.parse(stretched) : {},
+        hiddenDelIcons: hiddenIcons ? JSON.parse(hiddenIcons) : {},
+        delPillVariants: variants ? JSON.parse(variants) : {},
+        hiddenDeliverablesMap: hiddenDeliverables ? JSON.parse(hiddenDeliverables) : {},
+        todosLabel,
+      };
+    } catch (e) {
+      console.warn("Error gathering scope pill config:", e);
+      return {};
+    }
+  };
+
+  // Helper to hydrate Design Studio stores from imported JSON or preset
+  const hydrateExtendedState = (data: ExtendedProposalPayload, slug?: string) => {
     if (!data || typeof data !== "object") return;
+
+    const slugToUse = (
+      slug ||
+      data.client?.shortName ||
+      data.client?.name ||
+      data.project?.code ||
+      currentSlug ||
+      "propuesta"
+    )
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
     const clientName = (data.client?.name || "").toUpperCase();
     const clientShortName = (data.client?.shortName || "").toUpperCase();
@@ -952,7 +1014,41 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           }
         });
       }
+
+      // Hydrate scope pills custom config if present in the loaded proposal
+      if (data.scopePillsConfig && typeof data.scopePillsConfig === "object") {
+        try {
+          if (data.scopePillsConfig.pillCustomSizes) {
+            localStorage.setItem(`scope_pill_custom_sizes_${slugToUse}`, JSON.stringify(data.scopePillsConfig.pillCustomSizes));
+            localStorage.setItem("scope_pill_custom_sizes", JSON.stringify(data.scopePillsConfig.pillCustomSizes));
+          }
+          if (data.scopePillsConfig.stretchedDeliverables) {
+            localStorage.setItem(`scope_stretched_deliverables_${slugToUse}`, JSON.stringify(data.scopePillsConfig.stretchedDeliverables));
+            localStorage.setItem("scope_stretched_deliverables_map", JSON.stringify(data.scopePillsConfig.stretchedDeliverables));
+          }
+          if (data.scopePillsConfig.hiddenDelIcons) {
+            localStorage.setItem(`scope_hidden_del_icons_${slugToUse}`, JSON.stringify(data.scopePillsConfig.hiddenDelIcons));
+            localStorage.setItem("scope_hidden_del_icons", JSON.stringify(data.scopePillsConfig.hiddenDelIcons));
+          }
+          if (data.scopePillsConfig.delPillVariants) {
+            localStorage.setItem(`scope_del_variants_${slugToUse}`, JSON.stringify(data.scopePillsConfig.delPillVariants));
+            localStorage.setItem("scope_del_variants", JSON.stringify(data.scopePillsConfig.delPillVariants));
+          }
+          if (data.scopePillsConfig.hiddenDeliverablesMap) {
+            localStorage.setItem(`scope_hidden_deliverables_map_${slugToUse}`, JSON.stringify(data.scopePillsConfig.hiddenDeliverablesMap));
+            localStorage.setItem("scope_hidden_deliverables_map", JSON.stringify(data.scopePillsConfig.hiddenDeliverablesMap));
+          }
+          if (data.scopePillsConfig.todosLabel) {
+            localStorage.setItem(`scope_todos_label_${slugToUse}`, data.scopePillsConfig.todosLabel);
+            localStorage.setItem("scope_todos_label", data.scopePillsConfig.todosLabel);
+          }
+        } catch (e) {
+          console.warn("Error hydrating scope pills config:", e);
+        }
+      }
+
       window.dispatchEvent(new Event("enfoco-sync-editables"));
+      window.dispatchEvent(new CustomEvent("enfoco-proposal-switched", { detail: { slug: slugToUse } }));
     }
   };
 
@@ -961,6 +1057,9 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     const studioState = useStudioStore.getState();
     const themeState = useThemeStore.getState();
     const currentTheme = themeState.theme;
+    const safeClient = (proposal.client?.shortName || "cliente").toLowerCase().replace(/[^a-z0-9]/gi, "_");
+    const activeSlug = currentSlug || safeClient;
+    const scopePillsConfig = getScopePillsConfigForSlug(activeSlug);
 
     const fullProposalData = {
       ...proposal,
@@ -980,16 +1079,16 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         h1: currentTheme.h1Color || currentTheme.textPrimary,
         h2: currentTheme.h2Color || currentTheme.secondaryAccent,
       },
+      scopePillsConfig,
     };
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullProposalData, null, 2));
     const downloadAnchor = document.createElement("a");
-    const safeClient = (proposal.client.shortName || "cliente").toLowerCase().replace(/[^a-z0-9]/gi, "_");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `propuesta_${safeClient}_${proposal.project.code}.json`);
+    downloadAnchor.setAttribute("download", `propuesta_${safeClient}_${proposal.project?.code || 'ENF-2026'}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-    toast.success("Archivo JSON de la propuesta descargado con temas y colores.");
+    toast.success("Archivo JSON de la propuesta descargado con temas, colores y configuración de entregables.");
   };
 
   // Save Proposal Directly to Server / Vercel API without downloading
@@ -1036,6 +1135,8 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         }
       }
 
+      const scopePillsConfig = getScopePillsConfigForSlug(slugToUse);
+
       const fullProposalData = {
         ...proposal,
         sections: studioState.sections,
@@ -1056,6 +1157,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         },
         editableFields,
         editableColors,
+        scopePillsConfig,
       };
 
       // 1. Guardar en localStorage inmediatamente para persistencia cliente
@@ -1082,6 +1184,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           buttonActionsMap: studioState.buttonActionsMap,
           editableFields,
           editableColors,
+          scopePillsConfig,
         }),
       });
 
@@ -1123,8 +1226,21 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         return false;
       }
       clearEditableCache();
+      const derivedSlug = (
+        parsed.client?.shortName ||
+        parsed.client?.name ||
+        parsed.project?.code ||
+        "propuesta-importada"
+      )
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9_-]+/g, "-");
+
+      setCurrentSlug(derivedSlug);
       setProposal(parsed);
-      hydrateExtendedState(parsed);
+      hydrateExtendedState(parsed, derivedSlug);
       toast.success(`Propuesta de ${parsed.client?.name || "cliente"} cargada con éxito.`);
       return true;
     } catch (e) {
@@ -1149,7 +1265,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             if (validation.success && validation.data) {
               setCurrentSlug(dashed);
               setProposal(apiData.data);
-              hydrateExtendedState(apiData.data);
+              hydrateExtendedState(apiData.data, dashed);
               if (typeof window !== "undefined") {
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set("proposal", dashed);
@@ -1175,7 +1291,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           if (valCustom.success && valCustom.data) {
             setCurrentSlug(dashed);
             setProposal(parsedCustom);
-            hydrateExtendedState(parsedCustom);
+            hydrateExtendedState(parsedCustom, dashed);
             if (typeof window !== "undefined") {
               const newUrl = new URL(window.location.href);
               newUrl.searchParams.set("proposal", dashed);
@@ -1194,7 +1310,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       if (presetExact) {
         setCurrentSlug(dashed);
         setProposal(presetExact);
-        hydrateExtendedState(presetExact);
+        hydrateExtendedState(presetExact, dashed);
         if (typeof window !== "undefined") {
           const newUrl = new URL(window.location.href);
           newUrl.searchParams.set("proposal", dashed);
@@ -1221,7 +1337,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             if (validation.success && validation.data) {
               setCurrentSlug(dashed);
               setProposal(remoteJson);
-              hydrateExtendedState(remoteJson);
+              hydrateExtendedState(remoteJson, dashed);
               if (typeof window !== "undefined") {
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set("proposal", dashed);
@@ -1241,7 +1357,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       if (presetLoose) {
         setCurrentSlug(dashed);
         setProposal(presetLoose);
-        hydrateExtendedState(presetLoose);
+        hydrateExtendedState(presetLoose, dashed);
         if (typeof window !== "undefined") {
           const newUrl = new URL(window.location.href);
           newUrl.searchParams.set("proposal", dashed);

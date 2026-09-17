@@ -5,6 +5,7 @@ import { ProposalData } from "@/data/proposalData";
 import { useProposal } from "@/context/ProposalContext";
 import { EditableText } from "@/components/studio/EditableText";
 import { EditableField } from "@/components/ui/EditableField";
+import { ColorableIcon } from "@/components/ui/ColorableIcon";
 import { ShieldCheck, Calendar, FileText, UserCheck, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -45,20 +46,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
         </span>
 
         {/* Co-Branding Header */}
-        <div className="inline-flex items-center gap-3 py-2 px-5 rounded-full bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm text-xs font-semibold uppercase tracking-wider mb-5 transition-colors duration-300">
+        <div className="inline-flex items-center gap-3 py-2 px-5 rounded-full bg-white/15 dark:bg-black/20 backdrop-blur-md border border-white/25 shadow-md text-xs font-semibold uppercase tracking-wider mb-5 transition-colors duration-300">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-black font-display text-[var(--text-primary)]">
+            <span className="text-xs font-black font-display text-white">
               <EditableField id="hero_brand_name" defaultText="ENFOCO" />
-              <span className="text-[var(--accent-color)]">.</span>
+              <span className="text-[var(--secondary-accent)]">.</span>
             </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[var(--text-primary)] border border-[var(--border-color)] font-medium leading-none">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-white/15 text-white border border-white/30 font-semibold leading-none shadow-xs">
               <EditableField id="hero_brand_suffix" defaultText="S.R.L." />
             </span>
           </div>
 
-          <span className="text-[var(--text-primary)] opacity-40 font-light text-xs">|</span>
+          <span className="text-white/40 font-light text-xs">|</span>
 
-          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--secondary-accent)]">
             <EditableText
               id="hero_client_name"
               value={client.name || "Cliente Institucional"}
@@ -78,7 +79,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
                 onChange={(val) => updateProject({ heroTitlePrefix: val })}
                 tag="span"
               />{" "}
-              <span className="text-[var(--accent-color)]">
+              <span className="text-[var(--secondary-accent)]">
                 <EditableText
                   id="hero_title_accent"
                   value={project.heroTitleAccent}
@@ -133,7 +134,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           {/* Column 1: Fecha de Emisión */}
           <div className="px-3 py-1 flex flex-col justify-center">
             <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
-              <Calendar className="w-4 h-4 text-[var(--accent-color)]" />
+              <ColorableIcon id="hero_icon_date">
+                <Calendar className="w-4 h-4 text-[var(--accent-color)]" />
+              </ColorableIcon>
               <span><EditableField id="hero_label_date" defaultText="Fecha de Emisión" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--theme-text)] leading-tight">
@@ -149,7 +152,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           {/* Column 2: Versión & Código */}
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
             <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
-              <FileText className="w-4 h-4 text-[var(--accent-color)]" />
+              <ColorableIcon id="hero_icon_version">
+                <FileText className="w-4 h-4 text-[var(--accent-color)]" />
+              </ColorableIcon>
               <span><EditableField id="hero_label_version" defaultText="Versión & Código" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--theme-text)] leading-tight">
@@ -167,7 +172,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           {/* Column 3: Preparado Por */}
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
             <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
-              <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
+              <ColorableIcon id="hero_icon_author">
+                <UserCheck className="w-4 h-4 text-[var(--accent-color)]" />
+              </ColorableIcon>
               <span><EditableField id="hero_label_author" defaultText="Preparado Por" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--theme-text)] leading-tight">
@@ -183,7 +190,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ proposal }) => {
           {/* Column 4: Garantía Incluida */}
           <div className="px-3 py-1 flex flex-col justify-center pt-3 xl:pt-1">
             <div className="text-[11px] font-semibold text-[var(--theme-text)]/70 uppercase tracking-wider gap-1.5 flex items-center mb-1">
-              <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
+              <ColorableIcon id="hero_icon_guarantee">
+                <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
+              </ColorableIcon>
               <span><EditableField id="hero_label_guarantee" defaultText="Garantía Incluida" /></span>
             </div>
             <p className="text-xs sm:text-sm font-extrabold text-[var(--accent-color)] leading-tight">
