@@ -17,6 +17,7 @@ import {
   Sparkles,
   Loader2,
 } from "lucide-react";
+import { getPresetProposal } from "@/data/presetProposals";
 import { toast } from "sonner";
 
 interface ShareProposalModalProps {
@@ -41,13 +42,23 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
   const checkServerStatus = async (slugToCheck: string) => {
     setIsCheckingServer(true);
     try {
+      // 1. Preset institucional siempre verificado
+      const preset = getPresetProposal(slugToCheck, { allowFuzzy: true });
+      if (preset) {
+        setIsServerVerified(true);
+        return;
+      }
+
+      // 2. Consulta al endpoint del servidor
       const res = await fetch(`/api/proposals?slug=${encodeURIComponent(slugToCheck)}`);
       if (res.ok) {
         const data = await res.json();
-        setIsServerVerified(Boolean(data?.success && data?.data));
-      } else {
-        setIsServerVerified(false);
+        if (data?.success && data?.data) {
+          setIsServerVerified(true);
+          return;
+        }
       }
+      setIsServerVerified(false);
     } catch {
       setIsServerVerified(false);
     } finally {
@@ -100,10 +111,15 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
   const handleManualSave = async () => {
     setIsSavingServer(true);
     try {
-      await saveProposalToServer(currentSlug);
-      await checkServerStatus(currentSlug);
-    } catch (e) {
+      const res = await saveProposalToServer(currentSlug);
+      if (res && res.success) {
+        setIsServerVerified(true);
+      } else {
+        await checkServerStatus(currentSlug);
+      }
+    } catch (e: any) {
       console.error(e);
+      toast.error(`Error al guardar: ${e?.message || e}`);
     } finally {
       setIsSavingServer(false);
     }
@@ -230,17 +246,17 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
                   </div>
                 </div>
               ) : (
-                <div className="p-3 bg-amber-950/40 border border-amber-800/50 rounded-2xl flex items-start justify-between gap-3">
-                  <div className="text-[11px] text-amber-200 leading-relaxed">
-                    <strong>⚠️ No sincronizado aún en el servidor:</strong>
-                    <p className="text-amber-300/80 mt-0.5">
-                      Guarda la propuesta en el servidor para que el enlace corto esté disponible públicamente.
+                <div className="p-3 bg-blue-950/40 border border-blue-800/50 rounded-2xl flex items-start justify-between gap-3">
+                  <div className="text-[11px] text-blue-200 leading-relaxed">
+                    <strong>💡 Sincronizar propuesta con el servidor:</strong>
+                    <p className="text-blue-300/80 mt-0.5">
+                      Haz clic en &apos;Guardar Ahora&apos; para registrar los cambios en el servidor y dejar activo el enlace corto oficial.
                     </p>
                   </div>
                   <button
                     onClick={handleManualSave}
                     disabled={isSavingServer}
-                    className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs shrink-0 cursor-pointer flex items-center gap-1.5 transition-all"
+                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs shrink-0 cursor-pointer flex items-center gap-1.5 transition-all shadow-md"
                   >
                     {isSavingServer ? (
                       <>

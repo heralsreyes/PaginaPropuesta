@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 import { validateProposalData } from "@/lib/proposalValidation";
+import { getPresetProposal } from "@/data/presetProposals";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
 
 function sanitizeSlug(rawSlug: string): string {
   return rawSlug
@@ -32,15 +43,27 @@ export async function GET(req: NextRequest) {
         try {
           const fileContent = await fs.readFile(filePath, "utf-8");
           const parsed = JSON.parse(fileContent);
-          return NextResponse.json({ success: true, data: parsed, slug: cleanSlug });
+          return NextResponse.json(
+            { success: true, data: parsed, slug: cleanSlug },
+            { headers: corsHeaders }
+          );
         } catch {
           // Continuar con el siguiente candidato
         }
       }
 
+      // Si no está en disco, verificar si coincide con alguna plantilla predeterminada
+      const preset = getPresetProposal(cleanSlug, { allowFuzzy: true });
+      if (preset) {
+        return NextResponse.json(
+          { success: true, data: preset, slug: cleanSlug, isPreset: true },
+          { headers: corsHeaders }
+        );
+      }
+
       return NextResponse.json(
         { success: false, error: `No se encontró la propuesta '${cleanSlug}'` },
-        { status: 404 }
+        { status: 404, headers: corsHeaders }
       );
     }
 
@@ -215,19 +238,22 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({
-      success: true,
-      message: `Propuesta guardada correctamente en ${targetFile}`,
-      slug: cleanSlug,
-      filename: targetFile,
-      mode: savedMode,
-      timestamp: fullPayload._savedAt,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: `Propuesta guardada correctamente en ${targetFile}`,
+        slug: cleanSlug,
+        filename: targetFile,
+        mode: savedMode,
+        timestamp: fullPayload._savedAt,
+      },
+      { headers: corsHeaders }
+    );
   } catch (error: any) {
     console.error("[API /api/proposals POST Error]:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Error interno al guardar propuesta" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
