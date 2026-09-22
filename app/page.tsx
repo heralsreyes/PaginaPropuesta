@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { ProposalProvider, useProposal } from "@/context/ProposalContext";
 import { SidebarNav } from "@/components/SidebarNav";
 import { AcceptModal } from "@/components/AcceptModal";
@@ -92,17 +93,20 @@ function ProposalContent() {
   );
 }
 
-export default function Home({
+function HomeContent({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const nextSearchParams = useSearchParams();
   const proposalParam =
-    typeof searchParams?.proposal === "string"
-      ? searchParams.proposal
-      : typeof searchParams?.p === "string"
+    nextSearchParams.get("p") ||
+    nextSearchParams.get("proposal") ||
+    (typeof searchParams?.p === "string"
       ? searchParams.p
-      : undefined;
+      : typeof searchParams?.proposal === "string"
+      ? searchParams.proposal
+      : undefined);
 
   return (
     <ProposalProvider initialProposalSlug={proposalParam}>
@@ -110,5 +114,23 @@ export default function Home({
         <ProposalContent />
       </StudioLayout>
     </ProposalProvider>
+  );
+}
+
+export default function Home({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full min-h-screen bg-[#002224] flex items-center justify-center text-white font-mono text-xs">
+          Cargando propuesta...
+        </div>
+      }
+    >
+      <HomeContent searchParams={searchParams} />
+    </Suspense>
   );
 }

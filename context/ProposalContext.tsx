@@ -5,6 +5,7 @@ import { ProposalData, sampleProposal, Requirement, RequirementCategory, Payment
 import { useStudioStore, EXCEL_CUSTOM_SECTIONS, GENERIC_DEFAULT_SECTIONS, PageSection, CanvasElement, ButtonActionConfig } from "@/store/useStudioStore";
 import { useThemeStore, PRESET_THEMES, ThemeConfig, applyCssVars } from "@/store/useThemeStore";
 import { validateProposalData } from "@/lib/proposalValidation";
+import { decompressProposalFromHash } from "@/lib/shareUtils";
 import { toast } from "sonner";
 
 export interface ScopePillsConfig {
@@ -25,6 +26,26 @@ export type ExtendedProposalPayload = Partial<ProposalData> & {
   editableFields?: Record<string, string>;
   editableColors?: Record<string, string>;
   scopePillsConfig?: ScopePillsConfig;
+  scopeEpicsData?: any[];
+  scopeEpicsFilterButtons?: any[];
+  scopeEpicsMetadata?: {
+    filterLabel?: string;
+    filterSummary?: string;
+    epicsColTitle?: string;
+    epicsCountBadge?: string;
+  };
+  companyConfig?: {
+    hiddenOptions?: string[];
+    hiddenBullets?: string[];
+  };
+  responsibilitiesConfig?: {
+    cotejoIcons?: Record<string, boolean>;
+    cotejoMap?: Record<string, boolean>;
+    showGuaranteeBanner?: boolean;
+    userStories?: any[];
+  };
+  _slug?: string;
+  _savedAt?: string;
 };
 
 const LOCAL_STORAGE_KEY = "enfoco_proposal_data_v2";
@@ -72,6 +93,7 @@ interface ProposalContextType {
   currentSlug: string;
   setCurrentSlug: (slug: string) => void;
   saveProposalToServer: (targetSlug?: string) => Promise<{ success: boolean; message: string; filename?: string }>;
+  getConsolidatedPayload: (targetSlug?: string) => ExtendedProposalPayload;
 }
 
 const clearEditableCache = () => {
@@ -334,7 +356,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     toast.success("↪️ Acción rehecha correctamente.");
   };
 
-  // Load from LocalStorage & URL Params on mount
+  // Load from LocalStorage, URL Hash & URL Params on mount
   useEffect(() => {
     async function initProposalData() {
       try {
@@ -365,12 +387,58 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
           }
         }
 
-        // 2. Load proposal JSON dynamically if ?proposal=name parameter exists
+        // 2. FIRST PRIORITY: Portable Self-Contained Link (#d=... or #data=...)
+        if (typeof window !== "undefined" && window.location.hash) {
+          const hash = window.location.hash;
+          if (hash.startsWith("#d=") || hash.startsWith("#data=") || (hash.length > 5 && !hash.includes("/"))) {
+            try {
+              const decompressed = await decompressProposalFromHash(hash);
+              if (decompressed && typeof decompressed === "object") {
+                const validation = validateProposalData(decompressed);
+                if (validation.success && validation.data) {
+                  const derivedSlug = (
+                    decompressed._slug ||
+                    proposalParam ||
+                    decompressed.client?.shortName ||
+                    decompressed.client?.name ||
+                    "propuesta-compartida"
+                  )
+                    .trim()
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9_-]+/g, "-");
+
+                  setCurrentSlug(derivedSlug);
+                  setProposal(decompressed as ProposalData);
+                  hydrateExtendedState(decompressed, derivedSlug);
+
+                  // Persistir en este dispositivo para futuras recargas
+                  try {
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(decompressed));
+                    localStorage.setItem(`enfoco_proposal_${derivedSlug}`, JSON.stringify(decompressed));
+                    localStorage.setItem("current_proposal_slug", derivedSlug);
+                  } catch (e) {
+                    console.warn("Error caching decompressed proposal in localStorage:", e);
+                  }
+
+                  toast.success(`Cargada propuesta compartida: ${decompressed.client?.name || derivedSlug}`);
+                  setIsLoaded(true);
+                  return;
+                }
+              }
+            } catch (hashErr) {
+              console.warn("[ProposalContext] Error decodificando enlace portátil en hash:", hashErr);
+            }
+          }
+        }
+
+        // 3. SECOND PRIORITY: Load proposal JSON dynamically if ?proposal=name or ?p=name exists
         if (proposalParam) {
           const cleanParam = decodeURIComponent(proposalParam).trim().toLowerCase();
           const dashed = cleanParam.replace(/[\s_]+/g, "-");
 
-          // 2.1 Primero, intentar cargar el archivo guardado real desde /api/proposals
+          // 3.1 Primero, intentar cargar el archivo guardado real desde /api/proposals
           try {
             const apiRes = await fetch(`/api/proposals?slug=${encodeURIComponent(dashed)}`);
             if (apiRes.ok) {
@@ -381,6 +449,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                   setCurrentSlug(dashed);
                   setProposal(apiData.data);
                   hydrateExtendedState(apiData.data, dashed);
+                  localStorage.setItem("current_proposal_slug", dashed);
                   toast.success(`Cargada propuesta guardada: ${apiData.data.client?.name || dashed}`);
                   setIsLoaded(true);
                   return;
@@ -391,7 +460,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             console.warn("[ProposalContext] Error consultando /api/proposals:", apiErr);
           }
 
-          // 2.2 Segundo, intentar cargar desde localStorage por slug
+          // 3.2 Segundo, intentar cargar desde localStorage por slug en este dispositivo
           const savedCustom =
             localStorage.getItem(`enfoco_proposal_${dashed}`) ||
             localStorage.getItem(`enfoco_proposal_${cleanParam}`);
@@ -403,6 +472,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                 setCurrentSlug(dashed);
                 setProposal(parsedCustom);
                 hydrateExtendedState(parsedCustom, dashed);
+                localStorage.setItem("current_proposal_slug", dashed);
                 toast.success(`Cargada propuesta de ${parsedCustom.client?.name || dashed}`);
                 setIsLoaded(true);
                 return;
@@ -412,7 +482,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             }
           }
 
-          // 2.3 Tercero, verificar rutas estáticas en /proposals/*.json
+          // 3.3 Tercero, verificar rutas estáticas en /proposals/*.json
           const underscored = cleanParam.replace(/[\s-]+/g, "_");
           const candidates = [
             `/proposals/${cleanParam}.json`,
@@ -430,6 +500,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
                   setCurrentSlug(dashed);
                   setProposal(remoteJson);
                   hydrateExtendedState(remoteJson, dashed);
+                  localStorage.setItem("current_proposal_slug", dashed);
                   toast.success(`Cargada propuesta de ${remoteJson.client.name || dashed}`);
                   setIsLoaded(true);
                   return;
@@ -440,30 +511,61 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             }
           }
 
-          // 2.4 Cuarto, coincidencia exacta con plantilla institucional
+          // 3.4 Cuarto, coincidencia exacta con plantilla institucional
           const presetExact = getPresetProposal(cleanParam, { allowFuzzy: false });
           if (presetExact) {
-            setCurrentSlug(cleanParam);
+            setCurrentSlug(dashed);
             setProposal(presetExact);
-            hydrateExtendedState(presetExact, cleanParam);
-            toast.success(`Cargada plantilla: ${presetExact.client.name}`);
+            hydrateExtendedState(presetExact, dashed);
+            localStorage.setItem("current_proposal_slug", dashed);
+            toast.success(`Cargada plantilla institucional: ${presetExact.client.name}`);
             setIsLoaded(true);
             return;
           }
 
-          // 2.5 Quinto, coincidencia aproximada de plantilla (solo si es alias simple como 'ramos' o 'claro')
+          // 3.5 Quinto, coincidencia aproximada de plantilla (por ejemplo 'ramos' o 'primera')
           const presetLoose = getPresetProposal(cleanParam, { allowFuzzy: true });
           if (presetLoose) {
-            setCurrentSlug(cleanParam);
+            setCurrentSlug(dashed);
             setProposal(presetLoose);
-            hydrateExtendedState(presetLoose, cleanParam);
+            hydrateExtendedState(presetLoose, dashed);
+            localStorage.setItem("current_proposal_slug", dashed);
             toast.success(`Cargada plantilla: ${presetLoose.client.name}`);
             setIsLoaded(true);
             return;
           }
+
+          // 3.6 Si no se encontró en el servidor ni plantillas, alertar y no cargar silenciosamente un cliente no deseado
+          console.warn(`[ProposalContext] No se encontró el archivo de propuesta para '${proposalParam}'`);
+          toast.error(`No se encontró la propuesta '${proposalParam}' en el servidor. Mostrando plantilla inicial.`);
+          setCurrentSlug(dashed);
+          setProposal(sampleProposal);
+          hydrateExtendedState(sampleProposal, dashed);
+          setIsLoaded(true);
+          return;
         }
 
-        // 3. Fallback to LocalStorage if no URL param was provided
+        // 4. THIRD PRIORITY: Fallback to LocalStorage if no URL param and no hash was provided
+        const lastActiveSlug = localStorage.getItem("current_proposal_slug");
+        if (lastActiveSlug) {
+          const savedForSlug = localStorage.getItem(`enfoco_proposal_${lastActiveSlug}`);
+          if (savedForSlug) {
+            try {
+              const parsed = JSON.parse(savedForSlug);
+              const validation = validateProposalData(parsed);
+              if (validation.success && validation.data) {
+                setCurrentSlug(lastActiveSlug);
+                setProposal(parsed);
+                hydrateExtendedState(parsed, lastActiveSlug);
+                setIsLoaded(true);
+                return;
+              }
+            } catch (e) {
+              console.warn("Error loading proposal for lastActiveSlug:", e);
+            }
+          }
+        }
+
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           try {
@@ -473,7 +575,6 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
               setProposal(parsed);
               hydrateExtendedState(parsed, currentSlug);
             } else {
-              console.warn("[ProposalContext] LocalStorage con esquema inválido, usando sampleProposal:", validation.error);
               setProposal(sampleProposal);
               hydrateExtendedState(sampleProposal, "excel-puesto-de-bolsa");
             }
@@ -925,7 +1026,142 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     }
   };
 
-  // Helper to hydrate Design Studio stores from imported JSON or preset
+  const collectAuxiliaryData = (slug: string) => {
+    let scopeEpicsData: any[] | undefined = undefined;
+    let scopeEpicsFilterButtons: any[] | undefined = undefined;
+    let scopeEpicsMetadata: any = undefined;
+    let companyConfig: any = undefined;
+    let responsibilitiesConfig: any = undefined;
+
+    if (typeof window !== "undefined") {
+      try {
+        const epicsStr =
+          localStorage.getItem(`scope_epics_data_${slug}`) ||
+          localStorage.getItem("scope_epics_data");
+        if (epicsStr) scopeEpicsData = JSON.parse(epicsStr);
+
+        const buttonsStr =
+          localStorage.getItem(`scope_epics_filter_buttons_${slug}`) ||
+          localStorage.getItem("scope_epics_filter_buttons");
+        if (buttonsStr) scopeEpicsFilterButtons = JSON.parse(buttonsStr);
+
+        const filterLabel = localStorage.getItem(`scope_epics_filter_label_${slug}`);
+        const filterSummary = localStorage.getItem(`scope_epics_summary_${slug}`);
+        const epicsColTitle = localStorage.getItem(`scope_epics_col_title_${slug}`);
+        const epicsCountBadge = localStorage.getItem(`scope_epics_count_badge_${slug}`);
+
+        if (filterLabel || filterSummary || epicsColTitle || epicsCountBadge) {
+          scopeEpicsMetadata = { filterLabel, filterSummary, epicsColTitle, epicsCountBadge };
+        }
+
+        const compOptions = localStorage.getItem("company_hidden_options");
+        const compBullets = localStorage.getItem("company_hidden_bullets");
+        if (compOptions || compBullets) {
+          companyConfig = {
+            hiddenOptions: compOptions ? JSON.parse(compOptions) : undefined,
+            hiddenBullets: compBullets ? JSON.parse(compBullets) : undefined,
+          };
+        }
+
+        const cotejoIcons = localStorage.getItem("enfoco_hidden_cotejo_icons");
+        const cotejoMap = localStorage.getItem("enfoco_responsibilities_cotejo");
+        const guarantee = localStorage.getItem("enfoco_show_guarantee_banner");
+        const stories = localStorage.getItem("enfoco_user_stories_v1");
+        if (cotejoIcons || cotejoMap || guarantee !== null || stories) {
+          responsibilitiesConfig = {
+            cotejoIcons: cotejoIcons ? JSON.parse(cotejoIcons) : undefined,
+            cotejoMap: cotejoMap ? JSON.parse(cotejoMap) : undefined,
+            showGuaranteeBanner: guarantee ? guarantee === "true" : undefined,
+            userStories: stories ? JSON.parse(stories) : undefined,
+          };
+        }
+      } catch (err) {
+        console.warn("Error gathering auxiliary proposal data:", err);
+      }
+    }
+
+    return {
+      scopeEpicsData,
+      scopeEpicsFilterButtons,
+      scopeEpicsMetadata,
+      companyConfig,
+      responsibilitiesConfig,
+    };
+  };
+
+  const getConsolidatedPayload = (targetSlug?: string): ExtendedProposalPayload => {
+    const studioState = useStudioStore.getState();
+    const themeState = useThemeStore.getState();
+    const currentTheme = themeState.theme;
+
+    const rawSlug =
+      targetSlug ||
+      currentSlug ||
+      proposal.client?.shortName ||
+      proposal.client?.name ||
+      proposal.project?.code ||
+      "propuesta";
+
+    const slugToUse = rawSlug
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    const editableFields: Record<string, string> = {};
+    const editableColors: Record<string, string> = {};
+    if (typeof window !== "undefined") {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k?.startsWith("editable_color_")) {
+          const fieldId = k.replace("editable_color_", "");
+          const val = localStorage.getItem(k);
+          if (val) editableColors[fieldId] = val;
+        } else if (k?.startsWith("editable_")) {
+          const fieldId = k.replace("editable_", "");
+          const val = localStorage.getItem(k);
+          if (val !== null) editableFields[fieldId] = val;
+        }
+      }
+    }
+
+    const scopePillsConfig = getScopePillsConfigForSlug(slugToUse);
+    const aux = collectAuxiliaryData(slugToUse);
+
+    return {
+      ...proposal,
+      sections: studioState.sections,
+      canvasElements: studioState.canvasElements,
+      buttonActionsMap: studioState.buttonActionsMap,
+      theme: currentTheme,
+      colors: {
+        primary: currentTheme.accentColor,
+        secondary: currentTheme.secondaryAccent,
+        background: currentTheme.bgMain,
+        card: currentTheme.cardBg,
+        border: currentTheme.cardBorder,
+        text: currentTheme.textPrimary,
+        textSecondary: currentTheme.textSecondary,
+        nav: currentTheme.navBg,
+        h1: currentTheme.h1Color || currentTheme.textPrimary,
+        h2: currentTheme.h2Color || currentTheme.secondaryAccent,
+      },
+      editableFields,
+      editableColors,
+      scopePillsConfig,
+      scopeEpicsData: aux.scopeEpicsData,
+      scopeEpicsFilterButtons: aux.scopeEpicsFilterButtons,
+      scopeEpicsMetadata: aux.scopeEpicsMetadata,
+      companyConfig: aux.companyConfig,
+      responsibilitiesConfig: aux.responsibilitiesConfig,
+      _slug: slugToUse,
+      _savedAt: new Date().toISOString(),
+    };
+  };
+
+  // Helper to hydrate Design Studio stores from imported JSON, hash, or preset
   const hydrateExtendedState = (data: ExtendedProposalPayload, slug?: string) => {
     if (!data || typeof data !== "object") return;
 
@@ -988,7 +1224,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       }
     }
 
-    // Sincronizar campos de texto y colores editables
+    // Sincronizar campos de texto, colores editables y datos de épicas
     if (typeof window !== "undefined") {
       // Clear previous proposal's cached editable texts and colors to prevent cross-proposal bleeding
       const keysToRemove: string[] = [];
@@ -1047,40 +1283,70 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         }
       }
 
+      // Hydrate scope epics data and filter buttons if present in loaded proposal
+      if (data.scopeEpicsData && Array.isArray(data.scopeEpicsData) && data.scopeEpicsData.length > 0) {
+        try {
+          localStorage.setItem(`scope_epics_data_${slugToUse}`, JSON.stringify(data.scopeEpicsData));
+          localStorage.setItem("scope_epics_data", JSON.stringify(data.scopeEpicsData));
+        } catch (e) {
+          console.warn("Error hydrating scope epics data:", e);
+        }
+      }
+      if (data.scopeEpicsFilterButtons && Array.isArray(data.scopeEpicsFilterButtons)) {
+        try {
+          localStorage.setItem(`scope_epics_filter_buttons_${slugToUse}`, JSON.stringify(data.scopeEpicsFilterButtons));
+          localStorage.setItem("scope_epics_filter_buttons", JSON.stringify(data.scopeEpicsFilterButtons));
+        } catch (e) {
+          console.warn("Error hydrating scope epics filter buttons:", e);
+        }
+      }
+      if (data.scopeEpicsMetadata && typeof data.scopeEpicsMetadata === "object") {
+        try {
+          const meta = data.scopeEpicsMetadata;
+          if (meta.filterLabel) localStorage.setItem(`scope_epics_filter_label_${slugToUse}`, meta.filterLabel);
+          if (meta.filterSummary) localStorage.setItem(`scope_epics_summary_${slugToUse}`, meta.filterSummary);
+          if (meta.epicsColTitle) localStorage.setItem(`scope_epics_col_title_${slugToUse}`, meta.epicsColTitle);
+          if (meta.epicsCountBadge) localStorage.setItem(`scope_epics_count_badge_${slugToUse}`, meta.epicsCountBadge);
+        } catch (e) {
+          console.warn("Error hydrating scope epics metadata:", e);
+        }
+      }
+      if (data.companyConfig && typeof data.companyConfig === "object") {
+        try {
+          if (data.companyConfig.hiddenOptions) {
+            localStorage.setItem("company_hidden_options", JSON.stringify(data.companyConfig.hiddenOptions));
+          }
+          if (data.companyConfig.hiddenBullets) {
+            localStorage.setItem("company_hidden_bullets", JSON.stringify(data.companyConfig.hiddenBullets));
+          }
+        } catch (e) {
+          console.warn("Error hydrating company config:", e);
+        }
+      }
+      if (data.responsibilitiesConfig && typeof data.responsibilitiesConfig === "object") {
+        try {
+          const rc = data.responsibilitiesConfig;
+          if (rc.cotejoIcons) localStorage.setItem("enfoco_hidden_cotejo_icons", JSON.stringify(rc.cotejoIcons));
+          if (rc.cotejoMap) localStorage.setItem("enfoco_responsibilities_cotejo", JSON.stringify(rc.cotejoMap));
+          if (rc.showGuaranteeBanner !== undefined) localStorage.setItem("enfoco_show_guarantee_banner", String(rc.showGuaranteeBanner));
+          if (rc.userStories) localStorage.setItem("enfoco_user_stories_v1", JSON.stringify(rc.userStories));
+        } catch (e) {
+          console.warn("Error hydrating responsibilities config:", e);
+        }
+      }
+
       window.dispatchEvent(new Event("enfoco-sync-editables"));
+      window.dispatchEvent(new Event("enfoco-epics-sync"));
       window.dispatchEvent(new CustomEvent("enfoco-proposal-switched", { detail: { slug: slugToUse } }));
     }
   };
 
   // Export JSON File
   const exportJson = () => {
-    const studioState = useStudioStore.getState();
-    const themeState = useThemeStore.getState();
-    const currentTheme = themeState.theme;
     const safeClient = (proposal.client?.shortName || "cliente").toLowerCase().replace(/[^a-z0-9]/gi, "_");
     const activeSlug = currentSlug || safeClient;
-    const scopePillsConfig = getScopePillsConfigForSlug(activeSlug);
+    const fullProposalData = getConsolidatedPayload(activeSlug);
 
-    const fullProposalData = {
-      ...proposal,
-      sections: studioState.sections,
-      canvasElements: studioState.canvasElements,
-      buttonActionsMap: studioState.buttonActionsMap,
-      theme: currentTheme,
-      colors: {
-        primary: currentTheme.accentColor,
-        secondary: currentTheme.secondaryAccent,
-        background: currentTheme.bgMain,
-        card: currentTheme.cardBg,
-        border: currentTheme.cardBorder,
-        text: currentTheme.textPrimary,
-        textSecondary: currentTheme.textSecondary,
-        nav: currentTheme.navBg,
-        h1: currentTheme.h1Color || currentTheme.textPrimary,
-        h2: currentTheme.h2Color || currentTheme.secondaryAccent,
-      },
-      scopePillsConfig,
-    };
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullProposalData, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
@@ -1088,7 +1354,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-    toast.success("Archivo JSON de la propuesta descargado con temas, colores y configuración de entregables.");
+    toast.success("Archivo JSON de la propuesta descargado con temas, colores y configuración completa.");
   };
 
   // Save Proposal Directly to Server / Vercel API without downloading
@@ -1097,10 +1363,6 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   ): Promise<{ success: boolean; message: string; filename?: string }> => {
     setIsSaving(true);
     try {
-      const studioState = useStudioStore.getState();
-      const themeState = useThemeStore.getState();
-      const currentTheme = themeState.theme;
-
       const rawSlug =
         targetSlug ||
         currentSlug ||
@@ -1117,74 +1379,39 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         .replace(/[^a-z0-9_-]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-      // Recolectar textos y colores editados en vivo
-      const editableFields: Record<string, string> = {};
-      const editableColors: Record<string, string> = {};
-      if (typeof window !== "undefined") {
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k?.startsWith("editable_color_")) {
-            const fieldId = k.replace("editable_color_", "");
-            const val = localStorage.getItem(k);
-            if (val) editableColors[fieldId] = val;
-          } else if (k?.startsWith("editable_")) {
-            const fieldId = k.replace("editable_", "");
-            const val = localStorage.getItem(k);
-            if (val !== null) editableFields[fieldId] = val;
-          }
-        }
-      }
+      const fullProposalData = getConsolidatedPayload(slugToUse);
 
-      const scopePillsConfig = getScopePillsConfigForSlug(slugToUse);
-
-      const fullProposalData = {
-        ...proposal,
-        sections: studioState.sections,
-        canvasElements: studioState.canvasElements,
-        buttonActionsMap: studioState.buttonActionsMap,
-        theme: currentTheme,
-        colors: {
-          primary: currentTheme.accentColor,
-          secondary: currentTheme.secondaryAccent,
-          background: currentTheme.bgMain,
-          card: currentTheme.cardBg,
-          border: currentTheme.cardBorder,
-          text: currentTheme.textPrimary,
-          textSecondary: currentTheme.textSecondary,
-          nav: currentTheme.navBg,
-          h1: currentTheme.h1Color || currentTheme.textPrimary,
-          h2: currentTheme.h2Color || currentTheme.secondaryAccent,
-        },
-        editableFields,
-        editableColors,
-        scopePillsConfig,
-      };
-
-      // 1. Guardar en localStorage inmediatamente para persistencia cliente
+      // 1. Guardar en localStorage inmediatamente para persistencia cliente en este dispositivo
       if (typeof window !== "undefined") {
         try {
           localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(fullProposalData));
           localStorage.setItem(`enfoco_proposal_${slugToUse}`, JSON.stringify(fullProposalData));
+          localStorage.setItem("current_proposal_slug", slugToUse);
         } catch (storageErr) {
           console.warn("[ProposalContext] Advertencia de localStorage:", storageErr);
         }
       }
 
-      // 2. Enviar a endpoint de servidor /api/proposals
+      // 2. Enviar a endpoint de servidor /api/proposals con payload consolidado
       const res = await fetch("/api/proposals", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           slug: slugToUse,
           proposal,
-          theme: currentTheme,
+          theme: fullProposalData.theme,
           colors: fullProposalData.colors,
-          sections: studioState.sections,
-          canvasElements: studioState.canvasElements,
-          buttonActionsMap: studioState.buttonActionsMap,
-          editableFields,
-          editableColors,
-          scopePillsConfig,
+          sections: fullProposalData.sections,
+          canvasElements: fullProposalData.canvasElements,
+          buttonActionsMap: fullProposalData.buttonActionsMap,
+          editableFields: fullProposalData.editableFields,
+          editableColors: fullProposalData.editableColors,
+          scopePillsConfig: fullProposalData.scopePillsConfig,
+          scopeEpicsData: fullProposalData.scopeEpicsData,
+          scopeEpicsFilterButtons: fullProposalData.scopeEpicsFilterButtons,
+          scopeEpicsMetadata: fullProposalData.scopeEpicsMetadata,
+          companyConfig: fullProposalData.companyConfig,
+          responsibilitiesConfig: fullProposalData.responsibilitiesConfig,
         }),
       });
 
@@ -1198,14 +1425,15 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       setLastSavedTime(timeStr);
       setCurrentSlug(slugToUse);
 
-      // Actualizar URL sin recargar la página
+      // Sincronizar URL del navegador a ?p=slug sin recargar la página
       if (typeof window !== "undefined") {
         const newUrl = new URL(window.location.href);
-        newUrl.searchParams.set("proposal", slugToUse);
+        newUrl.searchParams.set("p", slugToUse);
+        newUrl.searchParams.delete("proposal");
         window.history.replaceState({}, "", newUrl.toString());
       }
 
-      toast.success(`💾 Propuesta guardada con éxito en el servidor (${resData.filename || slugToUse + '.json'})`);
+      toast.success(`💾 Propuesta guardada con éxito (${resData.filename || slugToUse + '.json'})`);
       return { success: true, message: resData.message, filename: resData.filename };
     } catch (err: any) {
       console.error("Error guardando propuesta en servidor:", err);
@@ -1510,6 +1738,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
         currentSlug,
         setCurrentSlug,
         saveProposalToServer,
+        getConsolidatedPayload,
       }}
     >
       {children}

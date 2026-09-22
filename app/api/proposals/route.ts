@@ -94,7 +94,23 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { slug, proposal, theme, sections, canvasElements, buttonActionsMap, colors, editableFields, editableColors, scopePillsConfig } = body;
+    const {
+      slug,
+      proposal,
+      theme,
+      sections,
+      canvasElements,
+      buttonActionsMap,
+      colors,
+      editableFields,
+      editableColors,
+      scopePillsConfig,
+      scopeEpicsData,
+      scopeEpicsFilterButtons,
+      scopeEpicsMetadata,
+      companyConfig,
+      responsibilitiesConfig,
+    } = body;
 
     if (!proposal) {
       return NextResponse.json(
@@ -133,6 +149,12 @@ export async function POST(req: NextRequest) {
       ...(editableFields ? { editableFields } : {}),
       ...(editableColors ? { editableColors } : {}),
       ...(scopePillsConfig ? { scopePillsConfig } : {}),
+      ...(scopeEpicsData ? { scopeEpicsData } : {}),
+      ...(scopeEpicsFilterButtons ? { scopeEpicsFilterButtons } : {}),
+      ...(scopeEpicsMetadata ? { scopeEpicsMetadata } : {}),
+      ...(companyConfig ? { companyConfig } : {}),
+      ...(responsibilitiesConfig ? { responsibilitiesConfig } : {}),
+      _slug: cleanSlug,
       _savedAt: new Date().toISOString(),
     };
 

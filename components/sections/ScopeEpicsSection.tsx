@@ -583,10 +583,12 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
   const [epicsColTitle, setEpicsColTitle] = useState<string>("ÉPICAS DE LA SOLUCIÓN");
   const [epicsCountBadge, setEpicsCountBadge] = useState<string>("7 Épicas");
 
-  useEffect(() => {
+  const loadEpicsState = () => {
     if (typeof window === "undefined") return;
     const slug = currentSlug || "excel-puesto-de-bolsa";
-    const saved = localStorage.getItem(`scope_epics_data_${slug}`);
+    const saved =
+      localStorage.getItem(`scope_epics_data_${slug}`) ||
+      localStorage.getItem("scope_epics_data");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -611,9 +613,13 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
       } catch (err) {
         console.warn("Error parsing saved epics:", err);
       }
+    } else {
+      setEpics(epicsData);
     }
 
-    const savedButtons = localStorage.getItem(`scope_epics_filter_buttons_${slug}`);
+    const savedButtons =
+      localStorage.getItem(`scope_epics_filter_buttons_${slug}`) ||
+      localStorage.getItem("scope_epics_filter_buttons");
     if (savedButtons) {
       try {
         const parsed = JSON.parse(savedButtons);
@@ -633,6 +639,8 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
           { id: "fase1", label: sF1 || "Fase 1: App Inversionista" },
           { id: "fase2", label: sF2 || "Fase 2: CRM Dynamics & Core" },
         ]);
+      } else {
+        setFilterButtons(defaultFilterButtons);
       }
     }
 
@@ -647,6 +655,22 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
     const savedCountBadge = localStorage.getItem(`scope_epics_count_badge_${slug}`);
     if (savedCountBadge) setEpicsCountBadge(savedCountBadge);
+  };
+
+  useEffect(() => {
+    loadEpicsState();
+
+    const handleSync = () => {
+      loadEpicsState();
+    };
+
+    window.addEventListener("enfoco-epics-sync", handleSync);
+    window.addEventListener("enfoco-proposal-switched", handleSync);
+
+    return () => {
+      window.removeEventListener("enfoco-epics-sync", handleSync);
+      window.removeEventListener("enfoco-proposal-switched", handleSync);
+    };
   }, [currentSlug]);
 
   const saveEpics = (newEpics: EpicItem[]) => {

@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { useThemeStore } from "@/store/useThemeStore";
+import { ShareProposalModal } from "../ShareProposalModal";
 import {
   Download,
   Upload,
@@ -19,6 +20,9 @@ import {
   Copy,
   ChevronDown,
   ChevronUp,
+  Share2,
+  Smartphone,
+  Globe,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -41,6 +45,7 @@ export const SidebarJsonTab: React.FC = () => {
   const [showJsonEditor, setShowJsonEditor] = useState(false);
   const [editableJson, setEditableJson] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
     if (currentSlug) {
@@ -219,6 +224,31 @@ export const SidebarJsonTab: React.FC = () => {
             <span>Última versión guardada en servidor a las {lastSavedTime}</span>
           </div>
         )}
+      </div>
+
+      {/* Share Proposal Card */}
+      <div className="p-3.5 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-2xl space-y-2.5 shadow-xs">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-indigo-950 font-extrabold text-xs">
+            <Share2 className="w-4 h-4 text-indigo-600 shrink-0" />
+            <span>Compartir Propuesta</span>
+          </div>
+          <span className="text-[9px] bg-indigo-200/70 text-indigo-900 font-bold px-2 py-0.5 rounded-full font-mono">
+            Incógnito & Móvil
+          </span>
+        </div>
+
+        <p className="text-[11px] text-indigo-950/80 leading-relaxed font-normal">
+          Genera un enlace universal para enviar por WhatsApp o correo. Carga al 100% tus textos, colores e historias en cualquier dispositivo.
+        </p>
+
+        <button
+          onClick={() => setIsShareModalOpen(true)}
+          className="w-full p-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-bold flex items-center justify-center space-x-2 cursor-pointer shadow-sm transition-all"
+        >
+          <Share2 className="w-4 h-4" />
+          <span>Obtener Enlace para Compartir</span>
+        </button>
       </div>
 
       {/* Interactive JSON Editor */}
@@ -410,6 +440,9 @@ export const SidebarJsonTab: React.FC = () => {
           <span>Restablecer Todo a Valores Iniciales</span>
         </button>
       </div>
+
+      {/* Share Proposal Modal */}
+      <ShareProposalModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} />
     </div>
   );
 };

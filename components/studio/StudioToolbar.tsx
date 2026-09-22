@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useStudioStore } from "@/store/useStudioStore";
 import { useProposal } from "@/context/ProposalContext";
+import { ShareProposalModal } from "./ShareProposalModal";
 import {
   Eye,
   PanelLeftClose,
@@ -15,11 +16,13 @@ import {
   Save,
   Loader2,
   Check,
+  Share2,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export const StudioToolbar: React.FC = () => {
   const { undo, redo, canUndo, canRedo, saveProposalToServer, isSaving, lastSavedTime } = useProposal();
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const {
     toggleDesignMode,
     isPanelOpen,
@@ -152,6 +155,16 @@ export const StudioToolbar: React.FC = () => {
           </span>
         </button>
 
+        {/* Share Proposal Button */}
+        <button
+          onClick={() => setIsShareOpen(true)}
+          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-blue-600/90 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md shadow-blue-900/30 transition-all cursor-pointer transform hover:scale-105 active:scale-95"
+          title="Compartir propuesta con enlace universal para cualquier dispositivo o incógnito"
+        >
+          <Share2 className="w-3.5 h-3.5 text-white" />
+          <span>Compartir</span>
+        </button>
+
         {/* Executive View Switch / Exit Studio */}
         <button
           onClick={toggleDesignMode}
@@ -164,6 +177,9 @@ export const StudioToolbar: React.FC = () => {
           </span>
         </button>
       </div>
+
+      {/* Share Proposal Modal */}
+      <ShareProposalModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
     </header>
   );
 };

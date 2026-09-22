@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { ProposalData } from "@/types/proposal";
 import { useProposal } from "@/context/ProposalContext";
 import { useStudioStore } from "@/store/useStudioStore";
 import { useThemeStore } from "@/store/useThemeStore";
 import { EditableText } from "@/components/studio/EditableText";
 import { EditableField } from "@/components/ui/EditableField";
-import { CheckCircle2, Palette } from "lucide-react";
+import { CheckCircle2, Palette, Share2 } from "lucide-react";
+import { ShareProposalModal } from "@/components/studio/ShareProposalModal";
 
 interface NavBrandHeaderProps {
   proposal: ProposalData;
@@ -21,6 +22,7 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
   const { currentSlug, updateCompany, updateClient } = useProposal();
   const { isDesignMode, isPanelOpen } = useStudioStore();
   const { theme, setTheme } = useThemeStore();
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const companyName = proposal?.company?.name || "Enfoco";
   const clientName = proposal?.client?.name || "Cliente Institucional";
@@ -103,6 +105,22 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
 
       {/* Action Buttons Right (Reacts dynamically to theme palette) */}
       <div className="pointer-events-auto flex items-center gap-2">
+        {/* Share Proposal Button */}
+        <button
+          type="button"
+          onClick={() => setIsShareModalOpen(true)}
+          style={{
+            backgroundColor: "var(--card-bg, #002224)",
+            borderColor: "var(--card-border, var(--border-color, rgba(255,255,255,0.25)))",
+            color: "var(--theme-h1, #FFFFFF)",
+          }}
+          className="px-3 py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs shadow-lg border transition-all hover:scale-105 cursor-pointer flex items-center gap-1.5 hover:brightness-110 drop-shadow-sm backdrop-blur-md"
+          title="Compartir propuesta con enlace directo o universal"
+        >
+          <Share2 className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)] shrink-0" />
+          <span className="hidden sm:inline">Compartir</span>
+        </button>
+
         <div className="relative flex items-center gap-1.5">
           {/* Accept Proposal Modal Button */}
           <button
@@ -136,6 +154,9 @@ export const NavBrandHeader: React.FC<NavBrandHeaderProps> = ({
           )}
         </div>
       </div>
+
+      {/* Share Proposal Modal */}
+      <ShareProposalModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} />
     </div>
   );
 };
