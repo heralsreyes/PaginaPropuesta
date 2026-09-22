@@ -55,7 +55,30 @@ const sectionItemVariants = {
   },
 };
 
-const epicsData = [
+export interface RichStory {
+  id: string;
+  title: string;
+  asA: string;
+  iWant: string;
+  soThat: string;
+  status: string;
+  phase: string;
+  demoTab?: "portafolio" | "ticket" | "estados" | "asesor";
+  dod: string[];
+}
+
+export interface EpicItem {
+  id: number;
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge: string;
+  coverage: string;
+  subtitle?: string;
+  deliverables: string[];
+  richStories: RichStory[];
+}
+
+const epicsData: EpicItem[] = [
   {
     id: 1,
     title: "Épica 1: Registro, Autenticación Segura & Perfil KYC",
@@ -553,7 +576,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
   const [activeStoryId, setActiveStoryId] = useState<string | null>("e1_s1");
   const [storyPhaseFilter, setStoryPhaseFilter] = useState<string>("todos");
 
-  const [epics, setEpics] = useState(epicsData);
+  const [epics, setEpics] = useState<EpicItem[]>(epicsData);
   const [filterButtons, setFilterButtons] = useState<FilterButton[]>(defaultFilterButtons);
   const [filterLabel, setFilterLabel] = useState<string>("Fase de Implementación:");
   const [filterSummary, setFilterSummary] = useState<string>("7 Épicas SIMV • 28 Historias Oficiales Excel");
@@ -626,7 +649,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
     if (savedCountBadge) setEpicsCountBadge(savedCountBadge);
   }, [currentSlug]);
 
-  const saveEpics = (newEpics: typeof epicsData) => {
+  const saveEpics = (newEpics: EpicItem[]) => {
     setEpics(newEpics);
     if (typeof window !== "undefined") {
       const slug = currentSlug || "excel-puesto-de-bolsa";
@@ -918,7 +941,7 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
   const addEpic = () => {
     const nextId = epics.length + 1;
-    const newEpic = {
+    const newEpic: EpicItem = {
       id: nextId,
       title: `Épica ${nextId}: Nuevo Módulo Funcional`,
       icon: Sparkles,
