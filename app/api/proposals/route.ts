@@ -24,12 +24,30 @@ function sanitizeSlug(rawSlug: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// GET: Lista todas las propuestas disponibles o retorna una específica si se envía ?slug=...
+// GET: Lista todas las propuestas disponibles o retorna una específica si se envía ?slug=... o ?id=...
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id") || searchParams.get("cloudId");
     const slug = searchParams.get("slug");
     const proposalsDir = path.join(process.cwd(), "public", "proposals");
+
+    // 1. Si se envía id de almacenamiento en la nube, resolver de inmediato
+    if (id) {
+      const cleanId = id.trim().replace(/[^a-zA-Z0-9_-]/g, "");
+      try {
+        const cloudRes = await fetch(`https://dpaste.com/${cleanId}.txt`);
+        if (cloudRes.ok) {
+          const cloudData = await cloudRes.json();
+          return NextResponse.json(
+            { success: true, data: cloudData, id: cleanId, source: "cloud" },
+            { headers: corsHeaders }
+          );
+        }
+      } catch (err: any) {
+        console.warn("[API /api/proposals GET id Error]:", err.message);
+      }
+    }
 
     if (slug) {
       const cleanSlug = sanitizeSlug(slug);
@@ -195,7 +213,32 @@ export async function POST(req: NextRequest) {
       savedMode = "readonly-fallback";
     }
 
-    // Si se tiene configurado un token de GitHub para Vercel, se puede hacer commit directo al repo
+    // 2. Persistir automáticamente en Cloud Storage para disponibilidad instantánea en cualquier dispositivo
+    let cloudId: string | null = null;
+    try {
+      const cloudRes = await fetch("https://dpaste.com/api/v2/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          content: JSON.stringify(fullPayload),
+          syntax: "json",
+          title: cleanSlug,
+          expiry_days: "365",
+        }),
+      });
+      if (cloudRes.ok) {
+        const urlText = (await cloudRes.text()).trim();
+        const extractedId = urlText.split("/").filter(Boolean).pop();
+        if (extractedId) {
+          cloudId = extractedId;
+          savedMode = savedMode === "filesystem" ? "filesystem+cloud" : "cloud";
+        }
+      }
+    } catch (cloudErr: any) {
+      console.warn("[API /api/proposals POST Cloud Error]:", cloudErr.message);
+    }
+
+    // 3. Si se tiene configurado un token de GitHub para Vercel, se puede hacer commit directo al repo
     if (process.env.GITHUB_TOKEN && process.env.GITHUB_REPO) {
       try {
         const repo = process.env.GITHUB_REPO;
@@ -231,7 +274,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (commitRes.ok) {
-          savedMode = "github-commit";
+          savedMode = savedMode.includes("cloud") ? "github+cloud" : "github-commit";
         }
       } catch (ghErr: any) {
         console.warn("[API /api/proposals] Error al sincronizar con GitHub:", ghErr.message);
@@ -244,6 +287,7 @@ export async function POST(req: NextRequest) {
         message: `Propuesta guardada correctamente en ${targetFile}`,
         slug: cleanSlug,
         filename: targetFile,
+        cloudId,
         mode: savedMode,
         timestamp: fullPayload._savedAt,
       },

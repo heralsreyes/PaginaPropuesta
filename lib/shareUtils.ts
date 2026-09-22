@@ -69,6 +69,7 @@ export async function decompressProposalFromHash(hashString: string): Promise<Ex
 export interface ShareUrlOptions {
   slug: string;
   payload?: ExtendedProposalPayload;
+  cloudId?: string;
   mode?: "portable" | "short";
   includeAdmin?: boolean;
 }
@@ -76,10 +77,10 @@ export interface ShareUrlOptions {
 /**
  * Generates an absolute shareable URL based on the specified mode.
  * - 'portable': Includes compressed data in the hash fragment (#d=...), works on any device immediately.
- * - 'short': Uses clean query parameter (?p=slug), requires proposal file on server.
+ * - 'short': Uses clean query parameter (?p=slug&id=cloudId), fast and universally reachable from any device.
  */
 export async function generateShareUrl(options: ShareUrlOptions): Promise<string> {
-  const { slug, payload, mode = "portable", includeAdmin = false } = options;
+  const { slug, payload, cloudId, mode = "portable", includeAdmin = false } = options;
 
   const defaultOrigin = "https://pagina-propuesta-beta.vercel.app";
   let origin = defaultOrigin;
@@ -101,6 +102,10 @@ export async function generateShareUrl(options: ShareUrlOptions): Promise<string
   const url = new URL(origin);
   url.pathname = "/";
   url.searchParams.set("p", cleanSlug);
+
+  if (cloudId) {
+    url.searchParams.set("id", cloudId);
+  }
 
   if (includeAdmin) {
     url.searchParams.set("admin", "true");

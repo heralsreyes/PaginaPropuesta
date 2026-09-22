@@ -108,8 +108,20 @@ function HomeContent({
       ? searchParams.proposal
       : undefined);
 
+  const cloudIdParam =
+    nextSearchParams.get("id") ||
+    nextSearchParams.get("cloudId") ||
+    (typeof searchParams?.id === "string"
+      ? searchParams.id
+      : typeof searchParams?.cloudId === "string"
+      ? searchParams.cloudId
+      : undefined);
+
   return (
-    <ProposalProvider initialProposalSlug={proposalParam}>
+    <ProposalProvider
+      initialProposalSlug={proposalParam}
+      initialCloudId={cloudIdParam}
+    >
       <StudioLayout>
         <ProposalContent />
       </StudioLayout>

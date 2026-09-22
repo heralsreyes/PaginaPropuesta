@@ -77,9 +77,16 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
       try {
         const payload = getConsolidatedPayload(currentSlug);
 
+        // Check if we have a cloudId for this slug
+        let cloudId: string | null = null;
+        if (typeof window !== "undefined") {
+          cloudId = localStorage.getItem(`cloud_id_${currentSlug}`);
+        }
+
         // 1. Generate Clean Short URL (Default for clients & WhatsApp)
         const short = await generateShareUrl({
           slug: currentSlug,
+          cloudId: cloudId || undefined,
           mode: "short",
         });
 
@@ -106,7 +113,7 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
     return () => {
       isMounted = false;
     };
-  }, [isOpen, currentSlug, getConsolidatedPayload]);
+  }, [isOpen, currentSlug, getConsolidatedPayload, saveProposalToServer]);
 
   const handleManualSave = async () => {
     setIsSavingServer(true);
@@ -114,6 +121,15 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
       const res = await saveProposalToServer(currentSlug);
       if (res && res.success) {
         setIsServerVerified(true);
+        if (res.cloudId) {
+          const updatedShort = await generateShareUrl({
+            slug: currentSlug,
+            cloudId: res.cloudId,
+            mode: "short",
+          });
+          setShortUrl(updatedShort);
+        }
+        toast.success("✅ Guardada y verificada en el servidor");
       } else {
         await checkServerStatus(currentSlug);
       }

@@ -92,7 +92,7 @@ interface ProposalContextType {
   lastSavedTime: string | null;
   currentSlug: string;
   setCurrentSlug: (slug: string) => void;
-  saveProposalToServer: (targetSlug?: string) => Promise<{ success: boolean; message: string; filename?: string }>;
+  saveProposalToServer: (targetSlug?: string) => Promise<{ success: boolean; message: string; filename?: string; cloudId?: string }>;
   getConsolidatedPayload: (targetSlug?: string) => ExtendedProposalPayload;
 }
 
@@ -296,9 +296,14 @@ export function extractThemeFromPayload(data: ExtendedProposalPayload | any): Th
 
 const ProposalContext = createContext<ProposalContextType | undefined>(undefined);
 
-export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProposalSlug?: string }> = ({
+export const ProposalProvider: React.FC<{
+  children: React.ReactNode;
+  initialProposalSlug?: string;
+  initialCloudId?: string;
+}> = ({
   children,
   initialProposalSlug,
+  initialCloudId,
 }) => {
   const initialPreset = getPresetProposal(initialProposalSlug);
   const [proposal, setProposal] = useState<ProposalData>(initialPreset || sampleProposal);
@@ -430,6 +435,80 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
             } catch (hashErr) {
               console.warn("[ProposalContext] Error decodificando enlace portátil en hash:", hashErr);
             }
+          }
+        }
+
+        // 2.5 CLOUD PRIORITY: Load proposal from Cloud Store if ?id=code or ?cloudId=code exists
+        const cloudIdToUse =
+          initialCloudId ||
+          (typeof window !== "undefined"
+            ? new URLSearchParams(window.location.search).get("id") ||
+              new URLSearchParams(window.location.search).get("cloudId")
+            : null);
+
+        if (cloudIdToUse) {
+          try {
+            let cloudData = null;
+            // Intentar vía endpoint interno /api/proposals?id=...
+            try {
+              const cloudRes = await fetch(`/api/proposals?id=${encodeURIComponent(cloudIdToUse)}`);
+              if (cloudRes.ok) {
+                const cloudJson = await cloudRes.json();
+                if (cloudJson.success && cloudJson.data) {
+                  cloudData = cloudJson.data;
+                }
+              }
+            } catch (e) {
+              console.warn("[ProposalContext] Error consultando /api/proposals?id=:", e);
+            }
+
+            // Fallback directo al endpoint público de la nube
+            if (!cloudData) {
+              try {
+                const directRes = await fetch(`https://dpaste.com/${cloudIdToUse}.txt`);
+                if (directRes.ok) {
+                  cloudData = await directRes.json();
+                }
+              } catch (e) {
+                console.warn("[ProposalContext] Error en fallback directo de dpaste:", e);
+              }
+            }
+
+            if (cloudData) {
+              const validation = validateProposalData(cloudData);
+              if (validation.success && validation.data) {
+                const targetSlug =
+                  proposalParam?.trim() ||
+                  cloudData._slug ||
+                  cloudData.client?.shortName ||
+                  cloudData.client?.name ||
+                  "propuesta-compartida";
+                const cleanSlug = targetSlug
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/[^a-z0-9_-]+/g, "-");
+
+                setCurrentSlug(cleanSlug);
+                setProposal(cloudData);
+                hydrateExtendedState(cloudData, cleanSlug);
+
+                try {
+                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cloudData));
+                  localStorage.setItem(`enfoco_proposal_${cleanSlug}`, JSON.stringify(cloudData));
+                  localStorage.setItem(`cloud_id_${cleanSlug}`, cloudIdToUse);
+                  localStorage.setItem("current_proposal_slug", cleanSlug);
+                } catch (e) {
+                  console.warn("Error caching cloud proposal in localStorage:", e);
+                }
+
+                toast.success(`Cargada propuesta de ${cloudData.client?.name || cleanSlug}`);
+                setIsLoaded(true);
+                return;
+              }
+            }
+          } catch (cloudErr) {
+            console.warn("[ProposalContext] Error cargando desde la nube por ID:", cloudErr);
           }
         }
 
@@ -1360,7 +1439,7 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
   // Save Proposal Directly to Server / Vercel API without downloading
   const saveProposalToServer = async (
     targetSlug?: string
-  ): Promise<{ success: boolean; message: string; filename?: string }> => {
+  ): Promise<{ success: boolean; message: string; filename?: string; cloudId?: string }> => {
     setIsSaving(true);
     try {
       const rawSlug =
@@ -1425,16 +1504,32 @@ export const ProposalProvider: React.FC<{ children: React.ReactNode; initialProp
       setLastSavedTime(timeStr);
       setCurrentSlug(slugToUse);
 
-      // Sincronizar URL del navegador a ?p=slug sin recargar la página
+      if (resData.cloudId) {
+        try {
+          localStorage.setItem(`cloud_id_${slugToUse}`, resData.cloudId);
+        } catch (e) {
+          console.warn("Storage warning:", e);
+        }
+      }
+
+      // Sincronizar URL del navegador a ?p=slug&id=cloudId sin recargar la página
       if (typeof window !== "undefined") {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set("p", slugToUse);
         newUrl.searchParams.delete("proposal");
+        if (resData.cloudId) {
+          newUrl.searchParams.set("id", resData.cloudId);
+        }
         window.history.replaceState({}, "", newUrl.toString());
       }
 
       toast.success(`💾 Propuesta guardada con éxito (${resData.filename || slugToUse + '.json'})`);
-      return { success: true, message: resData.message, filename: resData.filename };
+      return {
+        success: true,
+        message: resData.message,
+        filename: resData.filename,
+        cloudId: resData.cloudId,
+      };
     } catch (err: any) {
       console.error("Error guardando propuesta en servidor:", err);
       toast.error(`Error al guardar en el servidor: ${err.message}`);
