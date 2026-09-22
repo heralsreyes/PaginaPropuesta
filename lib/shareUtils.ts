@@ -81,9 +81,13 @@ export interface ShareUrlOptions {
 export async function generateShareUrl(options: ShareUrlOptions): Promise<string> {
   const { slug, payload, mode = "portable", includeAdmin = false } = options;
 
-  let origin = "";
+  const defaultOrigin = "https://pagina-propuesta-beta.vercel.app";
+  let origin = defaultOrigin;
   if (typeof window !== "undefined") {
-    origin = window.location.origin;
+    // If not running on local development host, use current window origin
+    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+      origin = window.location.origin;
+    }
   }
 
   const cleanSlug = (slug || "propuesta")
@@ -94,7 +98,7 @@ export async function generateShareUrl(options: ShareUrlOptions): Promise<string
     .replace(/[^a-z0-9_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-  const url = new URL(origin || "https://paginapropuesta.vercel.app");
+  const url = new URL(origin);
   url.pathname = "/";
   url.searchParams.set("p", cleanSlug);
 

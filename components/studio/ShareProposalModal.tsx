@@ -25,42 +25,63 @@ interface ShareProposalModalProps {
 }
 
 export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, onClose }) => {
-  const { proposal, currentSlug, getConsolidatedPayload } = useProposal();
-  const [activeTab, setActiveTab] = useState<"portable" | "short">("portable");
+  const { proposal, currentSlug, getConsolidatedPayload, saveProposalToServer } = useProposal();
+  const [activeTab, setActiveTab] = useState<"short" | "portable">("short");
   const [portableUrl, setPortableUrl] = useState<string>("");
   const [shortUrl, setShortUrl] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [copiedMode, setCopiedMode] = useState<"portable" | "short" | null>(null);
+  const [isServerVerified, setIsServerVerified] = useState<boolean | null>(null);
+  const [isCheckingServer, setIsCheckingServer] = useState<boolean>(false);
+  const [isSavingServer, setIsSavingServer] = useState<boolean>(false);
 
   const clientName = proposal.client?.name || proposal.client?.shortName || "Cliente";
   const projectTitle = proposal.project?.title || "Propuesta Técnica & Económica";
+
+  const checkServerStatus = async (slugToCheck: string) => {
+    setIsCheckingServer(true);
+    try {
+      const res = await fetch(`/api/proposals?slug=${encodeURIComponent(slugToCheck)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setIsServerVerified(Boolean(data?.success && data?.data));
+      } else {
+        setIsServerVerified(false);
+      }
+    } catch {
+      setIsServerVerified(false);
+    } finally {
+      setIsCheckingServer(false);
+    }
+  };
 
   useEffect(() => {
     if (!isOpen) return;
 
     let isMounted = true;
     setIsGenerating(true);
+    checkServerStatus(currentSlug);
 
     async function buildUrls() {
       try {
         const payload = getConsolidatedPayload(currentSlug);
 
-        // 1. Generate Portable Universal URL with compressed hash payload
+        // 1. Generate Clean Short URL (Default for clients & WhatsApp)
+        const short = await generateShareUrl({
+          slug: currentSlug,
+          mode: "short",
+        });
+
+        // 2. Generate Portable Universal URL with compressed hash payload (Fallback)
         const portable = await generateShareUrl({
           slug: currentSlug,
           payload,
           mode: "portable",
         });
 
-        // 2. Generate Clean Short URL
-        const short = await generateShareUrl({
-          slug: currentSlug,
-          mode: "short",
-        });
-
         if (isMounted) {
-          setPortableUrl(portable);
           setShortUrl(short);
+          setPortableUrl(portable);
         }
       } catch (err) {
         console.error("Error generating share URLs:", err);
@@ -76,20 +97,32 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
     };
   }, [isOpen, currentSlug, getConsolidatedPayload]);
 
+  const handleManualSave = async () => {
+    setIsSavingServer(true);
+    try {
+      await saveProposalToServer(currentSlug);
+      await checkServerStatus(currentSlug);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSavingServer(false);
+    }
+  };
+
   if (!isOpen) return null;
 
-  const currentUrl = activeTab === "portable" ? portableUrl : shortUrl;
+  const currentUrl = activeTab === "short" ? shortUrl : portableUrl;
 
   const handleCopy = (mode: "portable" | "short") => {
-    const textToCopy = mode === "portable" ? portableUrl : shortUrl;
+    const textToCopy = mode === "short" ? shortUrl : portableUrl;
     if (!textToCopy) return;
 
     navigator.clipboard.writeText(textToCopy);
     setCopiedMode(mode);
     toast.success(
-      mode === "portable"
-        ? "✅ Enlace Universal copiado. ¡Listo para enviar a cualquier dispositivo o incógnito!"
-        : "✅ Enlace corto copiado al portapapeles."
+      mode === "short"
+        ? "✅ Enlace corto oficial copiado. ¡Listo para enviar a tu cliente!"
+        : "✅ Enlace universal de respaldo copiado."
     );
 
     setTimeout(() => {
@@ -147,21 +180,6 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
         {/* Tab Switcher */}
         <div className="p-4 bg-zinc-900/30 border-b border-zinc-800 flex gap-2">
           <button
-            onClick={() => setActiveTab("portable")}
-            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
-              activeTab === "portable"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-900/30"
-                : "bg-zinc-800/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            <Smartphone className="w-3.5 h-3.5" />
-            <span>Enlace Universal</span>
-            <span className="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.5 rounded">
-              Recomendado
-            </span>
-          </button>
-
-          <button
             onClick={() => setActiveTab("short")}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
               activeTab === "short"
@@ -170,34 +188,80 @@ export const ShareProposalModal: React.FC<ShareProposalModalProps> = ({ isOpen, 
             }`}
           >
             <Globe className="w-3.5 h-3.5" />
-            <span>Enlace Corto (?p=...)</span>
+            <span>Enlace Corto Oficial</span>
+            <span className="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.5 rounded">
+              Recomendado Clientes
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("portable")}
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              activeTab === "portable"
+                ? "bg-blue-600 text-white shadow-md shadow-blue-900/30"
+                : "bg-zinc-800/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200"
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>Enlace Portátil</span>
+            <span className="text-[9px] bg-zinc-700 text-zinc-300 font-mono px-1 py-0.5 rounded">
+              Sin Servidor
+            </span>
           </button>
         </div>
 
         {/* Content Body */}
         <div className="p-5 space-y-4 text-xs">
-          {activeTab === "portable" ? (
+          {activeTab === "short" ? (
             <div className="space-y-3">
-              <div className="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-2xl flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <div className="text-[11px] text-emerald-200 leading-relaxed">
-                  <strong>¡Garantizado para incógnito y cualquier dispositivo!</strong>
-                  <p className="text-emerald-300/80 mt-0.5">
-                    Este enlace lleva empaquetadas todas tus ediciones en vivo (textos, colores, historias y temas).
-                    Cualquier persona que lo abra lo verá al instante sin importar si aún no has desplegado a Vercel.
-                  </p>
+              {isCheckingServer ? (
+                <div className="p-3 bg-zinc-900/60 border border-zinc-800 rounded-2xl flex items-center gap-2 text-zinc-400 text-[11px]">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />
+                  <span>Verificando disponibilidad en el servidor...</span>
                 </div>
-              </div>
+              ) : isServerVerified ? (
+                <div className="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-2xl flex items-start gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div className="text-[11px] text-emerald-200 leading-relaxed">
+                    <strong>✅ Verificado y activo en el servidor:</strong>
+                    <p className="text-emerald-300/80 mt-0.5">
+                      Este enlace corto es limpio, profesional e ideal para WhatsApp o correos. Abrirá directamente la propuesta de <strong>{clientName}</strong> en cualquier dispositivo sin necesidad de abrir enlaces largos previamente.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3 bg-amber-950/40 border border-amber-800/50 rounded-2xl flex items-start justify-between gap-3">
+                  <div className="text-[11px] text-amber-200 leading-relaxed">
+                    <strong>⚠️ No sincronizado aún en el servidor:</strong>
+                    <p className="text-amber-300/80 mt-0.5">
+                      Guarda la propuesta en el servidor para que el enlace corto esté disponible públicamente.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleManualSave}
+                    disabled={isSavingServer}
+                    className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs shrink-0 cursor-pointer flex items-center gap-1.5 transition-all"
+                  >
+                    {isSavingServer ? (
+                      <>
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                        <span>Guardando...</span>
+                      </>
+                    ) : (
+                      <span>Guardar Ahora</span>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="p-3 bg-blue-950/40 border border-blue-800/50 rounded-2xl flex items-start gap-2.5">
-                <Globe className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                <div className="text-[11px] text-blue-200 leading-relaxed">
-                  <strong>Enlace limpio oficial para propuestas en servidor:</strong>
-                  <p className="text-blue-300/80 mt-0.5">
-                    Carga el archivo <code>public/proposals/{currentSlug}.json</code> desde el servidor. Si guardaste
-                    localmente, sube a GitHub para que Vercel lo sincronice.
+              <div className="p-3 bg-zinc-900/60 border border-zinc-800 rounded-2xl flex items-start gap-2.5">
+                <Smartphone className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                <div className="text-[11px] text-zinc-300 leading-relaxed">
+                  <strong>Enlace autónomo de respaldo (Sin Servidor):</strong>
+                  <p className="text-zinc-400 mt-0.5">
+                    Lleva todos los datos comprimidos dentro de la URL. Al ser extenso (varios KB), se recomienda principalmente para pruebas internas o cuando no se dispone de conexión con el servidor.
                   </p>
                 </div>
               </div>
