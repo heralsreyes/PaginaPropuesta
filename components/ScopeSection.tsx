@@ -29,9 +29,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface ScopeSectionProps {
   requirements: Requirement[];
+  secId?: string;
 }
 
-export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
+export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements, secId = "alcance" }) => {
   const {
     currentSlug,
     proposal,
@@ -43,9 +44,14 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
   } = useProposal();
   const { isDesignMode } = useStudioStore();
 
+  const activeRequirements =
+    proposal?.requirements && Array.isArray(proposal.requirements) && proposal.requirements.length > 0
+      ? proposal.requirements
+      : requirements || [];
+
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [todosLabel, setTodosLabel] = useState<string>("Todos");
-  const [selectedRequirementId, setSelectedRequirementId] = useState<string>(requirements[0]?.id || "REQ-01");
+  const [selectedRequirementId, setSelectedRequirementId] = useState<string>(activeRequirements[0]?.id || "REQ-01");
   const [isCardStretched, setIsCardStretched] = useState<boolean>(false);
   const [hiddenDeliverablesMap, setHiddenDeliverablesMap] = useState<Record<string, boolean>>({});
   const [stretchedDeliverables, setStretchedDeliverables] = useState<Record<string, boolean>>({});
@@ -206,25 +212,25 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
     return () => window.removeEventListener("enfoco-proposal-switched", handleProposalSwitched);
   }, [currentSlug, loadScopedConfig]);
 
-  // Sync selectedRequirementId when requirements change
+  // Sync selectedRequirementId when activeRequirements change
   useEffect(() => {
-    if (requirements && requirements.length > 0) {
-      const exists = requirements.some((r) => r.id === selectedRequirementId);
+    if (activeRequirements && activeRequirements.length > 0) {
+      const exists = activeRequirements.some((r) => r.id === selectedRequirementId);
       if (!exists) {
-        setSelectedRequirementId(requirements[0].id);
+        setSelectedRequirementId(activeRequirements[0].id);
       }
     }
-  }, [requirements, selectedRequirementId]);
+  }, [activeRequirements, selectedRequirementId]);
 
   // Sync selectedCategory if it doesn't exist in the current proposal's categories
   useEffect(() => {
-    if (selectedCategory !== "Todos" && requirements && requirements.length > 0) {
-      const catExists = requirements.some((r) => r.category === selectedCategory);
+    if (selectedCategory !== "Todos" && activeRequirements && activeRequirements.length > 0) {
+      const catExists = activeRequirements.some((r) => r.category === selectedCategory);
       if (!catExists) {
         setSelectedCategory("Todos");
       }
     }
-  }, [requirements, selectedCategory]);
+  }, [activeRequirements, selectedCategory]);
 
   useEffect(() => {
     if (!draggingPill) return;
@@ -353,20 +359,20 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
     });
   };
 
-  // Dynamic categories extracted from current requirements
-  const existingCategories = Array.from(new Set(requirements.map((r) => r.category).filter(Boolean)));
+  // Dynamic categories extracted from current activeRequirements
+  const existingCategories = Array.from(new Set(activeRequirements.map((r) => r.category).filter(Boolean)));
   const knownDefaults = ["Core", "Automatización", "Integración", "Reportes", "Seguridad"];
   const allSelectableCategories = Array.from(new Set([...existingCategories, ...knownDefaults]));
   const categories = ["Todos", ...existingCategories];
 
-  const filteredWithIndices = requirements
+  const filteredWithIndices = activeRequirements
     .map((req, origIdx) => ({ req, origIdx }))
     .filter(({ req }) => selectedCategory === "Todos" || req.category === selectedCategory);
   const filtered = filteredWithIndices.map((f) => f.req);
 
   const handleCategorySelect = (cat: string) => {
     setSelectedCategory(cat);
-    const newFiltered = requirements
+    const newFiltered = activeRequirements
       .map((req, origIdx) => ({ req, origIdx }))
       .filter(({ req }) => cat === "Todos" || req.category === cat);
     if (newFiltered.length > 0) {
@@ -401,7 +407,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
 
   return (
     <section
-      id="alcance"
+      id={secId || "alcance"}
       className="min-h-screen w-full flex flex-col justify-start items-center relative overflow-hidden bg-[var(--bg-main)] border-t border-[var(--border-color)] px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 transition-colors duration-300"
     >
       {/* 💻 Screen Interactive View */}
@@ -416,13 +422,32 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
         <div className="text-center max-w-3xl mx-auto mb-4 shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-4 py-1.5 rounded-full border border-[var(--accent-color)]/30 inline-flex items-center space-x-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span><EditableField id="scope_header_badge" defaultText="ARQUITECTURA DE ALCANCE • INSPECTOR MAESTRO-DETALLE" /></span>
+            <span>
+              <EditableField
+                id={`scope_header_badge_${currentSlug || "default"}`}
+                defaultText={
+                  currentSlug?.includes("excel")
+                    ? "03. ALCANCE FUNCIONAL COMPLETO • ÉPICAS SIMV"
+                    : "ARQUITECTURA DE ALCANCE • INSPECTOR MAESTRO-DETALLE"
+                }
+              />
+            </span>
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold font-display text-[var(--h2-color)] mt-2 mb-1">
-            <EditableField id="scope_header_h2" defaultText="Alcance & Funcionalidades Requeridas" />
+            <EditableField
+              id={`scope_header_h2_${currentSlug || "default"}`}
+              defaultText={
+                currentSlug?.includes("excel")
+                  ? "Detalle Funcional por 7 Épicas SIMV"
+                  : "Alcance & Funcionalidades Requeridas"
+              }
+            />
           </h2>
           <p className="text-[var(--text-primary)]/70 text-xs sm:text-sm font-normal max-w-2xl mx-auto">
-            <EditableField id="scope_header_desc" defaultText="Seleccione un módulo a la izquierda para inspeccionar sus especificaciones técnicas y entregables en el panel derecho." />
+            <EditableField
+              id={`scope_header_desc_${currentSlug || "default"}`}
+              defaultText="Seleccione un módulo a la izquierda para inspeccionar sus especificaciones técnicas y entregables en el panel derecho."
+            />
           </p>
         </div>
 
@@ -569,7 +594,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                       <button
                         type="button"
                         onClick={() => {
-                          const nextNum = requirements.length + 1;
+                          const nextNum = activeRequirements.length + 1;
                           addRequirement({
                             id: `REQ-${nextNum < 10 ? "0" + nextNum : nextNum}`,
                             category: (selectedCategory === "Todos" ? "Core" : selectedCategory) as RequirementCategory,
@@ -646,7 +671,7 @@ export const ScopeSection: React.FC<ScopeSectionProps> = ({ requirements }) => {
                             </div>
                             <h4 className={`text-xs sm:text-sm font-extrabold block leading-snug ${isSelected ? "text-[var(--accent-color)]" : "text-[var(--theme-text)]"}`}>
                               <EditableText
-                                id={`scope_req_${req.id || origIdx}_title`}
+                                id={`scope_req_${currentSlug || "default"}_${req.id || origIdx}_title`}
                                 value={req.title}
                                 onChange={(val) => updateRequirement(origIdx, { title: val })}
                                 tag="span"

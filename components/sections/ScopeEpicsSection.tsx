@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   UserCheck,
@@ -16,8 +16,15 @@ import {
   ChevronDown,
   Play,
   Sparkles,
+  Plus,
+  Trash2,
+  X,
 } from "lucide-react";
 import { EditableField } from "@/components/ui/EditableField";
+import { EditableText } from "@/components/studio/EditableText";
+import { useStudioStore } from "@/store/useStudioStore";
+import { useProposal } from "@/context/ProposalContext";
+import { toast } from "sonner";
 
 interface ScopeEpicsSectionProps {
   secId: string;
@@ -55,6 +62,7 @@ const epicsData = [
     icon: UserCheck,
     badge: "Seguridad SIMV",
       coverage: "100% Cobertura SIMV",
+    subtitle: "Login Biométrico & OTP",
       deliverables: ["Login Biométrico & OTP", "Perfilado Inversionista SIMV", "Sesiones Expirables Seguras"],
       richStories: [
         {
@@ -122,6 +130,7 @@ const epicsData = [
       icon: PieChart,
       badge: "Core Inversiones",
       coverage: "100% Datos Sincronizados",
+      subtitle: "Dashboard Portafolio 360°",
       deliverables: ["Dashboard Portafolio 360°", "Saldos Diarios Actualizados", "Soporte Titular/Cotitular"],
       richStories: [
         {
@@ -190,6 +199,7 @@ const epicsData = [
       icon: FileText,
       badge: "Documentos",
       coverage: "Cifrado AES-256 Activo",
+      subtitle: "Visor PDF Integrado",
       deliverables: ["Visor PDF Integrado", "Clave Titular Cifrada", "Histórico 12 Meses"],
       richStories: [
         {
@@ -258,6 +268,7 @@ const epicsData = [
       icon: FileCode,
       badge: "Transaccional",
       coverage: "Trade Ticket Fehaciente",
+      subtitle: "Motor de Solicitudes Digitales",
       deliverables: ["Motor de Solicitudes Digitales", "Trade Ticket Fehaciente", "Validación KYC en Tiempo Real"],
       richStories: [
         {
@@ -325,6 +336,7 @@ const epicsData = [
       icon: MessageSquare,
       badge: "Comunicación",
       coverage: "Dynamics 365 Linked",
+      subtitle: "Push Notifications Segmentadas",
       deliverables: ["Push Notifications Segmentadas", "Alerta Vencimiento 15 Días", "Bandeja de Mensajes"],
       richStories: [
         {
@@ -393,6 +405,7 @@ const epicsData = [
       icon: TrendingUp,
       badge: "Mercado",
       coverage: "Información Pública SIMV",
+      subtitle: "Cotizaciones en Vivo",
       deliverables: ["Cotizaciones en Vivo", "Directorio Productos", "Distintivo EPB vs ESAFI"],
       richStories: [
         {
@@ -459,6 +472,7 @@ const epicsData = [
       icon: ShieldCheck,
       badge: "Gobernanza",
       coverage: "Audit-Ready SIMV & ISO",
+      subtitle: "Logs de Auditoría Inmutables",
       deliverables: ["Logs de Auditoría Inmutables", "Cumplimiento ISO 27002 & SIMV", "Indicadores de Uso Gerencial"],
       richStories: [
         {
@@ -521,34 +535,202 @@ const epicsData = [
     },
   ];
 
+interface FilterButton {
+  id: string;
+  label: string;
+}
+
+const defaultFilterButtons: FilterButton[] = [
+  { id: "todos", label: "Todas (28 Stories)" },
+  { id: "fase1", label: "Fase 1: App Inversionista" },
+  { id: "fase2", label: "Fase 2: CRM Dynamics & Core" },
+];
+
 export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onNavigateToSimulator }) => {
+  const { isDesignMode } = useStudioStore();
+  const { currentSlug } = useProposal();
   const [activeEpicTab, setActiveEpicTab] = useState<number>(1);
   const [activeStoryId, setActiveStoryId] = useState<string | null>("e1_s1");
-  const [storyPhaseFilter, setStoryPhaseFilter] = useState<"todos" | "fase1" | "fase2">("todos");
+  const [storyPhaseFilter, setStoryPhaseFilter] = useState<string>("todos");
 
-  const currentEpic = epicsData.find((e) => e.id === activeEpicTab) || epicsData[0];
+  const [epics, setEpics] = useState(epicsData);
+  const [filterButtons, setFilterButtons] = useState<FilterButton[]>(defaultFilterButtons);
+  const [filterLabel, setFilterLabel] = useState<string>("Fase de Implementación:");
+  const [filterSummary, setFilterSummary] = useState<string>("7 Épicas SIMV • 28 Historias Oficiales Excel");
+  const [epicsColTitle, setEpicsColTitle] = useState<string>("ÉPICAS DE LA SOLUCIÓN");
+  const [epicsCountBadge, setEpicsCountBadge] = useState<string>("7 Épicas");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const slug = currentSlug || "excel-puesto-de-bolsa";
+    const saved = localStorage.getItem(`scope_epics_data_${slug}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const withIcons = parsed.map((p: any) => {
+            const match = epicsData.find((orig) => orig.id === p.id);
+            return {
+              ...p,
+              icon: match ? match.icon : UserCheck,
+              subtitle:
+                p.subtitle !== undefined && p.subtitle !== ""
+                  ? p.subtitle
+                  : p.deliverables && p.deliverables.length > 0
+                  ? p.deliverables[0]
+                  : match
+                  ? match.subtitle
+                  : "",
+            };
+          });
+          setEpics(withIcons);
+        }
+      } catch (err) {
+        console.warn("Error parsing saved epics:", err);
+      }
+    }
+
+    const savedButtons = localStorage.getItem(`scope_epics_filter_buttons_${slug}`);
+    if (savedButtons) {
+      try {
+        const parsed = JSON.parse(savedButtons);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setFilterButtons(parsed);
+        }
+      } catch (err) {
+        console.warn("Error parsing saved filter buttons:", err);
+      }
+    } else {
+      const sTodos = localStorage.getItem(`scope_epics_tab_todos_${slug}`);
+      const sF1 = localStorage.getItem(`scope_epics_tab_fase1_${slug}`);
+      const sF2 = localStorage.getItem(`scope_epics_tab_fase2_${slug}`);
+      if (sTodos || sF1 || sF2) {
+        setFilterButtons([
+          { id: "todos", label: sTodos || "Todas (28 Stories)" },
+          { id: "fase1", label: sF1 || "Fase 1: App Inversionista" },
+          { id: "fase2", label: sF2 || "Fase 2: CRM Dynamics & Core" },
+        ]);
+      }
+    }
+
+    const savedFilterLabel = localStorage.getItem(`scope_epics_filter_label_${slug}`);
+    if (savedFilterLabel) setFilterLabel(savedFilterLabel);
+
+    const savedSummary = localStorage.getItem(`scope_epics_summary_${slug}`);
+    if (savedSummary) setFilterSummary(savedSummary);
+
+    const savedColTitle = localStorage.getItem(`scope_epics_col_title_${slug}`);
+    if (savedColTitle) setEpicsColTitle(savedColTitle);
+
+    const savedCountBadge = localStorage.getItem(`scope_epics_count_badge_${slug}`);
+    if (savedCountBadge) setEpicsCountBadge(savedCountBadge);
+  }, [currentSlug]);
+
+  const saveEpics = (newEpics: typeof epicsData) => {
+    setEpics(newEpics);
+    if (typeof window !== "undefined") {
+      const slug = currentSlug || "excel-puesto-de-bolsa";
+      const serializable = newEpics.map(({ icon, ...rest }) => rest);
+      localStorage.setItem(`scope_epics_data_${slug}`, JSON.stringify(serializable));
+      localStorage.setItem("scope_epics_data", JSON.stringify(serializable));
+    }
+  };
+
+  const saveFilterButtons = (buttons: FilterButton[]) => {
+    setFilterButtons(buttons);
+    if (typeof window !== "undefined") {
+      const slug = currentSlug || "excel-puesto-de-bolsa";
+      localStorage.setItem(`scope_epics_filter_buttons_${slug}`, JSON.stringify(buttons));
+    }
+  };
+
+  const addFilterButton = () => {
+    const nextNum = filterButtons.length;
+    const newId = `fase_${Date.now()}`;
+    const newButton: FilterButton = {
+      id: newId,
+      label: `Fase ${nextNum}: Nueva Fase`,
+    };
+    const updated = [...filterButtons, newButton];
+    saveFilterButtons(updated);
+    toast.success("Nuevo botón de filtro añadido.");
+  };
+
+  const deleteFilterButton = (id: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (filterButtons.length <= 1) {
+      toast.error("Debe existir al menos 1 botón de filtro.");
+      return;
+    }
+    const updated = filterButtons.filter((btn) => btn.id !== id);
+    saveFilterButtons(updated);
+    if (storyPhaseFilter === id) {
+      setStoryPhaseFilter(updated[0]?.id || "todos");
+    }
+    toast.info("Botón de filtro eliminado.");
+  };
+
+  const updateFilterButtonLabel = (id: string, newLabel: string) => {
+    const updated = filterButtons.map((btn) => (btn.id === id ? { ...btn, label: newLabel } : btn));
+    saveFilterButtons(updated);
+  };
+
+  const saveFilterLabel = (val: string) => {
+    setFilterLabel(val);
+    if (typeof window !== "undefined") {
+      const slug = currentSlug || "excel-puesto-de-bolsa";
+      localStorage.setItem(`scope_epics_filter_label_${slug}`, val);
+    }
+  };
+
+  const saveFilterSummary = (val: string) => {
+    setFilterSummary(val);
+    if (typeof window !== "undefined") {
+      const slug = currentSlug || "excel-puesto-de-bolsa";
+      localStorage.setItem(`scope_epics_summary_${slug}`, val);
+    }
+  };
+
+  const saveEpicsColTitle = (val: string) => {
+    setEpicsColTitle(val);
+    if (typeof window !== "undefined") {
+      const slug = currentSlug || "excel-puesto-de-bolsa";
+      localStorage.setItem(`scope_epics_col_title_${slug}`, val);
+    }
+  };
+
+  const saveEpicsCountBadge = (val: string) => {
+    setEpicsCountBadge(val);
+    if (typeof window !== "undefined") {
+      const slug = currentSlug || "excel-puesto-de-bolsa";
+      localStorage.setItem(`scope_epics_count_badge_${slug}`, val);
+    }
+  };
+
+  const currentEpic = epics.find((e) => e.id === activeEpicTab) || epics[0] || epicsData[0];
 
   const filteredStories = currentEpic.richStories.filter((story) => {
-    if (storyPhaseFilter === "fase1") return story.phase === "fase1";
-    if (storyPhaseFilter === "fase2") return story.phase === "fase2";
-    return true;
+    if (storyPhaseFilter === "todos") return true;
+    return story.phase === storyPhaseFilter;
   });
 
   const handleEpicSelect = (epicId: number) => {
     setActiveEpicTab(epicId);
     setStoryPhaseFilter("todos");
-    const targetEpic = epicsData.find((e) => e.id === epicId);
+    const targetEpic = epics.find((e) => e.id === epicId);
     if (targetEpic && targetEpic.richStories.length > 0) {
       setActiveStoryId(targetEpic.richStories[0].id);
     }
   };
 
-  const handlePhaseFilterChange = (phase: "todos" | "fase1" | "fase2") => {
+  const handlePhaseFilterChange = (phase: string) => {
     setStoryPhaseFilter(phase);
     const matching = currentEpic.richStories.filter((s) => {
-      if (phase === "fase1") return s.phase === "fase1";
-      if (phase === "fase2") return s.phase === "fase2";
-      return true;
+      if (phase === "todos") return true;
+      return s.phase === phase;
     });
     if (matching.length > 0) {
       setActiveStoryId(matching[0].id);
@@ -557,6 +739,227 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
 
   const toggleStoryExpansion = (storyId: string) => {
     setActiveStoryId((prev) => (prev === storyId ? null : storyId));
+  };
+
+  // Story mutators
+  const updateStory = (epicId: number, storyId: string, updates: any) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      return {
+        ...epic,
+        richStories: epic.richStories.map((story) => (story.id === storyId ? { ...story, ...updates } : story)),
+      };
+    });
+    saveEpics(updated);
+  };
+
+  const deleteStory = (epicId: number, storyId: string) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      if (epic.richStories.length <= 1) {
+        toast.error("Debe existir al menos 1 tarjeta en esta épica.");
+        return epic;
+      }
+      return {
+        ...epic,
+        richStories: epic.richStories.filter((s) => s.id !== storyId),
+      };
+    });
+    saveEpics(updated);
+    if (activeStoryId === storyId) {
+      const current = updated.find((e) => e.id === epicId);
+      setActiveStoryId(current && current.richStories[0] ? current.richStories[0].id : null);
+    }
+    toast.info("Tarjeta eliminada.");
+  };
+
+  const addStory = (epicId: number) => {
+    const targetEpic = epics.find((e) => e.id === epicId);
+    const nextNum = (targetEpic?.richStories.length || 0) + 1;
+    const newId = `e${epicId}_s${Date.now()}`;
+    const newStory = {
+      id: newId,
+      title: `Nueva Historia ${nextNum}: Especificación funcional`,
+      asA: "Usuario o Inversionista",
+      iWant: "Gestionar esta funcionalidad desde la plataforma",
+      soThat: "Pueda operar de forma rápida y segura.",
+      status: "Sprint 1 (Listo)",
+      phase: storyPhaseFilter !== "todos" ? storyPhaseFilter : "fase1",
+      dod: [
+        "Criterio de aceptación 1 aprobado",
+        "Pruebas de validación ejecutadas",
+      ],
+    };
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      return {
+        ...epic,
+        richStories: [...epic.richStories, newStory],
+      };
+    });
+    saveEpics(updated);
+    setActiveStoryId(newId);
+    toast.success("Nueva tarjeta de historia añadida.");
+  };
+
+  const updateDodItem = (epicId: number, storyId: string, dodIdx: number, val: string) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      return {
+        ...epic,
+        richStories: epic.richStories.map((story) => {
+          if (story.id !== storyId) return story;
+          const newDod = [...story.dod];
+          newDod[dodIdx] = val;
+          return { ...story, dod: newDod };
+        }),
+      };
+    });
+    saveEpics(updated);
+  };
+
+  const addDodItem = (epicId: number, storyId: string) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      return {
+        ...epic,
+        richStories: epic.richStories.map((story) => {
+          if (story.id !== storyId) return story;
+          return { ...story, dod: [...story.dod, `Nuevo criterio DoD ${story.dod.length + 1}`] };
+        }),
+      };
+    });
+    saveEpics(updated);
+    toast.success("Criterio DoD añadido.");
+  };
+
+  const deleteDodItem = (epicId: number, storyId: string, dodIdx: number) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      return {
+        ...epic,
+        richStories: epic.richStories.map((story) => {
+          if (story.id !== storyId) return story;
+          if (story.dod.length <= 1) return story;
+          return { ...story, dod: story.dod.filter((_, i) => i !== dodIdx) };
+        }),
+      };
+    });
+    saveEpics(updated);
+  };
+
+  // Deliverables mutators
+  const updateDeliverable = (epicId: number, idx: number, val: string) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      const newDels = [...epic.deliverables];
+      newDels[idx] = val;
+      return {
+        ...epic,
+        deliverables: newDels,
+        ...(idx === 0 ? { subtitle: val } : {}),
+      };
+    });
+    saveEpics(updated);
+  };
+
+  const addDeliverable = (epicId: number) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      return {
+        ...epic,
+        deliverables: [...epic.deliverables, `Nuevo Entregable ${epic.deliverables.length + 1}`],
+      };
+    });
+    saveEpics(updated);
+    toast.success("Entregable añadido.");
+  };
+
+  const deleteDeliverable = (epicId: number, idx: number) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      if (epic.deliverables.length <= 1) {
+        toast.error("Debe existir al menos 1 entregable.");
+        return epic;
+      }
+      const newDeliverables = epic.deliverables.filter((_, i) => i !== idx);
+      return {
+        ...epic,
+        deliverables: newDeliverables,
+        subtitle: newDeliverables[0] || "",
+      };
+    });
+    saveEpics(updated);
+  };
+
+  // Epic mutators
+  const updateEpic = (epicId: number, updates: any) => {
+    const updated = epics.map((epic) => (epic.id === epicId ? { ...epic, ...updates } : epic));
+    saveEpics(updated);
+  };
+
+  const updateEpicSubtitle = (epicId: number, val: string) => {
+    const updated = epics.map((epic) => {
+      if (epic.id !== epicId) return epic;
+      const newDeliverables = [...(epic.deliverables || [])];
+      if (newDeliverables.length > 0) {
+        newDeliverables[0] = val;
+      } else {
+        newDeliverables.push(val);
+      }
+      return {
+        ...epic,
+        subtitle: val,
+        deliverables: newDeliverables,
+      };
+    });
+    saveEpics(updated);
+  };
+
+  const addEpic = () => {
+    const nextId = epics.length + 1;
+    const newEpic = {
+      id: nextId,
+      title: `Épica ${nextId}: Nuevo Módulo Funcional`,
+      icon: Sparkles,
+      badge: "Módulo Adicional",
+      coverage: "100% Especificado",
+      subtitle: "Entregable 1",
+      deliverables: ["Entregable 1", "Entregable 2"],
+      richStories: [
+        {
+          id: `e${nextId}_s1`,
+          title: "Funcionalidad Principal del Módulo",
+          asA: "Usuario del Sistema",
+          iWant: "Acceder a las funciones de este módulo",
+          soThat: "Pueda ejecutar mis operaciones con facilidad.",
+          status: "Sprint 1 (Listo)",
+          phase: "fase1" as const,
+          dod: ["Criterio de aceptación 1"],
+        },
+      ],
+    };
+    const updated = [...epics, newEpic];
+    saveEpics(updated);
+    setActiveEpicTab(nextId);
+    setActiveStoryId(`e${nextId}_s1`);
+    toast.success("Nueva épica añadida.");
+  };
+
+  const deleteEpic = (epicId: number) => {
+    if (epics.length <= 1) {
+      toast.error("Debe existir al menos 1 épica.");
+      return;
+    }
+    const updated = epics.filter((e) => e.id !== epicId);
+    saveEpics(updated);
+    if (activeEpicTab === epicId) {
+      setActiveEpicTab(updated[0].id);
+      if (updated[0].richStories.length > 0) {
+        setActiveStoryId(updated[0].richStories[0].id);
+      }
+    }
+    toast.info("Épica eliminada.");
   };
 
   const toggleExpandAllStories = (e?: React.MouseEvent) => {
@@ -616,59 +1019,75 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
         {/* Phase Filter Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl theme-card-glass shadow-xl text-white">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 flex items-center gap-1.5">
+            <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 flex items-center gap-1.5 font-mono">
               <Filter className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)]" />
-              <span>Fase de Implementación:</span>
+              <EditableText
+                id={`scope_epics_filter_label_${currentSlug || "default"}`}
+                value={filterLabel}
+                onChange={saveFilterLabel}
+                tag="span"
+              />
             </span>
             <div className="flex flex-wrap items-center gap-1.5 pl-1">
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePhaseFilterChange("todos");
-                }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
-                  storyPhaseFilter === "todos"
-                    ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
-                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                Todas (28 Stories)
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePhaseFilterChange("fase1");
-                }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
-                  storyPhaseFilter === "fase1"
-                    ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
-                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                Fase 1: App Inversionista
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePhaseFilterChange("fase2");
-                }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none ${
-                  storyPhaseFilter === "fase2"
-                    ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
-                    : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                Fase 2: CRM Dynamics & Core
-              </button>
+              {filterButtons.map((btn) => {
+                const isActive = storyPhaseFilter === btn.id;
+                return (
+                  <div
+                    key={btn.id}
+                    onClick={() => handlePhaseFilterChange(btn.id)}
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all select-none group/filterbtn ${
+                      isActive
+                        ? "bg-[var(--secondary-accent,#F08D17)] text-white shadow-md shadow-[var(--secondary-accent,#F08D17)]/25 scale-105"
+                        : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <EditableText
+                      id={`scope_epics_tab_btn_${btn.id}_${currentSlug || "default"}`}
+                      value={btn.label}
+                      onChange={(newVal) => updateFilterButtonLabel(btn.id, newVal)}
+                      tag="span"
+                    />
+
+                    {isDesignMode && filterButtons.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={(e) => deleteFilterButton(btn.id, e)}
+                        className={`p-0.5 rounded transition-all cursor-pointer opacity-50 hover:opacity-100 ${
+                          isActive
+                            ? "text-white/80 hover:text-white hover:bg-black/20"
+                            : "text-white/50 hover:text-red-400 hover:bg-red-500/20"
+                        }`}
+                        title={`Eliminar botón "${btn.label}"`}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+
+              {isDesignMode && (
+                <button
+                  type="button"
+                  onClick={addFilterButton}
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold border border-dashed border-emerald-400/50 hover:border-emerald-400 text-emerald-300 hover:bg-emerald-500/10 flex items-center gap-1 transition-all cursor-pointer shadow-sm"
+                  title="Añadir un nuevo botón a la botonera"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Añadir Botón</span>
+                </button>
+              )}
             </div>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono font-medium text-white/70 bg-white/5 px-3.5 py-1.5 rounded-lg border border-white/10">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>7 Épicas SIMV • 28 Historias Oficiales Excel</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <EditableText
+              id={`scope_epics_summary_${currentSlug || "default"}`}
+              value={filterSummary}
+              onChange={saveFilterSummary}
+              tag="span"
+            />
           </div>
         </div>
 
@@ -679,14 +1098,26 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
             <div className="text-[11px] font-mono font-medium tracking-widest text-white/50 uppercase px-1 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--secondary-accent,#F08D17)]" />
-                ÉPICAS DE LA SOLUCIÓN
+                <EditableText
+                  id={`scope_epics_col_title_${currentSlug || "default"}`}
+                  value={epicsColTitle}
+                  onChange={saveEpicsColTitle}
+                  tag="span"
+                />
               </span>
-              <span className="text-[var(--secondary-accent,#F08D17)]/70 font-bold">7 Épicas</span>
+              <span className="text-[var(--secondary-accent,#F08D17)]/70 font-bold">
+                <EditableText
+                  id={`scope_epics_count_badge_${currentSlug || "default"}`}
+                  value={epicsCountBadge}
+                  onChange={saveEpicsCountBadge}
+                  tag="span"
+                />
+              </span>
             </div>
 
             <div className="space-y-2">
-              {epicsData.map((epic) => {
-                const EpicIcon = epic.icon;
+              {epics.map((epic) => {
+                const EpicIcon = epic.icon || UserCheck;
                 const isSelected = activeEpicTab === epic.id;
                 const matchingStoriesCount = epic.richStories.filter((s) => {
                   if (storyPhaseFilter === "fase1") return s.phase === "fase1";
@@ -695,20 +1126,16 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 }).length;
 
                 return (
-                  <button
-                    type="button"
+                  <div
                     key={epic.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEpicSelect(epic.id);
-                    }}
-                    className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3.5 shadow-sm group relative overflow-hidden select-none z-10 ${
+                    onClick={() => handleEpicSelect(epic.id)}
+                    className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 shadow-sm group relative overflow-hidden select-none z-10 ${
                       isSelected
                         ? "bg-white/[0.08] backdrop-blur-md border-[var(--secondary-accent,#F08D17)]/50 shadow-xl ring-1 ring-[var(--secondary-accent,#F08D17)]/25 text-white scale-[1.01]"
                         : "bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-sm border-white/10 hover:border-white/20 text-white/80"
                     }`}
                   >
-                    <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
                           isSelected
@@ -718,32 +1145,76 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       >
                         <EpicIcon className="w-5 h-5" />
                       </div>
-                      <div className="min-w-0 space-y-0.5">
+                      <div className="min-w-0 space-y-1 flex-1">
                         <h3
-                          className={`font-bold text-sm sm:text-base leading-tight truncate transition-colors font-display ${
+                          className={`font-bold text-sm sm:text-base leading-snug transition-colors font-display break-words ${
                             isSelected ? "text-white" : "text-white/85 group-hover:text-white"
                           }`}
                         >
-                          {epic.id}. {epic.title.replace(/^Épica \d+: /, "")}
+                          <EditableText
+                            id={`epic_nav_title_${epic.id}`}
+                            value={epic.title}
+                            onChange={(val) => updateEpic(epic.id, { title: val })}
+                            tag="span"
+                          />
                         </h3>
-                        <p
-                          className={`text-xs truncate font-mono ${
-                            isSelected ? "text-[var(--secondary-accent,#F08D17)]/90 font-medium" : "text-white/40 group-hover:text-white/60"
+                        <div
+                          className={`text-xs font-mono break-words leading-relaxed ${
+                            isSelected ? "text-[var(--secondary-accent,#F08D17)]/90 font-medium" : "text-white/50 group-hover:text-white/70"
                           }`}
                         >
-                          {epic.deliverables ? epic.deliverables[0] : `${matchingStoriesCount} Historias Oficiales`}
-                        </p>
+                          <EditableText
+                            id={`epic_nav_subtitle_${epic.id}`}
+                            value={
+                              epic.subtitle !== undefined && epic.subtitle !== ""
+                                ? epic.subtitle
+                                : epic.deliverables && epic.deliverables.length > 0
+                                ? epic.deliverables[0]
+                                : `${matchingStoriesCount} Historias Oficiales`
+                            }
+                            onChange={(val) => updateEpicSubtitle(epic.id, val)}
+                            tag="span"
+                            className="max-w-full inline-block"
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    <ChevronRight
-                      className={`w-4 h-4 shrink-0 transition-transform ${
-                        isSelected ? "text-[var(--secondary-accent,#F08D17)] translate-x-0.5" : "text-white/30 group-hover:text-white/70"
-                      }`}
-                    />
-                  </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {isDesignMode && epics.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteEpic(epic.id);
+                          }}
+                          className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-all cursor-pointer opacity-50 group-hover:opacity-100"
+                          title="Eliminar esta épica"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      <ChevronRight
+                        className={`w-4 h-4 shrink-0 transition-transform ${
+                          isSelected ? "text-[var(--secondary-accent,#F08D17)] translate-x-0.5" : "text-white/30 group-hover:text-white/70"
+                        }`}
+                      />
+                    </div>
+                  </div>
                 );
               })}
+
+              {isDesignMode && (
+                <button
+                  type="button"
+                  onClick={addEpic}
+                  className="w-full py-2.5 rounded-xl border border-dashed border-emerald-400/40 hover:border-emerald-400 bg-emerald-500/5 hover:bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-2"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Añadir Nueva Épica</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -759,15 +1230,35 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                 <div className="flex flex-col items-start text-left">
                   <span className="text-[11px] font-medium tracking-widest uppercase text-white/50 mb-1.5 flex items-center gap-2 font-mono">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>ÉPICA 0{currentEpic.id} • <span className="text-[var(--secondary-accent,#F08D17)] font-semibold">{currentEpic.badge}</span></span>
+                    <span>
+                      ÉPICA 0{currentEpic.id} •{" "}
+                      <span className="text-[var(--secondary-accent,#F08D17)] font-semibold">
+                        <EditableText
+                          id={`epic_badge_${currentEpic.id}`}
+                          value={currentEpic.badge}
+                          onChange={(val) => updateEpic(currentEpic.id, { badge: val })}
+                          tag="span"
+                        />
+                      </span>
+                    </span>
                   </span>
                   <div className="flex flex-wrap items-center gap-3 pt-0.5">
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-display text-white tracking-tight">
-                      {currentEpic.title.replace(/^Épica \d+: /, "")}
+                      <EditableText
+                        id={`epic_title_${currentEpic.id}`}
+                        value={currentEpic.title}
+                        onChange={(val) => updateEpic(currentEpic.id, { title: val })}
+                        tag="span"
+                      />
                       <span className="text-emerald-400">.</span>
                     </h3>
                     <span className="text-xs px-2.5 py-0.5 rounded-md bg-[var(--secondary-accent,#F08D17)]/10 border border-[var(--secondary-accent,#F08D17)]/30 text-[var(--secondary-accent,#F08D17)] inline-flex items-center font-mono font-medium">
-                      {currentEpic.coverage}
+                      <EditableText
+                        id={`epic_coverage_${currentEpic.id}`}
+                        value={currentEpic.coverage}
+                        onChange={(val) => updateEpic(currentEpic.id, { coverage: val })}
+                        tag="span"
+                      />
                     </span>
                   </div>
                 </div>
@@ -809,13 +1300,60 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                   key={idx}
                   className="text-xs bg-white/5 hover:bg-white/10 text-white/80 px-3 py-1 rounded-md border border-white/10 font-mono font-medium transition-all inline-flex items-center gap-1.5"
                 >
-                  <span className="text-[var(--secondary-accent,#F08D17)]">✓</span> {item}
+                  <span className="text-[var(--secondary-accent,#F08D17)]">✓</span>
+                  <EditableText
+                    id={`epic_del_${currentEpic.id}_${idx}`}
+                    value={item}
+                    onChange={(val) => updateDeliverable(currentEpic.id, idx, val)}
+                    tag="span"
+                  />
+                  {isDesignMode && currentEpic.deliverables.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteDeliverable(currentEpic.id, idx);
+                      }}
+                      className="text-red-400 hover:text-red-300 p-0.5 ml-0.5 cursor-pointer opacity-50 hover:opacity-100"
+                      title="Eliminar entregable"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
                 </span>
               ))}
+              {isDesignMode && (
+                <button
+                  type="button"
+                  onClick={() => addDeliverable(currentEpic.id)}
+                  className="text-xs text-emerald-400 hover:text-emerald-300 border border-dashed border-emerald-400/40 hover:border-emerald-400 px-2.5 py-1 rounded-md font-mono font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Entregable</span>
+                </button>
+              )}
             </div>
 
             {/* Interactive User Story Dropdown Toggle Cards List (Hero Glass Style) */}
             <div className="space-y-3">
+              {filteredStories.length === 0 && (
+                <div className="p-8 text-center bg-white/[0.02] border border-dashed border-white/15 rounded-xl space-y-2">
+                  <p className="text-sm font-medium text-white/70">
+                    No hay historias en este filtro para la épica seleccionada.
+                  </p>
+                  {isDesignMode && (
+                    <button
+                      type="button"
+                      onClick={() => addStory(currentEpic.id)}
+                      className="px-4 py-2 rounded-xl bg-[var(--secondary-accent,#F08D17)] text-white text-xs font-mono font-bold shadow-md hover:scale-105 transition-all inline-flex items-center gap-1.5 cursor-pointer mt-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Crear historia en esta fase</span>
+                    </button>
+                  )}
+                </div>
+              )}
+
               {filteredStories.map((story) => {
                 const isExpanded = activeStoryId === story.id;
                 return (
@@ -844,18 +1382,64 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                       }}
                       className="p-3.5 sm:p-4 cursor-pointer flex items-center justify-between gap-3 select-none group"
                     >
-                      <div className="flex flex-wrap items-center gap-3 min-w-0">
+                      <div className="flex flex-wrap items-center gap-3 min-w-0 flex-1">
                         {/* Status Pill Badge (Hero Glass Pill) */}
                         <span className="text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-md bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 shrink-0 inline-flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          {story.status}
+                          <EditableText
+                            id={`epic_story_${currentEpic.id}_${story.id}_status`}
+                            value={story.status}
+                            onChange={(val) => updateStory(currentEpic.id, story.id, { status: val })}
+                            tag="span"
+                          />
                         </span>
-                        <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-emerald-300 transition-colors truncate font-display">
-                          {story.title}
+
+                        {isDesignMode && filterButtons.filter((b) => b.id !== "todos").length > 0 && (
+                          <select
+                            value={story.phase || "fase1"}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              updateStory(currentEpic.id, story.id, { phase: e.target.value });
+                            }}
+                            className="bg-black/30 text-emerald-300 border border-white/20 rounded px-2 py-0.5 text-[10px] font-mono cursor-pointer outline-none hover:border-[var(--secondary-accent,#F08D17)] shrink-0"
+                            title="Asignar a qué botón de fase pertenece esta historia"
+                          >
+                            {filterButtons
+                              .filter((b) => b.id !== "todos")
+                              .map((b) => (
+                                <option key={b.id} value={b.id} className="bg-zinc-900 text-white font-sans">
+                                  {b.label}
+                                </option>
+                              ))}
+                          </select>
+                        )}
+
+                        <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-emerald-300 transition-colors font-display break-words flex-1">
+                          <EditableText
+                            id={`epic_story_${currentEpic.id}_${story.id}_title`}
+                            value={story.title}
+                            onChange={(val) => updateStory(currentEpic.id, story.id, { title: val })}
+                            tag="span"
+                          />
                         </h4>
                       </div>
 
-                      <div className="flex items-center gap-2.5 shrink-0">
+                      <div className="flex items-center gap-2.5 shrink-0 ml-2">
+                        {isDesignMode && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteStory(currentEpic.id, story.id);
+                            }}
+                            className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-all cursor-pointer opacity-60 hover:opacity-100"
+                            title="Eliminar esta tarjeta"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+
                         {"demoTab" in story && (
                           <button
                             type="button"
@@ -891,9 +1475,27 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                             <span>Estructura Ágil (User Story)</span>
                           </div>
                           <div className="text-xs sm:text-sm font-normal leading-relaxed text-slate-200">
-                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Como:</span> {story.asA} |{" "}
-                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Quiero:</span> {story.iWant} |{" "}
-                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Para:</span> {story.soThat}
+                            <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Como:</span>{" "}
+                            <EditableText
+                              id={`epic_story_${currentEpic.id}_${story.id}_asa`}
+                              value={story.asA}
+                              onChange={(val) => updateStory(currentEpic.id, story.id, { asA: val })}
+                              tag="span"
+                            />{" "}
+                            | <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Quiero:</span>{" "}
+                            <EditableText
+                              id={`epic_story_${currentEpic.id}_${story.id}_iwant`}
+                              value={story.iWant}
+                              onChange={(val) => updateStory(currentEpic.id, story.id, { iWant: val })}
+                              tag="span"
+                            />{" "}
+                            | <span className="text-[var(--secondary-accent,#F08D17)] font-bold">Para:</span>{" "}
+                            <EditableText
+                              id={`epic_story_${currentEpic.id}_${story.id}_sothat`}
+                              value={story.soThat}
+                              onChange={(val) => updateStory(currentEpic.id, story.id, { soThat: val })}
+                              tag="span"
+                            />
                           </div>
                         </div>
 
@@ -907,19 +1509,61 @@ export const ScopeEpicsSection: React.FC<ScopeEpicsSectionProps> = ({ secId, onN
                             {story.dod.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-2.5 p-3 rounded-lg bg-white/[0.02] border border-white/10 font-normal text-slate-200"
+                                className="flex items-start justify-between gap-2.5 p-3 rounded-lg bg-white/[0.02] border border-white/10 font-normal text-slate-200"
                               >
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)] shrink-0 mt-0.5" />
-                                <span>{item}</span>
+                                <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-[var(--secondary-accent,#F08D17)] shrink-0 mt-0.5" />
+                                  <EditableText
+                                    id={`epic_story_${currentEpic.id}_${story.id}_dod_${idx}`}
+                                    value={item}
+                                    onChange={(val) => updateDodItem(currentEpic.id, story.id, idx, val)}
+                                    tag="span"
+                                    className="flex-1"
+                                  />
+                                </div>
+                                {isDesignMode && story.dod.length > 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      deleteDodItem(currentEpic.id, story.id, idx);
+                                    }}
+                                    className="text-red-400 hover:text-red-300 opacity-50 hover:opacity-100 p-0.5 cursor-pointer shrink-0"
+                                    title="Eliminar criterio"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                )}
                               </li>
                             ))}
                           </ul>
+                          {isDesignMode && (
+                            <button
+                              type="button"
+                              onClick={() => addDodItem(currentEpic.id, story.id)}
+                              className="text-xs text-emerald-400 hover:text-emerald-300 font-mono font-medium flex items-center gap-1 mt-2 cursor-pointer transition-colors"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Añadir Criterio DoD</span>
+                            </button>
+                          )}
                         </div>
                       </div>
                     )}
                   </div>
                 );
               })}
+
+              {isDesignMode && (
+                <button
+                  type="button"
+                  onClick={() => addStory(currentEpic.id)}
+                  className="w-full py-3.5 rounded-xl border border-dashed border-emerald-400/40 hover:border-emerald-400 bg-emerald-500/5 hover:bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm mt-3"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ Añadir Nueva Tarjeta de Historia</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -50,8 +50,8 @@ export const CustomSectionRenderer: React.FC<CustomSectionRendererProps> = ({
   if (cType === "hero") {
     return <HeroSection proposal={safeProposal} onOpenAcceptModal={onOpenAcceptModal} />;
   }
-  if (cType === "alcance") {
-    return <ScopeSection requirements={safeProposal.requirements || []} />;
+  if (cType === "alcance" && secId !== "sec-7-epicas-alcance") {
+    return <ScopeSection secId={secId} requirements={safeProposal.requirements || []} />;
   }
   if (cType === "cronograma") {
     return (
